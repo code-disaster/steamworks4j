@@ -1,0 +1,12 @@
+# Steam SDK
+sdk/
+
+# generated sources
+src/main/native/com.codedisaster.steamworks.*
+
+# output
+target/
+
+# IDE files
+.idea/
+*.iml
