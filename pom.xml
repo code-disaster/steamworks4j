@@ -8,7 +8,7 @@
 	<artifactId>steamworks4j</artifactId>
 	<name>Steam API Java Wrapper</name>
 
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>

@@ -2,7 +2,10 @@ package com.codedisaster.steamworks;
 
 public class SteamAPI {
 
-	static public boolean init() {
+	static public boolean init(String nativesJar) {
+		if (!loadLibraries(nativesJar)) {
+			return false;
+		}
 		return nativeInit();
 	}
 
@@ -10,6 +13,16 @@ public class SteamAPI {
 		SteamUserStats.dispose();
 		SteamRemoteStorage.dispose();
 		nativeShutdown();
+	}
+
+	static private boolean loadLibraries(String nativesJar) {
+
+		SteamSharedLibraryLoader loader = new SteamSharedLibraryLoader(nativesJar);
+
+		loader.load("steam_api");
+		loader.load("steamworks4j");
+
+		return true;
 	}
 
 	// @off

@@ -81,7 +81,7 @@ public class SteamAPITestApplication {
 	private boolean run(@SuppressWarnings("unused") String[] arguments) throws SteamException {
 
 		System.out.println("Initialise Steam API ...");
-		if (!SteamAPI.init()) {
+		if (!SteamAPI.init(null/*"target/steamworks4j-0.0.1-SNAPSHOT-jar-with-dependencies.jar"*/)) {
 			return false;
 		}
 
@@ -120,9 +120,6 @@ public class SteamAPITestApplication {
 	public static void main(String[] arguments) {
 
 		try {
-
-			System.load(arguments[0] + "/libsteam_api.dylib");
-			System.load(arguments[0] + "/libsteamworks4j.dylib");
 
 			if (!new SteamAPITestApplication().run(arguments)) {
 				System.exit(-1);
