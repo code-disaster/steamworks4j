@@ -20,6 +20,12 @@ SteamCallbackAdapter::~SteamCallbackAdapter() {
     }
 }
 
+void SteamCallbackAdapter::attach(std::function<void (JNIEnv* env)> fn) const {
+    JNIEnv* env = attachThread();
+    fn(env);
+    detachThread();
+}
+
 JNIEnv* SteamCallbackAdapter::attachThread() const {
 	JNIEnv* env;
 	m_vm->AttachCurrentThread((void**) &env, NULL);
@@ -32,12 +38,13 @@ void SteamCallbackAdapter::detachThread() const {
 
 void SteamCallbackAdapter::callVoidMethod(JNIEnv* env, const char* method, const char* signature, ...) const {
 	jclass clazz = env->GetObjectClass(m_callback);
+	jclass ex = env->FindClass("com/codedisaster/steamworks/SteamException");
 	if (clazz == 0) {
-		//logDebug("JNI: error getting class for callback object\n");
+	    env->ThrowNew(ex, "Couldn't retrieve class for callback object.");
 	} else {
 		jmethodID methodID = env->GetMethodID(clazz, method, signature);
 		if (methodID == 0) {
-			//logDebug("JNI: can't find method %s%s\n", method, signature);
+    	    env->ThrowNew(ex, "Couldn't retrieve callback method.");
 		} else {
 			va_list args;
 			va_start(args, signature);
@@ -57,8 +64,9 @@ void SteamCallbackAdapter::callVoidMethod(JNIEnv* env, const char* method, const
 
 void SteamCallbackAdapter::callStaticVoidMethod(JNIEnv* env, const char* method, const char* signature, ...) const {
 	jmethodID methodID = env->GetStaticMethodID(m_callbackClass, method, signature);
+	jclass ex = env->FindClass("com/codedisaster/steamworks/SteamException");
 	if (methodID == 0) {
-		//logDebug("JNI: can't find static method %s%s\n", method, signature);
+	    env->ThrowNew(ex, "Couldn't retrieve static callback method.");
 	} else {
 		va_list args;
 		va_start(args, signature);

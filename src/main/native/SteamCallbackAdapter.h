@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <jni.h>
 
 class SteamCallbackAdapter {
@@ -10,11 +11,14 @@ protected:
 
     virtual ~SteamCallbackAdapter();
 
-	JNIEnv* attachThread() const;
-	void detachThread() const;
+    void attach(std::function<void (JNIEnv* env)> fn) const;
 
 	void callVoidMethod(JNIEnv* env, const char* method, const char* signature, ...) const;
 	void callStaticVoidMethod(JNIEnv* env, const char* method, const char* signature, ...) const;
+
+private:
+	JNIEnv* attachThread() const;
+	void detachThread() const;
 
     JavaVM* m_vm;
     jobject m_callback;

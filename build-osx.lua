@@ -6,7 +6,7 @@ solution "steamworks4j"
 		kind "SharedLib"
 		language "C++"
 
-		buildoptions { "-Wall", "-mmacosx-version-min=10.6" }
+		buildoptions { "-std=c++11", "-stdlib=libc++", "-Wall", "-mmacosx-version-min=10.7" }
 
 		files { "src/main/native/**.h", "src/main/native/**.cpp" }
 		includedirs { "src/main/native", "sdk/public", "sdk/public/steam", "/System/Library/Frameworks/JavaVM.framework/Headers" }
@@ -16,6 +16,6 @@ solution "steamworks4j"
 
 		libdirs { "sdk/redistributable_bin/osx32" }
 		links { "steam_api" }
-		linkoptions { "-framework CoreFoundation", "-mmacosx-version-min=10.6" }
+		linkoptions { "-framework CoreFoundation", "-mmacosx-version-min=10.7" }
 
 		platforms { "universal" }

@@ -12,14 +12,14 @@ SteamUserStatsCallback::~SteamUserStatsCallback() {
 }
 
 void SteamUserStatsCallback::onUserStatsReceived(UserStatsReceived_t* callback) {
-	JNIEnv* env = attachThread();
-	callVoidMethod(env, "onUserStatsReceived", "(JJI)V", (jlong) callback->m_nGameID,
-	    (jlong) callback->m_steamIDUser.ConvertToUint64(), (jint) callback->m_eResult);
-	detachThread();
+	attach([&] (JNIEnv* env) {
+        callVoidMethod(env, "onUserStatsReceived", "(JJI)V", (jlong) callback->m_nGameID,
+            (jlong) callback->m_steamIDUser.ConvertToUint64(), (jint) callback->m_eResult);
+	});
 }
 
 void SteamUserStatsCallback::onUserStatsStored(UserStatsStored_t* callback) {
-	JNIEnv* env = attachThread();
-	callVoidMethod(env, "onUserStatsStored", "(JI)V", (jlong) callback->m_nGameID, (jint) callback->m_eResult);
-	detachThread();
+	attach([&] (JNIEnv* env) {
+    	callVoidMethod(env, "onUserStatsStored", "(JI)V", (jlong) callback->m_nGameID, (jint) callback->m_eResult);
+    });
 }
