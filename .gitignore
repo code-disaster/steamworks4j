@@ -8,6 +8,13 @@ src/main/native/com.codedisaster.steamworks.*
 build/
 obj/
 target/
+Makefile
+*.exp
+*.lib
+*.make
+*.sln
+*.vcxproj
+*.vcxproj.*
 
 # IDE files
 .idea/

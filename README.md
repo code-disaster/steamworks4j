@@ -1,20 +1,36 @@
 # steamworks4j
 
-A thin wrapper which allows Java applications to access the Steamworks C++ API.
+A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, e.g. [libGDX](http://libgdx.badlogicgames.com/).
 
 ## About
 
+The reason for this project to surface is a rather simple one. For development of our latest game, [Halfway](http://halfwaygame.com), we were very lucky to get hands on work-in-progress Java wrappers from two different indie games developers. This saved us quite some time we would have spent implementing all the JNI fun ourselves, though we had to work around some issues, too.
+
+After release of **Halfway** I've been approached by multiple other developers who expressed interest in finding an available Java library. Odd enough (at least in the library-rich world of Java) there doesn't seem to be any, not least because the Valve NDA seems a little fuzzy about the topic of releasing information about the Steamworks SDK into the public.
+
+After gathering some feedback from developers of wrappers in other languages, e.g. the rather popular [Steamworks.NET](https://github.com/rlabrecque/Steamworks.NET), I now decided to fill the gap, and start an open-source library for anyone to use - and contribute, hopefully.
+
 The wrapper is written as minimal as possible without sacrificing ease of usability. Its goal is to provide *just* an accessible Java interface to Valve's C++ interfaces.
 
-In its current state, the wrapper only publishs very few interfaces. In basic, everything we put into use with our own games right now. Feel free to participate to extend it with functions and interfaces still missing.
+> **In its current state, the wrapper only publishes very few interfaces. In basic, everything we put into use with our own games right now. Feel free to participate to extend it with the many functions and interfaces still missing.**
 
-**steamworks4j** is currently built against Steamworks SDK 1.30.
+**steamworks4j** is currently built against Steamworks SDK v1.30.
 
-This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve.
+This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
 
 ## Requirements
 
-First of all, you need to be registered with Steamworks to use this wrapper.
+First of all, you need to be registered with, and have a project set up at Steamworks to use this wrapper.
+
+### Technical requirements
+
+#### Java
+
+The Java code is compiled with JDK 1.6.
+
+#### Mac OS
+
+Right now only OS X 10.7 and above is supported.
 
 ## Building native libraries
 
@@ -37,7 +53,7 @@ We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts 
 
 #### Windows
 
-- The **Visual Studio 2012** command line environment must be available. It's sufficient to use the VS2012 Express edition. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat*
+- The **Visual Studio 2010** command line environment must be available. It's sufficient to use the VS2010 (or VS2012) Express edition. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat*
 - **premake4.exe** must be available in the path, e.g. put into the *steamworks4j/* root folder.
 
 #### Linux
@@ -48,7 +64,7 @@ We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts 
 #### Mac OS
 
 - **XCode** must be installed.
-- **premake4** needs to be available. One possible option is to install as a **Mac Ports** package.
+- **premake4** needs to be available. One possible option is to install it as a **Mac Ports** package.
 
 ### Build steps
 
@@ -73,4 +89,4 @@ Just use Maven to *mvn package* or *mvn install* to compile a jar ready to be us
 
 ## Debugging
 
-For development you'll need to put a text file *steam_appid.txt*, which just contains the appID of your Steam application, into the working directory of your game.
+For development you'll need to put a text file *steam_appid.txt*, which just contains the appID of your Steam application, into the working directory of your application.
