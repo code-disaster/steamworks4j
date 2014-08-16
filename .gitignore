@@ -5,8 +5,11 @@ sdk/
 src/main/native/com.codedisaster.steamworks.*
 
 # output
+build/
+obj/
 target/
 
 # IDE files
 .idea/
+*.xcodeproj/
 *.iml
