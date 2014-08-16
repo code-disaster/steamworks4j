@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class SteamAPITestApplication {
 
 	private SteamUserStats userStats;
+	private SteamRemoteStorage remoteStorage;
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
@@ -38,7 +39,9 @@ public class SteamAPITestApplication {
 		public InputHandler(Thread mainThread) {
 			this.alive = true;
 			this.mainThread = mainThread;
+
 			this.scanner = new Scanner(System.in);
+			scanner.useDelimiter("[\r\n\t]");
 		}
 
 		@Override
@@ -48,14 +51,22 @@ public class SteamAPITestApplication {
 				if (scanner.hasNext()) {
 					String input = scanner.next();
 
-					if (input.startsWith("q")) {
+					if (input.equals("q")) {
 						alive = false;
-					}
-
-					if (input.equals("1")) {
+					} else if (input.equals("1")) {
 						userStats.requestCurrentStats();
 					} else if (input.equals("2")) {
 						userStats.storeStats();
+					} else if (input.equals("file list")) {
+						int numFiles = remoteStorage.getFileCount();
+						System.out.println("Num of files: " + numFiles);
+
+						for (int i = 0; i < numFiles; i++) {
+							int[] sizes = new int[1];
+							String name = remoteStorage.getFileNameAndSize(i, sizes);
+							boolean exists = remoteStorage.fileExists(name);
+							System.out.println("# " + i + " : name=" + name + ", size=" + sizes[0] + ", exists=" + (exists ? "yes" : "no"));
+						}
 					}
 				}
 
@@ -79,6 +90,9 @@ public class SteamAPITestApplication {
 
 		System.out.println("Requesting user stats ...");
 		userStats.requestCurrentStats();
+
+		System.out.println("Register remote storage ...");
+		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer());
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 		new Thread(inputHandler).start();

@@ -9,7 +9,7 @@ public class SteamUserStats {
 		registerCallback(callback);
 	}
 
-	static public void dispose() {
+	static void dispose() {
 		registerCallback(null);
 	}
 

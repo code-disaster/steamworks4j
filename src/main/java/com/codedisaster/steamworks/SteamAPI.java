@@ -8,6 +8,7 @@ public class SteamAPI {
 
 	static public void shutdown() {
 		SteamUserStats.dispose();
+		SteamRemoteStorage.dispose();
 		nativeShutdown();
 	}
 
@@ -24,8 +25,6 @@ public class SteamAPI {
 			return false;
 		}
 
-
-
 		return SteamAPI_Init();
 	*/
 
@@ -41,12 +40,12 @@ public class SteamAPI {
 		return SteamAPI_IsSteamRunning();
 	*/
 
-	static public native long getSteamUserPointer(); /*
-		return (long) SteamUser();
-	*/
-
 	static public native long getSteamUserStatsPointer(); /*
 		return (long) SteamUserStats();
+	*/
+
+	static public native long getSteamRemoteStoragePointer(); /*
+		return (long) SteamRemoteStorage();
 	*/
 
 }
