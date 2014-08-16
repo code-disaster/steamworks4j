@@ -15,8 +15,12 @@ Makefile
 *.sln
 *.vcxproj
 *.vcxproj.*
+*.xcodeproj/
 
 # IDE files
 .idea/
-*.xcodeproj/
 *.iml
+
+# misc
+premake4.exe
+steam_appid.txt
