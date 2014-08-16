@@ -11,6 +11,15 @@ public class SteamAPITestApplication {
 		public void onUserStatsReceived(long gameId, long userId, int result) {
 			System.out.println("User stats received: gameId=" + gameId + ", userId=" + userId +
 					", result=" + SteamResult.byValue(result).toString());
+
+			int numAchievements = userStats.getNumAchievements();
+			System.out.println("Num of achievements: " + numAchievements);
+
+			for (int i = 0; i < numAchievements; i++) {
+				String name = userStats.getAchievementName(i);
+				boolean achieved = userStats.isAchieved(name, false);
+				System.out.println("# " + i + " : name=" + name + ", achieved=" + (achieved ? "yes" : "no"));
+			}
 		}
 
 		@Override
