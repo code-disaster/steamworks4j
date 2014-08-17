@@ -1,16 +1,10 @@
 # steamworks4j
 
-A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, e.g. [libGDX](http://libgdx.badlogicgames.com/).
+A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as [libGDX](http://libgdx.badlogicgames.com/).
 
-## About
+## Introduction
 
-The reason for this project to surface is a rather simple one. For development of our latest game, [Halfway](http://halfwaygame.com), we were very lucky to get hands on work-in-progress Java wrappers from two different indie games developers. This saved us quite some time we would have spent implementing all the JNI fun ourselves, though we had to work around some issues, too.
-
-After release of **Halfway** I've been approached by multiple other developers who expressed interest in finding an available Java library. Odd enough (at least in the library-rich world of Java) there doesn't seem to be any, not least because the Valve NDA seems a little fuzzy about the topic of releasing information about the Steamworks SDK into the public.
-
-After gathering some feedback from developers of wrappers in other languages, e.g. the rather popular [Steamworks.NET](https://github.com/rlabrecque/Steamworks.NET), I now decided to fill the gap, and start an open-source library for anyone to use - and contribute, hopefully.
-
-The wrapper is written as minimal as possible without sacrificing ease of usability. Its goal is to provide *just* an accessible Java interface to Valve's C++ interfaces.
+The wrapper is written as minimal as possible without sacrificing ease of use. Its goal is to provide *just* an accessible Java interface to Valve's C++ interfaces.
 
 > **In its current state, the wrapper only publishes very few interfaces. In basic, everything we put into use with our own games right now. Feel free to participate to extend it with the many functions and interfaces still missing.**
 
