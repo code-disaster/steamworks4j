@@ -9,7 +9,7 @@ public class JNICodeGenerator {
 		try {
 
 			new NativeCodeGenerator().generate("src/main/java", "target/classes", "src/main/native",
-					new String[] { "**/*.java" }, new String[] { "**/JNICodeGenerator.java" });
+					new String[] { "**/*.java" }, new String[] { "**/JNICodeGenerator.java", "**/SteamSharedLibraryLoader.java" });
 
 		} catch (Exception e) {
 			e.printStackTrace();

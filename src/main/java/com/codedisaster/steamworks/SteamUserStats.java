@@ -61,12 +61,20 @@ public class SteamUserStats {
 		return storeStats(pointer);
 	}
 
+	public boolean indicateAchievementProgress(String name, int curProgress, int maxProgress) {
+		return indicateAchievementProgress(pointer, name, curProgress, maxProgress);
+	}
+
 	public int getNumAchievements() {
 		return getNumAchievements(pointer);
 	}
 
 	public String getAchievementName(int index) {
 		return getAchievementName(pointer, index);
+	}
+
+	public boolean resetAllStats(boolean achievementsToo) {
+		return resetAllStats(pointer, achievementsToo);
 	}
 
 	/*JNI
@@ -134,6 +142,12 @@ public class SteamUserStats {
 		return stats->StoreStats();
 	*/
 
+	static private native boolean indicateAchievementProgress(long pointer, String name,
+															  int curProgress, int maxProgress); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->IndicateAchievementProgress(name, curProgress, maxProgress);
+	*/
+
 	static private native int getNumAchievements(long pointer); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetNumAchievements();
@@ -143,5 +157,10 @@ public class SteamUserStats {
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		jstring name = env->NewStringUTF(stats->GetAchievementName(index));
 		return name;
+	*/
+
+	static private native boolean resetAllStats(long pointer, boolean achievementsToo); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->ResetAllStats(achievementsToo);
 	*/
 }
