@@ -36,9 +36,9 @@ Right now only OS X 10.7 and above is supported.
 
 ### Prebuilt libraries
 
-Building the native libraries yourself isn't required if you only plan to *use* the wrapper. There are prebuilt versions included in the *steamworks4j/src/main/resources* folder.
+Building the native libraries yourself isn't required if you only plan to *use* the wrapper. There are prebuilt versions included in the *steamworks4j/natives/libs/* folder. The Maven build packs them all into *steamworks4j-natives.jar* which is then bundled with the primary JAR file.
 
-### Preparations
+### Dependencies
 
 To build the native libraries, download the latest Steamworks SDK. Unzip and copy the following folders into the **steamworks4j** root directory:
 
@@ -54,7 +54,7 @@ We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts 
 #### Windows
 
 - The **Visual Studio 2010** command line environment must be available. It's sufficient to use the VS2010 (or VS2012) Express edition. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat*
-- **premake4.exe** must be available in the path, e.g. put into the *steamworks4j/* root folder.
+- **premake4.exe** must be available in the path, e.g. put into the *steamworks4j/build-natives/* folder.
 
 #### Linux
 
@@ -70,18 +70,18 @@ We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts 
 
 The first step is to let **jnigen** generate C++ source files for the embedded JNI functions. The `com.codedisaster.steamworks.jnigen.JNICodeGenerator` class contains the code to do that.
 
-- The working directory must be the *steamworks4j/* root folder.
-- Simply run `java -jar /path/to/steamworks4j-???.jar`. This will run the JNICodeGenerator.main() application.
+- The working directory must be the *steamworks4j/java-wrapper/* folder.
+- Simply run `java -jar /path/to/steamworks4j-${version}-jar-with-dependencies.jar`. This will run the JNICodeGenerator.main() application.
 - You can just run this as a plain Java application from inside your favorite IDE. No arguments are required.
-- The generated code is written to *steamworks4j/src/main/native/*.
+- The generated code is written to *steamworks4j/java-wrapper/src/main/native/*.
 
-If everything is setup correctly, you now only need to run the right `./build-???` bash file to compile and link the native libraries on each target platform.
+If everything is setup correctly, you now only need to run the right `build-[osx|linux|win].[sh|bat]` shell script in the *steamworks4j/build-natives/* folder to compile and link the native libraries on each target platform.
 
 In case of errors you should be able to open the workspace/project files created by **premake4**, to open them in the respective IDE for troubleshooting.
 
 ## Building the Java package
 
-Just use Maven to *mvn package* or *mvn install* to compile a jar ready to be used in your application.
+Just use Maven to *mvn package* in the root directory to compile a jar ready to be used in your application.
 
 ## Using the wrapper
 
