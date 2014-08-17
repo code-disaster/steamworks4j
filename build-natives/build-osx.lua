@@ -8,11 +8,11 @@ solution "steamworks4j"
 
 		buildoptions { "-std=c++11", "-stdlib=libc++", "-Wall", "-mmacosx-version-min=10.7" }
 
-		files { "../src/main/native/**.h", "../src/main/native/**.cpp" }
+		files { "../java-wrapper/src/main/native/**.h", "../java-wrapper/src/main/native/**.cpp" }
 		includedirs {
-			"../src/main/native",
-			"../src/main/native/include/jni",
-			"../src/main/native/include/jni/mac",
+			"../java-wrapper/src/main/native",
+			"../java-wrapper/src/main/native/include/jni",
+			"../java-wrapper/src/main/native/include/jni/mac",
 			"../sdk/public",
 			"../sdk/public/steam",
 			"/System/Library/Frameworks/JavaVM.framework/Headers" }

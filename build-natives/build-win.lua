@@ -6,13 +6,11 @@ solution "steamworks4j"
 		kind "SharedLib"
 		language "C++"
 
-		-- buildoptions { "-Wall" }
-		
-		files { "../src/main/native/**.h", "../src/main/native/**.cpp" }
+		files { "../java-wrapper/src/main/native/**.h", "../java-wrapper/src/main/native/**.cpp" }
 		includedirs {
-			"../src/main/native",
-			"../src/main/native/include/jni",
-			"../src/main/native/include/jni/win32",
+			"../java-wrapper/src/main/native",
+			"../java-wrapper/src/main/native/include/jni",
+			"../java-wrapper/src/main/native/include/jni/win32",
 			"../sdk/public",
 			"../sdk/public/steam" }
 
