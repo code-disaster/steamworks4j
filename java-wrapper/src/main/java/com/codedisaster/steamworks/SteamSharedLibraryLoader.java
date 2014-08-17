@@ -16,6 +16,7 @@ public class SteamSharedLibraryLoader extends JniGenSharedLibraryLoader {
 	public SteamSharedLibraryLoader(String nativesJar) {
 		super(nativesJar);
 
+		// custom library finder
 		setSharedLibraryFinder(new SharedLibraryFinder() {
 			@Override
 			public String getSharedLibraryNameWindows(String sharedLibName, boolean is64Bit, ZipFile nativesJar) {
@@ -34,7 +35,7 @@ public class SteamSharedLibraryLoader extends JniGenSharedLibraryLoader {
 
 			@Override
 			public String getSharedLibraryNameAndroid(String sharedLibName, ZipFile nativesJar) {
-				return sharedLibName;
+				return null;
 			}
 		});
 

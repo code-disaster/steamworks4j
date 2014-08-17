@@ -81,7 +81,7 @@ public class SteamAPITestApplication {
 	private boolean run(@SuppressWarnings("unused") String[] arguments) throws SteamException {
 
 		System.out.println("Initialise Steam API ...");
-		if (!SteamAPI.init("target/classes/steamworks4j-natives.jar")) {
+		if (!SteamAPI.init()) {
 			return false;
 		}
 
