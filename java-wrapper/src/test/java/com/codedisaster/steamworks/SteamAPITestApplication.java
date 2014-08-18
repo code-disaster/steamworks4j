@@ -9,9 +9,9 @@ public class SteamAPITestApplication {
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
-		public void onUserStatsReceived(long gameId, long userId, int result) {
+		public void onUserStatsReceived(long gameId, long userId, SteamResult result) {
 			System.out.println("User stats received: gameId=" + gameId + ", userId=" + userId +
-					", result=" + SteamResult.byValue(result).toString());
+					", result=" + result.toString());
 
 			int numAchievements = userStats.getNumAchievements();
 			System.out.println("Num of achievements: " + numAchievements);
@@ -24,9 +24,9 @@ public class SteamAPITestApplication {
 		}
 
 		@Override
-		public void onUserStatsStored(long gameId, int result) {
+		public void onUserStatsStored(long gameId, SteamResult result) {
 			System.out.println("User stats stored: gameId=" + gameId +
-					", result=" + SteamResult.byValue(result).toString());
+					", result=" + result.toString());
 		}
 	};
 

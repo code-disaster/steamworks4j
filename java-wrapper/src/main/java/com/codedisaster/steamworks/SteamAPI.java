@@ -20,7 +20,13 @@ public class SteamAPI {
 	static private boolean loadLibraries() {
 
 		String libraryPath = System.getProperty("java.io.tmpdir") + "/steamworks4j/steamworks4j-natives.jar";
-		new File(libraryPath).getParentFile().mkdirs();
+
+		File libraryDirectory = new File(libraryPath).getParentFile();
+		if (!libraryDirectory.exists()) {
+			if (!libraryDirectory.mkdirs()) {
+				return false;
+			}
+		}
 
 		try {
 

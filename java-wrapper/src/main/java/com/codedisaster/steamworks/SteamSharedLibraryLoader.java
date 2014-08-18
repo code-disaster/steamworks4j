@@ -9,11 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.zip.ZipFile;
 
-public class SteamSharedLibraryLoader extends JniGenSharedLibraryLoader {
+class SteamSharedLibraryLoader extends JniGenSharedLibraryLoader {
 
 	private String firstCrc;
 
-	public SteamSharedLibraryLoader(String nativesJar) {
+	SteamSharedLibraryLoader(String nativesJar) {
 		super(nativesJar);
 
 		// custom library finder

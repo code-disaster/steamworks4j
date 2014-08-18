@@ -6,7 +6,7 @@ public class SteamUserStats {
 
 	public SteamUserStats(long pointer, SteamUserStatsCallback callback) {
 		this.pointer = pointer;
-		registerCallback(callback);
+		registerCallback(new SteamUserStatsCallbackAdapter(callback));
 	}
 
 	static void dispose() {
@@ -84,7 +84,7 @@ public class SteamUserStats {
 		static SteamUserStatsCallback* callback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamUserStatsCallback javaCallback); /*
+	static private native boolean registerCallback(SteamUserStatsCallbackAdapter javaCallback); /*
 		if (callback != NULL) {
 			delete callback;
 			callback = NULL;

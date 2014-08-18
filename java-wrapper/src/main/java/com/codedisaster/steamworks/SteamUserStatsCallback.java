@@ -1,10 +1,9 @@
 package com.codedisaster.steamworks;
 
-@SuppressWarnings("unused")
 public interface SteamUserStatsCallback {
 
-	void onUserStatsReceived(long gameId, long userId, int result);
+	void onUserStatsReceived(long gameId, long userId, SteamResult result);
 
-	void onUserStatsStored(long gameId, int result);
+	void onUserStatsStored(long gameId, SteamResult result);
 
 }
