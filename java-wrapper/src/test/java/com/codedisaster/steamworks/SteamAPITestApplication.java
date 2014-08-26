@@ -6,6 +6,7 @@ public class SteamAPITestApplication {
 
 	private SteamUserStats userStats;
 	private SteamRemoteStorage remoteStorage;
+	private SteamUGC ugc;
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
@@ -28,6 +29,9 @@ public class SteamAPITestApplication {
 			System.out.println("User stats stored: gameId=" + gameId +
 					", result=" + result.toString());
 		}
+	};
+
+	private SteamUGCCallback ugcCallback = new SteamUGCCallback() {
 	};
 
 	class InputHandler implements Runnable {
@@ -93,6 +97,9 @@ public class SteamAPITestApplication {
 
 		System.out.println("Register remote storage ...");
 		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer());
+
+		System.out.println("Register UGC ...");
+		ugc = new SteamUGC(SteamAPI.getSteamUGCPointer(), ugcCallback);
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 		new Thread(inputHandler).start();

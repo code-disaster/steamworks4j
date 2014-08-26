@@ -2,7 +2,7 @@
 sdk/
 
 # generated sources
-src/main/native/com.codedisaster.steamworks.*
+java-wrapper/src/main/native/com.codedisaster.steamworks.*
 
 # output
 build/
