@@ -12,14 +12,14 @@ SteamUserStatsCallback::~SteamUserStatsCallback() {
 }
 
 void SteamUserStatsCallback::onUserStatsReceived(UserStatsReceived_t* callback) {
-	attach([&] (JNIEnv* env) {
+	invokeCallback({
         callVoidMethod(env, "onUserStatsReceived", "(JJI)V", (jlong) callback->m_nGameID,
             (jlong) callback->m_steamIDUser.ConvertToUint64(), (jint) callback->m_eResult);
 	});
 }
 
 void SteamUserStatsCallback::onUserStatsStored(UserStatsStored_t* callback) {
-	attach([&] (JNIEnv* env) {
+	invokeCallback({
     	callVoidMethod(env, "onUserStatsStored", "(JI)V", (jlong) callback->m_nGameID, (jint) callback->m_eResult);
     });
 }

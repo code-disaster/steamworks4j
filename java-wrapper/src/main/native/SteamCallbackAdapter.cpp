@@ -20,7 +20,7 @@ SteamCallbackAdapter::~SteamCallbackAdapter() {
     }
 }
 
-void SteamCallbackAdapter::attach(std::function<void (JNIEnv* env)> fn) const {
+void SteamCallbackAdapter::attach(SteamInvokeCallbackFunction fn) const {
     JNIEnv* env = attachThread();
     fn(env);
     detachThread();
