@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class SteamAPITestApplication {
 
+	private SteamUser user;
 	private SteamUserStats userStats;
 	private SteamRemoteStorage remoteStorage;
 	private SteamUGC ugc;
@@ -89,6 +90,9 @@ public class SteamAPITestApplication {
 			return false;
 		}
 
+		System.out.println("Register user ...");
+		user = new SteamUser(SteamAPI.getSteamUserPointer());
+
 		System.out.println("Register user stats callback ...");
 		userStats = new SteamUserStats(SteamAPI.getSteamUserStatsPointer(), userStatsCallback);
 
@@ -100,6 +104,8 @@ public class SteamAPITestApplication {
 
 		System.out.println("Register UGC ...");
 		ugc = new SteamUGC(SteamAPI.getSteamUGCPointer(), ugcCallback);
+
+		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 		new Thread(inputHandler).start();
