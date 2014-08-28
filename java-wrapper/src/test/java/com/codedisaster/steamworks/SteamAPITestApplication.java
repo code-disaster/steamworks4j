@@ -8,6 +8,7 @@ public class SteamAPITestApplication {
 	private SteamUserStats userStats;
 	private SteamRemoteStorage remoteStorage;
 	private SteamUGC ugc;
+	private SteamUtils utils;
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
@@ -33,6 +34,14 @@ public class SteamAPITestApplication {
 	};
 
 	private SteamUGCCallback ugcCallback = new SteamUGCCallback() {
+		@Override
+		public void onUGCQueryCompleted(SteamUGCQuery query, int numResultsReturned, int totalMatchingResults,
+										boolean isCachedData, SteamResult result) {
+			System.out.println("UGC query completed: handle= " + query.handle + ", " + numResultsReturned + " of " +
+							   totalMatchingResults + " results returned, result=" + result.toString());
+
+			ugc.releaseQueryUserUGCRequest(query);
+		}
 	};
 
 	class InputHandler implements Runnable {
@@ -58,9 +67,9 @@ public class SteamAPITestApplication {
 
 					if (input.equals("q")) {
 						alive = false;
-					} else if (input.equals("1")) {
+					} else if (input.equals("stats request")) {
 						userStats.requestCurrentStats();
-					} else if (input.equals("2")) {
+					} else if (input.equals("stats store")) {
 						userStats.storeStats();
 					} else if (input.equals("file list")) {
 						int numFiles = remoteStorage.getFileCount();
@@ -71,6 +80,16 @@ public class SteamAPITestApplication {
 							String name = remoteStorage.getFileNameAndSize(i, sizes);
 							boolean exists = remoteStorage.fileExists(name);
 							System.out.println("# " + i + " : name=" + name + ", size=" + sizes[0] + ", exists=" + (exists ? "yes" : "no"));
+						}
+					} else if (input.equals("ugc query")) {
+						SteamUGCQuery query = ugc.createQueryUserUGCRequest(user.getSteamID().getAccountID(), SteamUGC.UserUGCList.Subscribed,
+								SteamUGC.MatchingUGCType.UsableInGame, SteamUGC.UserUGCListSortOrder.TitleAsc,
+								utils.getAppID(), utils.getAppID(), 1);
+
+						if (query.isValid()) {
+							System.out.println("sending UGC query: " + query.handle);
+							ugc.setReturnTotalOnly(query, true);
+							ugc.sendQueryUGCRequest(query);
 						}
 					}
 				}
@@ -96,8 +115,8 @@ public class SteamAPITestApplication {
 		System.out.println("Register user stats callback ...");
 		userStats = new SteamUserStats(SteamAPI.getSteamUserStatsPointer(), userStatsCallback);
 
-		System.out.println("Requesting user stats ...");
-		userStats.requestCurrentStats();
+		//System.out.println("Requesting user stats ...");
+		//userStats.requestCurrentStats();
 
 		System.out.println("Register remote storage ...");
 		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer());
@@ -105,7 +124,11 @@ public class SteamAPITestApplication {
 		System.out.println("Register UGC ...");
 		ugc = new SteamUGC(SteamAPI.getSteamUGCPointer(), ugcCallback);
 
+		System.out.println("Register Utils ...");
+		utils = new SteamUtils(SteamAPI.getSteamUtilsPointer());
+
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
+		System.out.println("App ID: " + utils.getAppID());
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 		new Thread(inputHandler).start();

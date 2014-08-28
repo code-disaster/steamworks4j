@@ -1,11 +1,9 @@
 package com.codedisaster.steamworks;
 
-public class SteamUser {
-
-	private long pointer;
+public class SteamUser extends SteamInterface {
 
 	public SteamUser(long pointer) {
-		this.pointer = pointer;
+		super(pointer);
 	}
 
 	static void dispose() {

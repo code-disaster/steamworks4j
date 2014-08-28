@@ -6,7 +6,7 @@
 
     /**
         Some shady macro magic to "fake" lambda functions for OSX 10.6. The XCode compiler refuses
-        to support C++11 functions (because of stdlib) when using -mmacosx-version-min=10.6.
+        to support C++11 functions (because of stdlib=libc++) when using -mmacosx-version-min=10.6.
 
         This nonsense can be removed if we bump to some reasonable minimum requirement.
     */

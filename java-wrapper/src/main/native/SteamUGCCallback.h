@@ -9,4 +9,5 @@ public:
     SteamUGCCallback(JNIEnv* env, jobject callback);
     ~SteamUGCCallback();
 
+    STEAM_CALLBACK(SteamUGCCallback, onUGCQueryCompleted, SteamUGCQueryCompleted_t, m_CallbackUGCQueryCompleted);
 };

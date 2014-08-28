@@ -1,11 +1,9 @@
 package com.codedisaster.steamworks;
 
-public class SteamUserStats {
-
-	private final long pointer;
+public class SteamUserStats extends SteamInterface {
 
 	public SteamUserStats(long pointer, SteamUserStatsCallback callback) {
-		this.pointer = pointer;
+		super(pointer);
 		registerCallback(new SteamUserStatsCallbackAdapter(callback));
 	}
 

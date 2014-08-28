@@ -7,7 +7,7 @@ public enum SteamResult {
 	Fail(2),
 
 	/** If this is returned, we missed to "port" an Steam error code above. */
-	UnknownErrorCode(0);
+	UnknownErrorCode_NotImplementedByAPI(0);
 
 	private int code;
 	static private final SteamResult[] valuesLookupTable;
