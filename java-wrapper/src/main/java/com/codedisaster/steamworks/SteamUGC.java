@@ -104,7 +104,9 @@ public class SteamUGC extends SteamInterface {
 
 	static private native long sendQueryUGCRequest(long pointer, long query); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
-		return ugc->SendQueryUGCRequest(query);
+		SteamAPICall_t handle = ugc->SendQueryUGCRequest(query);
+		callback->onUGCQueryCompletedCall.Set(handle, callback, &SteamUGCCallback::onUGCQueryCompleted);
+		return handle;
 	*/
 
 	static private native boolean releaseQueryUserUGCRequest(long pointer, long query); /*

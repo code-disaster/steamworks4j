@@ -1,11 +1,9 @@
 package com.codedisaster.steamworks;
 
-class SteamUserStatsCallbackAdapter {
-
-	private SteamUserStatsCallback callback;
+class SteamUserStatsCallbackAdapter extends SteamCallbackAdapter<SteamUserStatsCallback> {
 
 	SteamUserStatsCallbackAdapter(SteamUserStatsCallback callback) {
-		this.callback = callback;
+		super(callback);
 	}
 
 	public void onUserStatsReceived(long gameId, long userId, int result) {

@@ -1,11 +1,9 @@
 package com.codedisaster.steamworks;
 
-class SteamUGCCallbackAdapter {
-
-	private SteamUGCCallback callback;
+class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 
 	SteamUGCCallbackAdapter(SteamUGCCallback callback) {
-		this.callback = callback;
+		super(callback);
 	}
 
 	public void onUGCQueryCompleted(long handle, int numResultsReturned, int totalMatchingResults,

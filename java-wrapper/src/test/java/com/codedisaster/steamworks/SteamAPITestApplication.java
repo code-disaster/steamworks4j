@@ -1,5 +1,10 @@
 package com.codedisaster.steamworks;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Scanner;
 
 public class SteamAPITestApplication {
@@ -33,11 +38,18 @@ public class SteamAPITestApplication {
 		}
 	};
 
+	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
+		@Override
+		public void onRemoteStorageFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
+			System.out.println("Remote storage file share result: name='" + fileHandle + "', result=" + result.toString());
+		}
+	};
+
 	private SteamUGCCallback ugcCallback = new SteamUGCCallback() {
 		@Override
 		public void onUGCQueryCompleted(SteamUGCQuery query, int numResultsReturned, int totalMatchingResults,
 										boolean isCachedData, SteamResult result) {
-			System.out.println("UGC query completed: handle= " + query.handle + ", " + numResultsReturned + " of " +
+			System.out.println("UGC query completed: handle=" + query.handle + ", " + numResultsReturned + " of " +
 							   totalMatchingResults + " results returned, result=" + result.toString());
 
 			ugc.releaseQueryUserUGCRequest(query);
@@ -81,6 +93,27 @@ public class SteamAPITestApplication {
 							boolean exists = remoteStorage.fileExists(name);
 							System.out.println("# " + i + " : name=" + name + ", size=" + sizes[0] + ", exists=" + (exists ? "yes" : "no"));
 						}
+					} else if (input.startsWith("file write ")) {
+						String path = input.substring("file write ".length());
+						File file = new File(path);
+						try {
+							FileInputStream in = new FileInputStream(file);
+							SteamUGCFileWriteStreamHandle remoteFile = remoteStorage.fileWriteStreamOpen(path);
+							if (remoteFile != null) {
+								byte[] bytes = new byte[1024];
+								int bytesRead = 0;
+								while((bytesRead = in.read(bytes, 0, bytes.length)) > 0) {
+									ByteBuffer buffer = ByteBuffer.allocateDirect(bytesRead);
+									buffer.put(bytes, 0, bytesRead);
+									remoteStorage.fileWriteStreamWriteChunk(remoteFile, buffer, buffer.limit());
+								}
+								remoteStorage.fileWriteStreamClose(remoteFile);
+							}
+						} catch (FileNotFoundException e) {
+						} catch (IOException e) {
+						}
+					} else if (input.startsWith("file share ")) {
+						remoteStorage.fileShare(input.substring("file share ".length()));
 					} else if (input.equals("ugc query")) {
 						SteamUGCQuery query = ugc.createQueryUserUGCRequest(user.getSteamID().getAccountID(), SteamUGC.UserUGCList.Subscribed,
 								SteamUGC.MatchingUGCType.UsableInGame, SteamUGC.UserUGCListSortOrder.TitleAsc,
@@ -119,7 +152,7 @@ public class SteamAPITestApplication {
 		//userStats.requestCurrentStats();
 
 		System.out.println("Register remote storage ...");
-		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer());
+		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer(), remoteStorageCallback);
 
 		System.out.println("Register UGC ...");
 		ugc = new SteamUGC(SteamAPI.getSteamUGCPointer(), ugcCallback);

@@ -6,11 +6,13 @@ public class SteamRemoteStorage {
 
 	private long pointer;
 
-	public SteamRemoteStorage(long pointer) {
+	public SteamRemoteStorage(long pointer, SteamRemoteStorageCallback callback) {
 		this.pointer = pointer;
+		registerCallback(new SteamRemoteStorageCallbackAdapter(callback));
 	}
 
 	static void dispose() {
+		registerCallback(null);
 	}
 
 	public boolean fileWrite(String name, ByteBuffer data, int length) throws SteamException {
@@ -31,6 +33,26 @@ public class SteamRemoteStorage {
 		return fileDelete(pointer, name);
 	}
 
+	public SteamAPICall fileShare(String name) {
+		return new SteamAPICall(fileShare(pointer, name));
+	}
+
+	public SteamUGCFileWriteStreamHandle fileWriteStreamOpen(String name) {
+		return new SteamUGCFileWriteStreamHandle(fileWriteStreamOpen(pointer, name));
+	}
+
+	public boolean fileWriteStreamWriteChunk(SteamUGCFileWriteStreamHandle stream, ByteBuffer data, int length) {
+		return fileWriteStreamWriteChunk(pointer, stream.handle, data, length);
+	}
+
+	public boolean fileWriteStreamClose(SteamUGCFileWriteStreamHandle stream) {
+		return fileWriteStreamClose(pointer, stream.handle);
+	}
+
+	public boolean fileWriteStreamCancel(SteamUGCFileWriteStreamHandle stream) {
+		return fileWriteStreamCancel(pointer, stream.handle);
+	}
+
 	public boolean fileExists(String name) {
 		return fileExists(pointer, name);
 	}
@@ -49,6 +71,22 @@ public class SteamRemoteStorage {
 
 	/*JNI
 		#include <steam_api.h>
+		#include "SteamRemoteStorageCallback.h"
+
+		static SteamRemoteStorageCallback* callback = NULL;
+	*/
+
+	static private native boolean registerCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
+		if (callback != NULL) {
+			delete callback;
+			callback = NULL;
+		}
+
+		if (javaCallback != NULL) {
+			callback = new SteamRemoteStorageCallback(env, javaCallback);
+		}
+
+		return callback != NULL;
 	*/
 
 	static private native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*
@@ -64,6 +102,33 @@ public class SteamRemoteStorage {
 	static private native boolean fileDelete(long pointer, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileDelete(name);
+	*/
+
+	static private native long fileShare(long pointer, String name); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamAPICall_t handle = storage->FileShare(name);
+		callback->onFileShareResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onFileShareResult);
+		return handle;
+	*/
+
+	static private native long fileWriteStreamOpen(long pointer, String name); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileWriteStreamOpen(name);
+	*/
+
+	static private native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data, int length); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileWriteStreamWriteChunk((UGCFileWriteStreamHandle_t) stream, data, length);
+	*/
+
+	static private native boolean fileWriteStreamClose(long pointer, long stream); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileWriteStreamClose((UGCFileWriteStreamHandle_t) stream);
+	*/
+
+	static private native boolean fileWriteStreamCancel(long pointer, long stream); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileWriteStreamCancel((UGCFileWriteStreamHandle_t) stream);
 	*/
 
 	static private native boolean fileExists(long pointer, String name); /*
