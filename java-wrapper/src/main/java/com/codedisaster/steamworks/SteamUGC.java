@@ -64,6 +64,10 @@ public class SteamUGC extends SteamInterface {
 		return new SteamAPICall(sendQueryUGCRequest(pointer, query.handle));
 	}
 
+	public boolean getQueryUGCResult(SteamUGCQuery query, int index, SteamUGCDetails details) {
+		return getQueryUGCResult(pointer, query.handle, index, details);
+	}
+
 	public boolean releaseQueryUserUGCRequest(SteamUGCQuery query) {
 		return releaseQueryUserUGCRequest(pointer, query.handle);
 	}
@@ -107,6 +111,31 @@ public class SteamUGC extends SteamInterface {
 		SteamAPICall_t handle = ugc->SendQueryUGCRequest(query);
 		callback->onUGCQueryCompletedCall.Set(handle, callback, &SteamUGCCallback::onUGCQueryCompleted);
 		return handle;
+	*/
+
+	static private native boolean getQueryUGCResult(long pointer, long query, int index, SteamUGCDetails details); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCDetails_t result;
+
+		if (ugc->GetQueryUGCResult(query, index, &result)) {
+			jclass clazz = env->GetObjectClass(details);
+
+			jfieldID field = env->GetFieldID(clazz, "publishedFileID", "J");
+			env->SetLongField(details, field, (jlong) result.m_nPublishedFileId);
+
+			field = env->GetFieldID(clazz, "result", "I");
+			env->SetIntField(details, field, (jint) result.m_eResult);
+
+			field = env->GetFieldID(clazz, "fileHandle", "J");
+			env->SetLongField(details, field, (jlong) result.m_hFile);
+
+			field = env->GetFieldID(clazz, "previewFileHandle", "J");
+			env->SetLongField(details, field, (jlong) result.m_hPreviewFile);
+
+			return true;
+		}
+
+		return false;
 	*/
 
 	static private native boolean releaseQueryUserUGCRequest(long pointer, long query); /*
