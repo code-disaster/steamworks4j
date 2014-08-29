@@ -4,6 +4,16 @@ import java.nio.ByteBuffer;
 
 public class SteamRemoteStorage {
 
+	public enum PublishedFileVisibility {
+		Public,
+		FriendsOnly,
+		Private
+	}
+
+	public enum WorkshopFileType {
+		Community
+	}
+
 	private long pointer;
 
 	public SteamRemoteStorage(long pointer, SteamRemoteStorageCallback callback) {
@@ -67,6 +77,15 @@ public class SteamRemoteStorage {
 
 	public String getFileNameAndSize(int index, int[] sizes) {
 		return getFileNameAndSize(pointer, index, sizes);
+	}
+
+	public SteamAPICall publishWorkshopFile(String file, String previewFile,
+										   long consumerAppID, String title, String description,
+										   PublishedFileVisibility visibility, String[] tags,
+										   WorkshopFileType workshopFileType) {
+
+		return new SteamAPICall(publishWorkshopFile(pointer, file, previewFile, consumerAppID, title,
+				description, visibility.ordinal(), tags, tags != null ? tags.length : 0, workshopFileType.ordinal()));
 	}
 
 	/*JNI
@@ -150,6 +169,31 @@ public class SteamRemoteStorage {
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		jstring name = env->NewStringUTF(storage->GetFileNameAndSize(index, &sizes[0]));
 		return name;
+	*/
+
+	static private native long publishWorkshopFile(long pointer, String file, String previewFile, long consumerAppID,
+												   String title, String description, int visibility, String[] tags,
+												   int numTags, int workshopFileType); /*
+
+		SteamParamStringArray_t arrayTags;
+		arrayTags.m_ppStrings = (numTags > 0) ? new const char*[numTags] : NULL;
+		arrayTags.m_nNumStrings = numTags;
+		for (int t = 0; t < numTags; t++) {
+			arrayTags.m_ppStrings[t] = env->GetStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), 0);
+		}
+
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamAPICall_t handle = storage->PublishWorkshopFile(file, previewFile, consumerAppID, title, description,
+			(ERemoteStoragePublishedFileVisibility) visibility, &arrayTags, (EWorkshopFileType) workshopFileType);
+
+		callback->onPublishFileResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onPublishFileResult);
+
+		for (int t = 0; t < numTags; t++) {
+			env->ReleaseStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), arrayTags.m_ppStrings[t]);
+		}
+		delete[] arrayTags.m_ppStrings;
+
+		return handle;
 	*/
 
 }

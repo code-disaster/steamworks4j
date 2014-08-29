@@ -40,8 +40,14 @@ public class SteamAPITestApplication {
 
 	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
 		@Override
-		public void onRemoteStorageFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
+		public void onFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
 			System.out.println("Remote storage file share result: name='" + fileHandle + "', result=" + result.toString());
+		}
+
+		@Override
+		public void onPublishFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
+			System.out.println("Remote storage publish file result: publishedFileID=" + publishedFileID.id +
+					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
 		}
 	};
 
@@ -112,8 +118,22 @@ public class SteamAPITestApplication {
 						} catch (FileNotFoundException e) {
 						} catch (IOException e) {
 						}
+					} else if (input.startsWith("file delete ")) {
+						String path = input.substring("file delete ".length());
+						if (remoteStorage.fileDelete(path)) {
+							System.out.println("deleted file '" + path + "'");
+						}
 					} else if (input.startsWith("file share ")) {
 						remoteStorage.fileShare(input.substring("file share ".length()));
+					} else if (input.startsWith("file publish ")) {
+						String[] paths = input.substring("file publish ".length()).split(" ");
+						if (paths.length >= 2) {
+							System.out.println("publishing file: " + paths[0] + ", preview file: " + paths[1]);
+							remoteStorage.publishWorkshopFile(paths[0], paths[1], utils.getAppID(),
+									"Test UGC!", "Dummy UGC file published by SteamAPITestApplication.",
+									SteamRemoteStorage.PublishedFileVisibility.Private, null,
+									SteamRemoteStorage.WorkshopFileType.Community);
+						}
 					} else if (input.equals("ugc query")) {
 						SteamUGCQuery query = ugc.createQueryUserUGCRequest(user.getSteamID().getAccountID(), SteamUGC.UserUGCList.Subscribed,
 								SteamUGC.MatchingUGCType.UsableInGame, SteamUGC.UserUGCListSortOrder.TitleAsc,
@@ -121,7 +141,7 @@ public class SteamAPITestApplication {
 
 						if (query.isValid()) {
 							System.out.println("sending UGC query: " + query.handle);
-							ugc.setReturnTotalOnly(query, true);
+							//ugc.setReturnTotalOnly(query, true);
 							ugc.sendQueryUGCRequest(query);
 						}
 					}
@@ -147,9 +167,6 @@ public class SteamAPITestApplication {
 
 		System.out.println("Register user stats callback ...");
 		userStats = new SteamUserStats(SteamAPI.getSteamUserStatsPointer(), userStatsCallback);
-
-		//System.out.println("Requesting user stats ...");
-		//userStats.requestCurrentStats();
 
 		System.out.println("Register remote storage ...");
 		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer(), remoteStorageCallback);

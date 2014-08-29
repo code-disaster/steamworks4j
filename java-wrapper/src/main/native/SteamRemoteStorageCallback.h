@@ -11,4 +11,7 @@ public:
 
 	void onFileShareResult(RemoteStorageFileShareResult_t* callback, bool error);
 	CCallResult<SteamRemoteStorageCallback, RemoteStorageFileShareResult_t> onFileShareResultCall;
+
+	void onPublishFileResult(RemoteStoragePublishFileResult_t* callback, bool error);
+	CCallResult<SteamRemoteStorageCallback, RemoteStoragePublishFileResult_t> onPublishFileResultCall;
 };

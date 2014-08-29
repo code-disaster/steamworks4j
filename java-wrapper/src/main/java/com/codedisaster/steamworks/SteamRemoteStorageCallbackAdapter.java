@@ -6,8 +6,13 @@ public class SteamRemoteStorageCallbackAdapter extends SteamCallbackAdapter<Stea
 		super(callback);
 	}
 
-	public void onRemoteStorageFileShareResult(long fileHandle, String fileName, int result) {
-		callback.onRemoteStorageFileShareResult(new SteamUGCHandle(fileHandle), fileName, SteamResult.byValue(result));
+	public void onFileShareResult(long fileHandle, String fileName, int result) {
+		callback.onFileShareResult(new SteamUGCHandle(fileHandle),
+				fileName, SteamResult.byValue(result));
 	}
 
+	public void onPublishFileResult(long publishedFileID, boolean needsToAcceptWLA, int result) {
+		callback.onPublishFileResult(new SteamPublishedFileID(publishedFileID),
+				needsToAcceptWLA, SteamResult.byValue(result));
+	}
 }
