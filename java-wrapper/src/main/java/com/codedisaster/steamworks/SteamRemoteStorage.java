@@ -4,6 +4,12 @@ import java.nio.ByteBuffer;
 
 public class SteamRemoteStorage {
 
+	public enum UGCReadAction {
+		ContinueReadingUntilFinished,
+		ContinueReading,
+		Close
+	}
+
 	public enum PublishedFileVisibility {
 		Public,
 		FriendsOnly,
@@ -77,6 +83,14 @@ public class SteamRemoteStorage {
 
 	public String getFileNameAndSize(int index, int[] sizes) {
 		return getFileNameAndSize(pointer, index, sizes);
+	}
+
+	public SteamAPICall ugcDownload(SteamUGCHandle fileHandle, int priority) {
+		return new SteamAPICall(ugcDownload(pointer, fileHandle.handle, priority));
+	}
+
+	public int ugcRead(SteamUGCHandle fileHandle, ByteBuffer buffer, int capacity, int offset, UGCReadAction action) {
+		return ugcRead(pointer, fileHandle.handle, buffer, capacity, offset, action.ordinal());
 	}
 
 	public SteamAPICall publishWorkshopFile(String file, String previewFile,
@@ -169,6 +183,20 @@ public class SteamRemoteStorage {
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		jstring name = env->NewStringUTF(storage->GetFileNameAndSize(index, &sizes[0]));
 		return name;
+	*/
+
+	static private native long ugcDownload(long pointer, long content, int priority); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamAPICall_t handle = storage->UGCDownload(content, priority);
+		callback->onDownloadUGCResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onDownloadUGCResult);
+		return handle;
+	*/
+
+	static private native int ugcRead(long pointer, long content, ByteBuffer buffer, int capacity,
+									  int offset, int action); /*
+
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UGCRead(content, buffer, capacity, offset, (EUGCReadAction) action);
 	*/
 
 	static private native long publishWorkshopFile(long pointer, String file, String previewFile, long consumerAppID,

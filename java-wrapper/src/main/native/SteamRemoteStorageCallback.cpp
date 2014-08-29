@@ -17,6 +17,12 @@ void SteamRemoteStorageCallback::onFileShareResult(RemoteStorageFileShareResult_
 	});
 }
 
+void SteamRemoteStorageCallback::onDownloadUGCResult(RemoteStorageDownloadUGCResult_t* callback, bool error) {
+    invokeCallback({
+        callVoidMethod(env, "onDownloadUGCResult", "(JI)V", (jlong) callback->m_hFile, (jint) callback->m_eResult);
+    });
+}
+
 void SteamRemoteStorageCallback::onPublishFileResult(RemoteStoragePublishFileResult_t* callback, bool error) {
     invokeCallback({
         callVoidMethod(env, "onPublishFileResult", "(JZI)V", (jlong) callback->m_nPublishedFileId,

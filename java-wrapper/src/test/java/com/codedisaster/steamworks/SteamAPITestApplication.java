@@ -41,7 +41,25 @@ public class SteamAPITestApplication {
 	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
 		@Override
 		public void onFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
-			System.out.println("Remote storage file share result: name='" + fileHandle + "', result=" + result.toString());
+			System.out.println("Remote storage file share result: handle='" + Long.toHexString(fileHandle.handle) +
+					", name=" + fileName + "', result=" + result.toString());
+		}
+
+		@Override
+		public void onDownloadUGCResult(SteamUGCHandle fileHandle, SteamResult result) {
+			System.out.println("Remote storage download UGC result: handle='" + Long.toHexString(fileHandle.handle) +
+					"', result=" + result.toString());
+
+			ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+			int offset = 0, bytesRead;
+
+			do {
+				bytesRead = remoteStorage.ugcRead(fileHandle, buffer, buffer.limit(), offset,
+					SteamRemoteStorage.UGCReadAction.ContinueReadingUntilFinished);
+				offset += bytesRead;
+			} while (bytesRead > 0);
+
+			System.out.println("Read " + offset + " bytes from handle=" + Long.toHexString(fileHandle.handle));
 		}
 
 		@Override
@@ -154,6 +172,10 @@ public class SteamAPITestApplication {
 							//ugc.setReturnTotalOnly(query, true);
 							ugc.sendQueryUGCRequest(query);
 						}
+					} else if (input.startsWith("ugc download ")) {
+						String name = input.substring("ugc download ".length());
+						SteamUGCHandle handle = new SteamUGCHandle(Long.parseLong(name, 16));
+						remoteStorage.ugcDownload(handle, 0);
 					}
 				}
 

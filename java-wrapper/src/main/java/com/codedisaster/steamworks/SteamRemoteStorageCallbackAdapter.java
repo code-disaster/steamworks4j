@@ -11,6 +11,10 @@ public class SteamRemoteStorageCallbackAdapter extends SteamCallbackAdapter<Stea
 				fileName, SteamResult.byValue(result));
 	}
 
+	public void onDownloadUGCResult(long fileHandle, int result) {
+		callback.onDownloadUGCResult(new SteamUGCHandle(fileHandle), SteamResult.byValue(result));
+	}
+
 	public void onPublishFileResult(long publishedFileID, boolean needsToAcceptWLA, int result) {
 		callback.onPublishFileResult(new SteamPublishedFileID(publishedFileID),
 				needsToAcceptWLA, SteamResult.byValue(result));
