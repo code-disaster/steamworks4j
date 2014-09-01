@@ -80,10 +80,12 @@ public class SteamAPITestApplication {
 				SteamUGCDetails details = new SteamUGCDetails();
 				ugc.getQueryUGCResult(query, i, details);
 
-				System.out.println("UGC details #" + i + ": publishedFileID=" + details.getPublishedFileID().id +
-								   ", result=" + details.getResult().toString() + ", fileHandle=" +
-								   Long.toHexString(details.getFileHandle().handle) + ", previewFileHandle=" +
-								   Long.toHexString(details.getPreviewFileHandle().handle));
+				System.out.println("UGC details #" + i +
+								   ": publishedFileID=" + details.getPublishedFileID().id +
+								   ", result=" + details.getResult().toString() +
+								   ", fileName=" + details.getFileName() +
+								   ", fileHandle=" + Long.toHexString(details.getFileHandle().handle) +
+								   ", previewFileHandle=" + Long.toHexString(details.getPreviewFileHandle().handle));
 			}
 
 			ugc.releaseQueryUserUGCRequest(query);

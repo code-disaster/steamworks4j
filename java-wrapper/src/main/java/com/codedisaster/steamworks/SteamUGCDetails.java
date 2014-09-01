@@ -8,6 +8,7 @@ public class SteamUGCDetails {
 	int result;
 	long fileHandle;
 	long previewFileHandle;
+	String fileName;
 
 	public SteamPublishedFileID getPublishedFileID() {
 		return new SteamPublishedFileID(publishedFileID);
@@ -23,5 +24,9 @@ public class SteamUGCDetails {
 
 	public SteamUGCHandle getPreviewFileHandle() {
 		return new SteamUGCHandle(previewFileHandle);
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 }

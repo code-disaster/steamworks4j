@@ -132,6 +132,10 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "previewFileHandle", "J");
 			env->SetLongField(details, field, (jlong) result.m_hPreviewFile);
 
+			jstring fileName = env->NewStringUTF(result.m_pchFileName);
+			field = env->GetFieldID(clazz, "fileName", "Ljava/lang/String;");
+			env->SetObjectField(details, field, fileName);
+
 			return true;
 		}
 
