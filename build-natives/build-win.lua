@@ -15,7 +15,7 @@ solution "steamworks4j"
 			"../sdk/public/steam" }
 
 		defines { "NDEBUG", "WINDOWS" }
-		flags { "Optimize" }
+		flags { "Optimize", "StaticRuntime" }
 
 		configuration "x32"
 			libdirs { "../sdk/redistributable_bin" }
