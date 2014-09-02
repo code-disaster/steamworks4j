@@ -2,7 +2,6 @@ package com.codedisaster.steamworks;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Scanner;
@@ -137,7 +136,7 @@ public class SteamAPITestApplication {
 							SteamUGCFileWriteStreamHandle remoteFile = remoteStorage.fileWriteStreamOpen(path);
 							if (remoteFile != null) {
 								byte[] bytes = new byte[1024];
-								int bytesRead = 0;
+								int bytesRead;
 								while((bytesRead = in.read(bytes, 0, bytes.length)) > 0) {
 									ByteBuffer buffer = ByteBuffer.allocateDirect(bytesRead);
 									buffer.put(bytes, 0, bytesRead);
@@ -145,8 +144,8 @@ public class SteamAPITestApplication {
 								}
 								remoteStorage.fileWriteStreamClose(remoteFile);
 							}
-						} catch (FileNotFoundException e) {
 						} catch (IOException e) {
+							e.printStackTrace();
 						}
 					} else if (input.startsWith("file delete ")) {
 						String path = input.substring("file delete ".length());

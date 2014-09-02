@@ -12,6 +12,36 @@ The wrapper is written as minimal as possible without sacrificing ease of use. I
 
 This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
 
+## Implementation overview
+
+### Technical concept
+
+The *public* Java interfaces are more or less 1:1 mapped to their native counterparts, as long as it doesn't impede usability and type safety. In general, each public function does simple type conversion only before calling its native function.
+
+Callbacks are dealt with in a similar manner. Native callbacks are received by *package private callback adapters*, which only do type conversion, then forward the callback to their *public* interface.
+
+### Proper handling of callbacks
+
+The Steamworks API provides two different mechanics to deal with callbacks: `STEAM_CALLBACK()` and `CCallResult<>`. Both are handled internally by **steamworks4j** for you, but this abstraction imposes one drawback:
+
+> It is only guaranteed that, at any time, the user application receives callbacks related to the **latest** respective API call.
+
+> In practice this means that the caller shouldn't "batch-execute" the same API function, then wait for a bunch (of the same type) of callbacks. Instead, only one single API call should be issued. Then the application should wait for the callback, process it, then execute the next API call.
+
+> This is actually true for CCallResult<> style callbacks only, but the application will require more knowledge about the inner workings of Steamworks to differentiate, as the Java API doesn't tell.
+
+### Implemented interfaces
+
+The following interfaces have been *partially* implemented so far:
+
+```
+ISteamRemoteStorage
+ISteamUGC
+ISteamUser
+ISteamUserStats
+ISteamUtils
+```
+
 ## Requirements
 
 First of all, you need to be registered with, and have a project set up at Steamworks to use this wrapper.
