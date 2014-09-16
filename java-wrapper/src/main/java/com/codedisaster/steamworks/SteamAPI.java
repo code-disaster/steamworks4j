@@ -4,11 +4,11 @@ import java.io.*;
 
 public class SteamAPI {
 
+	static private boolean isRunning = false;
+
 	static public boolean init() {
-		if (!loadLibraries()) {
-			return false;
-		}
-		return nativeInit();
+		isRunning = loadLibraries() && nativeInit();
+		return isRunning;
 	}
 
 	static public void shutdown() {
@@ -18,6 +18,10 @@ public class SteamAPI {
 		SteamUserStats.dispose();
 		SteamUtils.dispose();
 		nativeShutdown();
+	}
+
+	static public boolean isSteamRunning() {
+		return isRunning && isSteamRunningNative();
 	}
 
 	static private boolean loadLibraries() {
@@ -86,7 +90,7 @@ public class SteamAPI {
 		SteamAPI_RunCallbacks();
 	*/
 
-	static public native boolean isSteamRunning(); /*
+	static private native boolean isSteamRunningNative(); /*
 		return SteamAPI_IsSteamRunning();
 	*/
 
