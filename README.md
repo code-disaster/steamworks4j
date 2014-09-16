@@ -54,7 +54,7 @@ The Java code is compiled with JDK 1.6.
 
 #### Mac OS
 
-Right now only OS X 10.7 and above is supported.
+OS X 10.6 and above is supported.
 
 ## Building native libraries
 
