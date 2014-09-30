@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
 public class SteamUGCQuery {
-	long handle;
+	final long handle;
 
 	public SteamUGCQuery(long handle) {
 		this.handle = handle;

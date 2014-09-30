@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
 public class SteamUGCHandle {
-	public long handle;
+	public final long handle;
 
 	SteamUGCHandle(long handle) {
 		this.handle = handle;

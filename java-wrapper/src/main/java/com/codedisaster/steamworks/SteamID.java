@@ -1,8 +1,7 @@
 package com.codedisaster.steamworks;
 
 public class SteamID {
-
-	private long id;
+	private final long id;
 
 	SteamID(long id) {
 		this.id = id;
@@ -11,5 +10,4 @@ public class SteamID {
 	public int getAccountID() {
 		return (int) (id % (1L << 32));
 	}
-
 }
