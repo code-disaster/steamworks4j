@@ -126,6 +126,14 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "result", "I");
 			env->SetIntField(details, field, (jint) result.m_eResult);
 
+			jstring title = env->NewStringUTF(result.m_rgchTitle);
+			field = env->GetFieldID(clazz, "title", "Ljava/lang/String;");
+			env->SetObjectField(details, field, title);
+
+			jstring description = env->NewStringUTF(result.m_rgchDescription);
+			field = env->GetFieldID(clazz, "description", "Ljava/lang/String;");
+			env->SetObjectField(details, field, description);
+
 			field = env->GetFieldID(clazz, "fileHandle", "J");
 			env->SetLongField(details, field, (jlong) result.m_hFile);
 

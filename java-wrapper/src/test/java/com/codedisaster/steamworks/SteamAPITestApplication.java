@@ -82,6 +82,8 @@ public class SteamAPITestApplication {
 				System.out.println("UGC details #" + i +
 								   ": publishedFileID=" + details.getPublishedFileID().id +
 								   ", result=" + details.getResult().toString() +
+								   ", title='" + details.getTitle() + "'" +
+								   ", description='" + details.getDescription() + "'" +
 								   ", fileName=" + details.getFileName() +
 								   ", fileHandle=" + Long.toHexString(details.getFileHandle().handle) +
 								   ", previewFileHandle=" + Long.toHexString(details.getPreviewFileHandle().handle));

@@ -6,6 +6,8 @@ public class SteamUGCDetails {
 
 	long publishedFileID;
 	int result;
+	String title;
+	String description;
 	long fileHandle;
 	long previewFileHandle;
 	String fileName;
@@ -16,6 +18,14 @@ public class SteamUGCDetails {
 
 	public SteamResult getResult() {
 		return SteamResult.byValue(result);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public SteamUGCHandle getFileHandle() {
