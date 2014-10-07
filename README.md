@@ -8,7 +8,7 @@ The wrapper is written as minimal as possible without sacrificing ease of use. I
 
 > **In its current state, the wrapper only publishes very few interfaces. In basic, everything we put into use with our own games right now. Feel free to participate to extend it with the many functions and interfaces still missing.**
 
-**steamworks4j** is currently built against Steamworks SDK v1.30.
+**steamworks4j** is currently built against Steamworks SDK v1.31.
 
 This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
 
@@ -35,6 +35,7 @@ The Steamworks API provides two different mechanics to deal with callbacks: `STE
 The following interfaces have been *partially* implemented so far:
 
 ```
+ISteamFriends
 ISteamRemoteStorage
 ISteamUGC
 ISteamUser

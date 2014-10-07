@@ -9,7 +9,7 @@
 	<name>Steam API Java Wrapper - Parent POM</name>
 
 	<packaging>pom</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 
 	<modules>
 		<module>natives</module>
