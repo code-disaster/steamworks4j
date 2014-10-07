@@ -12,6 +12,7 @@ public class SteamAPI {
 	}
 
 	static public void shutdown() {
+		SteamFriends.dispose();
 		SteamRemoteStorage.dispose();
 		SteamUGC.dispose();
 		SteamUser.dispose();
@@ -92,6 +93,10 @@ public class SteamAPI {
 
 	static private native boolean isSteamRunningNative(); /*
 		return SteamAPI_IsSteamRunning();
+	*/
+
+	static public native long getSteamFriendsPointer(); /*
+		return (long) SteamFriends();
 	*/
 
 	static public native long getSteamUserPointer(); /*

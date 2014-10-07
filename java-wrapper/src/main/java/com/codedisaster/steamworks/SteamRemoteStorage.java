@@ -2,7 +2,7 @@ package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
 
-public class SteamRemoteStorage {
+public class SteamRemoteStorage extends SteamInterface {
 
 	public enum UGCReadAction {
 		ContinueReadingUntilFinished,
@@ -20,10 +20,8 @@ public class SteamRemoteStorage {
 		Community
 	}
 
-	private long pointer;
-
 	public SteamRemoteStorage(long pointer, SteamRemoteStorageCallback callback) {
-		this.pointer = pointer;
+		super(pointer);
 		registerCallback(new SteamRemoteStorageCallbackAdapter(callback));
 	}
 

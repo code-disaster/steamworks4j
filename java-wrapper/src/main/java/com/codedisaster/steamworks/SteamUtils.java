@@ -13,6 +13,10 @@ public class SteamUtils extends SteamInterface {
 		return getAppID(pointer);
 	}
 
+	public boolean isOverlayEnabled() {
+		return isOverlayEnabled(pointer);
+	}
+
 	// @off
 
 	/*JNI
@@ -22,6 +26,11 @@ public class SteamUtils extends SteamInterface {
 	static private native long getAppID(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return (int64) utils->GetAppID();
+	*/
+
+	static private native boolean isOverlayEnabled(long pointer); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		return utils->IsOverlayEnabled();
 	*/
 
 }
