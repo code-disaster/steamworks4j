@@ -66,6 +66,12 @@ public class SteamAPITestApplication {
 			System.out.println("Remote storage publish file result: publishedFileID=" + publishedFileID.id +
 					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
 		}
+
+		@Override
+		public void onUpdatePublishedFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
+			System.out.println("Remote storage update published file result: publishedFileID=" + publishedFileID.id +
+					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
+		}
 	};
 
 	private SteamUGCCallback ugcCallback = new SteamUGCCallback() {
@@ -164,6 +170,22 @@ public class SteamAPITestApplication {
 									"Test UGC!", "Dummy UGC file published by SteamAPITestApplication.",
 									SteamRemoteStorage.PublishedFileVisibility.Private, null,
 									SteamRemoteStorage.WorkshopFileType.Community);
+						}
+					} else if (input.startsWith("file republish ")) {
+						String[] paths = input.substring("file republish ".length()).split(" ");
+						if (paths.length >= 3) {
+							System.out.println("republishing id: " + paths[0] + ", file: " + paths[1] + ", preview file: " + paths[2]);
+
+							SteamPublishedFileID fileID = new SteamPublishedFileID(Long.parseLong(paths[0]));
+
+							SteamPublishedFileUpdateHandle updateHandle = remoteStorage.createPublishedFileUpdateRequest(fileID);
+							if (updateHandle != null) {
+								remoteStorage.updatePublishedFileFile(updateHandle, paths[1]);
+								remoteStorage.updatePublishedFilePreviewFile(updateHandle, paths[2]);
+								remoteStorage.updatePublishedFileTitle(updateHandle, "Updated Test UGC!");
+								remoteStorage.updatePublishedFileDescription(updateHandle, "Dummy UGC file *updated* by SteamAPITestApplication.");
+								remoteStorage.commitPublishedFileUpdate(updateHandle);
+							}
 						}
 					} else if (input.equals("ugc query")) {
 						SteamUGCQuery query = ugc.createQueryUserUGCRequest(user.getSteamID().getAccountID(), SteamUGC.UserUGCList.Subscribed,

@@ -29,3 +29,10 @@ void SteamRemoteStorageCallback::onPublishFileResult(RemoteStoragePublishFileRes
             callback->m_bUserNeedsToAcceptWorkshopLegalAgreement, (jint) callback->m_eResult);
     });
 }
+
+void SteamRemoteStorageCallback::onUpdatePublishedFileResult(RemoteStorageUpdatePublishedFileResult_t* callback, bool error) {
+    invokeCallback({
+        callVoidMethod(env, "onUpdatePublishedFileResult", "(JZI)V", (jlong) callback->m_nPublishedFileId,
+            callback->m_bUserNeedsToAcceptWorkshopLegalAgreement, (jint) callback->m_eResult);
+    });
+}

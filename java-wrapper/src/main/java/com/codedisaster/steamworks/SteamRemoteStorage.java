@@ -100,6 +100,30 @@ public class SteamRemoteStorage extends SteamInterface {
 				description, visibility.ordinal(), tags, tags != null ? tags.length : 0, workshopFileType.ordinal()));
 	}
 
+	public SteamPublishedFileUpdateHandle createPublishedFileUpdateRequest(SteamPublishedFileID publishedFileID) {
+		return new SteamPublishedFileUpdateHandle(createPublishedFileUpdateRequest(pointer, publishedFileID.id));
+	}
+
+	public boolean updatePublishedFileFile(SteamPublishedFileUpdateHandle updateHandle, String file) {
+		return updatePublishedFileFile(pointer, updateHandle.handle, file);
+	}
+
+	public boolean updatePublishedFilePreviewFile(SteamPublishedFileUpdateHandle updateHandle, String previewFile) {
+		return updatePublishedFilePreviewFile(pointer, updateHandle.handle, previewFile);
+	}
+
+	public boolean updatePublishedFileTitle(SteamPublishedFileUpdateHandle updateHandle, String title) {
+		return updatePublishedFileTitle(pointer, updateHandle.handle, title);
+	}
+
+	public boolean updatePublishedFileDescription(SteamPublishedFileUpdateHandle updateHandle, String description) {
+		return updatePublishedFileDescription(pointer, updateHandle.handle, description);
+	}
+
+	public SteamAPICall commitPublishedFileUpdate(SteamPublishedFileUpdateHandle updateHandle) {
+		return new SteamAPICall(commitPublishedFileUpdate(pointer, updateHandle.handle));
+	}
+
 	/*JNI
 		#include <steam_api.h>
 		#include "SteamRemoteStorageCallback.h"
@@ -218,6 +242,40 @@ public class SteamRemoteStorage extends SteamInterface {
 			env->ReleaseStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), arrayTags.m_ppStrings[t]);
 		}
 		delete[] arrayTags.m_ppStrings;
+
+		return handle;
+	*/
+
+	static private native long createPublishedFileUpdateRequest(long pointer, long publishedFileID); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->CreatePublishedFileUpdateRequest(publishedFileID);
+	*/
+
+	static private native boolean updatePublishedFileFile(long pointer, long updateHandle, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UpdatePublishedFileFile(updateHandle, file);
+	*/
+
+	static private native boolean updatePublishedFilePreviewFile(long pointer, long updateHandle, String previewFile); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UpdatePublishedFilePreviewFile(updateHandle, previewFile);
+	*/
+
+	static private native boolean updatePublishedFileTitle(long pointer, long updateHandle, String title); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UpdatePublishedFileTitle(updateHandle, title);
+	*/
+
+	static private native boolean updatePublishedFileDescription(long pointer, long updateHandle, String description); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UpdatePublishedFileDescription(updateHandle, description);
+	*/
+
+	static private native long commitPublishedFileUpdate(long pointer, long updateHandle); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamAPICall_t handle = storage->CommitPublishedFileUpdate(updateHandle);
+
+		callback->onUpdatePublishedFileResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onUpdatePublishedFileResult);
 
 		return handle;
 	*/

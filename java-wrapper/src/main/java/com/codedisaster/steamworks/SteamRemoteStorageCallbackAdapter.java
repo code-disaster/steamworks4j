@@ -19,4 +19,9 @@ public class SteamRemoteStorageCallbackAdapter extends SteamCallbackAdapter<Stea
 		callback.onPublishFileResult(new SteamPublishedFileID(publishedFileID),
 				needsToAcceptWLA, SteamResult.byValue(result));
 	}
+
+	public void onUpdatePublishedFileResult(long publishedFileID, boolean needsToAcceptWLA, int result) {
+		callback.onUpdatePublishedFileResult(new SteamPublishedFileID(publishedFileID),
+				needsToAcceptWLA, SteamResult.byValue(result));
+	}
 }

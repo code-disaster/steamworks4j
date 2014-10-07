@@ -8,4 +8,6 @@ public interface SteamRemoteStorageCallback {
 
 	void onPublishFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result);
 
+	void onUpdatePublishedFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result);
+
 }
