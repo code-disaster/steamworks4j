@@ -17,7 +17,11 @@ public enum SteamResult {
 	}
 
 	static public SteamResult byValue(int resultCode) {
-		return valuesLookupTable[resultCode];
+		if (resultCode < valuesLookupTable.length) {
+			return valuesLookupTable[resultCode];
+		} else {
+			return UnknownErrorCode_NotImplementedByAPI;
+		}
 	}
 
 	static {
