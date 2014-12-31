@@ -6,6 +6,8 @@ public enum SteamResult {
 	OK(1),
 	Fail(2),
 
+	FileNotFound(9),
+
 	/** If this is returned, we missed to "port" an Steam error code above. */
 	UnknownErrorCode_NotImplementedByAPI(0);
 
