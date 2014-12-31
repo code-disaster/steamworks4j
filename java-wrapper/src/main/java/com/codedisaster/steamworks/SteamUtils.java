@@ -2,7 +2,7 @@ package com.codedisaster.steamworks;
 
 public class SteamUtils extends SteamInterface {
 
-	enum NotificationPosition {
+	public enum NotificationPosition {
 		TopLeft,
 		TopRight,
 		BottomLeft,
