@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+@SuppressWarnings("unused")
 public class SteamRemoteStorageCallbackAdapter extends SteamCallbackAdapter<SteamRemoteStorageCallback> {
 
 	SteamRemoteStorageCallbackAdapter(SteamRemoteStorageCallback callback) {

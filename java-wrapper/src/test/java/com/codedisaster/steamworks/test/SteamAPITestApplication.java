@@ -16,6 +16,8 @@ public class SteamAPITestApplication {
 	private SteamUGC ugc;
 	private SteamUtils utils;
 
+	private SteamLeaderboardHandle currentLeaderboard = null;
+
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
 		public void onUserStatsReceived(long gameId, long userId, SteamResult result) {
@@ -36,6 +38,57 @@ public class SteamAPITestApplication {
 		public void onUserStatsStored(long gameId, SteamResult result) {
 			System.out.println("User stats stored: gameId=" + gameId +
 					", result=" + result.toString());
+		}
+
+		@Override
+		public void onLeaderboardFindResult(SteamLeaderboardHandle leaderboard, boolean found) {
+			System.out.println("Leaderboard find result: handle=" + leaderboard.toString() +
+					", found=" + (found ? "yes" : "no"));
+
+			if (found) {
+				System.out.println("Leaderboard: name=" + userStats.getLeaderboardName(leaderboard) +
+						", entries=" + userStats.getLeaderboardEntryCount(leaderboard));
+
+				currentLeaderboard = leaderboard;
+			}
+		}
+
+		@Override
+		public void onLeaderboardScoresDownloaded(SteamLeaderboardHandle leaderboard,
+												  SteamLeaderboardEntriesHandle entries,
+												  int numEntries) {
+
+			System.out.println("Leaderboard scores downloaded: handle=" + leaderboard.toString() +
+					", entries=" + entries.toString() + ", count=" + numEntries);
+
+			for (int i = 0; i < numEntries; i++) {
+
+				SteamLeaderboardEntry entry = new SteamLeaderboardEntry();
+				if (userStats.getDownloadedLeaderboardEntry(entries, i, entry)) {
+
+					System.out.println("Leaderboard entry #" + i +
+							": steamIDUser=" + entry.getSteamIDUser().getAccountID() +
+							", globalRank=" + entry.getGlobalRank() +
+							", score=" + entry.getScore());
+				}
+
+			}
+		}
+
+		@Override
+		public void onLeaderboardScoreUploaded(boolean success,
+											   SteamLeaderboardHandle leaderboard,
+											   int score,
+											   boolean scoreChanged,
+											   int globalRankNew,
+											   int globalRankPrevious) {
+
+			System.out.println("Leaderboard score uploaded: " + (success ? "yes" : "no") +
+					", handle=" + leaderboard.toString() +
+					", score=" + score +
+					", changed=" + (scoreChanged ? "yes" : "no") +
+					", globalRankNew=" + globalRankNew +
+					", globalRankPrevious=" + globalRankPrevious);
 		}
 	};
 
@@ -203,6 +256,23 @@ public class SteamAPITestApplication {
 						String name = input.substring("ugc download ".length());
 						SteamUGCHandle handle = new SteamUGCHandle(Long.parseLong(name, 16));
 						remoteStorage.ugcDownload(handle, 0);
+					} else if (input.startsWith("leaderboard find ")) {
+						String name = input.substring("leaderboard find ".length());
+						userStats.findLeaderboard(name);
+					} else if (input.startsWith("leaderboard list ")) {
+						String[] params = input.substring("leaderboard list ".length()).split(" ");
+						if (currentLeaderboard != null && params.length >= 2) {
+							userStats.downloadLeaderboardEntries(currentLeaderboard,
+									SteamUserStats.LeaderboardDataRequest.Global,
+									Integer.valueOf(params[0]), Integer.valueOf(params[1]));
+						}
+					} else if (input.startsWith("leaderboard score ")) {
+						String score = input.substring("leaderboard score ".length());
+						if (currentLeaderboard != null) {
+							System.out.println("uploading score " + score + "to leaderboard " + currentLeaderboard.toString());
+							userStats.uploadLeaderboardScore(currentLeaderboard,
+									SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score));
+						}
 					}
 				}
 

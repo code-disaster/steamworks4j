@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+@SuppressWarnings("unused")
 class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 
 	SteamUGCCallbackAdapter(SteamUGCCallback callback) {
