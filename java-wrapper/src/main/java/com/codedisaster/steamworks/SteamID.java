@@ -1,13 +1,12 @@
 package com.codedisaster.steamworks;
 
-public class SteamID {
-	private final long id;
+public class SteamID extends SteamNativeHandle {
 
 	SteamID(long id) {
-		this.id = id;
+		super(id);
 	}
 
 	public int getAccountID() {
-		return (int) (id % (1L << 32));
+		return (int) (handle % (1L << 32));
 	}
 }

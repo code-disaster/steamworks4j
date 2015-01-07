@@ -1,9 +1,8 @@
 package com.codedisaster.steamworks;
 
-public class SteamPublishedFileID {
-	public final long id;
+public class SteamPublishedFileID extends SteamNativeHandle {
 
-	SteamPublishedFileID(long id) {
-		this.id = id;
+	public SteamPublishedFileID(long id) {
+		super(id);
 	}
 }

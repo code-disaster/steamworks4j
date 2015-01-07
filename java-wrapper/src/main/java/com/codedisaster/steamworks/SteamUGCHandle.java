@@ -1,9 +1,8 @@
 package com.codedisaster.steamworks;
 
-public class SteamUGCHandle {
-	public final long handle;
+public class SteamUGCHandle extends SteamNativeHandle {
 
-	SteamUGCHandle(long handle) {
-		this.handle = handle;
+	public SteamUGCHandle(long handle) {
+		super(handle);
 	}
 }

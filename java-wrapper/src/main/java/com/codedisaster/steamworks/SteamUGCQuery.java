@@ -1,10 +1,9 @@
 package com.codedisaster.steamworks;
 
-public class SteamUGCQuery {
-	final long handle;
+public class SteamUGCQuery extends SteamNativeHandle {
 
 	public SteamUGCQuery(long handle) {
-		this.handle = handle;
+		super(handle);
 	}
 
 	public boolean isValid() {

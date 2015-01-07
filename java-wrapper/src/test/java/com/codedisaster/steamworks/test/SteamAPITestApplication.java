@@ -1,4 +1,6 @@
-package com.codedisaster.steamworks;
+package com.codedisaster.steamworks.test;
+
+import com.codedisaster.steamworks.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,13 +42,13 @@ public class SteamAPITestApplication {
 	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
 		@Override
 		public void onFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
-			System.out.println("Remote storage file share result: handle='" + Long.toHexString(fileHandle.handle) +
+			System.out.println("Remote storage file share result: handle='" + fileHandle.toString() +
 					", name=" + fileName + "', result=" + result.toString());
 		}
 
 		@Override
 		public void onDownloadUGCResult(SteamUGCHandle fileHandle, SteamResult result) {
-			System.out.println("Remote storage download UGC result: handle='" + Long.toHexString(fileHandle.handle) +
+			System.out.println("Remote storage download UGC result: handle='" + fileHandle.toString() +
 					"', result=" + result.toString());
 
 			ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
@@ -58,18 +60,18 @@ public class SteamAPITestApplication {
 				offset += bytesRead;
 			} while (bytesRead > 0);
 
-			System.out.println("Read " + offset + " bytes from handle=" + Long.toHexString(fileHandle.handle));
+			System.out.println("Read " + offset + " bytes from handle=" + fileHandle.toString());
 		}
 
 		@Override
 		public void onPublishFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
-			System.out.println("Remote storage publish file result: publishedFileID=" + publishedFileID.id +
+			System.out.println("Remote storage publish file result: publishedFileID=" + publishedFileID.toString() +
 					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
 		}
 
 		@Override
 		public void onUpdatePublishedFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
-			System.out.println("Remote storage update published file result: publishedFileID=" + publishedFileID.id +
+			System.out.println("Remote storage update published file result: publishedFileID=" + publishedFileID.toString() +
 					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
 		}
 	};
@@ -78,7 +80,7 @@ public class SteamAPITestApplication {
 		@Override
 		public void onUGCQueryCompleted(SteamUGCQuery query, int numResultsReturned, int totalMatchingResults,
 										boolean isCachedData, SteamResult result) {
-			System.out.println("UGC query completed: handle=" + query.handle + ", " + numResultsReturned + " of " +
+			System.out.println("UGC query completed: handle=" + query.toString() + ", " + numResultsReturned + " of " +
 							   totalMatchingResults + " results returned, result=" + result.toString());
 
 			for (int i = 0; i < numResultsReturned; i++) {
@@ -86,13 +88,13 @@ public class SteamAPITestApplication {
 				ugc.getQueryUGCResult(query, i, details);
 
 				System.out.println("UGC details #" + i +
-								   ": publishedFileID=" + details.getPublishedFileID().id +
+								   ": publishedFileID=" + details.getPublishedFileID().toString() +
 								   ", result=" + details.getResult().toString() +
 								   ", title='" + details.getTitle() + "'" +
 								   ", description='" + details.getDescription() + "'" +
 								   ", fileName=" + details.getFileName() +
-								   ", fileHandle=" + Long.toHexString(details.getFileHandle().handle) +
-								   ", previewFileHandle=" + Long.toHexString(details.getPreviewFileHandle().handle));
+								   ", fileHandle=" + details.getFileHandle().toString() +
+								   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
 			}
 
 			ugc.releaseQueryUserUGCRequest(query);
@@ -193,7 +195,7 @@ public class SteamAPITestApplication {
 								utils.getAppID(), utils.getAppID(), 1);
 
 						if (query.isValid()) {
-							System.out.println("sending UGC query: " + query.handle);
+							System.out.println("sending UGC query: " + query.toString());
 							//ugc.setReturnTotalOnly(query, true);
 							ugc.sendQueryUGCRequest(query);
 						}

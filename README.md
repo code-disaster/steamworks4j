@@ -110,7 +110,7 @@ Just use Maven to *mvn package* in the root directory to compile a jar ready to 
 
 ## Using the wrapper
 
-`com.codedisaster.steamworks.SteamAPITestApplication` contains some test code which shows basic usage of the Java wrapper.
+`com.codedisaster.steamworks.test.SteamAPITestApplication` contains some test code which shows basic usage of the Java wrapper.
 
 ## Debugging
 

@@ -1,9 +1,8 @@
 package com.codedisaster.steamworks;
 
-public class SteamAPICall {
-	final long handle;
+public class SteamAPICall extends SteamNativeHandle {
 
-	public SteamAPICall(long handle) {
-		this.handle = handle;
+	SteamAPICall(long handle) {
+		super(handle);
 	}
 }

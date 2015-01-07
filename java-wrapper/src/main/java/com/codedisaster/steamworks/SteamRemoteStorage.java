@@ -101,7 +101,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamPublishedFileUpdateHandle createPublishedFileUpdateRequest(SteamPublishedFileID publishedFileID) {
-		return new SteamPublishedFileUpdateHandle(createPublishedFileUpdateRequest(pointer, publishedFileID.id));
+		return new SteamPublishedFileUpdateHandle(createPublishedFileUpdateRequest(pointer, publishedFileID.handle));
 	}
 
 	public boolean updatePublishedFileFile(SteamPublishedFileUpdateHandle updateHandle, String file) {

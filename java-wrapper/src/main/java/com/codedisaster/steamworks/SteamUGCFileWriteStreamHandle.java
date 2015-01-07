@@ -1,9 +1,8 @@
 package com.codedisaster.steamworks;
 
-public class SteamUGCFileWriteStreamHandle {
-	final long handle;
+public class SteamUGCFileWriteStreamHandle extends SteamNativeHandle {
 
 	SteamUGCFileWriteStreamHandle(long handle) {
-		this.handle = handle;
+		super(handle);
 	}
 }
