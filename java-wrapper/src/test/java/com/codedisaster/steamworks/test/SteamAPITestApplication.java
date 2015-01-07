@@ -269,7 +269,7 @@ public class SteamAPITestApplication {
 					} else if (input.startsWith("leaderboard score ")) {
 						String score = input.substring("leaderboard score ".length());
 						if (currentLeaderboard != null) {
-							System.out.println("uploading score " + score + "to leaderboard " + currentLeaderboard.toString());
+							System.out.println("uploading score " + score + " to leaderboard " + currentLeaderboard.toString());
 							userStats.uploadLeaderboardScore(currentLeaderboard,
 									SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score));
 						}

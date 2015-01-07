@@ -36,10 +36,10 @@ The following interfaces have been *partially* implemented so far:
 
 ```
 ISteamFriends
-ISteamRemoteStorage
+ISteamRemoteStorage (cloud saves, workshop files)
 ISteamUGC
 ISteamUser
-ISteamUserStats
+ISteamUserStats (user stats, achievements, leaderboards)
 ISteamUtils
 ```
 
@@ -56,6 +56,10 @@ The Java code is compiled with JDK 1.6.
 #### Mac OS
 
 OS X 10.6 and above is supported.
+
+## Building the Java package
+
+Just use Maven to *mvn package* in the root directory to compile a jar ready to be used in your application.
 
 ## Building native libraries
 
@@ -103,10 +107,6 @@ The first step is to let **jnigen** generate C++ source files for the embedded J
 If everything is setup correctly, you now only need to run the right `build-[osx|linux|win].[sh|bat]` shell script in the *steamworks4j/build-natives/* folder to compile and link the native libraries on each target platform.
 
 In case of errors you should be able to open the workspace/project files created by **premake4**, to open them in the respective IDE for troubleshooting.
-
-## Building the Java package
-
-Just use Maven to *mvn package* in the root directory to compile a jar ready to be used in your application.
 
 ## Using the wrapper
 
