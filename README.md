@@ -59,7 +59,9 @@ OS X 10.6 and above is supported.
 
 ## Building the Java package
 
-Just use Maven to *mvn package* in the root directory to compile a jar ready to be used in your application.
+Just use Maven to `mvn package` in the root directory to compile a jar ready to be used in your application.
+
+Run `mvn package -P with-dependencies` to compile an additional jar with dependencies ([jnigen](https://github.com/libgdx/libgdx/wiki/jnigen)) included.
 
 ## Sample application
 
@@ -105,7 +107,7 @@ We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts 
 
 ### Build steps
 
-The first step is to let **jnigen** generate C++ source files for the embedded JNI functions. The `com.codedisaster.steamworks.jnigen.JNICodeGenerator` class contains the code to do that.
+The first step is to let [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) generate C++ source files for the embedded JNI functions. The `com.codedisaster.steamworks.jnigen.JNICodeGenerator` class contains the code to do that.
 
 - The working directory must be the *steamworks4j/java-wrapper/* folder.
 - Simply run `java -jar /path/to/steamworks4j-${version}-jar-with-dependencies.jar`. This will run the JNICodeGenerator.main() application.
