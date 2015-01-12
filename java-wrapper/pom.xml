@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.codedisaster.steamworks4j</groupId>
+		<groupId>com.code-disaster.steamworks4j</groupId>
 		<artifactId>steamworks4j-parent</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
@@ -66,7 +66,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>com.codedisaster.steamworks.jnigen.JNICodeGenerator</mainClass>
+									<mainClass>com.code-disaster.steamworks.jnigen.JNICodeGenerator</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -112,7 +112,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>com.codedisaster.steamworks4j</groupId>
+									<groupId>com.code-disaster.steamworks4j</groupId>
 									<artifactId>steamworks4j-natives</artifactId>
 									<version>${project.version}</version>
 									<destFileName>steamworks4j-natives.jar</destFileName>
