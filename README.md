@@ -2,6 +2,28 @@
 
 A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as [libGDX](http://libgdx.badlogicgames.com/).
 
+## Quick start
+
+Major releases of **steamworks4j** are being released on Maven Central.
+
+#### Maven:
+
+```
+<dependency>
+  <groupId>com.code-disaster.steamworks4j</groupId>
+  <artifactId>steamworks4j</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+#### Gradle:
+
+```
+dependencies {
+	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.0"
+}
+```
+
 ## Introduction
 
 The wrapper is written as minimal as possible without sacrificing ease of use. Its goal is to provide *just* an accessible Java API to Valve's C++ interfaces.
