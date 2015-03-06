@@ -15,6 +15,7 @@ public class SteamAPITestApplication {
 	private SteamRemoteStorage remoteStorage;
 	private SteamUGC ugc;
 	private SteamUtils utils;
+	private SteamApps apps;
 
 	private SteamLeaderboardHandle currentLeaderboard = null;
 
@@ -273,6 +274,10 @@ public class SteamAPITestApplication {
 							userStats.uploadLeaderboardScore(currentLeaderboard,
 									SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score));
 						}
+					} else if (input.startsWith("apps subscribed ")) {
+						String appId = input.substring("apps subscribed ".length());
+						boolean subscribed = apps.isSubscribedApp(Long.parseLong(appId));
+						System.out.println("user described to app #" + appId + ": " + (subscribed ? "yes" : "no"));
 					}
 				}
 
@@ -305,6 +310,9 @@ public class SteamAPITestApplication {
 
 		System.out.println("Register Utils ...");
 		utils = new SteamUtils(SteamAPI.getSteamUtilsPointer());
+
+		System.out.println("Register Apps ...");
+		apps = new SteamApps(SteamAPI.getSteamAppsPointer());
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 		System.out.println("App ID: " + utils.getAppID());
