@@ -22,5 +22,5 @@ Makefile
 *.iml
 
 # misc
-premake4.exe
+premake5.exe
 steam_appid.txt
