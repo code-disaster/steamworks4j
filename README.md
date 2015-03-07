@@ -12,7 +12,7 @@ Major releases of **steamworks4j** are being released on Maven Central.
 <dependency>
   <groupId>com.code-disaster.steamworks4j</groupId>
   <artifactId>steamworks4j</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ Major releases of **steamworks4j** are being released on Maven Central.
 
 ```
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.0"
+	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.1"
 }
 ```
 
@@ -30,7 +30,7 @@ The wrapper is written as minimal as possible without sacrificing ease of use. I
 
 > **In its current state, the wrapper only publishes *some* interfaces. Some of them are not exposing the full API. In basic, I've added everything we need for our own games right now, and what I've been asked to. Feel free to send requests, or even better, participate to add the functions and interfaces still missing.**
 
-**steamworks4j** is currently built against Steamworks SDK v1.31.
+**steamworks4j** is currently built against Steamworks SDK v1.32.
 
 This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
 
@@ -57,6 +57,7 @@ The Steamworks API provides two different mechanics to deal with callbacks: `STE
 The following interfaces have been *partially* implemented so far:
 
 ```
+ISteamApps
 ISteamFriends
 ISteamRemoteStorage (cloud saves, workshop files)
 ISteamUGC
@@ -93,11 +94,11 @@ Run `mvn package -P with-dependencies` to compile an additional jar with depende
 
 For development you need to add a text file *steam_appid.txt* to the working directory, which just contains the appID of your Steam application.
 
+## Building native libraries
+
 ### Prebuilt native libraries
 
 Building the native libraries yourself isn't required if you don't plan to *modify* the native code part of the wrapper. There are prebuilt versions located in the *steamworks4j/natives/libs/* folder. The Maven build packs them all into *steamworks4j-natives.jar* which is then bundled with the primary JAR file.
-
-## Building native libraries
 
 ### Dependencies
 
@@ -108,14 +109,14 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
         - *public/*
         - *redistributable_bin/*
 
-We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts of the native code, and [premake4](http://industriousone.com/premake) to compile native code into dynamic libraries.
+We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts of the native code, and [premake4|5](http://industriousone.com/premake) to compile native code into dynamic libraries.
 
 ### Build environments
 
 - Windows
 
-  - The **Visual Studio 2010** command line environment must be available. It's sufficient to use the VS2010 (or VS2012) Express edition. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat*
-  - **premake4.exe** must be available in the path, e.g. put into the *steamworks4j/build-natives/* folder.
+  - The **Visual Studio 2013** command line environment must be available. It's sufficient to use the Community or Express editions. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat*
+  - **premake5.exe** must be available in the path, e.g. in the *steamworks4j/build-natives/* folder.
 
 - Linux
 
