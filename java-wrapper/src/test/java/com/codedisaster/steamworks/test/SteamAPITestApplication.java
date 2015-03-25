@@ -16,6 +16,7 @@ public class SteamAPITestApplication {
 	private SteamUGC ugc;
 	private SteamUtils utils;
 	private SteamApps apps;
+	private SteamFriends friends;
 
 	private SteamLeaderboardHandle currentLeaderboard = null;
 
@@ -71,6 +72,13 @@ public class SteamAPITestApplication {
 							": steamIDUser=" + entry.getSteamIDUser().getAccountID() +
 							", globalRank=" + entry.getGlobalRank() +
 							", score=" + entry.getScore());
+
+					if (friends.requestUserInformation(entry.getSteamIDUser(), true)) {
+						System.out.println("  ... requested user information for entry");
+					} else {
+						System.out.println("  ... user name is '" +
+								friends.getFriendPersonaName(entry.getSteamIDUser()) + "'");
+					}
 				}
 
 			}
@@ -152,6 +160,27 @@ public class SteamAPITestApplication {
 			}
 
 			ugc.releaseQueryUserUGCRequest(query);
+		}
+	};
+
+	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
+		@Override
+		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
+
+			switch (change) {
+
+				case Name:
+					System.out.println("Persona name received: " +
+							"accountID=" + steamID.getAccountID() +
+							", name='" + friends.getFriendPersonaName(steamID) + "'");
+					break;
+
+				default:
+					System.out.println("Persona state changed (unhandled: " +
+							"accountID=" + steamID.getAccountID() +
+							", change=" + change.name());
+					break;
+			}
 		}
 	};
 
@@ -313,6 +342,9 @@ public class SteamAPITestApplication {
 
 		System.out.println("Register Apps ...");
 		apps = new SteamApps(SteamAPI.getSteamAppsPointer());
+
+		System.out.println("Register Friends ...");
+		friends = new SteamFriends(SteamAPI.getSteamFriendsPointer(), friendsCallback);
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 		System.out.println("App ID: " + utils.getAppID());

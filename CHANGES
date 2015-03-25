@@ -1,3 +1,7 @@
+[1.0.2]
+- Added wrapper to ISteamFriends::RequestUserInformation().
+- Added PersonaStateChange callback.
+
 [1.0.1]
 - Updated to Steamworks SDK v1.32.
 - Added ISteamApps wrapper to expose BIsSubscribedApp() function.
