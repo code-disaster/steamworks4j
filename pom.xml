@@ -94,7 +94,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>com.code-disaster.steamworks.jnigen.JNICodeGenerator</mainClass>
+									<mainClass>com.codedisaster.steamworks.jnigen.JNICodeGenerator</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
