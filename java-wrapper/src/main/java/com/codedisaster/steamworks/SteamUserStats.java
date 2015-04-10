@@ -9,6 +9,19 @@ public class SteamUserStats extends SteamInterface {
 		Users
 	}
 
+	public enum LeaderboardDisplayType {
+		None,
+		Numeric,
+		TimeSeconds,
+		TimeMilliSeconds
+	}
+
+	public enum LeaderboardSortMethod {
+		None,
+		Ascending,
+		Descending
+	}
+
 	public enum LeaderboardUploadScoreMethod {
 		None,
 		KeepBest,
@@ -88,6 +101,14 @@ public class SteamUserStats extends SteamInterface {
 		return resetAllStats(pointer, achievementsToo);
 	}
 
+	public SteamAPICall findOrCreateLeaderboard(String leaderboardName,
+												LeaderboardSortMethod leaderboardSortMethod,
+												LeaderboardDisplayType leaderboardDisplayType) {
+
+		return new SteamAPICall(findOrCreateLeaderboard(pointer, leaderboardName,
+				leaderboardSortMethod.ordinal(), leaderboardDisplayType.ordinal()));
+	}
+
 	public SteamAPICall findLeaderboard(String leaderboardName) {
 		return new SteamAPICall(findLeaderboard(pointer, leaderboardName));
 	}
@@ -98,6 +119,14 @@ public class SteamUserStats extends SteamInterface {
 
 	public int getLeaderboardEntryCount(SteamLeaderboardHandle leaderboard) {
 		return getLeaderboardEntryCount(pointer, leaderboard.handle);
+	}
+
+	public LeaderboardSortMethod getLeaderboardSortMethod(SteamLeaderboardHandle leaderboard) {
+		return LeaderboardSortMethod.values()[getLeaderboardSortMethod(pointer, leaderboard.handle)];
+	}
+
+	public LeaderboardDisplayType getLeaderboardDisplayType(SteamLeaderboardHandle leaderboard) {
+		return LeaderboardDisplayType.values()[getLeaderboardDisplayType(pointer, leaderboard.handle)];
 	}
 
 	public SteamAPICall downloadLeaderboardEntries(SteamLeaderboardHandle leaderboard,
@@ -209,6 +238,15 @@ public class SteamUserStats extends SteamInterface {
 		return stats->ResetAllStats(achievementsToo);
 	*/
 
+	static private native long findOrCreateLeaderboard(long pointer, String leaderboardName,
+													   int leaderboardSortMethod, int leaderboardDisplayType); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamAPICall_t handle = stats->FindOrCreateLeaderboard(leaderboardName,
+			(ELeaderboardSortMethod) leaderboardSortMethod, (ELeaderboardDisplayType) leaderboardDisplayType);
+		callback->onLeaderboardFindResultCall.Set(handle, callback, &SteamUserStatsCallback::onLeaderboardFindResult);
+		return handle;
+	*/
+
 	static private native long findLeaderboard(long pointer, String leaderboardName); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		SteamAPICall_t handle = stats->FindLeaderboard(leaderboardName);
@@ -225,6 +263,16 @@ public class SteamUserStats extends SteamInterface {
 	static private native int getLeaderboardEntryCount(long pointer, long leaderboard); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetLeaderboardEntryCount(leaderboard);
+	*/
+
+	static private native int getLeaderboardSortMethod(long pointer, long leaderboard); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetLeaderboardSortMethod(leaderboard);
+	*/
+
+	static private native int getLeaderboardDisplayType(long pointer, long leaderboard); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetLeaderboardDisplayType(leaderboard);
 	*/
 
 	static private native long downloadLeaderboardEntries(long pointer, long leaderboard,

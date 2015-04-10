@@ -1,3 +1,6 @@
+[1.0.3]
+- Added ISteamUserStats::FindOrCreateLeaderboard(), GetLeaderboardSortMethod(), GetLeaderboardDisplayType().
+
 [1.0.2]
 - Added wrapper to ISteamFriends::RequestUserInformation().
 - Added PersonaStateChange callback.
