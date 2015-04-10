@@ -4,7 +4,7 @@ A thin wrapper which allows Java applications to access the Steamworks C++ API. 
 
 ## Quick start
 
-Major releases of **steamworks4j** are being released on Maven Central.
+We plan to release major updates of **steamworks4j** on Maven Central. Please refer to the build instructions [below](#building-the-java-package) if you want to use features which are not deployed yet.
 
 #### Maven:
 
@@ -12,7 +12,7 @@ Major releases of **steamworks4j** are being released on Maven Central.
 <dependency>
   <groupId>com.code-disaster.steamworks4j</groupId>
   <artifactId>steamworks4j</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ Major releases of **steamworks4j** are being released on Maven Central.
 
 ```
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.1"
+	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.2"
 }
 ```
 
@@ -80,12 +80,6 @@ The Java code is compatible to Java 6.
 
 OS X 10.6 and above is supported.
 
-## Building the Java package
-
-Just use Maven to `mvn package` in the root directory to compile a jar ready to be used in your application.
-
-Run `mvn package -P with-dependencies` to compile an additional jar with dependencies ([jnigen](https://github.com/libgdx/libgdx/wiki/jnigen)) included.
-
 ## Sample application
 
 `com.codedisaster.steamworks.test.SteamAPITestApplication` contains some test code which shows basic usage of the Java wrapper.
@@ -93,6 +87,12 @@ Run `mvn package -P with-dependencies` to compile an additional jar with depende
 ## Debugging
 
 For development you need to add a text file *steam_appid.txt* to the working directory, which just contains the appID of your Steam application.
+
+## Building the Java package
+
+Just use Maven to `mvn package` in the root directory to compile a jar ready to be used in your application, or `mvn install` to deploy it to your local Maven cache.
+
+Run `mvn package -P with-dependencies` to compile an additional jar with dependencies ([jnigen](https://github.com/libgdx/libgdx/wiki/jnigen)) included.
 
 ## Building native libraries
 
@@ -109,7 +109,7 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
         - *public/*
         - *redistributable_bin/*
 
-We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts of the native code, and [premake4|5](http://industriousone.com/premake) to compile native code into dynamic libraries.
+We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts of the native code, and [premake4/5](http://industriousone.com/premake) to compile native code into dynamic libraries.
 
 ### Build environments
 
@@ -139,4 +139,4 @@ The first step is to let [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) 
 
 If everything is setup correctly, you now only need to run the right `build-[osx|linux|win].[sh|bat]` shell script in the *steamworks4j/build-natives/* folder to compile and link the native libraries on each target platform.
 
-In case of errors you should be able to open the workspace/project files created by **premake4** in their respective IDE for troubleshooting.
+In case of errors you should be able to open the workspace/project files created by **premake4/5** in their respective IDE for troubleshooting.
