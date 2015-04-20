@@ -73,11 +73,29 @@ public class SteamAPITestApplication {
 							", globalRank=" + entry.getGlobalRank() +
 							", score=" + entry.getScore());
 
-					if (friends.requestUserInformation(entry.getSteamIDUser(), true)) {
+					if (friends.requestUserInformation(entry.getSteamIDUser(), false)) {
 						System.out.println("  ... requested user information for entry");
 					} else {
 						System.out.println("  ... user name is '" +
 								friends.getFriendPersonaName(entry.getSteamIDUser()) + "'");
+
+						int smallAvatar = friends.getSmallFriendAvatar(entry.getSteamIDUser());
+						if (smallAvatar != 0) {
+							int w = utils.getImageWidth(smallAvatar);
+							int h = utils.getImageHeight(smallAvatar);
+							System.out.println("  ... small avatar size: " + w + "x" + h + " pixels");
+
+							ByteBuffer image = ByteBuffer.allocate(w * h * 4);
+
+							if (utils.getImageRGBA(smallAvatar, image, w * h * 4)) {
+								System.out.println("  ... small avatar retrieve avatar image successful");
+							} else {
+								System.out.println("  ... small avatar retrieve avatar image failed!");
+							}
+						} else {
+							System.out.println("  ... small avatar image not available!");
+						}
+
 					}
 				}
 
@@ -176,7 +194,7 @@ public class SteamAPITestApplication {
 					break;
 
 				default:
-					System.out.println("Persona state changed (unhandled: " +
+					System.out.println("Persona state changed (unhandled): " +
 							"accountID=" + steamID.getAccountID() +
 							", change=" + change.name());
 					break;

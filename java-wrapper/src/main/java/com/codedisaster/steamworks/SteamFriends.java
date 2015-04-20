@@ -21,7 +21,7 @@ public class SteamFriends extends SteamInterface {
 
 		private final int bits;
 
-		private PersonaChange(int bits) {
+		PersonaChange(int bits) {
 			this.bits = bits;
 		}
 
@@ -45,6 +45,18 @@ public class SteamFriends extends SteamInterface {
 
 	public String getFriendPersonaName(SteamID steamID) {
 		return getFriendPersonaName(pointer, steamID.handle);
+	}
+
+	public int getSmallFriendAvatar(SteamID steamID) {
+		return getSmallFriendAvatar(pointer, steamID.handle);
+	}
+
+	public int getMediumFriendAvatar(SteamID steamID) {
+		return getMediumFriendAvatar(pointer, steamID.handle);
+	}
+
+	public int getLargeFriendAvatar(SteamID steamID) {
+		return getLargeFriendAvatar(pointer, steamID.handle);
 	}
 
 	public boolean requestUserInformation(SteamID steamID, boolean requireNameOnly) {
@@ -85,6 +97,21 @@ public class SteamFriends extends SteamInterface {
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamID));
 		return name;
+	*/
+
+	static private native int getSmallFriendAvatar(long pointer, long steamID); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetSmallFriendAvatar((uint64) steamID);
+	*/
+
+	static private native int getMediumFriendAvatar(long pointer, long steamID); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetMediumFriendAvatar((uint64) steamID);
+	*/
+
+	static private native int getLargeFriendAvatar(long pointer, long steamID); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetLargeFriendAvatar((uint64) steamID);
 	*/
 
 	static private native boolean requestUserInformation(long pointer, long steamID, boolean requireNameOnly); /*

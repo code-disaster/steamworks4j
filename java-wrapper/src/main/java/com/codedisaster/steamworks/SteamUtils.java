@@ -1,5 +1,7 @@
 package com.codedisaster.steamworks;
 
+import java.nio.ByteBuffer;
+
 public class SteamUtils extends SteamInterface {
 
 	public enum NotificationPosition {
@@ -14,6 +16,18 @@ public class SteamUtils extends SteamInterface {
 	}
 
 	static void dispose() {
+	}
+
+	public int getImageWidth(int image) {
+		return getImageWidth(pointer, image);
+	}
+
+	public int getImageHeight(int image) {
+		return getImageHeight(pointer, image);
+	}
+
+	public boolean getImageRGBA(int image, ByteBuffer dest, int destSize) {
+		return getImageRGBA(pointer, image, dest, destSize);
 	}
 
 	public long getAppID() {
@@ -32,6 +46,25 @@ public class SteamUtils extends SteamInterface {
 
 	/*JNI
 		#include <steam_api.h>
+	*/
+
+	static private native int getImageWidth(long pointer, int image); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		uint32 width, height;
+		bool result = utils->GetImageSize(image, &width, &height);
+		return result ? width : -1;
+	*/
+
+	static private native int getImageHeight(long pointer, int image); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		uint32 width, height;
+		bool result = utils->GetImageSize(image, &width, &height);
+		return result ? height : -1;
+	*/
+
+	static private native boolean getImageRGBA(long pointer, int image, ByteBuffer dest, int destSize); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		return utils->GetImageRGBA(image, (uint8*) dest, destSize);
 	*/
 
 	static private native long getAppID(long pointer); /*
