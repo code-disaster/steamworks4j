@@ -2,11 +2,21 @@
 
 A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as [libGDX](http://libgdx.badlogicgames.com/).
 
-## Quick start
+## Getting started
 
-We plan to release major updates of **steamworks4j** on Maven Central. Please refer to the build instructions [below](#building-the-java-package) if you want to use features which are not deployed yet.
+You'll notice that this library is documented very scarcely. That's a deliberate choice. I assume that you are a **registered Steam developer** and have access to the Steamworks documentation.
 
-#### Maven:
+Please refer to the official documentation to learn about the steps needed to prepare your application for use with Steam. Here's a very brief checklist:
+
+- You need a properly configured SteamApp depot, e.g. you should be able to upload to and run a development build from Steam.
+- The Steam client must be running.
+- A steam_appid.txt needs to be present in the working directory.
+
+## Maven releases
+
+I plan to release major updates of **steamworks4j** on Maven Central. Please refer to the build instructions [below](#building-the-java-package) if you want to use features which are not deployed yet.
+
+Maven:
 
 ```
 <dependency>
@@ -16,7 +26,7 @@ We plan to release major updates of **steamworks4j** on Maven Central. Please re
 </dependency>
 ```
 
-#### Gradle:
+Gradle:
 
 ```
 dependencies {
@@ -28,7 +38,7 @@ dependencies {
 
 The wrapper is written as minimal as possible without sacrificing ease of use. Its goal is to provide *just* an accessible Java API to Valve's C++ interfaces.
 
-> **In its current state, the wrapper only publishes *some* interfaces. Some of them are not exposing the full API. In basic, I've added everything we need for our own games right now, and what I've been asked to. Feel free to send requests, or even better, participate to add the functions and interfaces still missing.**
+> **In its current state, the wrapper only publishes *some* interfaces. Most of them do not expose the full API. In basic, I've added everything we need for our own games, plus what I've been asked to. Feel free to send requests, or even better, participate to add the functions and interfaces still missing.**
 
 **steamworks4j** is currently built against Steamworks SDK v1.32.
 
@@ -109,7 +119,7 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
         - *public/*
         - *redistributable_bin/*
 
-We use [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) to generate parts of the native code, and [premake4/5](http://industriousone.com/premake) to compile native code into dynamic libraries.
+[jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) is used to generate parts of the native code, and [premake4/5](http://industriousone.com/premake) to compile native code into dynamic libraries.
 
 ### Build environments
 
