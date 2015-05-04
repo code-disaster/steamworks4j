@@ -26,9 +26,9 @@ public class SteamGameServerAPI {
 
     static public void shutdown() {
         SteamGameServer.dispose();
+        SteamGameServerNetworking.dispose();
 //        SteamGameServerUtils.dispose();
-//        SteamGameServerNetworking.dispose(); 
-//        SteamGameServerStats.dispose(); 
+        SteamGameServerStats.dispose();
 //        SteamGameServerHTTP.dispose();
 //        SteamGameServerInventory.dispose();
 
@@ -122,6 +122,21 @@ public class SteamGameServerAPI {
 
     static public native int getHSteamPipe(); /*
      return SteamGameServer_GetHSteamPipe();
+     */
+
+
+    static public native long getSteamGameServerPointer(); /*
+     return (long) SteamGameServer();
+     */
+
+
+    static public native long getSteamGameServerNetworkingPointer(); /*
+     return (long) SteamGameServerNetworking();
+     */
+
+
+    static public native long getSteamGameServerStatsPointer(); /*
+     return (long) SteamGameServerStats();
      */
 
 }
