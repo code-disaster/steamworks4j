@@ -1,142 +1,88 @@
 package com.codedisaster.steamworks;
 
-import java.io.*;
-
 /**
  *
  * @author Francisco "Franz" Bischoff
  */
 public class SteamGameServerAPI {
 
-    public enum EServerMode {
+	public enum ServerMode {
+		Invalid,
+		NoAuthentication,
+		Authentication,
+		AuthenticationAndSecure
+	}
 
-        eServerModeInvalid, // DO NOT USE          
-        eServerModeNoAuthentication, // Don't authenticate user logins and don't list on the server list   
-        eServerModeAuthentication, // Authenticate users, list on the server list, don't run VAC on clients that connect   
-        eServerModeAuthenticationAndSecure, // Authenticate users, list on the server list and VAC protect clients
-    }
+	static private boolean isRunning = false;
 
-    static private boolean isRunning = false;
+	static public boolean init(int ip, short steamPort, short gamePort, short queryPort,
+							   ServerMode serverMode, String versionString) {
 
-    static public boolean init(int unIP, short usSteamPort, short usGamePort, short usQueryPort,
-            EServerMode eServerMode, String pchVersionString) {
-        isRunning = loadLibraries() && nativeInit(unIP, usSteamPort, usGamePort, usQueryPort, eServerMode.ordinal(), pchVersionString);
-        return isRunning;
-    }
+		isRunning = SteamSharedLibraryLoader.extractAndLoadLibraries() && nativeInit(
+				ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);
 
-    static public void shutdown() {
-        SteamGameServer.dispose();
-        SteamGameServerNetworking.dispose();
-//        SteamGameServerUtils.dispose();
-        SteamGameServerStats.dispose();
-//        SteamGameServerHTTP.dispose();
-//        SteamGameServerInventory.dispose();
+		return isRunning;
+	}
 
-        nativeShutdown();
-        isRunning = false;
-    }
+	static public void shutdown() {
+		SteamGameServer.dispose();
+		SteamGameServerNetworking.dispose();
+		SteamGameServerStats.dispose();
 
-    static private boolean loadLibraries() {
+		isRunning = false;
+		nativeShutdown();
+	}
 
-        String libraryPath = System.getProperty("java.io.tmpdir") + "/steamworks4j/steamworks4j-natives.jar";
+	static public SteamID getSteamID() {
+		return new SteamID(nativeGetSteamID());
+	}
 
-        File libraryDirectory = new File(libraryPath).getParentFile();
-        if (!libraryDirectory.exists()) {
-            if (!libraryDirectory.mkdirs()) {
-                return false;
-            }
-        }
+	// @off
 
-        try {
+	/*JNI
+		 #include <steam_gameserver.h>
 
-            InputStream input = SteamAPI.class.getResourceAsStream("/steamworks4j-natives.jar");
-            FileOutputStream output = new FileOutputStream(new File(libraryPath));
+		 static JavaVM* staticVM = 0;
+	*/
 
-            byte[] cache = new byte[4096];
-            int length;
+	static private native boolean nativeInit(int ip, short steamPort, short gamePort, short queryPort,
+											 int serverMode, String versionString); /*
 
-            do {
-                length = input.read(cache);
-                if (length > 0) {
-                    output.write(cache, 0, length);
-                }
-            } while (length > 0);
+		 if (env->GetJavaVM(&staticVM) != 0) {
+			 return false;
+		 }
 
-            input.close();
-            output.close();
+		 return SteamGameServer_Init(ip, steamPort, gamePort, queryPort,
+			static_cast<EServerMode>(serverMode), versionString);
+	*/
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+	static private native void nativeShutdown(); /*
+		SteamGameServer_Shutdown();
+	*/
 
-        SteamSharedLibraryLoader loader = new SteamSharedLibraryLoader(libraryPath);
+	static public native void runCallbacks(); /*
+		SteamGameServer_RunCallbacks();
+	*/
 
-        loader.load("steam_api");
-        loader.load("steamworks4j");
-
-        return true;
-    }
-
-    static public SteamID getSteamID() {
-        SteamID id = new SteamID(nativeGetSteamID());
-        return id;
-    }
-
-    // @off
-
-    /*JNI
-     #include <steam_gameserver.h>
-
-     static JavaVM* staticVM = 0;
-     */
-    static private native boolean nativeInit(int unIP, short usSteamPort, short usGamePort, short usQueryPort,
-            int eServerMode, String pchVersionString); /*
-     if (env->GetJavaVM(&staticVM) != 0) {
-     return false;
-     }
-   
-     return SteamGameServer_Init(unIP, usSteamPort, usGamePort, usQueryPort, static_cast<EServerMode>(eServerMode), pchVersionString);
-     */
+	static public native boolean isSecure(); /*
+		return SteamGameServer_BSecure();
+	*/
 
 
-    static private native void nativeShutdown(); /*
-     SteamGameServer_Shutdown();
-     */
+	static private native long nativeGetSteamID(); /*
+		return SteamGameServer_GetSteamID();
+	*/
 
+	static public native long getSteamGameServerPointer(); /*
+		return (long) SteamGameServer();
+	*/
 
-    static public native void runCallbacks(); /*
-     SteamGameServer_RunCallbacks();
-     */
+	static public native long getSteamGameServerNetworkingPointer(); /*
+		return (long) SteamGameServerNetworking();
+	*/
 
-
-    static public native boolean bSecure(); /*
-     return SteamGameServer_BSecure();
-     */
-
-
-    static private native long nativeGetSteamID(); /*
-     return SteamGameServer_GetSteamID();
-     */
-
-
-    static public native int getHSteamPipe(); /*
-     return SteamGameServer_GetHSteamPipe();
-     */
-
-
-    static public native long getSteamGameServerPointer(); /*
-     return (long) SteamGameServer();
-     */
-
-
-    static public native long getSteamGameServerNetworkingPointer(); /*
-     return (long) SteamGameServerNetworking();
-     */
-
-
-    static public native long getSteamGameServerStatsPointer(); /*
-     return (long) SteamGameServerStats();
-     */
+	static public native long getSteamGameServerStatsPointer(); /*
+		return (long) SteamGameServerStats();
+	*/
 
 }

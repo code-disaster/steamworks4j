@@ -10,6 +10,6 @@ public:
 	~SteamGameServerStatsCallback();
 
 	STEAM_GAMESERVER_CALLBACK(SteamGameServerStatsCallback, onStatsReceived, GSStatsReceived_t, m_CallbackStatsReceived);
-        STEAM_GAMESERVER_CALLBACK(SteamGameServerStatsCallback, onStatsStored, GSStatsStored_t, m_CallbackStatsStored);
-        STEAM_GAMESERVER_CALLBACK(SteamGameServerStatsCallback, onStatsUnloaded, GSStatsUnloaded_t, m_CallbackStatsUnloaded);
+	STEAM_GAMESERVER_CALLBACK(SteamGameServerStatsCallback, onStatsStored, GSStatsStored_t, m_CallbackStatsStored);
+	STEAM_GAMESERVER_CALLBACK(SteamGameServerStatsCallback, onStatsUnloaded, GSStatsUnloaded_t, m_CallbackStatsUnloaded);
 };

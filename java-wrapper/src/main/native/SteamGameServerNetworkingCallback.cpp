@@ -3,7 +3,7 @@
 SteamGameServerNetworkingCallback::SteamGameServerNetworkingCallback(JNIEnv* env, jobject callback)
 	: SteamCallbackAdapter(env, callback)
 	, m_CallbackP2PSessionConnectFail(this, &SteamGameServerNetworkingCallback::onP2PSessionConnectFail)
-        , m_CallbackP2PSessionRequest(this, &SteamGameServerNetworkingCallback::onP2PSessionRequest){
+	, m_CallbackP2PSessionRequest(this, &SteamGameServerNetworkingCallback::onP2PSessionRequest) {
 
 }
 
