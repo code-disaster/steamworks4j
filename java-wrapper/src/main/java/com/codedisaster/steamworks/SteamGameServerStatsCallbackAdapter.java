@@ -7,19 +7,19 @@ package com.codedisaster.steamworks;
 @SuppressWarnings("unused")
 class SteamGameServerStatsCallbackAdapter extends SteamCallbackAdapter<SteamGameServerStatsCallback> {
 
-    SteamGameServerStatsCallbackAdapter(SteamGameServerStatsCallback callback) {
-        super(callback);
-    }
+	SteamGameServerStatsCallbackAdapter(SteamGameServerStatsCallback callback) {
+		super(callback);
+	}
 
-    public void onStatsReceived(SteamGameServer.EResult eResult, long steamIDUser) {
-        callback.onStatsReceived(eResult, new SteamID(steamIDUser));
-    }
+	public void onStatsReceived(int result, long steamIDUser) {
+		callback.onStatsReceived(SteamResult.byValue(result), new SteamID(steamIDUser));
+	}
 
-    public void onStatsStored(SteamGameServer.EResult eResult, long steamIDUser) {
-        callback.onStatsStored(eResult, new SteamID(steamIDUser));
-    }
-    
-        public void onStatsUnloaded(long steamIDUser) {
-        callback.onStatsUnloaded(new SteamID(steamIDUser));
-    }
+	public void onStatsStored(int result, long steamIDUser) {
+		callback.onStatsStored(SteamResult.byValue(result), new SteamID(steamIDUser));
+	}
+	
+	public void onStatsUnloaded(long steamIDUser) {
+		callback.onStatsUnloaded(new SteamID(steamIDUser));
+	}
 }
