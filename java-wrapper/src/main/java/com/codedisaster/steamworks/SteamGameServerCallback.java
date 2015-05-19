@@ -6,27 +6,29 @@ package com.codedisaster.steamworks;
  */
 public interface SteamGameServerCallback {
 
-    void onValidateAuthTicketResponse(SteamID steamID, SteamGameServer.EAuthSessionResponse authSessionResponse, SteamID OwnerSteamID);
+	void onValidateAuthTicketResponse(SteamID steamID,
+									  SteamGameServer.AuthSessionResponse authSessionResponse,
+									  SteamID ownerSteamID);
 
-    void onSteamServersConnected();
+	void onSteamServersConnected();
 
-    void onSteamServerConnectFailure(SteamGameServer.EResult eResult);
+	void onSteamServerConnectFailure(SteamResult result);
 
-    void onSteamServersDisconnected(SteamGameServer.EResult eResult);
+	void onSteamServersDisconnected(SteamResult result);
 
-    void onClientApprove(SteamID steamID, SteamID ownerSteamID);
+	void onClientApprove(SteamID steamID, SteamID ownerSteamID);
 
-    void onClientDeny(SteamID steamID, SteamGameServer.EDenyReason eDenyReason, String rgchOptionalText);
+	void onClientDeny(SteamID steamID, SteamGameServer.DenyReason denyReason, String optionalText);
 
-    void onClientKick(SteamID steamID, SteamGameServer.EDenyReason eDenyReason);
+	void onClientKick(SteamID steamID, SteamGameServer.DenyReason denyReason);
 
-    void onClientGroupStatus(SteamID steamID, SteamID steamIDGroup, boolean bMember, boolean bOfficer);
+	void onClientGroupStatus(SteamID steamID, SteamID steamIDGroup, boolean isMember, boolean isOfficer);
 
-    void onAssociateWithClanResult(SteamGameServer.EResult eResult);
+	void onAssociateWithClanResult(SteamResult result);
 
-    void onComputeNewPlayerCompatibilityResult(SteamGameServer.EResult eResult,
-            int cPlayersThatDontLikeCandidate,
-            int cPlayersThatCandidateDoesntLike,
-            int cClanPlayersThatDontLikeCandidate,
-            SteamID steamIDCandidate);
+	void onComputeNewPlayerCompatibilityResult(SteamResult result,
+											   int playersThatDontLikeCandidate,
+											   int playersThatCandidateDoesntLike,
+											   int clanPlayersThatDontLikeCandidate,
+											   SteamID steamIDCandidate);
 }

@@ -6,7 +6,7 @@ package com.codedisaster.steamworks;
  */
 public interface SteamGameServerNetworkingCallback {
 
-    void onP2PSessionConnectFail(SteamID steamIDRemote, SteamGameServerNetworking.EP2PSessionError eP2PSessionError);
+	void onP2PSessionConnectFail(SteamID steamIDRemote, SteamGameServerNetworking.P2PSessionError sessionError);
 
-    void onP2PSessionRequest(SteamID steamIDRemote);
+	void onP2PSessionRequest(SteamID steamIDRemote);
 }

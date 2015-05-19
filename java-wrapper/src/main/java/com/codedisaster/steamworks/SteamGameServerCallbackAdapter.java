@@ -7,52 +7,55 @@ package com.codedisaster.steamworks;
 @SuppressWarnings("unused")
 class SteamGameServerCallbackAdapter extends SteamCallbackAdapter<SteamGameServerCallback> {
 
-    SteamGameServerCallbackAdapter(SteamGameServerCallback callback) {
-        super(callback);
-    }
+	SteamGameServerCallbackAdapter(SteamGameServerCallback callback) {
+		super(callback);
+	}
 
-    public void onValidateAuthTicketResponse(long steamID, SteamGameServer.EAuthSessionResponse authSessionResponse, long ownerSteamID) {
-        callback.onValidateAuthTicketResponse(new SteamID(steamID), authSessionResponse, new SteamID(ownerSteamID));
-    }
+	public void onValidateAuthTicketResponse(long steamID,
+											 int authSessionResponse,
+											 long ownerSteamID) {
+		callback.onValidateAuthTicketResponse(new SteamID(steamID),
+				SteamGameServer.AuthSessionResponse.byOrdinal(authSessionResponse), new SteamID(ownerSteamID));
+	}
 
-    public void onSteamServersConnected() {
-        callback.onSteamServersConnected();
-    }
+	public void onSteamServersConnected() {
+		callback.onSteamServersConnected();
+	}
 
-    public void onSteamServerConnectFailure(SteamGameServer.EResult eResult) {
-        callback.onSteamServerConnectFailure(eResult);
-    }
+	public void onSteamServerConnectFailure(int result) {
+		callback.onSteamServerConnectFailure(SteamResult.byValue(result));
+	}
 
-    public void onSteamServersDisconnected(SteamGameServer.EResult eResult) {
-        callback.onSteamServersDisconnected(eResult);
-    }
+	public void onSteamServersDisconnected(int result) {
+		callback.onSteamServersDisconnected(SteamResult.byValue(result));
+	}
 
-    public void onClientApprove(long steamID, long ownerSteamID) {
-        callback.onClientApprove(new SteamID(steamID), new SteamID(ownerSteamID));
-    }
+	public void onClientApprove(long steamID, long ownerSteamID) {
+		callback.onClientApprove(new SteamID(steamID), new SteamID(ownerSteamID));
+	}
 
-    public void onClientDeny(long steamID, SteamGameServer.EDenyReason eDenyReason, String rgchOptionalText) {
-        callback.onClientDeny(new SteamID(steamID), eDenyReason, rgchOptionalText);
-    }
+	public void onClientDeny(long steamID, int denyReason, String optionalText) {
+		callback.onClientDeny(new SteamID(steamID), SteamGameServer.DenyReason.byOrdinal(denyReason), optionalText);
+	}
 
-    public void onClientKick(long steamID, SteamGameServer.EDenyReason eDenyReason) {
-        callback.onClientKick(new SteamID(steamID), eDenyReason);
-    }
+	public void onClientKick(long steamID, int denyReason) {
+		callback.onClientKick(new SteamID(steamID), SteamGameServer.DenyReason.byOrdinal(denyReason));
+	}
 
-    public void onClientGroupStatus(long steamID, long steamIDGroup, boolean bMember, boolean bOfficer) {
-        callback.onClientGroupStatus(new SteamID(steamID), new SteamID(steamIDGroup), bMember, bOfficer);
-    }
+	public void onClientGroupStatus(long steamID, long steamIDGroup, boolean isMember, boolean isOfficer) {
+		callback.onClientGroupStatus(new SteamID(steamID), new SteamID(steamIDGroup), isMember, isOfficer);
+	}
 
-    public void onAssociateWithClanResult(SteamGameServer.EResult eResult) {
-        callback.onAssociateWithClanResult(eResult);
-    }
+	public void onAssociateWithClanResult(int result) {
+		callback.onAssociateWithClanResult(SteamResult.byValue(result));
+	}
 
-    public void onComputeNewPlayerCompatibilityResult(SteamGameServer.EResult eResult,
-            int cPlayersThatDontLikeCandidate,
-            int cPlayersThatCandidateDoesntLike,
-            int cClanPlayersThatDontLikeCandidate,
-            long steamIDCandidate) {
-        callback.onComputeNewPlayerCompatibilityResult(eResult, cPlayersThatDontLikeCandidate,
-                cPlayersThatCandidateDoesntLike, cClanPlayersThatDontLikeCandidate, new SteamID(steamIDCandidate));
-    }
+	public void onComputeNewPlayerCompatibilityResult(int result,
+													  int playersThatDontLikeCandidate,
+													  int playersThatCandidateDoesntLike,
+													  int clanPlayersThatDontLikeCandidate,
+													  long steamIDCandidate) {
+		callback.onComputeNewPlayerCompatibilityResult(SteamResult.byValue(result), playersThatDontLikeCandidate,
+				playersThatCandidateDoesntLike, clanPlayersThatDontLikeCandidate, new SteamID(steamIDCandidate));
+	}
 }
