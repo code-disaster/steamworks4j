@@ -26,8 +26,8 @@ public class SteamGameServerAPI {
 
 	static public void shutdown() {
 		SteamGameServer.dispose();
-		SteamGameServerNetworking.dispose();
 		SteamGameServerStats.dispose();
+		SteamNetworking.dispose();
 
 		isRunning = false;
 		nativeShutdown();
@@ -68,7 +68,6 @@ public class SteamGameServerAPI {
 		return SteamGameServer_BSecure();
 	*/
 
-
 	static private native long nativeGetSteamID(); /*
 		return SteamGameServer_GetSteamID();
 	*/
@@ -77,7 +76,7 @@ public class SteamGameServerAPI {
 		return (long) SteamGameServer();
 	*/
 
-	static public native long getSteamGameServerNetworkingPointer(); /*
+	static public native long getSteamNetworkingPointer(); /*
 		return (long) SteamGameServerNetworking();
 	*/
 

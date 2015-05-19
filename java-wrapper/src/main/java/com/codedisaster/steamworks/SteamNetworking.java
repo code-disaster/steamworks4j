@@ -1,0 +1,143 @@
+package com.codedisaster.steamworks;
+
+import java.nio.Buffer;
+
+/**
+ *
+ * @author Francisco "Franz" Bischoff
+ */
+public class SteamNetworking extends SteamInterface {
+
+	enum P2PSend {
+		Unreliable,
+		UnreliableNoDelay,
+		Reliable,
+		ReliableWithBuffering,
+	}
+
+	public enum P2PSessionError {
+		None,
+		NotRunningApp,
+		NoRightsToApp,
+		DestinationNotLoggedIn,
+		Timeout;
+
+		private static final P2PSessionError[] values = values();
+
+		public static P2PSessionError byOrdinal(int sessionError) {
+			return values[sessionError];
+		}
+	}
+
+	public SteamNetworking(long pointer, SteamNetworkingCallback callback) {
+		super(pointer);
+		registerCallback(new SteamNetworkingCallbackAdapter(callback));
+	}
+
+	static void dispose() {
+		registerCallback(null);
+	}
+
+	public boolean sendP2PPacket(SteamID steamIDRemote, Buffer data, P2PSend sendType, int channel) {
+		return sendP2PPacket(pointer, steamIDRemote.handle, data, data.limit(), sendType.ordinal(), channel);
+	}
+
+	public int isP2PPacketAvailable(int channel) {
+		int[] msgSize = new int[1];
+		if (isP2PPacketAvailable(pointer, msgSize, channel)) {
+			return msgSize[0];
+		}
+		return 0;
+	}
+
+	public SteamID readP2PPacket(Buffer dest, int channel) {
+		int[] msgSizeInBytes = new int[1];
+		long[] steamIDRemote = new long[1];
+		if (readP2PPacket(pointer, dest, dest.capacity(), msgSizeInBytes, steamIDRemote, channel)) {
+			dest.limit(msgSizeInBytes[0]);
+			return new SteamID(steamIDRemote[0]);
+		}
+		return null;
+	}
+
+	public boolean acceptP2PSessionWithUser(SteamID steamIDRemote) {
+		return acceptP2PSessionWithUser(pointer, steamIDRemote.handle);
+	}
+
+	public boolean closeP2PSessionWithUser(SteamID steamIDRemote) {
+		return closeP2PSessionWithUser(pointer, steamIDRemote.handle);
+	}
+
+	public boolean closeP2PChannelWithUser(SteamID steamIDRemote, int channel) {
+		return closeP2PChannelWithUser(pointer, steamIDRemote.handle, channel);
+	}
+
+	public boolean allowP2PPacketRelay(boolean allow) {
+		return allowP2PPacketRelay(pointer, allow);
+	}
+
+	// @off
+
+	/*JNI
+		#include <steam_gameserver.h>
+		#include "SteamNetworkingCallback.h"
+
+		static SteamNetworkingCallback* callback = NULL;
+	*/
+
+	static private native boolean registerCallback(SteamNetworkingCallbackAdapter javaCallback); /*
+		if (callback != NULL) {
+			delete callback;
+			callback = NULL;
+		}
+
+		if (javaCallback != NULL) {
+			callback = new SteamNetworkingCallback(env, javaCallback);
+		}
+
+		return callback != NULL;
+	*/
+
+	static private native boolean sendP2PPacket(long pointer, long steamIDRemote, Buffer data, int sizeInBytes, int sendType, int channel); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->SendP2PPacket((uint64) steamIDRemote, data, sizeInBytes, (EP2PSend) sendType, channel);
+	*/
+
+	static private native boolean isP2PPacketAvailable(long pointer, int[] msgSize, int channel); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->IsP2PPacketAvailable((uint32 *)msgSize, channel);
+	*/
+
+	static private native boolean readP2PPacket(long pointer, Buffer dest, int capacity, int[] msgSizeInBytes, long[] steamIDRemote, int channel); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		CSteamID remote;
+		if (net->ReadP2PPacket(dest, capacity, (uint32*) msgSizeInBytes, &remote, channel)) {
+			steamIDRemote[0] = remote.ConvertToUint64();
+			return true;
+		}
+		return false;
+	*/
+
+	static private native boolean acceptP2PSessionWithUser(long pointer, long steamIDRemote); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->AcceptP2PSessionWithUser((uint64) steamIDRemote);
+	*/
+
+	static private native boolean closeP2PSessionWithUser(long pointer, long steamIDRemote); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->CloseP2PSessionWithUser((uint64) steamIDRemote);
+	*/
+
+	static private native boolean closeP2PChannelWithUser(long pointer, long steamIDRemote, int channel); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->CloseP2PChannelWithUser((uint64) steamIDRemote, channel);
+	*/
+
+	// [@code-disaster] note: removed GetP2PSessionState(), won't work that way
+
+	static private native boolean allowP2PPacketRelay(long pointer, boolean allow); /*
+		ISteamNetworking* net = (ISteamNetworking*) pointer;
+		return net->AllowP2PPacketRelay(allow);
+	*/
+
+}
