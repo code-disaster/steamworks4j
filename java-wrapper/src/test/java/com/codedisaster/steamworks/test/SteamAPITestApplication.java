@@ -22,8 +22,8 @@ public class SteamAPITestApplication {
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
-		public void onUserStatsReceived(long gameId, long userId, SteamResult result) {
-			System.out.println("User stats received: gameId=" + gameId + ", userId=" + userId +
+		public void onUserStatsReceived(long gameId, SteamID steamIDUser, SteamResult result) {
+			System.out.println("User stats received: gameId=" + gameId + ", userId=" + steamIDUser.getAccountID() +
 					", result=" + result.toString());
 
 			int numAchievements = userStats.getNumAchievements();
