@@ -12,6 +12,7 @@ public class SteamAPI {
 	static public void shutdown() {
 		SteamApps.dispose();
 		SteamFriends.dispose();
+		SteamNetworking.dispose();
 		SteamRemoteStorage.dispose();
 		SteamUGC.dispose();
 		SteamUser.dispose();
@@ -60,6 +61,10 @@ public class SteamAPI {
 
 	static public native long getSteamFriendsPointer(); /*
 		return (long) SteamFriends();
+	*/
+
+	static public native long getSteamNetworkingPointer(); /*
+		return (long) SteamNetworking();
 	*/
 
 	static public native long getSteamUserPointer(); /*

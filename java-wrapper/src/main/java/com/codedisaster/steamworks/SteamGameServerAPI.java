@@ -76,7 +76,7 @@ public class SteamGameServerAPI {
 		return (long) SteamGameServer();
 	*/
 
-	static public native long getSteamNetworkingPointer(); /*
+	static public native long getSteamGameServerNetworkingPointer(); /*
 		return (long) SteamGameServerNetworking();
 	*/
 
