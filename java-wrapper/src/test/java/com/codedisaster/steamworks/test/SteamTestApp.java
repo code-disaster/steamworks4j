@@ -64,8 +64,9 @@ public abstract class SteamTestApp {
 
 		while (inputHandler.alive() && SteamAPI.isSteamRunning()) {
 
-			// process callbacks
 			SteamAPI.runCallbacks();
+
+			processUpdate();
 
 			try {
 				// sleep a little (Steam says it should poll at least 15 times/second)
