@@ -2,7 +2,6 @@ package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -11,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SteamNetworkingTestApp extends SteamTestApp {
 
 	private static final int defaultChannel = 1;
+	private static final Charset messageCharset = Charset.forName("UTF-8");
+
 	private static final int readBufferCapacity = 4096;
 	private static final int sendBufferCapacity = 4096;
 
@@ -76,13 +77,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				byte[] bytes = new byte[bytesReceived];
 				packetReadBuffer.get(bytes);
 
-				String message;
-
-				try {
-					message = new String(bytes, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new SteamException(e);
-				}
+				String message = new String(bytes, messageCharset);
 
 				System.out.println("Rcv message: \"" + message + "\"");
 			}
@@ -112,9 +107,14 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				packetSendBuffer.position(0);
 				packetSendBuffer.limit(packetSendBuffer.capacity());
 
-				byte[] bytes = params[1].getBytes(Charset.forName("UTF-8"));
+				for (int i = 1; i < params.length; i++) {
+					byte[] bytes = params[i].getBytes(messageCharset);
+					if (i > 1) {
+						packetSendBuffer.put((byte) 0x20);
+					}
+					packetSendBuffer.put(bytes);
+				}
 
-				packetSendBuffer.put(bytes);
 				packetSendBuffer.limit(packetSendBuffer.position());
 
 				networking.sendP2PPacket(steamIDReceiver, packetSendBuffer,
