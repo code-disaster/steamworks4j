@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SteamNetworkingTestApp extends SteamTestApp {
 
-	private static final int defaultChannel = 0;
+	private static final int defaultChannel = 1;
 	private static final int readBufferCapacity = 4096;
 	private static final int sendBufferCapacity = 4096;
 
@@ -54,6 +54,8 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 	protected void registerInterfaces() {
 		friends = new SteamFriends(SteamAPI.getSteamFriendsPointer(), friendsCallback);
 		networking = new SteamNetworking(SteamAPI.getSteamNetworkingPointer(), peer2peerCallback);
+
+		networking.allowP2PPacketRelay(true);
 	}
 
 	@Override
@@ -94,18 +96,21 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 			} else if (friendUserIDs.containsKey(receiverID)) {
 				steamIDReceiver = friendUserIDs.get(receiverID);
 			} else {
-				System.out.println("Error: unknown userID " + receiverID + " (no friend, not connected");
+				System.out.println("Error: unknown userID " + receiverID + " (no friend, not connected)");
 			}
 
 			if (steamIDReceiver != null) {
 
 				packetSendBuffer.position(0);
+				packetSendBuffer.limit(packetSendBuffer.capacity());
+
 				CharBuffer messageBuffer = packetSendBuffer.asCharBuffer();
 
 				messageBuffer.put(params[1]);
+				packetSendBuffer.limit(messageBuffer.position());
 
 				networking.sendP2PPacket(steamIDReceiver, packetSendBuffer,
-						SteamNetworking.P2PSend.Reliable, defaultChannel);
+						SteamNetworking.P2PSend.Unreliable, defaultChannel);
 
 			} else {
 				System.out.println("Error: unknown userID " + receiverID);
