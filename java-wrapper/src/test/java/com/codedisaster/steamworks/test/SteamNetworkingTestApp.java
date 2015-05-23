@@ -38,16 +38,13 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 			System.out.println("P2P connection failed: userID=" + steamIDRemote.getAccountID() +
 					", error: " + sessionError);
 
-			int userID = steamIDRemote.getAccountID();
-			if (remoteUserIDs.containsKey(userID)) {
-				remoteUserIDs.remove(userID);
-			}
+			unregisterRemoteSteamID(steamIDRemote);
 		}
 
 		@Override
 		public void onP2PSessionRequest(SteamID steamIDRemote) {
 			System.out.println("P2P connection requested by userID " + steamIDRemote.getAccountID());
-			remoteUserIDs.put(steamIDRemote.getAccountID(), steamIDRemote);
+			registerRemoteSteamID(steamIDRemote);
 			networking.acceptP2PSessionWithUser(steamIDRemote);
 		}
 	};
@@ -55,7 +52,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 	@Override
 	protected void registerInterfaces() {
 		friends = new SteamFriends(SteamAPI.getSteamFriendsPointer(), friendsCallback);
-		networking = new SteamNetworking(SteamAPI.getSteamNetworkingPointer(), peer2peerCallback);
+		networking = new SteamNetworking(SteamAPI.getSteamNetworkingPointer(), peer2peerCallback, SteamNetworking.API.Client);
 
 		networking.allowP2PPacketRelay(true);
 	}
@@ -80,6 +77,9 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				String message = new String(bytes, messageCharset);
 
 				System.out.println("Rcv message: \"" + message + "\"");
+
+				// register, if unknown
+				registerRemoteSteamID(sender);
 			}
 
 		}
@@ -119,9 +119,20 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 				networking.sendP2PPacket(steamIDReceiver, packetSendBuffer,
 						SteamNetworking.P2PSend.Unreliable, defaultChannel);
+			}
+		} else if (input.startsWith("p2p close ")) {
+			int remoteID = Integer.valueOf(input.substring("p2p close ".length()));
 
+			SteamID steamIDRemote = null;
+			if (remoteUserIDs.containsKey(remoteID)) {
+				steamIDRemote = remoteUserIDs.get(remoteID);
 			} else {
-				System.out.println("Error: unknown userID " + receiverID);
+				System.out.println("Error: unknown remote ID " + remoteID + " (not connected)");
+			}
+
+			if (steamIDRemote != null) {
+				networking.closeP2PSessionWithUser(steamIDRemote);
+				unregisterRemoteSteamID(steamIDRemote);
 			}
 		} else if (input.equals("p2p list")) {
 			System.out.println("P2P connected users:");
@@ -139,11 +150,21 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				friendUserIDs.put(steamIDUser.getAccountID(), steamIDUser);
 				String personaName = friends.getFriendPersonaName(steamIDUser);
 				SteamFriends.PersonaState personaState = friends.getFriendPersonaState(steamIDUser);
-				System.out.println("  " + steamIDUser.getAccountID() + "(" +
+				System.out.println("  " + steamIDUser.getAccountID() + " (" +
 						personaName + ", " + personaState.name() + ")");
 			}
 		}
 
+	}
+
+	private void registerRemoteSteamID(SteamID steamIDUser) {
+		if (!remoteUserIDs.containsKey(steamIDUser.getAccountID())) {
+			remoteUserIDs.put(steamIDUser.getAccountID(), steamIDUser);
+		}
+	}
+
+	private void unregisterRemoteSteamID(SteamID steamIDUser) {
+		remoteUserIDs.remove(steamIDUser.getAccountID());
 	}
 
 	public static void main(String[] arguments) {

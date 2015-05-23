@@ -8,6 +8,11 @@ import java.nio.Buffer;
  */
 public class SteamNetworking extends SteamInterface {
 
+	public enum API {
+		Client,
+		Server
+	}
+
 	public enum P2PSend {
 		Unreliable,
 		UnreliableNoDelay,
@@ -29,13 +34,14 @@ public class SteamNetworking extends SteamInterface {
 		}
 	}
 
-	public SteamNetworking(long pointer, SteamNetworkingCallback callback) {
+	public SteamNetworking(long pointer, SteamNetworkingCallback callback, API api) {
 		super(pointer);
-		registerCallback(new SteamNetworkingCallbackAdapter(callback));
+		registerCallback(new SteamNetworkingCallbackAdapter(callback), api == API.Client);
 	}
 
 	static void dispose() {
-		registerCallback(null);
+		registerCallback(null, true);
+		registerCallback(null, false);
 	}
 
 	public boolean sendP2PPacket(SteamID steamIDRemote, Buffer data, P2PSend sendType, int channel) throws SteamException {
@@ -86,23 +92,38 @@ public class SteamNetworking extends SteamInterface {
 	// @off
 
 	/*JNI
-		#include <steam_gameserver.h>
 		#include "SteamNetworkingCallback.h"
+		#include "SteamGameServerNetworkingCallback.h"
 
-		static SteamNetworkingCallback* callback = NULL;
+		static SteamNetworkingCallback* clientCallback = NULL;
+		static SteamGameServerNetworkingCallback* serverCallback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamNetworkingCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
+	static private native boolean registerCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
+		if (isClient) {
+			if (clientCallback != NULL) {
+				delete clientCallback;
+				clientCallback = NULL;
+			}
+
+			if (javaCallback != NULL) {
+				clientCallback = new SteamNetworkingCallback(env, javaCallback);
+			}
+
+			return clientCallback != NULL;
+		} else {
+			if (serverCallback != NULL) {
+				delete serverCallback;
+				serverCallback = NULL;
+			}
+
+			if (javaCallback != NULL) {
+				serverCallback = new SteamGameServerNetworkingCallback(env, javaCallback);
+			}
+
+			return serverCallback != NULL;
 		}
 
-		if (javaCallback != NULL) {
-			callback = new SteamNetworkingCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
 	*/
 
 	static private native boolean sendP2PPacket(long pointer, long steamIDRemote, Buffer data, int sizeInBytes, int sendType, int channel); /*
