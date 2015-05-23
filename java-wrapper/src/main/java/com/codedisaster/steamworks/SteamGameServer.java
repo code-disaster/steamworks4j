@@ -18,7 +18,7 @@ public class SteamGameServer extends SteamInterface {
 
 		private static final BeginAuthSessionResult[] values = values();
 
-		public static BeginAuthSessionResult byOrdinal(int authSessionResponse) {
+		static BeginAuthSessionResult byOrdinal(int authSessionResponse) {
 			return values[authSessionResponse];
 		}
 	}
@@ -37,7 +37,7 @@ public class SteamGameServer extends SteamInterface {
 
 		private static final AuthSessionResponse[] values = values();
 
-		public static AuthSessionResponse byOrdinal(int authSessionResponse) {
+		static AuthSessionResponse byOrdinal(int authSessionResponse) {
 			return values[authSessionResponse];
 		}
 	}
@@ -49,7 +49,7 @@ public class SteamGameServer extends SteamInterface {
 
 		private static final UserHasLicenseForAppResult[] values = values();
 
-		public static UserHasLicenseForAppResult byOrdinal(int result) {
+		static UserHasLicenseForAppResult byOrdinal(int result) {
 			return values[result];
 		}
 	}
@@ -74,7 +74,7 @@ public class SteamGameServer extends SteamInterface {
 
 		private static final DenyReason[] values = values();
 
-		public static DenyReason byOrdinal(int denyReason) {
+		static DenyReason byOrdinal(int denyReason) {
 			return values[denyReason];
 		}
 	}
