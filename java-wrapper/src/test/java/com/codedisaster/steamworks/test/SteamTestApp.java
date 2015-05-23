@@ -22,15 +22,19 @@ public abstract class SteamTestApp {
 
 		@Override
 		public void run() {
-			while (alive && mainThread.isAlive()) {
-				if (scanner.hasNext()) {
-					String input = scanner.next();
-					if (input.equals("quit") || input.equals("exit")) {
-						alive = false;
-					} else {
-						processInput(input);
+			try {
+				while (alive && mainThread.isAlive()) {
+					if (scanner.hasNext()) {
+						String input = scanner.next();
+						if (input.equals("quit") || input.equals("exit")) {
+							alive = false;
+						} else {
+							processInput(input);
+						}
 					}
 				}
+			} catch (SteamException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -41,7 +45,9 @@ public abstract class SteamTestApp {
 
 	protected abstract void registerInterfaces();
 
-	protected abstract void processInput(String input);
+	protected abstract void processUpdate() throws SteamException;
+
+	protected abstract void processInput(String input) throws SteamException;
 
 	private boolean runAsClient(@SuppressWarnings("unused") String[] arguments) throws SteamException {
 

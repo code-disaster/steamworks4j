@@ -8,7 +8,7 @@ import java.nio.Buffer;
  */
 public class SteamNetworking extends SteamInterface {
 
-	enum P2PSend {
+	public enum P2PSend {
 		Unreliable,
 		UnreliableNoDelay,
 		Reliable,
@@ -38,7 +38,10 @@ public class SteamNetworking extends SteamInterface {
 		registerCallback(null);
 	}
 
-	public boolean sendP2PPacket(SteamID steamIDRemote, Buffer data, P2PSend sendType, int channel) {
+	public boolean sendP2PPacket(SteamID steamIDRemote, Buffer data, P2PSend sendType, int channel) throws SteamException {
+		if (!data.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
 		return sendP2PPacket(pointer, steamIDRemote.handle, data, data.limit(), sendType.ordinal(), channel);
 	}
 
@@ -50,10 +53,14 @@ public class SteamNetworking extends SteamInterface {
 		return 0;
 	}
 
-	public SteamID readP2PPacket(Buffer dest, int channel) {
+	public SteamID readP2PPacket(Buffer dest, int channel) throws SteamException {
+		if (!dest.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
 		int[] msgSizeInBytes = new int[1];
 		long[] steamIDRemote = new long[1];
 		if (readP2PPacket(pointer, dest, dest.capacity(), msgSizeInBytes, steamIDRemote, channel)) {
+			dest.position(0);
 			dest.limit(msgSizeInBytes[0]);
 			return new SteamID(steamIDRemote[0]);
 		}

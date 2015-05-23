@@ -231,7 +231,12 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	}
 
 	@Override
-	protected void processInput(String input) {
+	protected void processUpdate() throws SteamException {
+
+	}
+
+	@Override
+	protected void processInput(String input) throws SteamException {
 
 		if (input.equals("stats request")) {
 			userStats.requestCurrentStats();
