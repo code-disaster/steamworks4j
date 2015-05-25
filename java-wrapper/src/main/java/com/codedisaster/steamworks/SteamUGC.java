@@ -39,6 +39,32 @@ public class SteamUGC extends SteamInterface {
 		ForModeration
 	}
 
+	public enum AllUGCQueryType {
+		RankedByVote(0),
+		RankedByPublicationDate(1),
+		AcceptedForGameRankedByAcceptanceDate(2),
+		RankedByTrend(3),
+		FavoritedByFriendsRankedByPublicationDate(4),
+		CreatedByFriendsRankedByPublicationDate(5),
+		RankedByNumTimesReported(6),
+		CreatedByFollowedUsersRankedByPublicationDate(7),
+		NotYetRated(8),
+		RankedByTotalVotesAsc(9),
+		RankedByVotesUp(10),
+		RankedByTextSearch(11),
+		RankedByTotalUniqueSubscriptions(12);
+
+		private int id;
+
+		private AllUGCQueryType(int id) {
+			this.id = id;
+		}
+
+		public int id() {
+			return id;
+		}
+	}
+
 	public SteamUGC(long pointer, SteamUGCCallback callback) {
 		super(pointer);
 		registerCallback(new SteamUGCCallbackAdapter(callback));
@@ -53,6 +79,14 @@ public class SteamUGC extends SteamInterface {
 										  long creatorAppID, long consumerAppID, int page) {
 
 		return new SteamUGCQuery(createQueryUserUGCRequest(pointer, accountID, listType.ordinal(),
+				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
+	}
+
+	public SteamUGCQuery createQueryAllUGCRequest(AllUGCQueryType queryType, UserUGCList listType,
+			  							  MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
+			  							  long creatorAppID, long consumerAppID, int page) {
+
+		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.id(), listType.ordinal(),
 				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
 
@@ -98,6 +132,15 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryUserUGCRequest(accountID, (EUserUGCList) listType,
 			(EUGCMatchingUGCType) matchingType, (EUserUGCListSortOrder) sortOrder, creatorAppID, consumerAppID, page);
+		return (long) query;
+	*/
+
+	static private native long createQueryAllUGCRequest(long pointer, int queryType, int listType,
+														 int matchingType, int sortOrder,
+														 long creatorAppID, long consumerAppID, int page); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
+			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
 		return (long) query;
 	*/
 
