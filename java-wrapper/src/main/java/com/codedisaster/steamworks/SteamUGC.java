@@ -40,29 +40,19 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public enum AllUGCQueryType {
-		RankedByVote(0),
-		RankedByPublicationDate(1),
-		AcceptedForGameRankedByAcceptanceDate(2),
-		RankedByTrend(3),
-		FavoritedByFriendsRankedByPublicationDate(4),
-		CreatedByFriendsRankedByPublicationDate(5),
-		RankedByNumTimesReported(6),
-		CreatedByFollowedUsersRankedByPublicationDate(7),
-		NotYetRated(8),
-		RankedByTotalVotesAsc(9),
-		RankedByVotesUp(10),
-		RankedByTextSearch(11),
-		RankedByTotalUniqueSubscriptions(12);
-
-		private int id;
-
-		private AllUGCQueryType(int id) {
-			this.id = id;
-		}
-
-		public int id() {
-			return id;
-		}
+		RankedByVote,
+		RankedByPublicationDate,
+		AcceptedForGameRankedByAcceptanceDate,
+		RankedByTrend,
+		FavoritedByFriendsRankedByPublicationDate,
+		CreatedByFriendsRankedByPublicationDate,
+		RankedByNumTimesReported,
+		CreatedByFollowedUsersRankedByPublicationDate,
+		NotYetRated,
+		RankedByTotalVotesAsc,
+		RankedByVotesUp,
+		RankedByTextSearch,
+		RankedByTotalUniqueSubscriptions
 	}
 
 	public SteamUGC(long pointer, SteamUGCCallback callback) {
@@ -86,7 +76,7 @@ public class SteamUGC extends SteamInterface {
 			  							  MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
 			  							  long creatorAppID, long consumerAppID, int page) {
 
-		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.id(), listType.ordinal(),
+		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), listType.ordinal(),
 				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
 
