@@ -28,13 +28,8 @@ public class SteamUserStats extends SteamInterface {
 		ForceUpdate
 	}
 
-	public SteamUserStats(long pointer, SteamUserStatsCallback callback) {
-		super(pointer);
-		registerCallback(new SteamUserStatsCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamUserStats(SteamUserStatsCallback callback) {
+		super(SteamAPI.getSteamUserStatsPointer(), createCallback(new SteamUserStatsCallbackAdapter(callback)));
 	}
 
 	public boolean requestCurrentStats() {
@@ -105,12 +100,12 @@ public class SteamUserStats extends SteamInterface {
 												LeaderboardSortMethod leaderboardSortMethod,
 												LeaderboardDisplayType leaderboardDisplayType) {
 
-		return new SteamAPICall(findOrCreateLeaderboard(pointer, leaderboardName,
+		return new SteamAPICall(findOrCreateLeaderboard(pointer, callback, leaderboardName,
 				leaderboardSortMethod.ordinal(), leaderboardDisplayType.ordinal()));
 	}
 
 	public SteamAPICall findLeaderboard(String leaderboardName) {
-		return new SteamAPICall(findLeaderboard(pointer, leaderboardName));
+		return new SteamAPICall(findLeaderboard(pointer, callback, leaderboardName));
 	}
 
 	public String getLeaderboardName(SteamLeaderboardHandle leaderboard) {
@@ -134,7 +129,7 @@ public class SteamUserStats extends SteamInterface {
 												   int rangeStart,
 												   int rangeEnd) {
 
-		return new SteamAPICall(downloadLeaderboardEntries(pointer, leaderboard.handle,
+		return new SteamAPICall(downloadLeaderboardEntries(pointer, callback, leaderboard.handle,
 				leaderboardDataRequest.ordinal(), rangeStart, rangeEnd));
 	}
 
@@ -148,27 +143,18 @@ public class SteamUserStats extends SteamInterface {
 											   LeaderboardUploadScoreMethod method,
 											   int score) {
 
-		return new SteamAPICall(uploadLeaderboardScore(pointer, leaderboard.handle, method.ordinal(), score));
+		return new SteamAPICall(uploadLeaderboardScore(pointer, callback, leaderboard.handle, method.ordinal(), score));
 	}
+
+	// @off
 
 	/*JNI
 		#include <steam_api.h>
 		#include "SteamUserStatsCallback.h"
-
-		static SteamUserStatsCallback* callback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamUserStatsCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamUserStatsCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamUserStatsCallbackAdapter javaCallback); /*
+		return (long) new SteamUserStatsCallback(env, javaCallback);
 	*/
 
 	static private native boolean requestCurrentStats(long pointer); /*
@@ -238,19 +224,21 @@ public class SteamUserStats extends SteamInterface {
 		return stats->ResetAllStats(achievementsToo);
 	*/
 
-	static private native long findOrCreateLeaderboard(long pointer, String leaderboardName,
+	static private native long findOrCreateLeaderboard(long pointer, long callback, String leaderboardName,
 													   int leaderboardSortMethod, int leaderboardDisplayType); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 		SteamAPICall_t handle = stats->FindOrCreateLeaderboard(leaderboardName,
 			(ELeaderboardSortMethod) leaderboardSortMethod, (ELeaderboardDisplayType) leaderboardDisplayType);
-		callback->onLeaderboardFindResultCall.Set(handle, callback, &SteamUserStatsCallback::onLeaderboardFindResult);
+		cb->onLeaderboardFindResultCall.Set(handle, cb, &SteamUserStatsCallback::onLeaderboardFindResult);
 		return handle;
 	*/
 
-	static private native long findLeaderboard(long pointer, String leaderboardName); /*
+	static private native long findLeaderboard(long pointer, long callback, String leaderboardName); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 		SteamAPICall_t handle = stats->FindLeaderboard(leaderboardName);
-		callback->onLeaderboardFindResultCall.Set(handle, callback, &SteamUserStatsCallback::onLeaderboardFindResult);
+		cb->onLeaderboardFindResultCall.Set(handle, cb, &SteamUserStatsCallback::onLeaderboardFindResult);
 		return handle;
 	*/
 
@@ -275,15 +263,16 @@ public class SteamUserStats extends SteamInterface {
 		return stats->GetLeaderboardDisplayType(leaderboard);
 	*/
 
-	static private native long downloadLeaderboardEntries(long pointer, long leaderboard,
+	static private native long downloadLeaderboardEntries(long pointer, long callback, long leaderboard,
 														  int leaderboardDataRequest, int rangeStart, int rangeEnd); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 
 		SteamAPICall_t handle = stats->DownloadLeaderboardEntries(leaderboard,
 			(ELeaderboardDataRequest) leaderboardDataRequest, rangeStart, rangeEnd);
 
-		callback->onLeaderboardScoresDownloadedCall.Set(handle, callback,
+		cb->onLeaderboardScoresDownloadedCall.Set(handle, cb,
 			&SteamUserStatsCallback::onLeaderboardScoresDownloaded);
 
 		return handle;
@@ -314,14 +303,16 @@ public class SteamUserStats extends SteamInterface {
 
 	*/
 
-	static private native long uploadLeaderboardScore(long pointer, long leaderboard, int method, int score); /*
+	static private native long uploadLeaderboardScore(long pointer, long callback,
+													  long leaderboard, int method, int score); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 
 		SteamAPICall_t handle = stats->UploadLeaderboardScore(leaderboard,
 			(ELeaderboardUploadScoreMethod) method, score, NULL, 0);
 
-		callback->onLeaderboardScoreUploadedCall.Set(handle, callback,
+		cb->onLeaderboardScoreUploadedCall.Set(handle, cb,
 			&SteamUserStatsCallback::onLeaderboardScoreUploaded);
 
 		return handle;

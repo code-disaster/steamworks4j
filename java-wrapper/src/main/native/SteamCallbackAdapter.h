@@ -29,11 +29,12 @@
 
 class SteamCallbackAdapter {
 
+public:
+    virtual ~SteamCallbackAdapter();
+
 protected:
     SteamCallbackAdapter(JNIEnv* env, jobject callback);
     SteamCallbackAdapter(JNIEnv* env, jclass callbackClass);
-
-    virtual ~SteamCallbackAdapter();
 
     void attach(SteamInvokeCallbackFunction fn) const;
 

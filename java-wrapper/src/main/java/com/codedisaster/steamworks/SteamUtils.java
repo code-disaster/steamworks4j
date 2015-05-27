@@ -11,11 +11,8 @@ public class SteamUtils extends SteamInterface {
 		BottomRight
 	}
 
-	public SteamUtils(long pointer) {
-		super(pointer);
-	}
-
-	static void dispose() {
+	public SteamUtils() {
+		super(SteamAPI.getSteamUtilsPointer());
 	}
 
 	public int getImageWidth(int image) {

@@ -6,13 +6,9 @@ package com.codedisaster.steamworks;
  */
 public class SteamGameServerStats extends SteamInterface {
 
-	public SteamGameServerStats(long pointer, SteamGameServerStatsCallback callback) {
-		super(pointer);
-		registerCallback(new SteamGameServerStatsCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamGameServerStats(SteamGameServerStatsCallback callback) {
+		super(SteamGameServerAPI.getSteamGameServerStatsPointer(), createCallback(
+				new SteamGameServerStatsCallbackAdapter(callback)));
 	}
 
 	public SteamAPICall requestUserStats(SteamID steamIDUser) {
@@ -70,23 +66,11 @@ public class SteamGameServerStats extends SteamInterface {
 	// @off
 
 	/*JNI
-		#include <steam_gameserver.h>
 		#include "SteamGameServerStatsCallback.h"
-
-		static SteamGameServerStatsCallback* callback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamGameServerStatsCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamGameServerStatsCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamGameServerStatsCallbackAdapter javaCallback); /*
+		return (long) new SteamGameServerStatsCallback(env, javaCallback);
 	*/
 
 	static private native long requestUserStats(long pointer, long steamIDUser); /*

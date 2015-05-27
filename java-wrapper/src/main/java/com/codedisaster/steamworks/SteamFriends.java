@@ -78,13 +78,8 @@ public class SteamFriends extends SteamInterface {
 		}
 	}
 
-	public SteamFriends(long pointer, SteamFriendsCallback callback) {
-		super(pointer);
-		registerCallback(new SteamFriendsCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamFriends(SteamFriendsCallback callback) {
+		super(SteamAPI.getSteamFriendsPointer(), createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
 
 	public PersonaState getPersonaState() {
@@ -131,24 +126,14 @@ public class SteamFriends extends SteamInterface {
 		activateGameOverlayToWebPage(pointer, url);
 	}
 
-	/*JNI
-		#include <steam_api.h>
-		#include "SteamFriendsCallback.h"
+	// @off
 
-		static SteamFriendsCallback* callback = NULL;
+	/*JNI
+		#include "SteamFriendsCallback.h"
 	*/
 
-	static private native boolean registerCallback(SteamFriendsCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamFriendsCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamFriendsCallbackAdapter javaCallback); /*
+		return (long) new SteamFriendsCallback(env, javaCallback);
 	*/
 
 	static private native String getPersonaName(long pointer); /*

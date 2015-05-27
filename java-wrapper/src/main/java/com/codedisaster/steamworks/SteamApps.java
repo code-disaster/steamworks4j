@@ -2,11 +2,8 @@ package com.codedisaster.steamworks;
 
 public class SteamApps extends SteamInterface {
 
-	public SteamApps(long pointer) {
-		super(pointer);
-	}
-
-	static void dispose() {
+	public SteamApps() {
+		super(SteamAPI.getSteamAppsPointer());
 	}
 
 	public boolean isSubscribedApp(long appID) {

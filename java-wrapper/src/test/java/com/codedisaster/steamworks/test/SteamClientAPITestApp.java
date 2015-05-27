@@ -205,29 +205,40 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	protected void registerInterfaces() {
 
 		System.out.println("Register user ...");
-		user = new SteamUser(SteamAPI.getSteamUserPointer());
+		user = new SteamUser();
 
 		System.out.println("Register user stats callback ...");
-		userStats = new SteamUserStats(SteamAPI.getSteamUserStatsPointer(), userStatsCallback);
+		userStats = new SteamUserStats(userStatsCallback);
 
 		System.out.println("Register remote storage ...");
-		remoteStorage = new SteamRemoteStorage(SteamAPI.getSteamRemoteStoragePointer(), remoteStorageCallback);
+		remoteStorage = new SteamRemoteStorage(remoteStorageCallback);
 
 		System.out.println("Register UGC ...");
-		ugc = new SteamUGC(SteamAPI.getSteamUGCPointer(), ugcCallback);
+		ugc = new SteamUGC(ugcCallback);
 
 		System.out.println("Register Utils ...");
-		utils = new SteamUtils(SteamAPI.getSteamUtilsPointer());
+		utils = new SteamUtils();
 
 		System.out.println("Register Apps ...");
-		apps = new SteamApps(SteamAPI.getSteamAppsPointer());
+		apps = new SteamApps();
 
 		System.out.println("Register Friends ...");
-		friends = new SteamFriends(SteamAPI.getSteamFriendsPointer(), friendsCallback);
+		friends = new SteamFriends(friendsCallback);
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 		System.out.println("App ID: " + utils.getAppID());
 
+	}
+
+	@Override
+	protected void unregisterInterfaces() {
+		user.dispose();
+		userStats.dispose();
+		remoteStorage.dispose();
+		ugc.dispose();
+		utils.dispose();
+		apps.dispose();
+		friends.dispose();
 	}
 
 	@Override

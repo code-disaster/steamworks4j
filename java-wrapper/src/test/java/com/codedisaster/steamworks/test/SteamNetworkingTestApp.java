@@ -51,10 +51,16 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
-		friends = new SteamFriends(SteamAPI.getSteamFriendsPointer(), friendsCallback);
-		networking = new SteamNetworking(SteamAPI.getSteamNetworkingPointer(), peer2peerCallback, SteamNetworking.API.Client);
+		friends = new SteamFriends(friendsCallback);
+		networking = new SteamNetworking(peer2peerCallback, SteamNetworking.API.Client);
 
 		networking.allowP2PPacketRelay(true);
+	}
+
+	@Override
+	protected void unregisterInterfaces() {
+		friends.dispose();
+		networking.dispose();
 	}
 
 	@Override

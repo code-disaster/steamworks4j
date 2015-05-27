@@ -45,6 +45,8 @@ public abstract class SteamTestApp {
 
 	protected abstract void registerInterfaces();
 
+	protected abstract void unregisterInterfaces();
+
 	protected abstract void processUpdate() throws SteamException;
 
 	protected abstract void processInput(String input) throws SteamException;
@@ -77,6 +79,9 @@ public abstract class SteamTestApp {
 		}
 
 		System.out.println("Shutting down Steam client API ...");
+
+		unregisterInterfaces();
+
 		SteamAPI.shutdown();
 
 		return true;

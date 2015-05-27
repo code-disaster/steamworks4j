@@ -2,11 +2,8 @@ package com.codedisaster.steamworks;
 
 public class SteamUser extends SteamInterface {
 
-	public SteamUser(long pointer) {
-		super(pointer);
-	}
-
-	static void dispose() {
+	public SteamUser() {
+		super(SteamAPI.getSteamUserPointer());
 	}
 
 	public SteamID getSteamID() {

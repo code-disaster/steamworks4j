@@ -25,10 +25,6 @@ public class SteamGameServerAPI {
 	}
 
 	static public void shutdown() {
-		SteamGameServer.dispose();
-		SteamGameServerStats.dispose();
-		SteamNetworking.dispose();
-
 		isRunning = false;
 		nativeShutdown();
 	}
@@ -72,15 +68,15 @@ public class SteamGameServerAPI {
 		return SteamGameServer_GetSteamID();
 	*/
 
-	static public native long getSteamGameServerPointer(); /*
+	static native long getSteamGameServerPointer(); /*
 		return (long) SteamGameServer();
 	*/
 
-	static public native long getSteamGameServerNetworkingPointer(); /*
+	static native long getSteamGameServerNetworkingPointer(); /*
 		return (long) SteamGameServerNetworking();
 	*/
 
-	static public native long getSteamGameServerStatsPointer(); /*
+	static native long getSteamGameServerStatsPointer(); /*
 		return (long) SteamGameServerStats();
 	*/
 

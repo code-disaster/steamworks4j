@@ -79,13 +79,9 @@ public class SteamGameServer extends SteamInterface {
 		}
 	}
 
-	public SteamGameServer(long pointer, SteamGameServerCallback callback) {
-		super(pointer);
-		registerCallback(new SteamGameServerCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamGameServer(SteamGameServerCallback callback) {
+		super(SteamGameServerAPI.getSteamGameServerPointer(),
+				createCallback(new SteamGameServerCallbackAdapter(callback)));
 	}
 
 	public void setProduct(String product) {
@@ -268,23 +264,11 @@ public class SteamGameServer extends SteamInterface {
 	// @off
 
 	/*JNI
-		#include <steam_gameserver.h>
 		#include "SteamGameServerCallback.h"
-
-		static SteamGameServerCallback* callback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamGameServerCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamGameServerCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamGameServerCallbackAdapter javaCallback); /*
+		return (long) new SteamGameServerCallback(env, javaCallback);
 	*/
 
 	static private native void setProduct(long pointer, String product); /*
