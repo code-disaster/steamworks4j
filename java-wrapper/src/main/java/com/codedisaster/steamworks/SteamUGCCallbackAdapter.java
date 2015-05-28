@@ -14,4 +14,12 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 				totalMatchingResults, isCachedData, SteamResult.byValue(result));
 	}
 
+	public void onSubscribeItem(long publishedFileID, int result) {
+		callback.onSubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
+	}
+	
+	public void onUnsubscribeItem(long publishedFileID, int result) {
+		callback.onUnsubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
+	}
+	
 }

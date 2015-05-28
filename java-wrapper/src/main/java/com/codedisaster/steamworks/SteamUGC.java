@@ -79,7 +79,7 @@ public class SteamUGC extends SteamInterface {
 		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), listType.ordinal(),
 				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
-
+	
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
 		return setReturnTotalOnly(pointer, query.handle, returnTotalOnly);
 	}
@@ -94,6 +94,29 @@ public class SteamUGC extends SteamInterface {
 
 	public boolean releaseQueryUserUGCRequest(SteamUGCQuery query) {
 		return releaseQueryUserUGCRequest(pointer, query.handle);
+	}
+
+	public SteamAPICall subscribeItem(SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(createQuerySubscribeItem(pointer, publishedFileID.handle));
+	}
+
+	public SteamAPICall unsubscribeItem(SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(createQueryUnsubscribeItem(pointer, publishedFileID.handle));
+	}
+
+	public int getNumSubscribedItems() {
+		return getNumSubscribedItems(pointer);
+	}
+
+	public int getSubscribedItems(SteamPublishedFileID[] publishedFileIds) {
+		long[] ids = new long[publishedFileIds.length];
+		int nb = getSubscribedItems(pointer, ids, publishedFileIds.length);
+
+		for (int i = 0; i < nb; i++) {
+			publishedFileIds[i] = new SteamPublishedFileID(ids[i]);
+		}
+
+		return nb;
 	}
 
 	/*JNI
@@ -186,6 +209,30 @@ public class SteamUGC extends SteamInterface {
 	static private native boolean releaseQueryUserUGCRequest(long pointer, long query); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->ReleaseQueryUGCRequest(query);
+	*/
+
+	static private native long createQuerySubscribeItem(long pointer, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamAPICall_t handle = ugc->SubscribeItem(publishedFileID);
+		callback->onSubscribeItemCall.Set(handle, callback, &SteamUGCCallback::onSubscribeItem);
+		return handle;
+	 */
+
+	static private native long createQueryUnsubscribeItem(long pointer, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamAPICall_t handle = ugc->UnsubscribeItem(publishedFileID);
+		callback->onUnsubscribeItemCall.Set(handle, callback, &SteamUGCCallback::onUnsubscribeItem);
+		return handle;
+	 */
+
+	static private native int getNumSubscribedItems(long pointer); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->GetNumSubscribedItems();
+	*/
+
+	static private native int getSubscribedItems(long pointer, long[] files, int maxEntries); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->GetSubscribedItems((PublishedFileId_t*) files, maxEntries);
 	*/
 
 }
