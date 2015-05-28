@@ -39,7 +39,7 @@ public class SteamUGC extends SteamInterface {
 		ForModeration
 	}
 
-	public enum AllUGCQueryType {
+	public enum UGCQueryType {
 		RankedByVote,
 		RankedByPublicationDate,
 		AcceptedForGameRankedByAcceptanceDate,
@@ -72,12 +72,11 @@ public class SteamUGC extends SteamInterface {
 				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
 
-	public SteamUGCQuery createQueryAllUGCRequest(AllUGCQueryType queryType, UserUGCList listType,
-			  							  MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
+	public SteamUGCQuery createQueryAllUGCRequest(UGCQueryType queryType, MatchingUGCType matchingType,
 			  							  long creatorAppID, long consumerAppID, int page) {
 
-		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), listType.ordinal(),
-				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
+		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.ordinal(),
+				creatorAppID, consumerAppID, page));
 	}
 
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
@@ -125,9 +124,8 @@ public class SteamUGC extends SteamInterface {
 		return (long) query;
 	*/
 
-	static private native long createQueryAllUGCRequest(long pointer, int queryType, int listType,
-														 int matchingType, int sortOrder,
-														 long creatorAppID, long consumerAppID, int page); /*
+	static private native long createQueryAllUGCRequest(long pointer, int queryType, int matchingType,
+														long creatorAppID, long consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
 			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
