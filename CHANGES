@@ -5,7 +5,10 @@
 - Added SteamGameServer, SteamGameServerStats and SteamNetworking APIs. [initially added by Francisco "Franz" Bischoff]
 - Updated test application to prepare for more (isolated) tests. SteamAPITestApplication is now called SteamClientAPITestApp.
 - Added SteamNetworkingTestApp for testing P2P networking functions.
+- Removed static native callback objects. They are stored per instance of each interface now.
+- Removed static dispose() methods. User applications need to call SteamInterface.dispose() to avoid native memory leaks.
 - API change: SteamUserStatsCallback.onUserStatsReceived() is now passed a SteamID instead of a long value.
+- API change: Simplified all interface constructors by removing 'pointer' parameters. They are obtained internally now.
 
 [1.0.2]
 - Added wrapper to ISteamFriends::RequestUserInformation().

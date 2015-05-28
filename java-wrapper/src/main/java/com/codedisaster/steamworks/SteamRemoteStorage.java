@@ -20,13 +20,8 @@ public class SteamRemoteStorage extends SteamInterface {
 		Community
 	}
 
-	public SteamRemoteStorage(long pointer, SteamRemoteStorageCallback callback) {
-		super(pointer);
-		registerCallback(new SteamRemoteStorageCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamRemoteStorage(SteamRemoteStorageCallback callback) {
+		super(SteamAPI.getSteamRemoteStoragePointer(), createCallback(new SteamRemoteStorageCallbackAdapter(callback)));
 	}
 
 	public boolean fileWrite(String name, ByteBuffer data, int length) throws SteamException {
@@ -48,7 +43,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamAPICall fileShare(String name) {
-		return new SteamAPICall(fileShare(pointer, name));
+		return new SteamAPICall(fileShare(pointer, callback, name));
 	}
 
 	public SteamUGCFileWriteStreamHandle fileWriteStreamOpen(String name) {
@@ -84,7 +79,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamAPICall ugcDownload(SteamUGCHandle fileHandle, int priority) {
-		return new SteamAPICall(ugcDownload(pointer, fileHandle.handle, priority));
+		return new SteamAPICall(ugcDownload(pointer, callback, fileHandle.handle, priority));
 	}
 
 	public int ugcRead(SteamUGCHandle fileHandle, ByteBuffer buffer, int capacity, int offset, UGCReadAction action) {
@@ -96,7 +91,7 @@ public class SteamRemoteStorage extends SteamInterface {
 										   PublishedFileVisibility visibility, String[] tags,
 										   WorkshopFileType workshopFileType) {
 
-		return new SteamAPICall(publishWorkshopFile(pointer, file, previewFile, consumerAppID, title,
+		return new SteamAPICall(publishWorkshopFile(pointer, callback, file, previewFile, consumerAppID, title,
 				description, visibility.ordinal(), tags, tags != null ? tags.length : 0, workshopFileType.ordinal()));
 	}
 
@@ -121,27 +116,17 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamAPICall commitPublishedFileUpdate(SteamPublishedFileUpdateHandle updateHandle) {
-		return new SteamAPICall(commitPublishedFileUpdate(pointer, updateHandle.handle));
+		return new SteamAPICall(commitPublishedFileUpdate(pointer, callback, updateHandle.handle));
 	}
 
-	/*JNI
-		#include <steam_api.h>
-		#include "SteamRemoteStorageCallback.h"
+	// @off
 
-		static SteamRemoteStorageCallback* callback = NULL;
+	/*JNI
+		#include "SteamRemoteStorageCallback.h"
 	*/
 
-	static private native boolean registerCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamRemoteStorageCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
+		return (long) new SteamRemoteStorageCallback(env, javaCallback);
 	*/
 
 	static private native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*
@@ -159,10 +144,11 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->FileDelete(name);
 	*/
 
-	static private native long fileShare(long pointer, String name); /*
+	static private native long fileShare(long pointer, long callback, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->FileShare(name);
-		callback->onFileShareResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onFileShareResult);
+		cb->onFileShareResultCall.Set(handle, cb, &SteamRemoteStorageCallback::onFileShareResult);
 		return handle;
 	*/
 
@@ -207,10 +193,11 @@ public class SteamRemoteStorage extends SteamInterface {
 		return name;
 	*/
 
-	static private native long ugcDownload(long pointer, long content, int priority); /*
+	static private native long ugcDownload(long pointer, long callback, long content, int priority); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->UGCDownload(content, priority);
-		callback->onDownloadUGCResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onDownloadUGCResult);
+		cb->onDownloadUGCResultCall.Set(handle, cb, &SteamRemoteStorageCallback::onDownloadUGCResult);
 		return handle;
 	*/
 
@@ -221,7 +208,8 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->UGCRead(content, buffer, capacity, offset, (EUGCReadAction) action);
 	*/
 
-	static private native long publishWorkshopFile(long pointer, String file, String previewFile, long consumerAppID,
+	static private native long publishWorkshopFile(long pointer, long callback,
+												   String file, String previewFile, long consumerAppID,
 												   String title, String description, int visibility, String[] tags,
 												   int numTags, int workshopFileType); /*
 
@@ -233,10 +221,12 @@ public class SteamRemoteStorage extends SteamInterface {
 		}
 
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
+
 		SteamAPICall_t handle = storage->PublishWorkshopFile(file, previewFile, consumerAppID, title, description,
 			(ERemoteStoragePublishedFileVisibility) visibility, &arrayTags, (EWorkshopFileType) workshopFileType);
 
-		callback->onPublishFileResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onPublishFileResult);
+		cb->onPublishFileResultCall.Set(handle, cb, &SteamRemoteStorageCallback::onPublishFileResult);
 
 		for (int t = 0; t < numTags; t++) {
 			env->ReleaseStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), arrayTags.m_ppStrings[t]);
@@ -271,12 +261,11 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->UpdatePublishedFileDescription(updateHandle, description);
 	*/
 
-	static private native long commitPublishedFileUpdate(long pointer, long updateHandle); /*
+	static private native long commitPublishedFileUpdate(long pointer, long callback, long updateHandle); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->CommitPublishedFileUpdate(updateHandle);
-
-		callback->onUpdatePublishedFileResultCall.Set(handle, callback, &SteamRemoteStorageCallback::onUpdatePublishedFileResult);
-
+		cb->onUpdatePublishedFileResultCall.Set(handle, cb, &SteamRemoteStorageCallback::onUpdatePublishedFileResult);
 		return handle;
 	*/
 

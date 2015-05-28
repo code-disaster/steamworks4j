@@ -55,13 +55,8 @@ public class SteamUGC extends SteamInterface {
 		RankedByTotalUniqueSubscriptions
 	}
 
-	public SteamUGC(long pointer, SteamUGCCallback callback) {
-		super(pointer);
-		registerCallback(new SteamUGCCallbackAdapter(callback));
-	}
-
-	static void dispose() {
-		registerCallback(null);
+	public SteamUGC(SteamUGCCallback callback) {
+		super(SteamAPI.getSteamUGCPointer(), createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
 
 	public SteamUGCQuery createQueryUserUGCRequest(long accountID, UserUGCList listType,
@@ -84,7 +79,7 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public SteamAPICall sendQueryUGCRequest(SteamUGCQuery query) {
-		return new SteamAPICall(sendQueryUGCRequest(pointer, query.handle));
+		return new SteamAPICall(sendQueryUGCRequest(pointer, callback, query.handle));
 	}
 
 	public boolean getQueryUGCResult(SteamUGCQuery query, int index, SteamUGCDetails details) {
@@ -95,24 +90,14 @@ public class SteamUGC extends SteamInterface {
 		return releaseQueryUserUGCRequest(pointer, query.handle);
 	}
 
-	/*JNI
-		#include <steam_api.h>
-		#include "SteamUGCCallback.h"
+	// @off
 
-		static SteamUGCCallback* callback = NULL;
+	/*JNI
+		#include "SteamUGCCallback.h"
 	*/
 
-	static private native boolean registerCallback(SteamUGCCallbackAdapter javaCallback); /*
-		if (callback != NULL) {
-			delete callback;
-			callback = NULL;
-		}
-
-		if (javaCallback != NULL) {
-			callback = new SteamUGCCallback(env, javaCallback);
-		}
-
-		return callback != NULL;
+	static private native long createCallback(SteamUGCCallbackAdapter javaCallback); /*
+		return (long) new SteamUGCCallback(env, javaCallback);
 	*/
 
 	static private native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
@@ -137,10 +122,11 @@ public class SteamUGC extends SteamInterface {
 		return ugc->SetReturnTotalOnly(query, returnTotalOnly);
 	*/
 
-	static private native long sendQueryUGCRequest(long pointer, long query); /*
+	static private native long sendQueryUGCRequest(long pointer, long callback, long query); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SendQueryUGCRequest(query);
-		callback->onUGCQueryCompletedCall.Set(handle, callback, &SteamUGCCallback::onUGCQueryCompleted);
+		cb->onUGCQueryCompletedCall.Set(handle, cb, &SteamUGCCallback::onUGCQueryCompleted);
 		return handle;
 	*/
 

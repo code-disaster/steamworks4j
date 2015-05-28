@@ -34,14 +34,10 @@ public class SteamNetworking extends SteamInterface {
 		}
 	}
 
-	public SteamNetworking(long pointer, SteamNetworkingCallback callback, API api) {
-		super(pointer);
-		registerCallback(new SteamNetworkingCallbackAdapter(callback), api == API.Client);
-	}
-
-	static void dispose() {
-		registerCallback(null, true);
-		registerCallback(null, false);
+	public SteamNetworking(SteamNetworkingCallback callback, API api) {
+		super(api == API.Client ? SteamAPI.getSteamNetworkingPointer()
+				: SteamGameServerAPI.getSteamGameServerNetworkingPointer(),
+				createCallback(new SteamNetworkingCallbackAdapter(callback), api == API.Client));
 	}
 
 	public boolean sendP2PPacket(SteamID steamIDRemote, Buffer data, P2PSend sendType, int channel) throws SteamException {
@@ -94,36 +90,14 @@ public class SteamNetworking extends SteamInterface {
 	/*JNI
 		#include "SteamNetworkingCallback.h"
 		#include "SteamGameServerNetworkingCallback.h"
-
-		static SteamNetworkingCallback* clientCallback = NULL;
-		static SteamGameServerNetworkingCallback* serverCallback = NULL;
 	*/
 
-	static private native boolean registerCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
+	static private native long createCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
 		if (isClient) {
-			if (clientCallback != NULL) {
-				delete clientCallback;
-				clientCallback = NULL;
-			}
-
-			if (javaCallback != NULL) {
-				clientCallback = new SteamNetworkingCallback(env, javaCallback);
-			}
-
-			return clientCallback != NULL;
+			return (long) new SteamNetworkingCallback(env, javaCallback);
 		} else {
-			if (serverCallback != NULL) {
-				delete serverCallback;
-				serverCallback = NULL;
-			}
-
-			if (javaCallback != NULL) {
-				serverCallback = new SteamGameServerNetworkingCallback(env, javaCallback);
-			}
-
-			return serverCallback != NULL;
+			return (long) new SteamGameServerNetworkingCallback(env, javaCallback);
 		}
-
 	*/
 
 	static private native boolean sendP2PPacket(long pointer, long steamIDRemote, Buffer data, int sizeInBytes, int sendType, int channel); /*
