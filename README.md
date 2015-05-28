@@ -40,7 +40,7 @@ The wrapper is written as minimal as possible without sacrificing ease of use. I
 
 > **In its current state, the wrapper only publishes *some* interfaces. Most of them do not expose the full API. In basic, I've added everything we need for our own games, plus what I've been asked to. Feel free to send requests, or even better, participate to add the functions and interfaces still missing.**
 
-**steamworks4j** is currently built against Steamworks SDK v1.32.
+**steamworks4j** is currently compiled with Steamworks SDK v1.33b.
 
 This project is released under the MIT license. The **steamworks4j** package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
 
@@ -69,6 +69,9 @@ The following interfaces have been *partially* implemented so far:
 ```
 ISteamApps
 ISteamFriends
+ISteamGameServer
+ISteamGameServerStats
+ISteamNetworking
 ISteamRemoteStorage (cloud saves, workshop files)
 ISteamUGC
 ISteamUser
@@ -92,7 +95,7 @@ OS X 10.6 and above is supported.
 
 ## Sample application
 
-`com.codedisaster.steamworks.test.SteamAPITestApplication` contains some test code which shows basic usage of the Java wrapper.
+The `com.codedisaster.steamworks.test.*` package contains some test applications which show basic usage of some of the Java interfaces.
 
 ## Debugging
 

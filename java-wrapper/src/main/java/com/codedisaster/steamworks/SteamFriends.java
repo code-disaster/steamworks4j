@@ -2,6 +2,54 @@ package com.codedisaster.steamworks;
 
 public class SteamFriends extends SteamInterface {
 
+	public enum PersonaState {
+		Offline,
+		Online,
+		Busy,
+		Away,
+		Snooze,
+		LookingToTrade,
+		LookingToPlay;
+
+		private static final PersonaState[] values = values();
+
+		static PersonaState byOrdinal(int personaState) {
+			return values[personaState];
+		}
+	}
+
+	public enum FriendFlags {
+
+		None(0x00),
+		Blocked(0x01),
+		FriendshipRequested(0x02),
+		Immediate(0x04),
+		ClanMember(0x08),
+		OnGameServer(0x10),
+		// HasPlayedWith(0x20),
+		// FriendOfFriend(0x40),
+		RequestingFriendship(0x80),
+		RequestingInfo(0x100),
+		Ignored(0x200),
+		IgnoredFriend(0x400),
+		Suggested(0x800),
+		All(0xFFFF);
+
+		private final int bits;
+
+		FriendFlags(int bits) {
+			this.bits = bits;
+		}
+
+		static int asBits(FriendFlags... friendFlags) {
+			int bits = 0;
+			for (FriendFlags flags : friendFlags) {
+				bits |= flags.bits;
+			}
+			return bits;
+		}
+	}
+
 	public enum PersonaChange {
 
 		Name(0x0001),
@@ -39,8 +87,24 @@ public class SteamFriends extends SteamInterface {
 		registerCallback(null);
 	}
 
+	public PersonaState getPersonaState() {
+		return PersonaState.byOrdinal(getPersonaState(pointer));
+	}
+
 	public String getPersonaName() {
 		return getPersonaName(pointer);
+	}
+
+	public int getFriendCount(FriendFlags... friendFlags) {
+		return getFriendCount(pointer, FriendFlags.asBits(friendFlags));
+	}
+
+	public SteamID getFriendByIndex(int friend, FriendFlags... friendFlags) {
+		return new SteamID(getFriendByIndex(pointer, friend, FriendFlags.asBits(friendFlags)));
+	}
+
+	public PersonaState getFriendPersonaState(SteamID steamIDFriend) {
+		return PersonaState.byOrdinal(getFriendPersonaState(pointer, steamIDFriend.handle));
 	}
 
 	public String getFriendPersonaName(SteamID steamID) {
@@ -91,6 +155,27 @@ public class SteamFriends extends SteamInterface {
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetPersonaName());
 		return name;
+	*/
+
+	static private native int getPersonaState(long pointer); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetPersonaState();
+	*/
+
+	static private native int getFriendCount(long pointer, int friendFlags); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetFriendCount(friendFlags);
+	*/
+
+	static private native long getFriendByIndex(long pointer, int friendIndex, int friendFlags); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		CSteamID id = friends->GetFriendByIndex(friendIndex, friendFlags);
+		return id.ConvertToUint64();
+	*/
+
+	static private native int getFriendPersonaState(long pointer, long steamIDFriend); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetFriendPersonaState((uint64) steamIDFriend);
 	*/
 
 	static private native String getFriendPersonaName(long pointer, long steamID); /*

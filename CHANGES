@@ -1,5 +1,11 @@
 [1.0.3]
 - Added ISteamUserStats::FindOrCreateLeaderboard(), GetLeaderboardSortMethod(), GetLeaderboardDisplayType().
+- Added SteamFriends API to retrieve avatar images.
+- Added SteamFriends API to enumerate friend lists and query persona states.
+- Added SteamGameServer, SteamGameServerStats and SteamNetworking APIs. [initially added by Francisco "Franz" Bischoff]
+- Updated test application to prepare for more (isolated) tests. SteamAPITestApplication is now called SteamClientAPITestApp.
+- Added SteamNetworkingTestApp for testing P2P networking functions.
+- API change: SteamUserStatsCallback.onUserStatsReceived() is now passed a SteamID instead of a long value.
 
 [1.0.2]
 - Added wrapper to ISteamFriends::RequestUserInformation().
