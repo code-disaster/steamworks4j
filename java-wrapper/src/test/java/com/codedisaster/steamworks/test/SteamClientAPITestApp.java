@@ -178,6 +178,16 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 			ugc.releaseQueryUserUGCRequest(query);
 		}
+
+		@Override
+		public void onSubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result) {
+			System.out.println("Subscribe item result: publishedFileID=" + publishedFileID + ", result=" + result);
+		}
+
+		@Override
+		public void onUnsubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result) {
+			System.out.println("Unsubscribe item result: publishedFileID=" + publishedFileID + ", result=" + result);
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
@@ -328,6 +338,12 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			String name = input.substring("ugc download ".length());
 			SteamUGCHandle handle = new SteamUGCHandle(Long.parseLong(name, 16));
 			remoteStorage.ugcDownload(handle, 0);
+		} else if (input.startsWith("ugc subscribe ")) {
+			Long id = Long.parseLong(input.substring("ugc subscribe ".length()));
+			ugc.subscribeItem(new SteamPublishedFileID(id));
+		} else if (input.startsWith("ugc unsubscribe ")) {
+			Long id = Long.parseLong(input.substring("ugc unsubscribe ".length()));
+			ugc.unsubscribeItem(new SteamPublishedFileID(id));
 		} else if (input.startsWith("leaderboard find ")) {
 			String name = input.substring("leaderboard find ".length());
 			userStats.findLeaderboard(name);

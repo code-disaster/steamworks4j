@@ -16,3 +16,15 @@ void SteamUGCCallback::onUGCQueryCompleted(SteamUGCQueryCompleted_t* callback, b
             (jboolean) callback->m_bCachedData, (jint) callback->m_eResult);
 	});
 }
+
+void SteamUGCCallback::onSubscribeItem(RemoteStorageSubscribePublishedFileResult_t* callback, bool error) {
+	invokeCallback({
+        callVoidMethod(env, "onSubscribeItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
+	});
+}
+
+void SteamUGCCallback::onUnsubscribeItem(RemoteStorageSubscribePublishedFileResult_t* callback, bool error) {
+	invokeCallback({
+        callVoidMethod(env, "onUnsubscribeItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
+	});
+}

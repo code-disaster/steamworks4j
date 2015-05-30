@@ -11,4 +11,10 @@ public:
 
 	void onUGCQueryCompleted(SteamUGCQueryCompleted_t* callback, bool error);
 	CCallResult<SteamUGCCallback, SteamUGCQueryCompleted_t> onUGCQueryCompletedCall;
+
+	void onSubscribeItem(RemoteStorageSubscribePublishedFileResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, RemoteStorageSubscribePublishedFileResult_t> onSubscribeItemCall;
+
+	void onUnsubscribeItem(RemoteStorageSubscribePublishedFileResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, RemoteStorageSubscribePublishedFileResult_t> onUnsubscribeItemCall;
 };
