@@ -91,11 +91,11 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public SteamAPICall subscribeItem(SteamPublishedFileID publishedFileID) {
-		return new SteamAPICall(createQuerySubscribeItem(pointer, publishedFileID.handle));
+		return new SteamAPICall(subscribeItem(pointer, callback, publishedFileID.handle));
 	}
 
 	public SteamAPICall unsubscribeItem(SteamPublishedFileID publishedFileID) {
-		return new SteamAPICall(createQueryUnsubscribeItem(pointer, publishedFileID.handle));
+		return new SteamAPICall(unsubscribeItem(pointer, callback, publishedFileID.handle));
 	}
 
 	public int getNumSubscribedItems() {
@@ -195,17 +195,19 @@ public class SteamUGC extends SteamInterface {
 		return ugc->ReleaseQueryUGCRequest(query);
 	*/
 
-	static private native long createQuerySubscribeItem(long pointer, long publishedFileID); /*
+	static private native long subscribeItem(long pointer, long callback, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SubscribeItem(publishedFileID);
-		callback->onSubscribeItemCall.Set(handle, callback, &SteamUGCCallback::onSubscribeItem);
+		cb->onSubscribeItemCall.Set(handle, cb, &SteamUGCCallback::onSubscribeItem);
 		return handle;
 	 */
 
-	static private native long createQueryUnsubscribeItem(long pointer, long publishedFileID); /*
+	static private native long unsubscribeItem(long pointer, long callback, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->UnsubscribeItem(publishedFileID);
-		callback->onUnsubscribeItemCall.Set(handle, callback, &SteamUGCCallback::onUnsubscribeItem);
+		cb->onUnsubscribeItemCall.Set(handle, cb, &SteamUGCCallback::onUnsubscribeItem);
 		return handle;
 	 */
 
