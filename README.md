@@ -52,13 +52,19 @@ The *public* Java interfaces are more or less 1:1 mapped to their native counter
 
 Callbacks are dealt with in a similar manner. Native callbacks are received by *package private callback adapters*, which only do type conversion, then forward the callback to their *public* interface.
 
+### Native resources
+
+Java interfaces may allocate some native heap memory. To clean up those resources, call SteamInterface.dispose() to avoid memory leaks.
+
 ### Proper handling of callbacks
 
 The Steamworks API provides two different mechanics to deal with callbacks: `STEAM_CALLBACK()` and `CCallResult<>`. Both are handled internally by **steamworks4j** for you, but this abstraction imposes one drawback:
 
-> It is only guaranteed that, at any time, the user application receives callbacks related to the **latest** respective API call.
+> It is only guaranteed that, at any time, each instance of an interface only receives callbacks related to the **latest** respective API call.
 
-> In practice this means that the caller shouldn't "batch-execute" the same API function, then wait for a bunch (of the same type) of callbacks. Instead, only one single API call should be issued. Then the application should wait for the callback, process it, then execute the next API call.
+> In practice this means that the caller shouldn't "batch-execute" the same API function, then wait for a bunch of callbacks. Instead, only one single API call should be issued. Then the interface should wait for the callback, process it, then execute the next API call.
+
+> If you really want to execute functions which trigger callbacks in parallel, you have to create and maintain multiple instances of the same interface.
 
 > This is actually true for CCallResult<> style callbacks only, but the application will require more knowledge about the inner workings of Steamworks to differentiate, as the Java API doesn't tell.
 
@@ -69,14 +75,16 @@ The following interfaces have been *partially* implemented so far:
 ```
 ISteamApps
 ISteamFriends
-ISteamGameServer
-ISteamGameServerStats
+[*] ISteamGameServer
+[*] ISteamGameServerStats
 ISteamNetworking
 ISteamRemoteStorage (cloud saves, workshop files)
 ISteamUGC
 ISteamUser
 ISteamUserStats (user stats, achievements, leaderboards)
 ISteamUtils
+
+[*] The game server wrappers are not tested at all, so expect issues using them.
 ```
 
 ## Requirements
