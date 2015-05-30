@@ -23,7 +23,7 @@ void SteamUGCCallback::onSubscribeItem(RemoteStorageSubscribePublishedFileResult
 	});
 }
 
-void SteamUGCCallback::onUnsubscribeItem(RemoteStorageSubscribePublishedFileResult_t* callback, bool error) {
+void SteamUGCCallback::onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileResult_t* callback, bool error) {
 	invokeCallback({
         callVoidMethod(env, "onUnsubscribeItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
 	});
