@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 
 public class SteamUGC extends SteamInterface {
 
@@ -59,25 +59,26 @@ public class SteamUGC extends SteamInterface {
 	}
 	
 	public enum ItemState {
-		None(0), // item not tracked on client
-		Subscribed(1), // current user is subscribed to this item. Not just cached.
-		LegacyItem(2), // item was created with ISteamRemoteStorage
-		Installed(4), // item is installed and usable (but maybe out of date)
-		NeedsUpdate(8), // items needs an update. Either because it's not installed yet or creator updated content
-		Downloading(16), // item update is currently downloading
-		DownloadPending(32);// DownloadItem() was called for this item, content isn't available until DownloadItemResult_t is fired
+		None(0),
+		Subscribed(1),
+		LegacyItem(2),
+		Installed(4),
+		NeedsUpdate(8),
+		Downloading(16),
+		DownloadPending(32);
 
-		private int id;
+		private final int bits;
+		private static final ItemState[] values = values();
 
-		private ItemState(int id) {
-			this.id = id;
+		ItemState(int bits) {
+			this.bits = bits;
 		}
 
-		public static Collection<ItemState> getById(int id) {
-			Collection<ItemState> itemStates = new ArrayList<ItemState>();
+		static Collection<ItemState> fromBits(int bits) {
+			EnumSet<ItemState> itemStates = EnumSet.noneOf(ItemState.class);
 
-			for (ItemState itemState : values()) {
-				if ((id & itemState.id) == itemState.id) {
+			for (ItemState itemState : values) {
+				if ((bits & itemState.bits) == itemState.bits) {
 					itemStates.add(itemState);
 				}
 			}
@@ -145,7 +146,7 @@ public class SteamUGC extends SteamInterface {
 	}
 	
 	public Collection<ItemState> getItemState(SteamPublishedFileID publishedFileID) {
-		return ItemState.getById(getItemState(pointer, publishedFileID.handle));
+		return ItemState.fromBits(getItemState(pointer, publishedFileID.handle));
 	}
 
 	// @off
