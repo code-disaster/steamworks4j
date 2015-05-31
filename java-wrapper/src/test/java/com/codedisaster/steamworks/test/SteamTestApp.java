@@ -55,7 +55,7 @@ public abstract class SteamTestApp {
 
 		System.out.println("Initialise Steam client API ...");
 
-		if (!SteamAPI.init()) {
+		if (!SteamAPI.init("../natives/libs")) {
 			return false;
 		}
 
