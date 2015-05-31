@@ -1,5 +1,8 @@
 package com.codedisaster.steamworks;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class SteamUGC extends SteamInterface {
 
 	public enum UserUGCList {
@@ -53,6 +56,34 @@ public class SteamUGC extends SteamInterface {
 		RankedByVotesUp,
 		RankedByTextSearch,
 		RankedByTotalUniqueSubscriptions
+	}
+	
+	public enum ItemState {
+		None(0), // item not tracked on client
+		Subscribed(1), // current user is subscribed to this item. Not just cached.
+		LegacyItem(2), // item was created with ISteamRemoteStorage
+		Installed(4), // item is installed and usable (but maybe out of date)
+		NeedsUpdate(8), // items needs an update. Either because it's not installed yet or creator updated content
+		Downloading(16), // item update is currently downloading
+		DownloadPending(32);// DownloadItem() was called for this item, content isn't available until DownloadItemResult_t is fired
+
+		private int id;
+
+		private ItemState(int id) {
+			this.id = id;
+		}
+
+		public static Collection<ItemState> getById(int id) {
+			Collection<ItemState> itemStates = new ArrayList<ItemState>();
+
+			for (ItemState itemState : values()) {
+				if ((id & itemState.id) == itemState.id) {
+					itemStates.add(itemState);
+				}
+			}
+
+			return itemStates;
+		}
 	}
 
 	public SteamUGC(SteamUGCCallback callback) {
@@ -111,6 +142,10 @@ public class SteamUGC extends SteamInterface {
 		}
 
 		return nb;
+	}
+	
+	public Collection<ItemState> getItemState(SteamPublishedFileID publishedFileID) {
+		return ItemState.getById(getItemState(pointer, publishedFileID.handle));
 	}
 
 	// @off
@@ -219,6 +254,11 @@ public class SteamUGC extends SteamInterface {
 	static private native int getSubscribedItems(long pointer, long[] files, int maxEntries); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetSubscribedItems((PublishedFileId_t*) files, maxEntries);
+	*/
+	
+	static private native int getItemState(long pointer, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->GetItemState(publishedFileID);
 	*/
 
 }
