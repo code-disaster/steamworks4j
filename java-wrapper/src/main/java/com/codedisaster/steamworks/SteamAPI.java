@@ -5,7 +5,16 @@ public class SteamAPI {
 	static private boolean isRunning = false;
 
 	static public boolean init() {
-		isRunning = SteamSharedLibraryLoader.extractAndLoadLibraries() && nativeInit();
+		return init(null);
+	}
+
+	static public boolean init(String pathToNativeLibraries) {
+		boolean fromJar = pathToNativeLibraries == null || pathToNativeLibraries.endsWith(".jar");
+
+		isRunning = SteamSharedLibraryLoader.extractAndLoadLibraries(fromJar, pathToNativeLibraries);
+
+		isRunning = isRunning && nativeInit();
+
 		return isRunning;
 	}
 

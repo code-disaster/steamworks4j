@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Collection;
 
 public class SteamClientAPITestApp extends SteamTestApp {
 
@@ -339,11 +340,18 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			SteamUGCHandle handle = new SteamUGCHandle(Long.parseLong(name, 16));
 			remoteStorage.ugcDownload(handle, 0);
 		} else if (input.startsWith("ugc subscribe ")) {
-			Long id = Long.parseLong(input.substring("ugc subscribe ".length()));
+			Long id = Long.parseLong(input.substring("ugc subscribe ".length()), 16);
 			ugc.subscribeItem(new SteamPublishedFileID(id));
 		} else if (input.startsWith("ugc unsubscribe ")) {
-			Long id = Long.parseLong(input.substring("ugc unsubscribe ".length()));
+			Long id = Long.parseLong(input.substring("ugc unsubscribe ".length()), 16);
 			ugc.unsubscribeItem(new SteamPublishedFileID(id));
+		} else if (input.startsWith("ugc state ")) {
+			Long id = Long.parseLong(input.substring("ugc state ".length()), 16);
+			Collection<SteamUGC.ItemState> itemStates = ugc.getItemState(new SteamPublishedFileID(id));
+			System.out.println("UGC item states: " + itemStates.size());
+			for (SteamUGC.ItemState itemState : itemStates) {
+				System.out.println("  " + itemState.name());
+			}
 		} else if (input.startsWith("leaderboard find ")) {
 			String name = input.substring("leaderboard find ".length());
 			userStats.findLeaderboard(name);

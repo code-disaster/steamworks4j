@@ -1,5 +1,7 @@
 package com.codedisaster.steamworks;
 
+import java.util.Collection;
+
 public class SteamFriends extends SteamInterface {
 
 	public enum PersonaState {
@@ -41,7 +43,7 @@ public class SteamFriends extends SteamInterface {
 			this.bits = bits;
 		}
 
-		static int asBits(FriendFlags... friendFlags) {
+		static int asBits(Collection<FriendFlags> friendFlags) {
 			int bits = 0;
 			for (FriendFlags flags : friendFlags) {
 				bits |= flags.bits;
@@ -90,11 +92,19 @@ public class SteamFriends extends SteamInterface {
 		return getPersonaName(pointer);
 	}
 
-	public int getFriendCount(FriendFlags... friendFlags) {
+	public int getFriendCount(FriendFlags friendFlag) {
+		return getFriendCount(pointer, friendFlag.bits);
+	}
+
+	public int getFriendCount(Collection<FriendFlags> friendFlags) {
 		return getFriendCount(pointer, FriendFlags.asBits(friendFlags));
 	}
 
-	public SteamID getFriendByIndex(int friend, FriendFlags... friendFlags) {
+	public SteamID getFriendByIndex(int friend, FriendFlags friendFlag) {
+		return new SteamID(getFriendByIndex(pointer, friend, friendFlag.bits));
+	}
+
+	public SteamID getFriendByIndex(int friend, Collection<FriendFlags> friendFlags) {
 		return new SteamID(getFriendByIndex(pointer, friend, FriendFlags.asBits(friendFlags)));
 	}
 

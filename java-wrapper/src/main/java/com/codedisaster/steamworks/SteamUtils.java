@@ -4,6 +4,30 @@ import java.nio.ByteBuffer;
 
 public class SteamUtils extends SteamInterface {
 
+	public enum SteamAPICallFailure {
+		None(-1),
+		SteamGone(0),
+		NetworkFailure(1),
+		InvalidHandle(2),
+		MismatchedCallback(3);
+
+		private int code;
+		private static final SteamAPICallFailure[] values = values();
+
+		SteamAPICallFailure(int code) {
+			this.code = code;
+		}
+
+		static SteamAPICallFailure byValue(int code) {
+			for (SteamAPICallFailure value : values) {
+				if (value.code == code) {
+					return value;
+				}
+			}
+			return None;
+		}
+	}
+
 	public enum NotificationPosition {
 		TopLeft,
 		TopRight,
@@ -33,6 +57,14 @@ public class SteamUtils extends SteamInterface {
 
 	public void setOverlayNotificationPosition(NotificationPosition position) {
 		setOverlayNotificationPosition(pointer, position.ordinal());
+	}
+
+	public boolean isAPICallCompleted(SteamAPICall handle, boolean[] result) {
+		return isAPICallCompleted(pointer, handle.handle, result);
+	}
+
+	public SteamAPICallFailure getAPICallFailureReason(SteamAPICall handle) {
+		return SteamAPICallFailure.byValue(getAPICallFailureReason(pointer, handle.handle));
 	}
 
 	public boolean isOverlayEnabled() {
@@ -72,6 +104,16 @@ public class SteamUtils extends SteamInterface {
 	static private native void setOverlayNotificationPosition(long pointer, int position); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		utils->SetOverlayNotificationPosition((ENotificationPosition) position);
+	*/
+
+	static private native boolean isAPICallCompleted(long pointer, long handle, boolean[] result); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		return utils->IsAPICallCompleted((SteamAPICall_t) handle, &result[0]);
+	*/
+
+	static private native int getAPICallFailureReason(long pointer, long handle); /*
+		ISteamUtils* utils = (ISteamUtils*) pointer;
+		return utils->GetAPICallFailureReason((SteamAPICall_t) handle);
 	*/
 
 	static private native boolean isOverlayEnabled(long pointer); /*

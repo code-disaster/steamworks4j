@@ -70,12 +70,12 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 		if (packetSize > 0) {
 
-			SteamID sender = networking.readP2PPacket(packetReadBuffer, defaultChannel);
+			SteamID steamIDSender = new SteamID();
 
-			if (sender != null) {
+			if (networking.readP2PPacket(steamIDSender, packetReadBuffer, defaultChannel) > 0) {
 
 				int bytesReceived = packetReadBuffer.limit();
-				System.out.println("Rcv packet: userID=" + sender.getAccountID() + ", " + bytesReceived + " bytes");
+				System.out.println("Rcv packet: userID=" + steamIDSender.getAccountID() + ", " + bytesReceived + " bytes");
 
 				byte[] bytes = new byte[bytesReceived];
 				packetReadBuffer.get(bytes);
@@ -85,7 +85,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				System.out.println("Rcv message: \"" + message + "\"");
 
 				// register, if unknown
-				registerRemoteSteamID(sender);
+				registerRemoteSteamID(steamIDSender);
 			}
 
 		}
@@ -110,8 +110,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 			if (steamIDReceiver != null) {
 
-				packetSendBuffer.position(0);
-				packetSendBuffer.limit(packetSendBuffer.capacity());
+				packetSendBuffer.clear(); // pos=0, limit=cap
 
 				for (int i = 1; i < params.length; i++) {
 					byte[] bytes = params[i].getBytes(messageCharset);
@@ -121,7 +120,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 					packetSendBuffer.put(bytes);
 				}
 
-				packetSendBuffer.limit(packetSendBuffer.position());
+				packetSendBuffer.flip(); // limit=pos, pos=0
 
 				networking.sendP2PPacket(steamIDReceiver, packetSendBuffer,
 						SteamNetworking.P2PSend.Unreliable, defaultChannel);

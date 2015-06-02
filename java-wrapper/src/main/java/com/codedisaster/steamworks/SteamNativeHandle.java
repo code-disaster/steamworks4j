@@ -1,7 +1,8 @@
 package com.codedisaster.steamworks;
 
 abstract class SteamNativeHandle {
-	final long handle;
+
+	long handle;
 
 	SteamNativeHandle(long handle) {
 		this.handle = handle;
