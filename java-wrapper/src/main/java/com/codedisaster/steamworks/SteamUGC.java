@@ -297,6 +297,12 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "ownerIDHandle", "J");
 			env->SetLongField(details, field, (jlong) result.m_ulSteamIDOwner);
 
+			field = env->GetFieldID(clazz, "timeCreated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeCreated);
+
+			field = env->GetFieldID(clazz, "timeUpdated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
+
 			return true;
 		}
 
