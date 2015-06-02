@@ -8,5 +8,7 @@ public interface SteamUGCCallback {
 	void onSubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result);
 
 	void onUnsubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result);
+	
+	void onRequestUGCDetails(SteamUGCDetails details, SteamResult result);
 
 }

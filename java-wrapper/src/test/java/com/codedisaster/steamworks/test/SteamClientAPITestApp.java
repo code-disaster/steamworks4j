@@ -189,6 +189,18 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		public void onUnsubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result) {
 			System.out.println("Unsubscribe item result: publishedFileID=" + publishedFileID + ", result=" + result);
 		}
+		
+		public void onRequestUGCDetails(SteamUGCDetails details, SteamResult result) {
+			System.out.println("Request details result: result=" + result);
+			System.out.println("UGC details " +
+					   ": publishedFileID=" + details.getPublishedFileID().toString() +
+					   ", result=" + details.getResult().toString() +
+					   ", title='" + details.getTitle() + "'" +
+					   ", description='" + details.getDescription() + "'" +
+					   ", fileName=" + details.getFileName() +
+					   ", fileHandle=" + details.getFileHandle().toString() +
+					   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
