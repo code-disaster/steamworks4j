@@ -88,43 +88,21 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public class ItemInstallInfo {
-		private boolean installed;
-		private SteamPublishedFileID publishedFileID;
-		private long fileHandle;
-		private String path;
-		private int size;
+		private String folder;
+		private int sizeOnDisk;
 
-		public boolean isInstalled() {
-			return installed;
+		public String getFolder() {
+			return folder;
 		}
 
-		public SteamPublishedFileID getPublishedFileID() {
-			return publishedFileID;
-		}
-
-		public String getPath() {
-			return path;
-		}
-
-		public int getSize() {
-			return size;
+		public int getSizeOnDisk() {
+			return sizeOnDisk;
 		}
 	}
 	
 	public class ItemDownloadInfo {
-		private boolean available;
-		private SteamPublishedFileID publishedFileID;
-		private long fileHandle;
-		private long bytesDownloaded;
-		private long bytesTotal;
-
-		public boolean isAvailable() {
-			return available;
-		}
-
-		public SteamPublishedFileID getPublishedFileID() {
-			return publishedFileID;
-		}
+		long bytesDownloaded;
+		long bytesTotal;
 
 		public long getBytesDownloaded() {
 			return bytesDownloaded;
@@ -215,18 +193,18 @@ public class SteamUGC extends SteamInterface {
 		return ItemState.fromBits(getItemState(pointer, publishedFileID.handle));
 	}
 	
-	public ItemInstallInfo getItemInstallInfo(SteamPublishedFileID publishedFileID) {
-		ItemInstallInfo itemInstallInfo = new ItemInstallInfo();
-		getItemInstallInfo(pointer, publishedFileID.handle, itemInstallInfo);
-		itemInstallInfo.publishedFileID = new SteamPublishedFileID(itemInstallInfo.fileHandle);
-		return itemInstallInfo;
+	public boolean getItemInstallInfo(SteamPublishedFileID publishedFileID, ItemInstallInfo installInfo) {
+		return getItemInstallInfo(pointer, publishedFileID.handle, installInfo);
 	}
 	
-	public ItemDownloadInfo getItemDownloadInfo(SteamPublishedFileID publishedFileID) {
-		ItemDownloadInfo itemDownloadInfo = new ItemDownloadInfo();
-		getItemDownloadInfo(pointer, publishedFileID.handle, itemDownloadInfo);
-		itemDownloadInfo.publishedFileID = new SteamPublishedFileID(itemDownloadInfo.fileHandle);
-		return itemDownloadInfo;
+	public boolean getItemDownloadInfo(SteamPublishedFileID publishedFileID, ItemDownloadInfo downloadInfo) {
+		long[] values = new long[2];
+		if (getItemDownloadInfo(pointer, publishedFileID.handle, values)) {
+			downloadInfo.bytesDownloaded = values[0];
+			downloadInfo.bytesTotal = values[1];
+			return true;
+		}
+		return false;
 	}
 
 	@Deprecated // API docs: use createQueryUGCDetailsRequest call instead
@@ -368,49 +346,36 @@ public class SteamUGC extends SteamInterface {
 		return ugc->GetItemState(publishedFileID);
 	*/
 
-	static private native void getItemInstallInfo(long pointer, long publishedFileID, ItemInstallInfo itemInstallInfo); /*
+	static private native boolean getItemInstallInfo(long pointer, long publishedFileID, ItemInstallInfo installInfo); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
-		uint64 punSizeOnDisk;
-		uint32 cchFolderSize = 1024;
-		uint32 punTimeStamp;
-		char* pchFolder = new char[cchFolderSize];
-		bool installed = ugc->GetItemInstallInfo(publishedFileID, &punSizeOnDisk, pchFolder, cchFolderSize, &punTimeStamp);
-		
-		jclass clzz = env->GetObjectClass(itemInstallInfo);
-	
-		jfieldID field = env->GetFieldID(clzz, "fileHandle", "J");
-		env->SetLongField(itemInstallInfo, field, (jlong) publishedFileID);
-	
-		field = env->GetFieldID(clzz, "installed", "Z");
-		env->SetBooleanField(itemInstallInfo, field, (jboolean) installed);
-	
-		jstring description = env->NewStringUTF(pchFolder);
-		field = env->GetFieldID(clzz, "path", "Ljava/lang/String;");
-		env->SetObjectField(itemInstallInfo, field, description);
-	
-		field = env->GetFieldID(clzz, "size", "I");
-		env->SetIntField(itemInstallInfo, field, (jint) punSizeOnDisk);
+
+		char folder[1024];
+		uint64 sizeOnDisk;
+		uint32 timeStamp;
+
+		if (ugc->GetItemInstallInfo(publishedFileID, &sizeOnDisk, folder, 1024, &timeStamp)) {
+
+			jclass clzz = env->GetObjectClass(installInfo);
+
+			jstring folderString = env->NewStringUTF(folder);
+			jfieldID field = env->GetFieldID(clzz, "folder", "Ljava/lang/String;");
+			env->SetObjectField(installInfo, field, folderString);
+
+			field = env->GetFieldID(clzz, "sizeOnDisk", "I");
+			env->SetIntField(installInfo, field, (jint) sizeOnDisk);
+
+			return true;
+		}
+
+		return false;
 	*/
 	
-	static private native void getItemDownloadInfo(long pointer, long publishedFileID, ItemDownloadInfo itemDownloadInfo); /*
+	static private native boolean getItemDownloadInfo(long pointer, long publishedFileID,
+													  long[] bytesDownloadedAndTotal); /*
+
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
-		uint64 punBytesDownloaded;
-		uint64 punBytesTotal;
-		bool available = ugc->GetItemDownloadInfo(publishedFileID, &punBytesDownloaded, &punBytesTotal);
-		
-		jclass clzz = env->GetObjectClass(itemDownloadInfo);
-	
-		jfieldID field = env->GetFieldID(clzz, "fileHandle", "J");
-		env->SetLongField(itemDownloadInfo, field, (jlong) publishedFileID);
-	
-		field = env->GetFieldID(clzz, "available", "Z");
-		env->SetBooleanField(itemDownloadInfo, field, (jboolean) available);
-	
-		field = env->GetFieldID(clzz, "bytesDownloaded", "J");
-		env->SetLongField(itemDownloadInfo, field, (jlong) punBytesDownloaded);
-	
-		field = env->GetFieldID(clzz, "bytesTotal", "J");
-		env->SetLongField(itemDownloadInfo, field, (jlong) punBytesTotal);
+		uint64* values = (uint64*) bytesDownloadedAndTotal;
+		return ugc->GetItemDownloadInfo(publishedFileID, &values[0], &values[1]);
 	*/
 	
 	static private native long requestUGCDetails(long pointer, long callback, long publishedFileID, int maxAgeSeconds); /*
