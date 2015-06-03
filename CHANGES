@@ -1,4 +1,6 @@
-[1.0.3]
+[1.1.1]
+
+[1.1.0]
 - Prebuilt libraries now compiled with Steamworks SDK v1.33b.
 - Added SteamUserStats.findOrCreateLeaderboard(), getLeaderboardSortMethod(), getLeaderboardDisplayType().
 - Added SteamUGC.createQueryAllUGCRequest(), subscribeItems(), unsubscribeItems(), getNumSubscribedItems(), getSubscribedItems(). [thanks, titoasty]
