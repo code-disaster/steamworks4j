@@ -13,8 +13,7 @@ public class SteamUGCDetails {
 	String fileName;
 	int votesUp;
 	int votesDown;
-	SteamID ownerID;
-	long ownerIDHandle;
+	long ownerID;
 	int timeCreated;
 	int timeUpdated;
 
@@ -55,11 +54,15 @@ public class SteamUGCDetails {
 	}
 	
 	public SteamID getOwnerID() {
-		return ownerID;
+		return new SteamID(ownerID);
 	}
 	
 	public int getTimeCreated() {
 		return timeCreated;
+	}
+
+	public int getTimeUpdated() {
+		return timeUpdated;
 	}
 	
 }

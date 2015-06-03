@@ -153,7 +153,25 @@ public class SteamUGC extends SteamInterface {
 		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.ordinal(),
 				creatorAppID, consumerAppID, page));
 	}
-	
+
+	public SteamUGCQuery createQueryUGCDetailsRequest(SteamPublishedFileID publishedFileID) {
+		long[] fileIDs = new long[1];
+		fileIDs[0] = publishedFileID.handle;
+		return new SteamUGCQuery(createQueryUGCDetailsRequest(pointer, fileIDs, 1));
+	}
+
+	public SteamUGCQuery createQueryUGCDetailsRequest(Collection<SteamPublishedFileID> publishedFileIDs) {
+		int size = publishedFileIDs.size();
+		long[] fileIDs = new long[size];
+
+		int index = 0;
+		for (SteamPublishedFileID fileID : publishedFileIDs) {
+			fileIDs[index++] = fileID.handle;
+		}
+
+		return new SteamUGCQuery(createQueryUGCDetailsRequest(pointer, fileIDs, size));
+	}
+
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
 		return setReturnTotalOnly(pointer, query.handle, returnTotalOnly);
 	}
@@ -163,9 +181,7 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public boolean getQueryUGCResult(SteamUGCQuery query, int index, SteamUGCDetails details) {
-		boolean ret = getQueryUGCResult(pointer, query.handle, index, details);
-		details.ownerID = new SteamID(details.ownerIDHandle);
-		return ret;
+		return getQueryUGCResult(pointer, query.handle, index, details);
 	}
 
 	public boolean releaseQueryUserUGCRequest(SteamUGCQuery query) {
@@ -212,7 +228,8 @@ public class SteamUGC extends SteamInterface {
 		itemDownloadInfo.publishedFileID = new SteamPublishedFileID(itemDownloadInfo.fileHandle);
 		return itemDownloadInfo;
 	}
-	
+
+	@Deprecated // API docs: use createQueryUGCDetailsRequest call instead
 	public SteamAPICall requestUGCDetails(SteamPublishedFileID publishedFileID, int maxAgeSeconds) {
 		return new SteamAPICall(requestUGCDetails(pointer, callback, publishedFileID.handle, maxAgeSeconds));
 	}
@@ -241,6 +258,12 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
 			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
+		return (long) query;
+	*/
+
+	static private native long createQueryUGCDetailsRequest(long pointer, long[] publishedFileIDs, int numPublishedFileIDs); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		UGCQueryHandle_t query = ugc->CreateQueryUGCDetailsRequest((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
 		return (long) query;
 	*/
 
@@ -294,7 +317,7 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "votesDown", "I");
 			env->SetIntField(details, field, (jint) result.m_unVotesDown);
 
-			field = env->GetFieldID(clazz, "ownerIDHandle", "J");
+			field = env->GetFieldID(clazz, "ownerID", "J");
 			env->SetLongField(details, field, (jlong) result.m_ulSteamIDOwner);
 
 			field = env->GetFieldID(clazz, "timeCreated", "I");
