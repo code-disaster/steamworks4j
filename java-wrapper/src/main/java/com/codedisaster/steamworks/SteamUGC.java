@@ -87,7 +87,7 @@ public class SteamUGC extends SteamInterface {
 		}
 	}
 
-	public class ItemInstallInfo {
+	public static class ItemInstallInfo {
 		private String folder;
 		private int sizeOnDisk;
 
@@ -100,7 +100,7 @@ public class SteamUGC extends SteamInterface {
 		}
 	}
 	
-	public class ItemDownloadInfo {
+	public static class ItemDownloadInfo {
 		long bytesDownloaded;
 		long bytesTotal;
 

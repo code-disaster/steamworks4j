@@ -28,6 +28,7 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 
 		SteamUGCDetails details = new SteamUGCDetails();
 		details.publishedFileID = publishedFileID;
+		details.result = result;
 		details.title = title;
 		details.description = description;
 		details.votesUp = votesUp;
