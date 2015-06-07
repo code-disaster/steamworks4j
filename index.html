@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>steamworks4j by code-disaster</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>steamworks4j</h1>
+        <p>A thin Java wrapper to access the Steamworks API</p>
+
+        <p class="view"><a href="https://github.com/code-disaster/steamworks4j">View the Project on GitHub <small>code-disaster/steamworks4j</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/code-disaster/steamworks4j/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/code-disaster/steamworks4j/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/code-disaster/steamworks4j">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="steamworks4j" class="anchor" href="#steamworks4j" aria-hidden="true"><span class="octicon octicon-link"></span></a>steamworks4j</h1>
+
+<p>A thin wrapper which allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as <a href="http://libgdx.badlogicgames.com/">libGDX</a>.</p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<p>You'll notice that this library is documented very scarcely. That's a deliberate choice. I assume that you are a <strong>registered Steam developer</strong> and have access to the Steamworks documentation.</p>
+
+<p>Please refer to the official documentation to learn about the steps needed to prepare your application for use with Steam. Here's a very brief checklist:</p>
+
+<ul>
+<li>You need a properly configured SteamApp depot, e.g. you should be able to upload to and run a development build from Steam.</li>
+<li>The Steam client must be running.</li>
+<li>A steam_appid.txt needs to be present in the working directory.</li>
+</ul>
+
+<h2>
+<a id="maven-releases" class="anchor" href="#maven-releases" aria-hidden="true"><span class="octicon octicon-link"></span></a>Maven releases</h2>
+
+<p>I plan to release major updates of <strong>steamworks4j</strong> on Maven Central. Please refer to the build instructions <a href="#building-the-java-package">below</a> if you want to use features which are not deployed yet.</p>
+
+<p>Maven:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;com.code-disaster.steamworks4j&lt;/groupId&gt;
+  &lt;artifactId&gt;steamworks4j&lt;/artifactId&gt;
+  &lt;version&gt;1.1.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>Gradle:</p>
+
+<pre><code>dependencies {
+    compile "com.code-disaster.steamworks4j:steamworks4j:1.1.0"
+}
+</code></pre>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>The wrapper is written as minimal as possible without sacrificing ease of use. Its goal is to provide <em>just</em> an accessible Java API to Valve's C++ interfaces.</p>
+
+<blockquote>
+<p><strong>In its current state, the wrapper only publishes <em>some</em> interfaces. Most of them do not expose the full API. In basic, I've added everything we need for our own games, plus what I've been asked to. Feel free to send requests, or even better, participate to add the functions and interfaces still missing.</strong></p>
+</blockquote>
+
+<p><strong>steamworks4j</strong> is currently compiled with Steamworks SDK v1.33b.</p>
+
+<p>This project is released under the MIT license. The <strong>steamworks4j</strong> package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.</p>
+
+<h2>
+<a id="implementation-overview" class="anchor" href="#implementation-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementation overview</h2>
+
+<h3>
+<a id="technical-concept" class="anchor" href="#technical-concept" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technical concept</h3>
+
+<p>The <em>public</em> Java interfaces are more or less 1:1 mapped to their native counterparts, as long as it doesn't impede usability and type safety. In general, each public function does simple type conversion only, before calling its native function.</p>
+
+<p>Callbacks are dealt with in a similar manner. Native callbacks are received by <em>package private callback adapters</em>, which only do type conversion, then forward the callback to their <em>public</em> interface.</p>
+
+<h3>
+<a id="native-resources" class="anchor" href="#native-resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Native resources</h3>
+
+<p>Java interfaces may allocate some native heap memory. To clean up those resources, call SteamInterface.dispose() to avoid memory leaks.</p>
+
+<h3>
+<a id="proper-handling-of-callbacks" class="anchor" href="#proper-handling-of-callbacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Proper handling of callbacks</h3>
+
+<p>The Steamworks API provides two different mechanics to deal with callbacks: <code>STEAM_CALLBACK()</code> and <code>CCallResult&lt;&gt;</code>. Both are handled internally by <strong>steamworks4j</strong> for you, but this abstraction imposes one drawback:</p>
+
+<blockquote>
+<p>It is only guaranteed that, at any time, each instance of an interface only receives callbacks related to the <strong>latest</strong> respective API call.</p>
+
+<p>In practice this means that the caller shouldn't "batch-execute" the same API function, then wait for a bunch of callbacks. Instead, only one single API call should be issued. Then the interface should wait for the callback, process it, then execute the next API call.</p>
+
+<p>If you really want to execute functions which trigger callbacks in parallel, you have to create and maintain multiple instances of the same interface.</p>
+
+<p>This is actually true for CCallResult&lt;&gt; style callbacks only, but the application will require more knowledge about the inner workings of Steamworks to differentiate, as the Java API doesn't tell.</p>
+</blockquote>
+
+<h3>
+<a id="implemented-interfaces" class="anchor" href="#implemented-interfaces" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implemented interfaces</h3>
+
+<p>The following interfaces have been <em>partially</em> implemented so far:</p>
+
+<pre><code>ISteamApps
+ISteamFriends
+[*] ISteamGameServer
+[*] ISteamGameServerStats
+ISteamNetworking
+ISteamRemoteStorage (cloud saves, workshop files)
+ISteamUGC
+ISteamUser
+ISteamUserStats (user stats, achievements, leaderboards)
+ISteamUtils
+
+[*] The game server wrappers are not tested at all, so expect issues using them.
+</code></pre>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>First of all, you need to be registered with, and have a project set up at Steamworks to use this wrapper.</p>
+
+<h3>
+<a id="technical-requirements" class="anchor" href="#technical-requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technical requirements</h3>
+
+<h4>
+<a id="java" class="anchor" href="#java" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java</h4>
+
+<p>The Java code is compatible to Java 6.</p>
+
+<h4>
+<a id="mac-os" class="anchor" href="#mac-os" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mac OS</h4>
+
+<p>OS X 10.6 and above is supported.</p>
+
+<h2>
+<a id="sample-application" class="anchor" href="#sample-application" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sample application</h2>
+
+<p>The <code>com.codedisaster.steamworks.test.*</code> package contains some test applications which show basic usage of some of the Java interfaces.</p>
+
+<h2>
+<a id="debugging" class="anchor" href="#debugging" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging</h2>
+
+<p>For development you need to add a text file <em>steam_appid.txt</em> to the working directory, which just contains the appID of your Steam application.</p>
+
+<h2>
+<a id="building-the-java-package" class="anchor" href="#building-the-java-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the Java package</h2>
+
+<p>Just use Maven to <code>mvn package</code> in the root directory to compile a jar ready to be used in your application, or <code>mvn install</code> to deploy it to your local Maven cache.</p>
+
+<p>Run <code>mvn package -P with-dependencies</code> to compile an additional jar with dependencies (<a href="https://github.com/libgdx/libgdx/wiki/jnigen">jnigen</a>) included.</p>
+
+<h2>
+<a id="building-native-libraries" class="anchor" href="#building-native-libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building native libraries</h2>
+
+<h3>
+<a id="prebuilt-native-libraries" class="anchor" href="#prebuilt-native-libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prebuilt native libraries</h3>
+
+<p>Building the native libraries yourself isn't required if you don't plan to <em>modify</em> the native code part of the wrapper. There are prebuilt versions located in the <em>steamworks4j/natives/libs/</em> folder. The Maven build packs them all into <em>steamworks4j-natives.jar</em> which is then bundled with the primary JAR file.</p>
+
+<h3>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h3>
+
+<p>To build the native libraries, download the latest Steamworks SDK. Unzip and copy the following folders into the <strong>steamworks4j</strong> root directory:</p>
+
+<ul>
+<li>
+<em>steamworks4j/</em>
+
+<ul>
+<li>
+<em>sdk/</em>
+
+<ul>
+<li><em>public/</em></li>
+<li><em>redistributable_bin/</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p><a href="https://github.com/libgdx/libgdx/wiki/jnigen">jnigen</a> is used to generate parts of the native code, and <a href="http://industriousone.com/premake">premake4/5</a> to compile native code into dynamic libraries.</p>
+
+<h3>
+<a id="build-environments" class="anchor" href="#build-environments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build environments</h3>
+
+<ul>
+<li>
+<p>Windows</p>
+
+<ul>
+<li>The <strong>Visual Studio 2013</strong> command line environment must be available. It's sufficient to use the Community or Express editions. The default location for the batch file to setup the build environment is <em>c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat</em>
+</li>
+<li>
+<strong>premake5.exe</strong> must be available in the path, e.g. in the <em>steamworks4j/build-natives/</em> folder.</li>
+</ul>
+</li>
+<li>
+<p>Linux</p>
+
+<ul>
+<li>
+<strong>GCC</strong> must be installed in a fairly recent version with C++11 support.</li>
+<li>
+<strong>premake4</strong> needs to be installed. It should be available through your favorite package manager, e.g. per <em>apt-get install premake4</em>.</li>
+</ul>
+</li>
+<li>
+<p>Mac OS</p>
+
+<ul>
+<li>
+<strong>XCode</strong> must be installed.</li>
+<li>
+<strong>premake4</strong> needs to be available. One possible option is to install it as a <strong>Mac Ports</strong> package.</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="build-steps" class="anchor" href="#build-steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build steps</h3>
+
+<p>The first step is to let <a href="https://github.com/libgdx/libgdx/wiki/jnigen">jnigen</a> generate C++ source files for the embedded JNI functions. The <code>com.codedisaster.steamworks.jnigen.JNICodeGenerator</code> class contains the code to do that.</p>
+
+<ul>
+<li>The working directory must be the <em>steamworks4j/java-wrapper/</em> folder.</li>
+<li>Simply run <code>java -jar /path/to/steamworks4j-${version}-jar-with-dependencies.jar</code>. This will run the JNICodeGenerator.main() application.</li>
+<li>You can just run this as a plain Java application from inside your favorite IDE. No arguments are required.</li>
+<li>The generated code is written to <em>steamworks4j/java-wrapper/src/main/native/</em>.</li>
+</ul>
+
+<p>If everything is setup correctly, you now only need to run the right <code>build-[osx|linux|win].[sh|bat]</code> shell script in the <em>steamworks4j/build-natives/</em> folder to compile and link the native libraries on each target platform.</p>
+
+<p>In case of errors you should be able to open the workspace/project files created by <strong>premake4/5</strong> in their respective IDE for troubleshooting.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/code-disaster">code-disaster</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
