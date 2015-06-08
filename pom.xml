@@ -6,7 +6,7 @@
 
 	<groupId>com.code-disaster.steamworks4j</groupId>
 	<artifactId>steamworks4j-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.1.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -150,6 +150,9 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+                			<additionalparam>-Xdoclint:none</additionalparam>
+            			</configuration>
 					</execution>
 				</executions>
 			</plugin>

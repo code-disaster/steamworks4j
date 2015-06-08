@@ -1,4 +1,6 @@
-[1.0.3]
+[1.1.1]
+
+[1.1.0]
 - Prebuilt libraries now compiled with Steamworks SDK v1.33b.
 - Added SteamUserStats.findOrCreateLeaderboard(), getLeaderboardSortMethod(), getLeaderboardDisplayType().
 - Added SteamUGC.createQueryAllUGCRequest(), subscribeItems(), unsubscribeItems(), getNumSubscribedItems(), getSubscribedItems(). [thanks, titoasty]
@@ -7,8 +9,10 @@
 - Added SteamGameServer, SteamGameServerStats and SteamNetworking APIs. [initially added by Francisco "Franz" Bischoff]
 - Updated test application to prepare for more (isolated) tests. SteamAPITestApplication is now called SteamClientAPITestApp.
 - Added SteamNetworkingTestApp for testing P2P networking functions.
-- Removed static native callback objects. They are stored per instance of each interface now.
-- API change: Removed static dispose() methods. User applications need to call SteamInterface.dispose() to avoid native memory leaks.
+- Removed static native callback objects. They are now created and stored per instance of each interface.
+- Added functions to check for SteamAPICall status and result.
+- Added option to specify path to jar or directory from where to load native libraries. Mostly meant to avoid need of 'mvn package' after recompiling native code during development. 
+- API change: Removed static dispose() methods. User applications need to call SteamInterface.dispose() to prevent native memory leaks.
 - API change: SteamUserStatsCallback.onUserStatsReceived() is now passed a SteamID instead of a long value.
 - API change: Simplified all interface constructors by removing 'pointer' parameters. They are obtained internally now.
 

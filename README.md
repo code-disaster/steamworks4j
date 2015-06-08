@@ -22,7 +22,7 @@ Maven:
 <dependency>
   <groupId>com.code-disaster.steamworks4j</groupId>
   <artifactId>steamworks4j</artifactId>
-  <version>1.0.2</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ Gradle:
 
 ```
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:1.0.2"
+	compile "com.code-disaster.steamworks4j:steamworks4j:1.1.0"
 }
 ```
 
