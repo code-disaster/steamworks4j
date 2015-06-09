@@ -11,9 +11,17 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>steamworks4j</artifactId>
+	<artifactId>steamworks4j-jnigen</artifactId>
 	<packaging>jar</packaging>
-	<name>Steam API Java Wrapper</name>
+	<name>Steam API Java Wrapper - JNI code generator</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-jnigen</artifactId>
+            <version>1.2.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -25,31 +33,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>com.code-disaster.steamworks4j</groupId>
-									<artifactId>steamworks4j-natives</artifactId>
-									<version>${project.version}</version>
-									<destFileName>steamworks4j-natives.jar</destFileName>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/classes</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>
