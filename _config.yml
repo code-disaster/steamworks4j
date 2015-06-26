@@ -1,3 +1,5 @@
+baseurl: /steamworks4j
+
 markdown: redcarpet
 
 steamworks4j:
