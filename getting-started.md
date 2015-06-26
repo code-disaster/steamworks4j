@@ -28,7 +28,7 @@ dependencies {
 }
 ```
 
-To learn how to build the library from source code, please refer to the [build instructions]({{ '/build-instructions.html' | prepend: site.url }}).
+To learn how to build the library from source code, please refer to the [build instructions]({{ '/build-instructions.html' | prepend: site.baseurl | prepend: site.url }}).
 
 ### Basic usage
 
