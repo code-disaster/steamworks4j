@@ -28,3 +28,10 @@ void SteamUGCCallback::onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileRe
         callVoidMethod(env, "onUnsubscribeItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
 	});
 }
+
+void SteamUGCCallback::onRequestUGCDetails(SteamUGCRequestUGCDetailsResult_t* callback, bool error) {
+	invokeCallback({
+        callVoidMethod(env, "onRequestUGCDetails", "(JILjava/lang/String;Ljava/lang/String;ZIIJII)V", (jlong) callback->m_details.m_nPublishedFileId, (jint) callback->m_details.m_eResult, env->NewStringUTF(callback->m_details.m_rgchTitle), env->NewStringUTF(callback->m_details.m_rgchDescription), (jboolean) callback->m_bCachedData, (jint) callback->m_details.m_unVotesUp, (jint) callback->m_details.m_unVotesDown, (jlong) callback->m_details.m_ulSteamIDOwner, (jint) callback->m_details.m_rtimeCreated, (jint) callback->m_details.m_rtimeUpdated);
+	});
+}
+

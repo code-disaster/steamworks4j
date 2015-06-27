@@ -17,4 +17,7 @@ public:
 
 	void onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileResult_t* callback, bool error);
 	CCallResult<SteamUGCCallback, RemoteStorageUnsubscribePublishedFileResult_t> onUnsubscribeItemCall;
+
+	void onRequestUGCDetails(SteamUGCRequestUGCDetailsResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, SteamUGCRequestUGCDetailsResult_t> onRequestUGCDetailsCall;
 };
