@@ -23,6 +23,7 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 	}
 	
 	public void onRequestUGCDetails(long publishedFileID, int result, String title, String description,
+									long fileHandle, long previewFileHandle, String fileName,
 									boolean cachedData, int votesUp, int votesDown, long ownerID,
 									int timeCreated, int timeUpdated) {
 
@@ -31,6 +32,9 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		details.result = result;
 		details.title = title;
 		details.description = description;
+		details.fileHandle = fileHandle;
+		details.previewFileHandle = previewFileHandle;
+		details.fileName = fileName;
 		details.votesUp = votesUp;
 		details.votesDown = votesDown;
 		details.ownerID = ownerID;
