@@ -87,6 +87,32 @@ public class SteamUGC extends SteamInterface {
 		}
 	}
 
+	public static class ItemInstallInfo {
+		private String folder;
+		private int sizeOnDisk;
+
+		public String getFolder() {
+			return folder;
+		}
+
+		public int getSizeOnDisk() {
+			return sizeOnDisk;
+		}
+	}
+	
+	public static class ItemDownloadInfo {
+		long bytesDownloaded;
+		long bytesTotal;
+
+		public long getBytesDownloaded() {
+			return bytesDownloaded;
+		}
+
+		public long getBytesTotal() {
+			return bytesTotal;
+		}
+	}
+	
 	public SteamUGC(SteamUGCCallback callback) {
 		super(SteamAPI.getSteamUGCPointer(), createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
@@ -105,7 +131,25 @@ public class SteamUGC extends SteamInterface {
 		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.ordinal(),
 				creatorAppID, consumerAppID, page));
 	}
-	
+
+	public SteamUGCQuery createQueryUGCDetailsRequest(SteamPublishedFileID publishedFileID) {
+		long[] fileIDs = new long[1];
+		fileIDs[0] = publishedFileID.handle;
+		return new SteamUGCQuery(createQueryUGCDetailsRequest(pointer, fileIDs, 1));
+	}
+
+	public SteamUGCQuery createQueryUGCDetailsRequest(Collection<SteamPublishedFileID> publishedFileIDs) {
+		int size = publishedFileIDs.size();
+		long[] fileIDs = new long[size];
+
+		int index = 0;
+		for (SteamPublishedFileID fileID : publishedFileIDs) {
+			fileIDs[index++] = fileID.handle;
+		}
+
+		return new SteamUGCQuery(createQueryUGCDetailsRequest(pointer, fileIDs, size));
+	}
+
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
 		return setReturnTotalOnly(pointer, query.handle, returnTotalOnly);
 	}
@@ -148,6 +192,25 @@ public class SteamUGC extends SteamInterface {
 	public Collection<ItemState> getItemState(SteamPublishedFileID publishedFileID) {
 		return ItemState.fromBits(getItemState(pointer, publishedFileID.handle));
 	}
+	
+	public boolean getItemInstallInfo(SteamPublishedFileID publishedFileID, ItemInstallInfo installInfo) {
+		return getItemInstallInfo(pointer, publishedFileID.handle, installInfo);
+	}
+	
+	public boolean getItemDownloadInfo(SteamPublishedFileID publishedFileID, ItemDownloadInfo downloadInfo) {
+		long[] values = new long[2];
+		if (getItemDownloadInfo(pointer, publishedFileID.handle, values)) {
+			downloadInfo.bytesDownloaded = values[0];
+			downloadInfo.bytesTotal = values[1];
+			return true;
+		}
+		return false;
+	}
+
+	@Deprecated // API docs: use createQueryUGCDetailsRequest call instead
+	public SteamAPICall requestUGCDetails(SteamPublishedFileID publishedFileID, int maxAgeSeconds) {
+		return new SteamAPICall(requestUGCDetails(pointer, callback, publishedFileID.handle, maxAgeSeconds));
+	}
 
 	// @off
 
@@ -173,6 +236,12 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
 			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
+		return (long) query;
+	*/
+
+	static private native long createQueryUGCDetailsRequest(long pointer, long[] publishedFileIDs, int numPublishedFileIDs); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		UGCQueryHandle_t query = ugc->CreateQueryUGCDetailsRequest((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
 		return (long) query;
 	*/
 
@@ -220,6 +289,21 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "fileName", "Ljava/lang/String;");
 			env->SetObjectField(details, field, fileName);
 
+			field = env->GetFieldID(clazz, "votesUp", "I");
+			env->SetIntField(details, field, (jint) result.m_unVotesUp);
+
+			field = env->GetFieldID(clazz, "votesDown", "I");
+			env->SetIntField(details, field, (jint) result.m_unVotesDown);
+
+			field = env->GetFieldID(clazz, "ownerID", "J");
+			env->SetLongField(details, field, (jlong) result.m_ulSteamIDOwner);
+
+			field = env->GetFieldID(clazz, "timeCreated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeCreated);
+
+			field = env->GetFieldID(clazz, "timeUpdated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
+
 			return true;
 		}
 
@@ -260,6 +344,46 @@ public class SteamUGC extends SteamInterface {
 	static private native int getItemState(long pointer, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetItemState(publishedFileID);
+	*/
+
+	static private native boolean getItemInstallInfo(long pointer, long publishedFileID, ItemInstallInfo installInfo); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+
+		char folder[1024];
+		uint64 sizeOnDisk;
+		uint32 timeStamp;
+
+		if (ugc->GetItemInstallInfo(publishedFileID, &sizeOnDisk, folder, 1024, &timeStamp)) {
+
+			jclass clzz = env->GetObjectClass(installInfo);
+
+			jstring folderString = env->NewStringUTF(folder);
+			jfieldID field = env->GetFieldID(clzz, "folder", "Ljava/lang/String;");
+			env->SetObjectField(installInfo, field, folderString);
+
+			field = env->GetFieldID(clzz, "sizeOnDisk", "I");
+			env->SetIntField(installInfo, field, (jint) sizeOnDisk);
+
+			return true;
+		}
+
+		return false;
+	*/
+	
+	static private native boolean getItemDownloadInfo(long pointer, long publishedFileID,
+													  long[] bytesDownloadedAndTotal); /*
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		uint64* values = (uint64*) bytesDownloadedAndTotal;
+		return ugc->GetItemDownloadInfo(publishedFileID, &values[0], &values[1]);
+	*/
+	
+	static private native long requestUGCDetails(long pointer, long callback, long publishedFileID, int maxAgeSeconds); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->RequestUGCDetails(publishedFileID, maxAgeSeconds);
+		cb->onRequestUGCDetailsCall.Set(handle, cb, &SteamUGCCallback::onRequestUGCDetails);
+		return handle;
 	*/
 
 }

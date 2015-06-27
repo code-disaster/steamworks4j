@@ -22,4 +22,26 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		callback.onUnsubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
 	}
 	
+	public void onRequestUGCDetails(long publishedFileID, int result, String title, String description,
+									long fileHandle, long previewFileHandle, String fileName,
+									boolean cachedData, int votesUp, int votesDown, long ownerID,
+									int timeCreated, int timeUpdated) {
+
+		SteamUGCDetails details = new SteamUGCDetails();
+		details.publishedFileID = publishedFileID;
+		details.result = result;
+		details.title = title;
+		details.description = description;
+		details.fileHandle = fileHandle;
+		details.previewFileHandle = previewFileHandle;
+		details.fileName = fileName;
+		details.votesUp = votesUp;
+		details.votesDown = votesDown;
+		details.ownerID = ownerID;
+		details.timeCreated = timeCreated;
+		details.timeUpdated = timeUpdated;
+		
+		callback.onRequestUGCDetails(details, SteamResult.byValue(result));
+	}
+	
 }

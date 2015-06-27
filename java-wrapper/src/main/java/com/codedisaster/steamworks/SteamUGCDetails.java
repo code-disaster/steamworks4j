@@ -11,6 +11,11 @@ public class SteamUGCDetails {
 	long fileHandle;
 	long previewFileHandle;
 	String fileName;
+	int votesUp;
+	int votesDown;
+	long ownerID;
+	int timeCreated;
+	int timeUpdated;
 
 	public SteamPublishedFileID getPublishedFileID() {
 		return new SteamPublishedFileID(publishedFileID);
@@ -39,4 +44,25 @@ public class SteamUGCDetails {
 	public String getFileName() {
 		return fileName;
 	}
+
+	public int getVotesUp() {
+		return votesUp;
+	}
+
+	public int getVotesDown() {
+		return votesDown;
+	}
+	
+	public SteamID getOwnerID() {
+		return new SteamID(ownerID);
+	}
+	
+	public int getTimeCreated() {
+		return timeCreated;
+	}
+
+	public int getTimeUpdated() {
+		return timeUpdated;
+	}
+	
 }

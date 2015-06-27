@@ -189,6 +189,19 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		public void onUnsubscribeItem(SteamPublishedFileID publishedFileID, SteamResult result) {
 			System.out.println("Unsubscribe item result: publishedFileID=" + publishedFileID + ", result=" + result);
 		}
+
+		@Override
+		public void onRequestUGCDetails(SteamUGCDetails details, SteamResult result) {
+			System.out.println("Request details result: result=" + result);
+			System.out.println("UGC details " +
+					   ": publishedFileID=" + details.getPublishedFileID().toString() +
+					   ", result=" + details.getResult().toString() +
+					   ", title='" + details.getTitle() + "'" +
+					   ", description='" + details.getDescription() + "'" +
+					   ", fileName=" + details.getFileName() +
+					   ", fileHandle=" + details.getFileHandle().toString() +
+					   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
@@ -351,6 +364,28 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			System.out.println("UGC item states: " + itemStates.size());
 			for (SteamUGC.ItemState itemState : itemStates) {
 				System.out.println("  " + itemState.name());
+			}
+		} else if (input.startsWith("ugc details ")) {
+			System.out.println("requesting UGC details (deprecated API call)");
+			Long id = Long.parseLong(input.substring("ugc details ".length()), 16);
+			ugc.requestUGCDetails(new SteamPublishedFileID(id), 0);
+
+			SteamUGCQuery query = ugc.createQueryUGCDetailsRequest(new SteamPublishedFileID(id));
+			if (query.isValid()) {
+				System.out.println("sending UGC details query: " + query.toString());
+				ugc.sendQueryUGCRequest(query);
+			}
+		} else if (input.startsWith("ugc info ")) {
+			Long id = Long.parseLong(input.substring("ugc info ".length()), 16);
+			SteamUGC.ItemInstallInfo installInfo = new SteamUGC.ItemInstallInfo();
+			if (ugc.getItemInstallInfo(new SteamPublishedFileID(id), installInfo)) {
+				System.out.println("  folder: " + installInfo.getFolder());
+				System.out.println("  size on disk: " + installInfo.getSizeOnDisk());
+			}
+			SteamUGC.ItemDownloadInfo downloadInfo = new SteamUGC.ItemDownloadInfo();
+			if (ugc.getItemDownloadInfo(new SteamPublishedFileID(id), downloadInfo)) {
+				System.out.println("  bytes downloaded: " + downloadInfo.getBytesDownloaded());
+				System.out.println("  bytes total: " + downloadInfo.getBytesTotal());
 			}
 		} else if (input.startsWith("leaderboard find ")) {
 			String name = input.substring("leaderboard find ".length());

@@ -6,8 +6,8 @@
 class SteamUGCCallback : public SteamCallbackAdapter {
 
 public:
-    SteamUGCCallback(JNIEnv* env, jobject callback);
-    ~SteamUGCCallback();
+	SteamUGCCallback(JNIEnv* env, jobject callback);
+	~SteamUGCCallback();
 
 	void onUGCQueryCompleted(SteamUGCQueryCompleted_t* callback, bool error);
 	CCallResult<SteamUGCCallback, SteamUGCQueryCompleted_t> onUGCQueryCompletedCall;
@@ -17,4 +17,7 @@ public:
 
 	void onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileResult_t* callback, bool error);
 	CCallResult<SteamUGCCallback, RemoteStorageUnsubscribePublishedFileResult_t> onUnsubscribeItemCall;
+
+	void onRequestUGCDetails(SteamUGCRequestUGCDetailsResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, SteamUGCRequestUGCDetailsResult_t> onRequestUGCDetailsCall;
 };
