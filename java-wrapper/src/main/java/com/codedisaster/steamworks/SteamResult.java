@@ -98,7 +98,7 @@ public enum SteamResult {
 	/** If this is returned(), we missed to "port" an Steam error code above. */
 	UnknownErrorCode_NotImplementedByAPI(0);
 
-	private int code;
+	private final int code;
 	static private final SteamResult[] valuesLookupTable;
 
 	SteamResult(int code) {

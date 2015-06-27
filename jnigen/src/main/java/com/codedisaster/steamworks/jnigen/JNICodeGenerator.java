@@ -2,8 +2,6 @@ package com.codedisaster.steamworks.jnigen;
 
 import com.badlogic.gdx.jnigen.NativeCodeGenerator;
 
-import java.io.File;
-
 public class JNICodeGenerator {
 
 	public static void main(String[] arguments) {

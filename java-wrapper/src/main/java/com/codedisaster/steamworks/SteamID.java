@@ -2,7 +2,7 @@ package com.codedisaster.steamworks;
 
 public class SteamID extends SteamNativeHandle {
 
-	private static long InvalidSteamID = getInvalidSteamID();
+	private static final long InvalidSteamID = getInvalidSteamID();
 
 	public SteamID() {
 		super(InvalidSteamID);

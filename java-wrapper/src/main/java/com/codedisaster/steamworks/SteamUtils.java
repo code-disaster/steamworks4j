@@ -11,7 +11,7 @@ public class SteamUtils extends SteamInterface {
 		InvalidHandle(2),
 		MismatchedCallback(3);
 
-		private int code;
+		private final int code;
 		private static final SteamAPICallFailure[] values = values();
 
 		SteamAPICallFailure(int code) {

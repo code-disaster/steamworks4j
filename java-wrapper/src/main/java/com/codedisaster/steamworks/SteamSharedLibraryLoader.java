@@ -7,8 +7,8 @@ import java.util.zip.ZipFile;
 
 class SteamSharedLibraryLoader {
 
-	private String libraryPath;
-	private boolean fromJar;
+	private final String libraryPath;
+	private final boolean fromJar;
 
 	private String libraryCrc;
 
