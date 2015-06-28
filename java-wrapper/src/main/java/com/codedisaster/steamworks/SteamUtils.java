@@ -35,8 +35,12 @@ public class SteamUtils extends SteamInterface {
 		BottomRight
 	}
 
+	private SteamUtilsCallbackAdapter callbackAdapter;
+
 	public SteamUtils() {
 		super(SteamAPI.getSteamUtilsPointer());
+		callbackAdapter = new SteamUtilsCallbackAdapter(new SteamUtilsCallback() {});
+		setCallback(createCallback(callbackAdapter));
 	}
 
 	public int getImageWidth(int image) {
@@ -67,6 +71,11 @@ public class SteamUtils extends SteamInterface {
 		return SteamAPICallFailure.byValue(getAPICallFailureReason(pointer, handle.handle));
 	}
 
+	public void setWarningMessageHook(SteamAPIWarningMessageHook messageHook) {
+		callbackAdapter.setWarningMessageHook(messageHook);
+		enableWarningMessageHook(this.callback, messageHook != null);
+	}
+
 	public boolean isOverlayEnabled() {
 		return isOverlayEnabled(pointer);
 	}
@@ -74,7 +83,11 @@ public class SteamUtils extends SteamInterface {
 	// @off
 
 	/*JNI
-		#include <steam_api.h>
+		#include "SteamUtilsCallback.h"
+	*/
+
+	static private native long createCallback(SteamUtilsCallbackAdapter javaCallback); /*
+		return (long) new SteamUtilsCallback(env, javaCallback);
 	*/
 
 	static private native int getImageWidth(long pointer, int image); /*
@@ -114,6 +127,11 @@ public class SteamUtils extends SteamInterface {
 	static private native int getAPICallFailureReason(long pointer, long handle); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetAPICallFailureReason((SteamAPICall_t) handle);
+	*/
+
+	static private native void enableWarningMessageHook(long callback, boolean enable); /*
+		SteamUtilsCallback* cb = (SteamUtilsCallback*) callback;
+		cb->enableWarningMessageHook(enable);
 	*/
 
 	static private native boolean isOverlayEnabled(long pointer); /*

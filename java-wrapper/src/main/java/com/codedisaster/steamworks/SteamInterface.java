@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 abstract class SteamInterface {
 
 	protected final long pointer;
-	protected final long callback;
+	protected long callback;
 
 	SteamInterface(long pointer) {
 		this(pointer, 0l);
@@ -11,6 +11,10 @@ abstract class SteamInterface {
 
 	SteamInterface(long pointer, long callback) {
 		this.pointer = pointer;
+		this.callback = callback;
+	}
+
+	void setCallback(long callback) {
 		this.callback = callback;
 	}
 
