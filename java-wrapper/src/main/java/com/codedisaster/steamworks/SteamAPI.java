@@ -35,6 +35,10 @@ public class SteamAPI {
 		static JavaVM* staticVM = 0;
 	*/
 
+	static public native boolean restartAppIfNecessary(long appId); /*
+		return SteamAPI_RestartAppIfNecessary(appId);
+	*/
+
 	static private native boolean nativeInit(); /*
 		if (env->GetJavaVM(&staticVM) != 0) {
 			return false;
