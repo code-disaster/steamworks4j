@@ -75,6 +75,10 @@ public class SteamAPI {
 		return (long) SteamRemoteStorage();
 	*/
 
+	static native long getSteamHTTPPointer(); /*
+		return (long) SteamHTTP();
+	*/
+
 	static native long getSteamUGCPointer(); /*
 		return (long) SteamUGC();
 	*/

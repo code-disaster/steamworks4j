@@ -90,4 +90,8 @@ public class SteamGameServerAPI {
 		return (long) SteamGameServerStats();
 	*/
 
+	static native long getSteamGameServerHTTPPointer(); /*
+		return (long) SteamGameServerHTTP();
+	*/
+
 }
