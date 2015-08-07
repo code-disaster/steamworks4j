@@ -94,6 +94,15 @@ public enum SteamResult {
 	TwoFactorActivationCodeMismatch(89),
 	AccountAssociatedToMultiplePartners(90),
 	NotModified(91),
+	NoMobileDevice(92),
+	TimeNotSynced(93),
+	SmsCodeFailed(94),
+	AccountLimitExceeded(95),
+	AccountActivityLimitExceeded(96),
+	PhoneActivityLimitExceeded(97),
+	RefundToWallet(98),
+	EmailSendFailure(99),
+	NotSettled(100),
 
 	/** If this is returned(), we missed to "port" an Steam error code above. */
 	UnknownErrorCode_NotImplementedByAPI(0);

@@ -29,7 +29,8 @@ public class SteamUGC extends SteamInterface {
 		WebGuides,
 		IntegratedGuides,
 		UsableInGame,
-		ControllerBindings
+		ControllerBindings,
+		GameManagedItems
 	}
 
 	public enum UserUGCListSortOrder {
