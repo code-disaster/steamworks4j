@@ -1,7 +1,12 @@
 [1.1.1]
+- Prebuilt libraries now compiled with Steamworks SDK v1.34.
 - Native code generator moved to separate sub-project. Removes runtime dependency on gdx-jnigen.
-- Added SteamUGC.getItemInstallInfo(), getItemDownloadInfo(), requestUGCDetails(), createQueryUGCDetailsRequest().
 - Moved documentation to GitHub pages: http://code-disaster.github.io/steamworks4j/
+- Added SteamUGC.getItemInstallInfo(), getItemDownloadInfo(), requestUGCDetails(), createQueryUGCDetailsRequest().
+- Added warning message hook.
+- Added SteamAPI.restartAppIfNecessary().
+- Added auth session API to SteamUser. This also adds a SteamUserCallback interface.
+- API change: moved some enums from SteamGameServer to SteamAuth.
 
 [1.1.0]
 - Prebuilt libraries now compiled with Steamworks SDK v1.33b.
