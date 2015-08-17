@@ -7,7 +7,7 @@ package com.codedisaster.steamworks;
 public interface SteamGameServerCallback {
 
 	void onValidateAuthTicketResponse(SteamID steamID,
-									  SteamGameServer.AuthSessionResponse authSessionResponse,
+									  SteamAuth.AuthSessionResponse authSessionResponse,
 									  SteamID ownerSteamID);
 
 	void onSteamServersConnected();

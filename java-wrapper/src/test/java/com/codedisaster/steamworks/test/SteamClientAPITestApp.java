@@ -20,6 +20,13 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 	private SteamLeaderboardHandle currentLeaderboard = null;
 
+	private SteamUserCallback userCallback = new SteamUserCallback() {
+		@Override
+		public void onValidateAuthTicketResponse(SteamID steamID, SteamAuth.AuthSessionResponse authSessionResponse, SteamID ownerSteamID) {
+			// unused
+		}
+	};
+
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
 		@Override
 		public void onUserStatsReceived(long gameId, SteamID steamIDUser, SteamResult result) {
@@ -229,7 +236,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	protected void registerInterfaces() {
 
 		System.out.println("Register user ...");
-		user = new SteamUser();
+		user = new SteamUser(userCallback);
 
 		System.out.println("Register user stats callback ...");
 		userStats = new SteamUserStats(userStatsCallback);

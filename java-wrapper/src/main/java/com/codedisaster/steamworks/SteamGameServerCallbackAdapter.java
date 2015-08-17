@@ -15,7 +15,7 @@ class SteamGameServerCallbackAdapter extends SteamCallbackAdapter<SteamGameServe
 											 int authSessionResponse,
 											 long ownerSteamID) {
 		callback.onValidateAuthTicketResponse(new SteamID(steamID),
-				SteamGameServer.AuthSessionResponse.byOrdinal(authSessionResponse), new SteamID(ownerSteamID));
+				SteamAuth.AuthSessionResponse.byOrdinal(authSessionResponse), new SteamID(ownerSteamID));
 	}
 
 	public void onSteamServersConnected() {

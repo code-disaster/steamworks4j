@@ -8,52 +8,6 @@ import java.nio.Buffer;
  */
 public class SteamGameServer extends SteamInterface {
 
-	public enum BeginAuthSessionResult {
-		OK,
-		InvalidTicket,
-		DuplicateRequest,
-		InvalidVersion,
-		GameMismatch,
-		ExpiredTicket;
-
-		private static final BeginAuthSessionResult[] values = values();
-
-		static BeginAuthSessionResult byOrdinal(int authSessionResponse) {
-			return values[authSessionResponse];
-		}
-	}
-
-	public enum AuthSessionResponse {
-		OK,
-		UserNotConnectedToSteam,
-		NoLicenseOrExpired,
-		VACBanned,
-		LoggedInElseWhere,
-		VACCheckTimedOut,
-		AuthTicketCanceled,
-		AuthTicketInvalidAlreadyUsed,
-		AuthTicketInvalid,
-		PublisherIssuedBan;
-
-		private static final AuthSessionResponse[] values = values();
-
-		static AuthSessionResponse byOrdinal(int authSessionResponse) {
-			return values[authSessionResponse];
-		}
-	}
-
-	public enum UserHasLicenseForAppResult {
-		HasLicense,
-		DoesNotHaveLicense,
-		NoAuth;
-
-		private static final UserHasLicenseForAppResult[] values = values();
-
-		static UserHasLicenseForAppResult byOrdinal(int result) {
-			return values[result];
-		}
-	}
-
 	public enum DenyReason {
 		Invalid,
 		InvalidVersion,
@@ -207,9 +161,9 @@ public class SteamGameServer extends SteamInterface {
 		return ticket;
 	}
 
-	public BeginAuthSessionResult beginAuthSession(Buffer authTicket, SteamID steamID) {
+	public SteamAuth.BeginAuthSessionResult beginAuthSession(Buffer authTicket, SteamID steamID) {
 		int result = beginAuthSession(pointer, authTicket, authTicket.limit(), steamID.handle);
-		return BeginAuthSessionResult.byOrdinal(result);
+		return SteamAuth.BeginAuthSessionResult.byOrdinal(result);
 	}
 
 	public void endAuthSession(SteamID steamID) {
@@ -220,8 +174,8 @@ public class SteamGameServer extends SteamInterface {
 		cancelAuthTicket(pointer, authTicket);
 	}
 
-	public UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, long appID) {
-		return UserHasLicenseForAppResult.byOrdinal(userHasLicenseForApp(pointer, steamID.handle, appID));
+	public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, long appID) {
+		return SteamAuth.UserHasLicenseForAppResult.byOrdinal(userHasLicenseForApp(pointer, steamID.handle, appID));
 	}
 
 	public boolean requestUserGroupStatus(SteamID steamIDUser, SteamID steamIDGroup) {
