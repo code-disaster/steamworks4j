@@ -65,7 +65,7 @@ Uses: achievements, remote storage<br>
 *The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
 
 Steam: [http://store.steampowered.com/app/366860/](http://store.steampowered.com/app/366860/)<br>
-Developer: [Digital Soul Games](digitalsoulgames)
+Developer: [Digital Soul Games][digitalsoulgames]<br>
 Uses: achievements, user stats, leaderboards, gameserver, web api
 
 [digitalsoulgames]: http://www.digitalsoulgames.org/
