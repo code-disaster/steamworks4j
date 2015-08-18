@@ -2,6 +2,8 @@ package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
 
+import java.nio.ByteBuffer;
+
 public class SteamHTTPTestApp extends SteamTestApp {
 
 	private SteamHTTP http;
@@ -25,6 +27,29 @@ public class SteamHTTPTestApp extends SteamTestApp {
 											  int offset, int bytesReceived) {
 
 			System.out.println("HTTP request data received: offset=" + offset + ", bytes=" + bytesReceived);
+
+			ByteBuffer bodyData = ByteBuffer.allocateDirect(bytesReceived);
+
+			try {
+
+				if (http.getHTTPStreamingResponseBodyData(request, offset, bodyData)) {
+
+					byte[] dest = new byte[bodyData.limit()];
+					bodyData.get(dest);
+
+					String result = new String(dest);
+					System.out.println("=== begin result:\n" + result + "\n=== end result");
+
+				} else {
+					System.out.println("- failed reading request data!");
+				}
+
+			} catch (SteamException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("- releasing request");
+			http.releaseHTTPRequest(request);
 		}
 	};
 

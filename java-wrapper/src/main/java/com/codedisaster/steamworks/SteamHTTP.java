@@ -129,9 +129,15 @@ public class SteamHTTP extends SteamInterface {
 		return getHTTPResponseHeaderSize(pointer, request.handle, headerName);
 	}
 
-	public boolean getHTTPResponseHeaderValue(SteamHTTPRequestHandle request, String headerName, ByteBuffer value) {
+	public boolean getHTTPResponseHeaderValue(SteamHTTPRequestHandle request, String headerName, ByteBuffer value) throws SteamException {
+
+		if (!value.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
 		int offset = value.position();
 		int capacity = value.limit() - offset;
+
 		return getHTTPResponseHeaderValue(pointer, request.handle, headerName, value, offset, capacity);
 	}
 
@@ -139,17 +145,28 @@ public class SteamHTTP extends SteamInterface {
 		return getHTTPResponseBodySize(pointer, request.handle);
 	}
 
-	public boolean getHTTPResponseBodyData(SteamHTTPRequestHandle request, ByteBuffer data) {
+	public boolean getHTTPResponseBodyData(SteamHTTPRequestHandle request, ByteBuffer data) throws SteamException {
+
+		if (!data.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
 		int offset = data.position();
 		int capacity = data.limit() - offset;
+
 		return getHTTPResponseBodyData(pointer, request.handle, data, offset, capacity);
 	}
 
 	public boolean getHTTPStreamingResponseBodyData(SteamHTTPRequestHandle request, int bodyDataOffset,
-													ByteBuffer data) {
+													ByteBuffer data) throws SteamException {
+
+		if (!data.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
 
 		int offset = data.position();
 		int capacity = data.limit() - offset;
+
 		return getHTTPStreamingResponseBodyData(pointer, request.handle, bodyDataOffset, data, offset, capacity);
 	}
 
