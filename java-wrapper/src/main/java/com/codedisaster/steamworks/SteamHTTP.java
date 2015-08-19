@@ -178,13 +178,14 @@ public class SteamHTTP extends SteamInterface {
 
 	/*JNI
 		#include "SteamHTTPCallback.h"
+		#include "SteamGameServerHTTPCallback.h"
 	*/
 
 	private static native long createCallback(SteamHTTPCallbackAdapter javaCallback, boolean isClient); /*
 		if (isClient) {
 			return (long) new SteamHTTPCallback(env, javaCallback);
 		} else {
-			//return (long) new SteamGameServerHTTPCallback(env, javaCallback);
+			return (long) new SteamGameServerHTTPCallback(env, javaCallback);
 		}
 	*/
 
