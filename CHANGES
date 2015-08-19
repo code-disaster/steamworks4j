@@ -6,6 +6,8 @@
 - Added warning message hook.
 - Added SteamAPI.restartAppIfNecessary().
 - Added auth session API to SteamUser. This also adds a SteamUserCallback interface.
+- Added SteamHTTP interface
+- Added SteamHTTPTestApp which calls some basic Steam Web API functions.
 - API change: moved some enums from SteamGameServer to SteamAuth.
 
 [1.1.0]
