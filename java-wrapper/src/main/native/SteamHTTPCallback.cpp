@@ -2,7 +2,6 @@
 
 SteamHTTPCallback::SteamHTTPCallback(JNIEnv* env, jobject callback)
 	: SteamCallbackAdapter(env, callback)
-	, m_CallbackHTTPRequestCompleted(this, &SteamHTTPCallback::onHTTPRequestCompleted)
 	, m_CallbackHTTPRequestHeadersReceived(this, &SteamHTTPCallback::onHTTPRequestHeadersReceived)
 	, m_CallbackHTTPRequestDataReceived(this, &SteamHTTPCallback::onHTTPRequestDataReceived) {
 
@@ -12,7 +11,7 @@ SteamHTTPCallback::~SteamHTTPCallback() {
 
 }
 
-void SteamHTTPCallback::onHTTPRequestCompleted(HTTPRequestCompleted_t* callback) {
+void SteamHTTPCallback::onHTTPRequestCompleted(HTTPRequestCompleted_t* callback, bool error) {
 	invokeCallback({
 		callVoidMethod(env, "onHTTPRequestCompleted", "(JJZII)V",
 			(jlong) callback->m_hRequest, (jlong) callback->m_ulContextValue, callback->m_bRequestSuccessful,

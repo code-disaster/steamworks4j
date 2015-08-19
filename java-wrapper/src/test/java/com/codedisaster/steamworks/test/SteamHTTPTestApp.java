@@ -15,6 +15,29 @@ public class SteamHTTPTestApp extends SteamTestApp {
 
 			System.out.println("HTTP request completed: " + (requestSuccessful ? "successful" : "failed") +
 					", status code=" + statusCode.toString() + ", body size=" + bodySize);
+
+			ByteBuffer bodyData = ByteBuffer.allocateDirect(bodySize);
+
+			try {
+
+				if (http.getHTTPResponseBodyData(request, bodyData)) {
+
+					byte[] dest = new byte[bodyData.limit()];
+					bodyData.get(dest);
+
+					String result = new String(dest);
+					System.out.println("=== begin result:\n" + result + "\n=== end result");
+
+				} else {
+					System.out.println("- failed reading request data!");
+				}
+
+			} catch (SteamException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("- releasing request");
+			http.releaseHTTPRequest(request);
 		}
 
 		@Override
@@ -78,6 +101,17 @@ public class SteamHTTPTestApp extends SteamTestApp {
 					"https://api.steampowered.com/ISteamWebAPIUtil/GetSupportedAPIList/v0001/?format=json");
 
 			SteamAPICall call = http.sendHTTPRequestAndStreamResponse(request);
+
+			if (!call.isValid()) {
+				System.out.println("http api: send request failed.");
+			}
+		} else if (input.startsWith("http achievements")) {
+			SteamHTTPRequestHandle request = http.createHTTPRequest(SteamHTTP.HTTPMethod.GET,
+					"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?format=json");
+
+			http.setHTTPRequestGetOrPostParameter(request, "gameid", Long.toString(clientUtils.getAppID()));
+
+			SteamAPICall call = http.sendHTTPRequest(request);
 
 			if (!call.isValid()) {
 				System.out.println("http api: send request failed.");

@@ -118,7 +118,7 @@ public class SteamHTTP extends SteamInterface {
 	}
 
 	public SteamAPICall sendHTTPRequest(SteamHTTPRequestHandle request) {
-		return new SteamAPICall(sendHTTPRequest(pointer, request.handle));
+		return new SteamAPICall(sendHTTPRequest(pointer, callback, request.handle));
 	}
 
 	public SteamAPICall sendHTTPRequestAndStreamResponse(SteamHTTPRequestHandle request) {
@@ -219,10 +219,12 @@ public class SteamHTTP extends SteamInterface {
 		return http->SetHTTPRequestGetOrPostParameter((HTTPRequestHandle) request, paramName, paramValue);
 	*/
 
-	private static native long sendHTTPRequest(long pointer, long request); /*
+	private static native long sendHTTPRequest(long pointer, long callback, long request); /*
 		ISteamHTTP* http = (ISteamHTTP*) pointer;
 		SteamAPICall_t handle;
 		if (http->SendHTTPRequest((HTTPRequestHandle) request, &handle)) {
+			SteamHTTPCallback* cb = (SteamHTTPCallback*) callback;
+			cb->onHTTPRequestCompletedCall.Set(handle, cb, &SteamHTTPCallback::onHTTPRequestCompleted);
 			return handle;
 		}
 		return 0;
