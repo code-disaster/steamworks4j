@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 abstract class SteamWebAPIInterface {
 
 	protected interface RequestCallback {
-		void onHTTPRequestCompleted(JsonObject jsonObject);
+		void onHTTPRequestCompleted(JsonObject jsonObject, long context);
 	}
 
 	private class HTTPCallback implements SteamHTTPCallback {
@@ -48,11 +48,19 @@ abstract class SteamWebAPIInterface {
 					if (http.getHTTPResponseBodyData(request, requestBodyData)) {
 
 						requestBodyData.get(requestBodyArray);
+						String requestString = new String(requestBodyArray);
 
-						JsonValue json = Json.parse(new String(requestBodyArray));
-						JsonObject jsonObject = json.asObject();
+						if (statusCode == SteamHTTP.HTTPStatusCode.OK) {
 
-						requestCallback.onHTTPRequestCompleted(jsonObject);
+							JsonValue json = Json.parse(requestString);
+							JsonObject jsonObject = json.asObject();
+
+							requestCallback.onHTTPRequestCompleted(jsonObject, contextValue);
+
+						} else {
+							// todo: error report by status code
+							throw new SteamException(statusCode.name() + ":\n" + requestString);
+						}
 
 					} else {
 						// todo: error callback
@@ -81,6 +89,7 @@ abstract class SteamWebAPIInterface {
 	}
 
 	protected SteamHTTP http;
+	private String webAPIKey;
 
 	protected void createHTTPInterface(RequestCallback callback, SteamHTTP.API api) {
 		http = new SteamHTTP(new HTTPCallback(callback), api);
@@ -90,8 +99,13 @@ abstract class SteamWebAPIInterface {
 		http.dispose();
 	}
 
+	public void setWebAPIKey(String key) {
+		webAPIKey = (key != null && !key.isEmpty()) ? key : null;
+	}
+
 	protected SteamHTTPRequestHandle createHTTPRequest(SteamHTTP.HTTPMethod getOrPost,
-													   String interfaceName, String methodName, int version) {
+													   String interfaceName, String methodName,
+													   int version, long context) {
 
 		// todo: possibly use StringBuilder
 
@@ -99,7 +113,15 @@ abstract class SteamWebAPIInterface {
 				"https://api.steampowered.com/%s/%s/v%04d/?format=json",
 				interfaceName, methodName, version);
 
-		return http.createHTTPRequest(getOrPost, url);
+		SteamHTTPRequestHandle request = http.createHTTPRequest(getOrPost, url);
+
+		http.setHTTPRequestContextValue(request, context);
+
+		if (webAPIKey != null) {
+			http.setHTTPRequestGetOrPostParameter(request, "key", webAPIKey);
+		}
+
+		return request;
 	}
 
 	protected boolean sendHTTPRequest(SteamHTTPRequestHandle request) {

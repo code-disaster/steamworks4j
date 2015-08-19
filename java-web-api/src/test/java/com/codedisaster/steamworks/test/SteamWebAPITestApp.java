@@ -8,7 +8,34 @@ import java.util.Collection;
 
 public class SteamWebAPITestApp extends SteamTestApp {
 
+	private SteamUser clientUser;
+
+	private SteamWebAPIPlayerService playerService;
 	private SteamWebAPIUserStats userStats;
+
+	private SteamUserCallback clientUserCallback = new SteamUserCallback() {
+		@Override
+		public void onValidateAuthTicketResponse(SteamID steamID, SteamAuth.AuthSessionResponse authSessionResponse, SteamID ownerSteamID) {
+
+		}
+	};
+
+	private SteamWebAPIPlayerServiceCallback playerServiceCallback = new SteamWebAPIPlayerServiceCallback() {
+		@Override
+		public void onRecentlyPlayedGames(SteamWebAPIPlayerService.RecentlyPlayedGames result) {
+
+			Collection<SteamWebAPIPlayerService.RecentlyPlayedGame> games = result.getGames();
+			System.out.println("Recently played games received: " + games.size() + " of " + result.getTotalCount());
+
+			for (SteamWebAPIPlayerService.RecentlyPlayedGame game : games) {
+				System.out.println(String.format("- '%s', %.1fh in 2 weeks, %.1fh total",
+						game.getName(),
+						game.getPlaytimeTwoWeeks() / 60.0f,
+						game.getPlaytimeForever() / 60.0f));
+			}
+
+		}
+	};
 
 	private SteamWebAPIUserStatsCallback userStatsCallback = new SteamWebAPIUserStatsCallback() {
 		@Override
@@ -28,12 +55,20 @@ public class SteamWebAPITestApp extends SteamTestApp {
 	@Override
 	protected void registerInterfaces() {
 
+		System.out.println("Register user ...");
+		clientUser = new SteamUser(clientUserCallback);
+
+		System.out.println("Register player service (web) ...");
+		playerService = new SteamWebAPIPlayerService(playerServiceCallback, SteamHTTP.API.Client);
+
 		System.out.println("Register user stats (web) ...");
 		userStats = new SteamWebAPIUserStats(userStatsCallback, SteamHTTP.API.Client);
 	}
 
 	@Override
 	protected void unregisterInterfaces() {
+		clientUser.dispose();
+		playerService.dispose();
 		userStats.dispose();
 	}
 
@@ -45,9 +80,21 @@ public class SteamWebAPITestApp extends SteamTestApp {
 	@Override
 	protected void processInput(String input) throws SteamException {
 
+		if (input.startsWith("web key ")) {
+			String key = input.substring("web key ".length());
+			playerService.setWebAPIKey(key);
+			userStats.setWebAPIKey(key);
+		}
+
+		if (input.startsWith("player recent")) {
+			if (!playerService.getRecentlyPlayedGames(clientUser.getSteamID().getNativeHandle(), 0)) {
+				System.out.println("getRecentlyPlayedGames(): send request failed.");
+			}
+		}
+
 		if (input.startsWith("web achievements")) {
 			if (!userStats.getGlobalAchievementPercentagesForApp(clientUtils.getAppID())) {
-				System.out.println("http achievements: send request failed.");
+				System.out.println("getGlobalAchievementPercentagesForApp(): send request failed.");
 			}
 		}
 	}

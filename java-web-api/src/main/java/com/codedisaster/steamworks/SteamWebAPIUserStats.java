@@ -8,7 +8,7 @@ public class SteamWebAPIUserStats extends SteamWebAPIInterface {
 
 	public static class AchievementPercentages {
 
-		private List<Achievement> achievements;
+		private final List<Achievement> achievements;
 
 		private AchievementPercentages(JsonObject json) {
 
@@ -28,8 +28,8 @@ public class SteamWebAPIUserStats extends SteamWebAPIInterface {
 
 	public static class Achievement {
 
-		private String name;
-		private double percent;
+		private final String name;
+		private final double percent;
 
 		private Achievement(JsonObject json) {
 			name = json.get("name").asString();
@@ -54,11 +54,9 @@ public class SteamWebAPIUserStats extends SteamWebAPIInterface {
 		}
 
 		@Override
-		public void onHTTPRequestCompleted(JsonObject jsonObject) {
+		public void onHTTPRequestCompleted(JsonObject jsonObject, long context) {
 
-			String jsonObjectName = jsonObject.names().get(0);
-
-			if (jsonObjectName.equals("achievementpercentages")) {
+			if (context == GET_GLOBAL_ACHIEVEMENT_PERCENTAGES) {
 
 				AchievementPercentages percentages = new AchievementPercentages(jsonObject);
 				userCallback.onGlobalAchievementPercentagesForApp(percentages);
@@ -70,6 +68,8 @@ public class SteamWebAPIUserStats extends SteamWebAPIInterface {
 		}
 	}
 
+	private static final long GET_GLOBAL_ACHIEVEMENT_PERCENTAGES = 1;
+
 	public SteamWebAPIUserStats(SteamWebAPIUserStatsCallback callback, SteamHTTP.API api) {
 		createHTTPInterface(new RequestListener(callback), api);
 	}
@@ -77,7 +77,8 @@ public class SteamWebAPIUserStats extends SteamWebAPIInterface {
 	public boolean getGlobalAchievementPercentagesForApp(long gameId) {
 
 		SteamHTTPRequestHandle request = createHTTPRequest(SteamHTTP.HTTPMethod.GET,
-				"ISteamUserStats", "GetGlobalAchievementPercentagesForApp", 2);
+				"ISteamUserStats", "GetGlobalAchievementPercentagesForApp",
+				2, GET_GLOBAL_ACHIEVEMENT_PERCENTAGES);
 
 		http.setHTTPRequestGetOrPostParameter(request, "gameid", Long.toString(gameId));
 
