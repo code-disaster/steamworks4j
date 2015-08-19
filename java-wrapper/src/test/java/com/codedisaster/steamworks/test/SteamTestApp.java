@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public abstract class SteamTestApp {
 
-	private SteamUtils clUtils;
+	protected SteamUtils clientUtils;
 
 	private SteamAPIWarningMessageHook clMessageHook = new SteamAPIWarningMessageHook() {
 		@Override
@@ -70,8 +70,8 @@ public abstract class SteamTestApp {
 
 		registerInterfaces();
 
-		clUtils = new SteamUtils();
-		clUtils.setWarningMessageHook(clMessageHook);
+		clientUtils = new SteamUtils();
+		clientUtils.setWarningMessageHook(clMessageHook);
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 		new Thread(inputHandler).start();
@@ -92,7 +92,7 @@ public abstract class SteamTestApp {
 
 		System.out.println("Shutting down Steam client API ...");
 
-		clUtils.dispose();
+		clientUtils.dispose();
 
 		unregisterInterfaces();
 
