@@ -35,6 +35,11 @@ public class SteamWebAPITestApp extends SteamTestApp {
 			}
 
 		}
+
+		@Override
+		public void onWebAPIRequestFailed(String interfaceName, String errorMessage, SteamHTTP.HTTPStatusCode statusCode) {
+			System.out.println("Request failed: '" + interfaceName + "', status code " + statusCode.name() + "\n" + errorMessage);
+		}
 	};
 
 	private SteamWebAPIUserStatsCallback userStatsCallback = new SteamWebAPIUserStatsCallback() {
@@ -49,6 +54,11 @@ public class SteamWebAPITestApp extends SteamTestApp {
 						((int) achievement.getPercent()) + "%");
 			}
 
+		}
+
+		@Override
+		public void onWebAPIRequestFailed(String interfaceName, String errorMessage, SteamHTTP.HTTPStatusCode statusCode) {
+			System.out.println("Request failed: '" + interfaceName + "', status code " + statusCode.name() + "\n" + errorMessage);
 		}
 	};
 

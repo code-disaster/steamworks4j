@@ -78,7 +78,7 @@ public class SteamWebAPIPlayerService extends SteamWebAPIInterface {
 		}
 	}
 
-	private static class RequestListener implements RequestCallback {
+	private class RequestListener implements RequestCallback {
 
 		private SteamWebAPIPlayerServiceCallback userCallback;
 
@@ -87,7 +87,8 @@ public class SteamWebAPIPlayerService extends SteamWebAPIInterface {
 		}
 
 		@Override
-		public void onHTTPRequestCompleted(JsonObject jsonObject, long context) {
+		public void onHTTPRequestCompleted(JsonObject jsonObject, long context,
+										   SteamHTTP.HTTPStatusCode statusCode) {
 
 			if (context == GET_RECENTLY_PLAYED_GAMES) {
 
@@ -95,23 +96,30 @@ public class SteamWebAPIPlayerService extends SteamWebAPIInterface {
 				userCallback.onRecentlyPlayedGames(games);
 
 			} else {
-				// todo: unknown result
+				userCallback.onWebAPIRequestFailed(interfaceName,
+						"Unknown method context (" + context + ")", statusCode);
 			}
 
+		}
+
+		@Override
+		public void onHTTPRequestFailed(String responseString, long contextValue,
+										SteamHTTP.HTTPStatusCode statusCode) {
+
+			userCallback.onWebAPIRequestFailed(interfaceName, responseString, statusCode);
 		}
 	}
 
 	private final static long GET_RECENTLY_PLAYED_GAMES = 1;
 
 	public SteamWebAPIPlayerService(SteamWebAPIPlayerServiceCallback callback, SteamHTTP.API api) {
-		createHTTPInterface(new RequestListener(callback), api);
+		createHTTPInterface("IPlayerService", new RequestListener(callback), api);
 	}
 
 	public boolean getRecentlyPlayedGames(long steamId, int count) {
 
 		SteamHTTPRequestHandle request = createHTTPRequest(SteamHTTP.HTTPMethod.GET,
-				"IPlayerService", "GetRecentlyPlayedGames",
-				1, GET_RECENTLY_PLAYED_GAMES);
+				"GetRecentlyPlayedGames", 1, GET_RECENTLY_PLAYED_GAMES);
 
 		http.setHTTPRequestGetOrPostParameter(request, "steamid", Long.toString(steamId));
 		http.setHTTPRequestGetOrPostParameter(request, "count", Long.toString(count));

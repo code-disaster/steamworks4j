@@ -7,7 +7,11 @@ import java.nio.ByteBuffer;
 abstract class SteamWebAPIInterface {
 
 	protected interface RequestCallback {
-		void onHTTPRequestCompleted(JsonObject jsonObject, long context);
+
+		void onHTTPRequestCompleted(JsonObject jsonObject, long contextValue, SteamHTTP.HTTPStatusCode statusCode);
+
+		void onHTTPRequestFailed(String responseString, long contextValue, SteamHTTP.HTTPStatusCode statusCode);
+
 	}
 
 	private class HTTPCallback implements SteamHTTPCallback {
@@ -55,19 +59,23 @@ abstract class SteamWebAPIInterface {
 							JsonValue json = Json.parse(requestString);
 							JsonObject jsonObject = json.asObject();
 
-							requestCallback.onHTTPRequestCompleted(jsonObject, contextValue);
+							requestCallback.onHTTPRequestCompleted(jsonObject, contextValue, statusCode);
 
 						} else {
-							// todo: error report by status code
-							throw new SteamException(statusCode.name() + ":\n" + requestString);
+							requestCallback.onHTTPRequestFailed(requestString, contextValue, statusCode);
 						}
 
 					} else {
-						// todo: error callback
+						requestCallback.onHTTPRequestFailed("Failed to obtain HTTP response data.",
+								contextValue, statusCode);
 					}
 
 				} catch (SteamException e) {
-					e.printStackTrace();
+					// Steam API error
+					requestCallback.onHTTPRequestFailed(e.getMessage(), contextValue, statusCode);
+				} catch (RuntimeException e) {
+					// JSON parse error
+					requestCallback.onHTTPRequestFailed(e.getMessage(), contextValue, statusCode);
 				}
 
 			} finally {
@@ -89,10 +97,13 @@ abstract class SteamWebAPIInterface {
 	}
 
 	protected SteamHTTP http;
+	protected String interfaceName;
+
 	private String webAPIKey;
 
-	protected void createHTTPInterface(RequestCallback callback, SteamHTTP.API api) {
+	protected void createHTTPInterface(String interfaceName, RequestCallback callback, SteamHTTP.API api) {
 		http = new SteamHTTP(new HTTPCallback(callback), api);
+		this.interfaceName = interfaceName;
 	}
 
 	public void dispose() {
@@ -104,8 +115,7 @@ abstract class SteamWebAPIInterface {
 	}
 
 	protected SteamHTTPRequestHandle createHTTPRequest(SteamHTTP.HTTPMethod getOrPost,
-													   String interfaceName, String methodName,
-													   int version, long context) {
+													   String methodName, int version, long context) {
 
 		// todo: possibly use StringBuilder
 
