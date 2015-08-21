@@ -4,7 +4,7 @@ layout: default
 
 ## About
 
-The *steamworks4j* library allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as [libGDX](http://libgdx.badlogicgames.com/).
+The *steamworks4j* library allows Java applications to access the Steamworks C++ API. It can be easily integrated with other frameworks, such as [libGDX](http://libgdx.badlogicgames.com/), [LWJGL](http://www.lwjgl.org/) or [Slick2D](http://slick.ninjacave.com/).
 
 ### Introduction
 
