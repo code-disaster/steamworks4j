@@ -6,6 +6,14 @@ public interface SteamUserStatsCallback {
 
 	void onUserStatsStored(long gameId, SteamResult result);
 
+	void onUserStatsUnloaded(SteamID steamIDUser);
+
+	void onUserAchievementStored(long gameId,
+								 boolean isGroupAchievement,
+								 String achievementName,
+								 int curProgress,
+								 int maxProgress);
+
 	void onLeaderboardFindResult(SteamLeaderboardHandle leaderboard, boolean found);
 
 	void onLeaderboardScoresDownloaded(SteamLeaderboardHandle leaderboard,
