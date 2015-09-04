@@ -43,7 +43,13 @@ Uses: achievements, user stats, leaderboards<br>
 
 Steam: [http://store.steampowered.com/app/384280/](http://store.steampowered.com/app/384280/)<br>
 Developer: [Iced Lizard Games][icedlizardgames]<br>
-Uses: achievements, remote storage
+Uses: achievements, remote storage<br>
+
+### RFLEX
+
+Steam: [http://store.steampowered.com/app/392020/](http://store.steampowered.com/app/392020/)<br>
+Developer: [Wesley LaFerriere][rflex]<br>
+Uses: achievements, remote storage, leaderboards<br>
 
 ### Run or Die
 
@@ -60,18 +66,26 @@ Steam: [http://store.steampowered.com/app/340880/](http://store.steampowered.com
 Developer: [Snipefish Entertainment][snipefish]<br>
 Uses: achievements, remote storage<br>
 
+### Spermination
+
+Steam: [http://store.steampowered.com/app/363460/](http://store.steampowered.com/app/363460/)<br>
+Developer: [Phr00t][phr00t]<br>
+Uses: achievements<br>
+
 ### Spy Bugs
 
 *The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
 
 Steam: [http://store.steampowered.com/app/366860/](http://store.steampowered.com/app/366860/)<br>
 Developer: [Digital Soul Games][digitalsoulgames]<br>
-Uses: achievements, user stats, leaderboards, gameserver, web api
+Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 
-[digitalsoulgames]: http://www.digitalsoulgames.org/
-[icedlizardgames]: http://icedlizardgames.com/
-[orangepixel]: http://www.orangepixel.net/
+[digitalsoulgames]: http://www.digitalsoulgames.org
+[icedlizardgames]: http://icedlizardgames.com
+[orangepixel]: http://www.orangepixel.net
+[phr00t]: http://www.phr00t.com
 [robotality]: http://robotality.com
-[sillysoft]: http://sillysoft.net/
-[snipefish]: http://solarwar.net/
-[teamflow]: http://www.runordiegame.com/
+[rflex]: http://rflex-game.com
+[sillysoft]: http://sillysoft.net
+[snipefish]: http://solarwar.net
+[teamflow]: http://www.runordiegame.com
