@@ -27,6 +27,7 @@ public class SteamApps extends SteamInterface {
     
     static private native String getCurrentGameLanguage(long pointer); /*
         ISteamApps* apps = (ISteamApps*) pointer;
-        return apps->GetCurrentGameLanguage();
+        jstring language = env->NewStringUTF(apps->GetCurrentGameLanguage());
+        return language;
     */
 }
