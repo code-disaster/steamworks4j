@@ -9,6 +9,10 @@ public class SteamApps extends SteamInterface {
 	public boolean isSubscribedApp(long appID) {
 		return isSubscribedApp(pointer, appID);
 	}
+    
+    public String getCurrentGameLanguage() {
+        return getCurrentGameLanguage(pointer);
+    }
 
 	// @off
 
@@ -20,5 +24,9 @@ public class SteamApps extends SteamInterface {
 		ISteamApps* apps = (ISteamApps*) pointer;
 		return apps->BIsSubscribedApp((AppId_t) appID);
 	*/
-
+    
+    static private native String getCurrentGameLanguage(long pointer); /*
+        ISteamApps* apps = (ISteamApps*) pointer;
+        return apps->GetCurrentGameLanguage();
+    */
 }
