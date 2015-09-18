@@ -271,6 +271,11 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 		System.out.println("App ID: " + utils.getAppID());
 
+		System.out.println("App build ID: " + apps.getAppBuildId());
+		System.out.println("App owner: " + apps.getAppOwner().getAccountID());
+
+		System.out.println("Current game language: " + apps.getCurrentGameLanguage());
+		System.out.println("Available game languages: " + apps.getAvailableGameLanguages());
 	}
 
 	@Override
