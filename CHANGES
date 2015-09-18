@@ -1,3 +1,7 @@
+[1.2.1]
+- Added UserStatsStored, UserAchievementStored callbacks.
+- Added a few SteamApps utility functions.
+
 [1.2.0]
 - Prebuilt libraries now compiled with Steamworks SDK v1.34.
 - Native code generator moved to separate sub-project. Removes runtime dependency on gdx-jnigen.
