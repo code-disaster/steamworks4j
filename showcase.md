@@ -6,82 +6,107 @@ layout: default
 
 A list of games released on Steam, in alphabetical order, which are known to utilize *steamworks4j*. Feel free to contact me if you like your game to be added (or removed).
 
-### Gunslugs
+---
+### [Gunslugs](http://store.steampowered.com/app/371890/)
 
-Steam: [http://store.steampowered.com/app/371890/](http://store.steampowered.com/app/371890/)<br>
 Developer: [OrangePixel][orangepixel]<br>
 Uses: achievements, leaderboards<br>
 
-### Gunslugs 2
+![Gunslugs](images/showcase_gunslugs.png)
 
-Steam: [http://store.steampowered.com/app/340750/](http://store.steampowered.com/app/340750/)<br>
+---
+### [Gunslugs 2](http://store.steampowered.com/app/340750/)
+
 Developer: [OrangePixel][orangepixel]<br>
 Uses: achievements, leaderboards<br>
 
-### Halfway
+![Gunslugs 2](images/showcase_gunslugs2.png)
+
+---
+### [Halfway](http://store.steampowered.com/app/253150/)
+
+Developer: [Robotality][robotality]<br>
+Uses: achievements, user stats, remote storage, user-generated content<br>
 
 ![Halfway](images/showcase_halfway.png)
 *The game which I eventually started writing steamworks4j for.*
 
-Steam: [http://store.steampowered.com/app/253150/](http://store.steampowered.com/app/253150/)<br>
-Developer: [Robotality][robotality]<br>
-Uses: achievements, user stats, remote storage, user-generated content<br>
+---
+### [Heroes of Loot](http://store.steampowered.com/app/359280/)
 
-### Heroes of Loot
-
-Steam: [http://store.steampowered.com/app/359280/](http://store.steampowered.com/app/359280/)<br>
 Developer: [OrangePixel][orangepixel]<br>
 Uses: achievements<br>
 
-### Lux Delux
+![Heroes of Loot](images/showcase_heroesofloot.png)
 
-Steam: [http://store.steampowered.com/app/341950/](http://store.steampowered.com/app/341950/)<br>
+---
+### [Lux Delux](http://store.steampowered.com/app/341950/)
+
 Developer: [Sillysoft Games][sillysoft]<br>
 Uses: achievements, user stats, leaderboards<br>
 
-### Mute Crimson+
+---
+### [Mute Crimson+](http://store.steampowered.com/app/384280/)
 
-Steam: [http://store.steampowered.com/app/384280/](http://store.steampowered.com/app/384280/)<br>
 Developer: [Iced Lizard Games][icedlizardgames]<br>
 Uses: achievements, remote storage<br>
 
-### RFLEX
+![Mute Crimson+](images/showcase_mutecrimsonplus.png)
 
-Steam: [http://store.steampowered.com/app/392020/](http://store.steampowered.com/app/392020/)<br>
+---
+### [Quarries of Scred](http://store.steampowered.com/app/346770/)
+
+Developer: [Hammerspace Games][hammerspacegames]<br>
+Uses: achievements<br>
+
+---
+### [RFLEX](http://store.steampowered.com/app/392020/)
+
 Developer: [Wesley LaFerriere][rflex]<br>
 Uses: achievements, remote storage, leaderboards<br>
 
-### Run or Die
+---
+### [Run or Die](http://store.steampowered.com/app/325150/)
+
+Developer: [Team Flow][teamflow]<br>
+Uses: achievements, user-generated content<br>
 
 ![Run or Die](images/showcase_runordie.png)
 *I love the (unwitting?) Halfway reference. :-D*
 
-Steam: [http://store.steampowered.com/app/325150/](http://store.steampowered.com/app/325150/)<br>
-Developer: [Team Flow][teamflow]<br>
-Uses: achievements, user-generated content<br>
+---
+### [Solar War](http://store.steampowered.com/app/340880/)
 
-### Solar War
-
-Steam: [http://store.steampowered.com/app/340880/](http://store.steampowered.com/app/340880/)<br>
 Developer: [Snipefish Entertainment][snipefish]<br>
 Uses: achievements, remote storage<br>
 
-### Spermination
+---
+### [Space Grunts](http://store.steampowered.com/app/371430/)
 
-Steam: [http://store.steampowered.com/app/363460/](http://store.steampowered.com/app/363460/)<br>
+Developer: [OrangePixel][orangepixel]<br>
+Uses: achievements, leaderboards<br>
+
+![Space Grunts](images/showcase_spacegrunts.png)
+
+---
+### [Spermination](http://store.steampowered.com/app/363460/)
+
 Developer: [Phr00t][phr00t]<br>
 Uses: achievements<br>
 
-### Spy Bugs
+*I don't even ...*
 
-*The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
+---
+### [Spy Bugs](http://store.steampowered.com/app/366860/)
 
-Steam: [http://store.steampowered.com/app/366860/](http://store.steampowered.com/app/366860/)<br>
 Developer: [Digital Soul Games][digitalsoulgames]<br>
 Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 
+*The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
+
 [digitalsoulgames]: http://www.digitalsoulgames.org
 [icedlizardgames]: http://icedlizardgames.com
+[hammerspacegames]: http://www.quarriesofscred.com
 [orangepixel]: http://www.orangepixel.net
 [phr00t]: http://www.phr00t.com
 [robotality]: http://robotality.com
