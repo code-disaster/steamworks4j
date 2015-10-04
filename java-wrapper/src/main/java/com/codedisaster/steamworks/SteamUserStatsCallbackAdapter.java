@@ -15,6 +15,15 @@ class SteamUserStatsCallbackAdapter extends SteamCallbackAdapter<SteamUserStatsC
 		callback.onUserStatsStored(gameId, SteamResult.byValue(result));
 	}
 
+	public void onUserStatsUnloaded(long steamIDUser) {
+		callback.onUserStatsUnloaded(new SteamID(steamIDUser));
+	}
+
+	public void onUserAchievementStored(long gameId, boolean isGroupAchievement, String achievementName,
+										int curProgress, int maxProgress) {
+		callback.onUserAchievementStored(gameId, isGroupAchievement, achievementName, curProgress, maxProgress);
+	}
+
 	public void onLeaderboardFindResult(long handle, boolean found) {
 		callback.onLeaderboardFindResult(new SteamLeaderboardHandle(handle), found);
 	}

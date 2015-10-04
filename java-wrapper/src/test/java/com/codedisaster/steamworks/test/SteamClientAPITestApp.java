@@ -50,6 +50,18 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		}
 
 		@Override
+		public void onUserStatsUnloaded(SteamID steamIDUser) {
+			System.out.println("User stats unloaded: userId=" + steamIDUser.getAccountID());
+		}
+
+		@Override
+		public void onUserAchievementStored(long gameId, boolean isGroupAchievement, String achievementName,
+											int curProgress, int maxProgress) {
+			System.out.println("User achievement stored: gameId=" + gameId + ", name=" + achievementName +
+					", progress=" + curProgress + "/" + maxProgress);
+		}
+
+		@Override
 		public void onLeaderboardFindResult(SteamLeaderboardHandle leaderboard, boolean found) {
 			System.out.println("Leaderboard find result: handle=" + leaderboard.toString() +
 					", found=" + (found ? "yes" : "no"));
@@ -259,6 +271,11 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
 		System.out.println("App ID: " + utils.getAppID());
 
+		System.out.println("App build ID: " + apps.getAppBuildId());
+		System.out.println("App owner: " + apps.getAppOwner().getAccountID());
+
+		System.out.println("Current game language: " + apps.getCurrentGameLanguage());
+		System.out.println("Available game languages: " + apps.getAvailableGameLanguages());
 	}
 
 	@Override
@@ -284,6 +301,14 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			userStats.requestCurrentStats();
 		} else if (input.equals("stats store")) {
 			userStats.storeStats();
+		} else if (input.startsWith("achievement set ")) {
+			String achievementName = input.substring("achievement set ".length());
+			System.out.println("- setting " + achievementName + " to 'achieved'");
+			userStats.setAchievement(achievementName);
+		} else if (input.startsWith("achievement clear ")) {
+			String achievementName = input.substring("achievement clear ".length());
+			System.out.println("- clearing " + achievementName);
+			userStats.clearAchievement(achievementName);
 		} else if (input.equals("file list")) {
 			int numFiles = remoteStorage.getFileCount();
 			System.out.println("Num of files: " + numFiles);
