@@ -26,14 +26,14 @@ public class SteamRemoteStorage extends SteamInterface {
 
 	public boolean fileWrite(String name, ByteBuffer data, int length) throws SteamException {
 		if (!data.isDirect()) {
-			throw new SteamException("Buffer must be direct!");
+			throw new SteamException("Direct buffer required!");
 		}
 		return fileWrite(pointer, name, data, length);
 	}
 
 	public boolean fileRead(String name, ByteBuffer buffer, int capacity) throws SteamException {
 		if (!buffer.isDirect()) {
-			throw new SteamException("Buffer must be direct!");
+			throw new SteamException("Direct buffer required!");
 		}
 		return fileRead(pointer, name, buffer, capacity);
 	}

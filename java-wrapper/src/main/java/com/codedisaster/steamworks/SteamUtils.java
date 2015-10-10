@@ -51,7 +51,10 @@ public class SteamUtils extends SteamInterface {
 		return getImageHeight(pointer, image);
 	}
 
-	public boolean getImageRGBA(int image, ByteBuffer dest, int destSize) {
+	public boolean getImageRGBA(int image, ByteBuffer dest, int destSize) throws SteamException {
+		if (!dest.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
 		return getImageRGBA(pointer, image, dest, destSize);
 	}
 

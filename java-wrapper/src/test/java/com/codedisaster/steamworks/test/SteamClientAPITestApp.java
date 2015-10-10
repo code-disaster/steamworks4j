@@ -2,9 +2,7 @@ package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 
@@ -104,12 +102,32 @@ public class SteamClientAPITestApp extends SteamTestApp {
 							int h = utils.getImageHeight(smallAvatar);
 							System.out.println("  ... small avatar size: " + w + "x" + h + " pixels");
 
-							ByteBuffer image = ByteBuffer.allocate(w * h * 4);
+							ByteBuffer image = ByteBuffer.allocateDirect(w * h * 4);
 
-							if (utils.getImageRGBA(smallAvatar, image, w * h * 4)) {
-								System.out.println("  ... small avatar retrieve avatar image successful");
-							} else {
-								System.out.println("  ... small avatar retrieve avatar image failed!");
+							try {
+								if (utils.getImageRGBA(smallAvatar, image, w * h * 4)) {
+									System.out.println("  ... small avatar retrieve avatar image successful");
+
+									int nonZeroes = w * h;
+									for (int y = 0; y < h; y++) {
+										for (int x = 0; x < w; x++) {
+											//System.out.print(String.format(" %08x", image.getInt(y * w + x)));
+											if (image.getInt(y * w + x) == 0) {
+												nonZeroes--;
+											}
+										}
+										//System.out.println();
+									}
+
+									if (nonZeroes == 0) {
+										System.err.println("Something's wrong! Avatar image is empty!");
+									}
+
+								} else {
+									System.out.println("  ... small avatar retrieve avatar image failed!");
+								}
+							} catch (SteamException e) {
+								e.printStackTrace();
 							}
 						} else {
 							System.out.println("  ... small avatar image not available!");
