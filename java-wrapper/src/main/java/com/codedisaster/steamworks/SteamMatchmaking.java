@@ -117,7 +117,7 @@ public class SteamMatchmaking extends SteamInterface {
 	}
 
 	public SteamAPICall requestLobbyList() {
-		return new SteamAPICall(requestLobbyList(pointer));
+		return new SteamAPICall(requestLobbyList(pointer, callback));
 	}
 
 	public void addRequestLobbyListStringFilter(String keyToMatch,
@@ -152,6 +152,21 @@ public class SteamMatchmaking extends SteamInterface {
 		addRequestLobbyListCompatibleMembersFilter(pointer, steamIDLobby.handle);
 	}
 
+	public SteamID getLobbyByIndex(int lobby) {
+		return new SteamID(getLobbyByIndex(pointer, lobby));
+	}
+
+
+
+
+	public int getNumLobbyMembers(SteamID steamIDLobby) {
+		return getNumLobbyMembers(pointer, steamIDLobby.handle);
+	}
+
+	public SteamID getLobbyMemberByIndex(SteamID steamIDLobby, int member) {
+		return new SteamID(getLobbyMemberByIndex(pointer, steamIDLobby.handle, member));
+	}
+
 	// @off
 
 	/*JNI
@@ -162,9 +177,12 @@ public class SteamMatchmaking extends SteamInterface {
 		return (long) new SteamMatchmakingCallback(env, javaCallback);
 	*/
 
-	private static native long requestLobbyList(long pointer); /*
+	private static native long requestLobbyList(long pointer, long callback); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
-		return (long) matchmaking->RequestLobbyList();
+		SteamAPICall_t handle = matchmaking->RequestLobbyList();
+		SteamMatchmakingCallback* cb = (SteamMatchmakingCallback*) callback;
+		cb->onLobbyMatchListCall.Set(handle, cb, &SteamMatchmakingCallback::onLobbyMatchList);
+		return handle;
 	*/
 
 	private static native void addRequestLobbyListStringFilter(long pointer, String keyToMatch,
@@ -203,6 +221,26 @@ public class SteamMatchmaking extends SteamInterface {
 	private static native void addRequestLobbyListCompatibleMembersFilter(long pointer, long steamIDLobby); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		matchmaking->AddRequestLobbyListCompatibleMembersFilter((uint64) steamIDLobby);
+	*/
+
+	private static native long getLobbyByIndex(long pointer, int lobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		CSteamID steamID = matchmaking->GetLobbyByIndex(lobby);
+		return (int64) steamID.ConvertToUint64();
+	*/
+
+
+
+
+	private static native int getNumLobbyMembers(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->GetNumLobbyMembers((uint64) steamIDLobby);
+	*/
+
+	private static native long getLobbyMemberByIndex(long pointer, long steamIDLobby, int member); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		CSteamID steamID = matchmaking->GetLobbyMemberByIndex((uint64) steamIDLobby, member);
+		return (int64) steamID.ConvertToUint64();
 	*/
 
 }
