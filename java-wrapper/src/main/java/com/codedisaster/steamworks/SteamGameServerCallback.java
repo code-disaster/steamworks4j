@@ -1,9 +1,5 @@
 package com.codedisaster.steamworks;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 public interface SteamGameServerCallback {
 
 	void onValidateAuthTicketResponse(SteamID steamID,

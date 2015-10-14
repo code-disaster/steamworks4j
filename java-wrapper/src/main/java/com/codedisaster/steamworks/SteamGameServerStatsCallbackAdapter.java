@@ -1,9 +1,5 @@
 package com.codedisaster.steamworks;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 @SuppressWarnings("unused")
 class SteamGameServerStatsCallbackAdapter extends SteamCallbackAdapter<SteamGameServerStatsCallback> {
 
@@ -11,15 +7,15 @@ class SteamGameServerStatsCallbackAdapter extends SteamCallbackAdapter<SteamGame
 		super(callback);
 	}
 
-	public void onStatsReceived(int result, long steamIDUser) {
+	void onStatsReceived(int result, long steamIDUser) {
 		callback.onStatsReceived(SteamResult.byValue(result), new SteamID(steamIDUser));
 	}
 
-	public void onStatsStored(int result, long steamIDUser) {
+	void onStatsStored(int result, long steamIDUser) {
 		callback.onStatsStored(SteamResult.byValue(result), new SteamID(steamIDUser));
 	}
 	
-	public void onStatsUnloaded(long steamIDUser) {
+	void onStatsUnloaded(long steamIDUser) {
 		callback.onStatsUnloaded(new SteamID(steamIDUser));
 	}
 }

@@ -1,9 +1,5 @@
 package com.codedisaster.steamworks;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 public class SteamGameServerAPI {
 
 	public enum ServerMode {
@@ -13,15 +9,15 @@ public class SteamGameServerAPI {
 		AuthenticationAndSecure
 	}
 
-	static private boolean isRunning = false;
+	private static boolean isRunning = false;
 
-	static public boolean init(int ip, short steamPort, short gamePort, short queryPort,
+	public static boolean init(int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) {
 
 		return init(null, ip, steamPort, gamePort, queryPort, serverMode, versionString);
 	}
 
-	static public boolean init(String pathToNativeLibraries,
+	public static boolean init(String pathToNativeLibraries,
 							   int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) {
 
@@ -34,12 +30,12 @@ public class SteamGameServerAPI {
 		return isRunning;
 	}
 
-	static public void shutdown() {
+	public static void shutdown() {
 		isRunning = false;
 		nativeShutdown();
 	}
 
-	static public SteamID getSteamID() {
+	public static SteamID getSteamID() {
 		return new SteamID(nativeGetSteamID());
 	}
 
@@ -51,7 +47,7 @@ public class SteamGameServerAPI {
 		 static JavaVM* staticVM = 0;
 	*/
 
-	static private native boolean nativeInit(int ip, short steamPort, short gamePort, short queryPort,
+	private static native boolean nativeInit(int ip, short steamPort, short gamePort, short queryPort,
 											 int serverMode, String versionString); /*
 
 		 if (env->GetJavaVM(&staticVM) != 0) {
@@ -62,19 +58,19 @@ public class SteamGameServerAPI {
 			static_cast<EServerMode>(serverMode), versionString);
 	*/
 
-	static private native void nativeShutdown(); /*
+	private static native void nativeShutdown(); /*
 		SteamGameServer_Shutdown();
 	*/
 
-	static public native void runCallbacks(); /*
+	public static native void runCallbacks(); /*
 		SteamGameServer_RunCallbacks();
 	*/
 
-	static public native boolean isSecure(); /*
+	public static native boolean isSecure(); /*
 		return SteamGameServer_BSecure();
 	*/
 
-	static private native long nativeGetSteamID(); /*
+	private static native long nativeGetSteamID(); /*
 		return SteamGameServer_GetSteamID();
 	*/
 

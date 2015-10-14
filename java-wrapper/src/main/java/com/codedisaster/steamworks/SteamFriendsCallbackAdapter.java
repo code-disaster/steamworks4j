@@ -9,7 +9,7 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 		super(callback);
 	}
 
-	public void onPersonaStateChange(long steamID, int changeFlags) {
+	void onPersonaStateChange(long steamID, int changeFlags) {
 		SteamID id = new SteamID(steamID);
 		for (SteamFriends.PersonaChange value : personaChangeValues) {
 			if (SteamFriends.PersonaChange.isSet(value, changeFlags)) {

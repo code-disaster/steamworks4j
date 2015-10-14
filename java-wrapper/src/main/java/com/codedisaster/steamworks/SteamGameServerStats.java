@@ -1,9 +1,5 @@
 package com.codedisaster.steamworks;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 public class SteamGameServerStats extends SteamInterface {
 
 	public SteamGameServerStats(SteamGameServerStatsCallback callback) {

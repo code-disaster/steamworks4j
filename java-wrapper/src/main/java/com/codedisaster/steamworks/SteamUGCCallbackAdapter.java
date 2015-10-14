@@ -7,25 +7,25 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		super(callback);
 	}
 
-	public void onUGCQueryCompleted(long handle, int numResultsReturned, int totalMatchingResults,
-									boolean isCachedData, int result) {
+	void onUGCQueryCompleted(long handle, int numResultsReturned, int totalMatchingResults,
+							 boolean isCachedData, int result) {
 
 		callback.onUGCQueryCompleted(new SteamUGCQuery(handle), numResultsReturned,
 				totalMatchingResults, isCachedData, SteamResult.byValue(result));
 	}
 
-	public void onSubscribeItem(long publishedFileID, int result) {
+	void onSubscribeItem(long publishedFileID, int result) {
 		callback.onSubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
 	}
 	
-	public void onUnsubscribeItem(long publishedFileID, int result) {
+	void onUnsubscribeItem(long publishedFileID, int result) {
 		callback.onUnsubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
 	}
 	
-	public void onRequestUGCDetails(long publishedFileID, int result, String title, String description,
-									long fileHandle, long previewFileHandle, String fileName,
-									boolean cachedData, int votesUp, int votesDown, long ownerID,
-									int timeCreated, int timeUpdated) {
+	void onRequestUGCDetails(long publishedFileID, int result, String title, String description,
+							 long fileHandle, long previewFileHandle, String fileName,
+							 boolean cachedData, int votesUp, int votesDown, long ownerID,
+							 int timeCreated, int timeUpdated) {
 
 		SteamUGCDetails details = new SteamUGCDetails();
 		details.publishedFileID = publishedFileID;
