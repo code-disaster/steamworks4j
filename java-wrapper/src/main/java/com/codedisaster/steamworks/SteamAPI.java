@@ -67,6 +67,10 @@ public class SteamAPI {
 		return (long) SteamFriends();
 	*/
 
+	static native long getSteamMatchmakingPointer(); /*
+		return (long) SteamMatchmaking();
+	*/
+
 	static native long getSteamNetworkingPointer(); /*
 		return (long) SteamNetworking();
 	*/
