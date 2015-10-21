@@ -7,6 +7,12 @@ layout: default
 A list of games released on Steam, in alphabetical order, which are known to utilize *steamworks4j*. Feel free to contact me if you like your game to be added (or removed).
 
 ---
+### [Bard to the Future](http://store.steampowered.com/app/337110/)
+
+Developer: [Battlebard Games][battlebardgames]<br>
+Uses: achievements, user stats, leaderboards<br>
+
+---
 ### [Gunslugs](http://store.steampowered.com/app/371890/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -104,6 +110,7 @@ Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 
 *The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
 
+[battlebardgames]: http://battlebardgames.com
 [digitalsoulgames]: http://www.digitalsoulgames.org
 [icedlizardgames]: http://icedlizardgames.com
 [hammerspacegames]: http://www.quarriesofscred.com
