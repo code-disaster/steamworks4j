@@ -4,7 +4,15 @@ import com.codedisaster.steamworks.*;
 
 public class SteamMatchmakingTestApp extends SteamTestApp {
 
+	private SteamFriends friends;
 	private SteamMatchmaking matchmaking;
+
+	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
+		@Override
+		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
+			System.out.println("PersonaStateChange: accountID=" + steamID.getAccountID() + " , change=" + change.name());
+		}
+	};
 
 	private SteamMatchmakingCallback matchmakingCallback = new SteamMatchmakingCallback() {
 		@Override
@@ -85,11 +93,13 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
+		friends = new SteamFriends(friendsCallback);
 		matchmaking = new SteamMatchmaking(matchmakingCallback);
 	}
 
 	@Override
 	protected void unregisterInterfaces() {
+		friends.dispose();
 		matchmaking.dispose();
 	}
 
