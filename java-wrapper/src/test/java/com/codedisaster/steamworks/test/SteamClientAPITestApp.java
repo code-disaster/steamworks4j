@@ -260,6 +260,11 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					break;
 			}
 		}
+
+		@Override
+		public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
+
+		}
 	};
 
 	@Override

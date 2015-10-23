@@ -13,8 +13,28 @@ public class FriendsMixin {
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
 		@Override
 		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
-			System.out.println("Persona state change: accountID=" +
-					steamID.getAccountID() + " , change=" + change.name());
+
+			switch (change) {
+
+				case Name:
+					System.out.println("Persona name received: " +
+							"accountID=" + steamID.getAccountID() +
+							", name='" + friends.getFriendPersonaName(steamID) + "'");
+					break;
+
+				default:
+					System.out.println("Persona state changed (unhandled): " +
+							"accountID=" + steamID.getAccountID() +
+							", change=" + change.name());
+					break;
+			}
+		}
+
+		@Override
+		public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
+			System.out.println("Game lobby join requested");
+			System.out.println("  - lobby: " + Long.toHexString(steamIDLobby.getNativeHandle()));
+			System.out.println("  - by friend accountID: " + steamIDFriend.getAccountID());
 		}
 	};
 

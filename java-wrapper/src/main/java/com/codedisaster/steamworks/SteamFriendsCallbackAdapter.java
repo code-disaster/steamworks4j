@@ -17,4 +17,9 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 			}
 		}
 	}
+
+	void onGameLobbyJoinRequested(long steamIDLobby, long steamIDFriend) {
+		callback.onGameLobbyJoinRequested(new SteamID(steamIDLobby), new SteamID(steamIDFriend));
+	}
+
 }

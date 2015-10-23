@@ -38,7 +38,11 @@ public abstract class SteamTestApp {
 						if (input.equals("quit") || input.equals("exit")) {
 							alive = false;
 						} else {
-							processInput(input);
+							try {
+								processInput(input);
+							} catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
