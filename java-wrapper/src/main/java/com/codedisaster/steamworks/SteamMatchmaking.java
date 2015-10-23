@@ -180,6 +180,18 @@ public class SteamMatchmaking extends SteamInterface {
 		return new SteamID(getLobbyMemberByIndex(pointer, steamIDLobby.handle, member));
 	}
 
+	public String getLobbyData(SteamID steamIDLobby, String key) {
+		return getLobbyData(pointer, steamIDLobby.handle, key);
+	}
+
+	public boolean setLobbyData(SteamID steamIDLobby, String key, String value) {
+		return setLobbyData(pointer, steamIDLobby.handle, key, value);
+	}
+
+	public boolean deleteLobbyData(SteamID steamIDLobby, String key) {
+		return deleteLobbyData(pointer, steamIDLobby.handle, key);
+	}
+
 	// @off
 
 	/*JNI
@@ -277,6 +289,22 @@ public class SteamMatchmaking extends SteamInterface {
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		CSteamID steamID = matchmaking->GetLobbyMemberByIndex((uint64) steamIDLobby, member);
 		return (int64) steamID.ConvertToUint64();
+	*/
+
+	private static native String getLobbyData(long pointer, long steamIDLobby, String key); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		jstring value = env->NewStringUTF(matchmaking->GetLobbyData((uint64) steamIDLobby, key));
+		return value;
+	*/
+
+	private static native boolean setLobbyData(long pointer, long steamIDLobby, String key, String value); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLobbyData((uint64) steamIDLobby, key, value);
+	*/
+
+	private static native boolean deleteLobbyData(long pointer, long steamIDLobby, String key); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->DeleteLobbyData((uint64) steamIDLobby, key);
 	*/
 
 }

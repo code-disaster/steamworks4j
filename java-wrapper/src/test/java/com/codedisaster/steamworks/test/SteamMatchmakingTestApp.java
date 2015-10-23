@@ -12,6 +12,9 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 	private SteamMatchmaking matchmaking;
 	private Map<Long, SteamID> lobbies = new HashMap<Long, SteamID>();
 
+	private static final String LobbyDataKey = "[test-key]";
+	private static final String LobbyDataValue = "[test-value]";
+
 	private SteamMatchmakingCallback matchmakingCallback = new SteamMatchmakingCallback() {
 		@Override
 		public void onFavoritesListChanged(int ip, int queryPort, int connPort, int appID, int flags, boolean add, int accountID) {
@@ -92,6 +95,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			System.out.println("  - result: " + result.name());
 			if (result == SteamResult.OK) {
 				lobbies.put(steamIDLobby.getNativeHandle(), steamIDLobby);
+				matchmaking.setLobbyData(steamIDLobby, LobbyDataKey, LobbyDataValue);
 			}
 		}
 
@@ -140,11 +144,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			int limit = Integer.parseInt(parameters[0]);
 			System.out.println("  - requesting up to " + limit + " lobbies");
 			matchmaking.addRequestLobbyListResultCountFilter(limit);
-			if (parameters.length > 1) {
-				String filter = parameters[1];
-				System.out.println("  - string filter: " + filter);
-				matchmaking.addRequestLobbyListStringFilter("c0deb33f", filter, SteamMatchmaking.LobbyComparison.Equal);
-			}
+			matchmaking.addRequestLobbyListStringFilter(LobbyDataKey, LobbyDataValue, SteamMatchmaking.LobbyComparison.Equal);
 			matchmaking.requestLobbyList();
 		} else if (input.startsWith("lobby create ")) {
 			int maxMembers = Integer.parseInt(input.substring("lobby create ".length()));
