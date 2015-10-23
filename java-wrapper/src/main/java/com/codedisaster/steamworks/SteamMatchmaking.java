@@ -156,8 +156,21 @@ public class SteamMatchmaking extends SteamInterface {
 		return new SteamID(getLobbyByIndex(pointer, lobby));
 	}
 
+	public SteamAPICall createLobby(LobbyType lobbyType, int maxMembers) {
+		return new SteamAPICall(createLobby(pointer, callback, lobbyType.ordinal(), maxMembers));
+	}
 
+	public SteamAPICall joinLobby(SteamID steamIDLobby) {
+		return new SteamAPICall(joinLobby(pointer, callback, steamIDLobby.handle));
+	}
 
+	public void leaveLobby(SteamID steamIDLobby) {
+		leaveLobby(pointer, steamIDLobby.handle);
+	}
+
+	public boolean inviteUserToLobby(SteamID steamIDLobby, SteamID steamIDInvitee) {
+		return inviteUserToLobby(pointer, steamIDLobby.handle, steamIDInvitee.handle);
+	}
 
 	public int getNumLobbyMembers(SteamID steamIDLobby) {
 		return getNumLobbyMembers(pointer, steamIDLobby.handle);
@@ -229,8 +242,31 @@ public class SteamMatchmaking extends SteamInterface {
 		return (int64) steamID.ConvertToUint64();
 	*/
 
+	private static native long createLobby(long pointer, long callback, int lobbyType, int maxMembers); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		SteamAPICall_t handle = matchmaking->CreateLobby((ELobbyType) lobbyType, maxMembers);
+		SteamMatchmakingCallback* cb = (SteamMatchmakingCallback*) callback;
+		cb->onLobbyCreatedCall.Set(handle, cb, &SteamMatchmakingCallback::onLobbyCreated);
+		return handle;
+	*/
 
+	private static native long joinLobby(long pointer, long callback, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		SteamAPICall_t handle = matchmaking->JoinLobby((uint64) steamIDLobby);
+		SteamMatchmakingCallback* cb = (SteamMatchmakingCallback*) callback;
+		cb->onLobbyEnterCall.Set(handle, cb, &SteamMatchmakingCallback::onLobbyEnter);
+		return handle;
+	*/
 
+	private static native void leaveLobby(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		matchmaking->LeaveLobby((uint64) steamIDLobby);
+	*/
+
+	private static native boolean inviteUserToLobby(long pointer, long steamIDLobby, long steamIDInvitee); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->InviteUserToLobby((uint64) steamIDLobby, (uint64) steamIDInvitee);
+	*/
 
 	private static native int getNumLobbyMembers(long pointer, long steamIDLobby); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
