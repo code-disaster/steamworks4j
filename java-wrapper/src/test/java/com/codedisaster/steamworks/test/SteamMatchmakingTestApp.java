@@ -1,22 +1,16 @@
 package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
+import com.codedisaster.steamworks.test.mixin.FriendsMixin;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SteamMatchmakingTestApp extends SteamTestApp {
 
-	private SteamFriends friends;
+	private FriendsMixin friends;
 	private SteamMatchmaking matchmaking;
 	private Map<Long, SteamID> lobbies = new HashMap<Long, SteamID>();
-
-	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
-		@Override
-		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
-			System.out.println("PersonaStateChange: accountID=" + steamID.getAccountID() + " , change=" + change.name());
-		}
-	};
 
 	private SteamMatchmakingCallback matchmakingCallback = new SteamMatchmakingCallback() {
 		@Override
@@ -29,6 +23,11 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			System.out.println("LobbyInvite received for " + steamIDLobby);
 			System.out.println("  - from user: " + steamIDUser);
 			System.out.println("  - for game: " + gameID);
+
+			System.out.println("  - auto-joining lobby ...");
+
+			lobbies.put(steamIDLobby.getNativeHandle(), steamIDLobby);
+			matchmaking.joinLobby(steamIDLobby);
 		}
 
 		@Override
@@ -116,7 +115,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
-		friends = new SteamFriends(friendsCallback);
+		friends = new FriendsMixin();
 		matchmaking = new SteamMatchmaking(matchmakingCallback);
 	}
 
@@ -162,22 +161,27 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			} else {
 				System.err.println("No lobby found: " + id);
 			}
-		}/* else if (input.startsWith("lobby invite ")) {
+		} else if (input.startsWith("lobby invite ")) {
 			String[] ids = input.substring("lobby invite ".length()).split(" ");
 			if (ids.length == 2) {
 				long lobbyID = Long.parseLong(ids[0], 16);
-				long playerID = Long.parseLong(ids[1]);
+				int playerAccountID = Integer.parseInt(ids[1]);
 				if (lobbies.containsKey(lobbyID)) {
-					System.out.println("  inviting player " + playerID + "to lobby " + lobbyID);
-					matchmaking.inviteUserToLobby(lobbies.get(lobbyID), new SteamID(playerID));
+					System.out.println("  inviting player " + playerAccountID + "to lobby " + lobbyID);
+					if (friends.isFriendAccountID(playerAccountID)) {
+						matchmaking.inviteUserToLobby(lobbies.get(lobbyID), friends.getFriendSteamID(playerAccountID));
+					} else {
+						System.err.println("No player (friend) found: " + playerAccountID);
+					}
 				} else {
 					System.err.println("No lobby found: " + lobbyID);
 				}
 			} else {
 				System.err.println("Expecting: 'lobby invite <lobbyID> <userID>'");
 			}
-		}*/
+		}
 
+		friends.processInput(input);
 	}
 
 	public static void main(String[] arguments) {

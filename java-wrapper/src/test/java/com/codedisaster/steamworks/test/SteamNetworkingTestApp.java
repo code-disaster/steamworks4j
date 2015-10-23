@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
+import com.codedisaster.steamworks.test.mixin.FriendsMixin;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -15,22 +16,13 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 	private static final int readBufferCapacity = 4096;
 	private static final int sendBufferCapacity = 4096;
 
-	private SteamFriends friends;
+	private FriendsMixin friends;
 	private SteamNetworking networking;
 
 	private ByteBuffer packetReadBuffer = ByteBuffer.allocateDirect(readBufferCapacity);
 	private ByteBuffer packetSendBuffer = ByteBuffer.allocateDirect(sendBufferCapacity);
 
-	private Map<Integer, SteamID> friendUserIDs = new ConcurrentHashMap<Integer, SteamID>();
 	private Map<Integer, SteamID> remoteUserIDs = new ConcurrentHashMap<Integer, SteamID>();
-
-	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
-		@Override
-		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
-			System.out.println("Persona state changed: " +
-					"accountID=" + steamID.getAccountID() + ", change=" + change.name());
-		}
-	};
 
 	private SteamNetworkingCallback peer2peerCallback = new SteamNetworkingCallback() {
 		@Override
@@ -51,7 +43,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
-		friends = new SteamFriends(friendsCallback);
+		friends = new FriendsMixin();
 		networking = new SteamNetworking(peer2peerCallback, SteamNetworking.API.Client);
 
 		networking.allowP2PPacketRelay(true);
@@ -102,8 +94,8 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 			SteamID steamIDReceiver = null;
 			if (remoteUserIDs.containsKey(receiverID)) {
 				steamIDReceiver = remoteUserIDs.get(receiverID);
-			} else if (friendUserIDs.containsKey(receiverID)) {
-				steamIDReceiver = friendUserIDs.get(receiverID);
+			} else if (friends.isFriendAccountID(receiverID)) {
+				steamIDReceiver = friends.getFriendSteamID(receiverID);
 			} else {
 				System.out.println("Error: unknown userID " + receiverID + " (no friend, not connected)");
 			}
@@ -147,19 +139,9 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 			for (SteamID steamIDUser : remoteUserIDs.values()) {
 				System.out.println("  " + steamIDUser.getAccountID());
 			}
-		} else if (input.equals("friends list")) {
-			int friendsCount = friends.getFriendCount(SteamFriends.FriendFlags.Immediate);
-			System.out.println(friendsCount + " friends");
-			for (int i = 0; i < friendsCount; i++) {
-				SteamID steamIDUser = friends.getFriendByIndex(i, SteamFriends.FriendFlags.Immediate);
-				friendUserIDs.put(steamIDUser.getAccountID(), steamIDUser);
-				String personaName = friends.getFriendPersonaName(steamIDUser);
-				SteamFriends.PersonaState personaState = friends.getFriendPersonaState(steamIDUser);
-				System.out.println("  " + steamIDUser.getAccountID() + " (" +
-						personaName + ", " + personaState.name() + ")");
-			}
 		}
 
+		friends.processInput(input);
 	}
 
 	private void registerRemoteSteamID(SteamID steamIDUser) {
