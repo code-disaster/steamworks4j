@@ -136,14 +136,20 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 		if (input.equals("lobby list")) {
 			listLobbies();
 		} else if (input.startsWith("lobby request ")) {
-			int limit = Integer.parseInt(input.substring("lobby request ".length()));
-			System.out.println("  requesting up to " + limit + " lobbies.");
+			String[] parameters = input.substring("lobby request ".length()).split(" ");
+			int limit = Integer.parseInt(parameters[0]);
+			System.out.println("  - requesting up to " + limit + " lobbies");
 			matchmaking.addRequestLobbyListResultCountFilter(limit);
+			if (parameters.length > 1) {
+				String filter = parameters[1];
+				System.out.println("  - string filter: " + filter);
+				matchmaking.addRequestLobbyListStringFilter("c0deb33f", filter, SteamMatchmaking.LobbyComparison.Equal);
+			}
 			matchmaking.requestLobbyList();
 		} else if (input.startsWith("lobby create ")) {
 			int maxMembers = Integer.parseInt(input.substring("lobby create ".length()));
 			System.out.println("  creating lobby for " + maxMembers+ " players.");
-			matchmaking.createLobby(SteamMatchmaking.LobbyType.FriendsOnly, maxMembers);
+			matchmaking.createLobby(SteamMatchmaking.LobbyType.Public, maxMembers);
 		} else if (input.startsWith("lobby join ")) {
 			long id = Long.parseLong(input.substring("lobby join ".length()), 16);
 			if (lobbies.containsKey(id)) {
@@ -167,7 +173,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 				long lobbyID = Long.parseLong(ids[0], 16);
 				int playerAccountID = Integer.parseInt(ids[1]);
 				if (lobbies.containsKey(lobbyID)) {
-					System.out.println("  inviting player " + playerAccountID + "to lobby " + lobbyID);
+					System.out.println("  inviting player " + playerAccountID + " to lobby " + lobbyID);
 					if (friends.isFriendAccountID(playerAccountID)) {
 						matchmaking.inviteUserToLobby(lobbies.get(lobbyID), friends.getFriendSteamID(playerAccountID));
 					} else {
