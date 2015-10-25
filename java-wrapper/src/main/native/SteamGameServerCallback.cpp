@@ -35,8 +35,8 @@ void SteamGameServerCallback::onSteamServersConnected(SteamServersConnected_t* c
 
 void SteamGameServerCallback::onSteamServerConnectFailure(SteamServerConnectFailure_t* callback) {
 	invokeCallback({
-		callVoidMethod(env, "onSteamServerConnectFailure", "(I)V",
-			(jint) callback->m_eResult);
+		callVoidMethod(env, "onSteamServerConnectFailure", "(IZ)V",
+			(jint) callback->m_eResult, callback->m_bStillRetrying);
 	});
 }
 

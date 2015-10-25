@@ -8,7 +8,7 @@ public interface SteamGameServerCallback {
 
 	void onSteamServersConnected();
 
-	void onSteamServerConnectFailure(SteamResult result);
+	void onSteamServerConnectFailure(SteamResult result, boolean stillRetrying);
 
 	void onSteamServersDisconnected(SteamResult result);
 

@@ -16,8 +16,8 @@ class SteamGameServerCallbackAdapter extends SteamCallbackAdapter<SteamGameServe
 		callback.onSteamServersConnected();
 	}
 
-	void onSteamServerConnectFailure(int result) {
-		callback.onSteamServerConnectFailure(SteamResult.byValue(result));
+	void onSteamServerConnectFailure(int result, boolean stillRetrying) {
+		callback.onSteamServerConnectFailure(SteamResult.byValue(result), stillRetrying);
 	}
 
 	void onSteamServersDisconnected(int result) {

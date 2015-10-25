@@ -103,6 +103,7 @@ public enum SteamResult {
 	RefundToWallet(98),
 	EmailSendFailure(99),
 	NotSettled(100),
+	NeedCaptcha(101),
 
 	/** If this is returned(), we missed to "port" an Steam error code above. */
 	UnknownErrorCode_NotImplementedByAPI(0);

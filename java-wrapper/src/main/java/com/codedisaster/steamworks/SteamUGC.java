@@ -18,19 +18,26 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public enum MatchingUGCType {
-		Items,
-		ItemsMtx,
-		ItemsReadyToUse,
-		Collections,
-		Artwork,
-		Videos,
-		Screenshots,
-		AllGuides,
-		WebGuides,
-		IntegratedGuides,
-		UsableInGame,
-		ControllerBindings,
-		GameManagedItems
+		Items(0),
+		ItemsMtx(1),
+		ItemsReadyToUse(2),
+		Collections(3),
+		Artwork(4),
+		Videos(5),
+		Screenshots(6),
+		AllGuides(7),
+		WebGuides(8),
+		IntegratedGuides(9),
+		UsableInGame(10),
+		ControllerBindings(11),
+		GameManagedItems(12),
+		All(~0);
+
+		private int value;
+
+		MatchingUGCType(int value) {
+			this.value = value;
+		}
 	}
 
 	public enum UserUGCListSortOrder {
@@ -119,17 +126,17 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public SteamUGCQuery createQueryUserUGCRequest(long accountID, UserUGCList listType,
-										  MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
-										  long creatorAppID, long consumerAppID, int page) {
+												   MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
+												   long creatorAppID, long consumerAppID, int page) {
 
 		return new SteamUGCQuery(createQueryUserUGCRequest(pointer, accountID, listType.ordinal(),
-				matchingType.ordinal(), sortOrder.ordinal(), creatorAppID, consumerAppID, page));
+				matchingType.value, sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
 
 	public SteamUGCQuery createQueryAllUGCRequest(UGCQueryType queryType, MatchingUGCType matchingType,
-			  							  long creatorAppID, long consumerAppID, int page) {
+												  long creatorAppID, long consumerAppID, int page) {
 
-		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.ordinal(),
+		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.value,
 				creatorAppID, consumerAppID, page));
 	}
 
