@@ -1,5 +1,7 @@
 package com.codedisaster.steamworks;
 
+import java.nio.ByteBuffer;
+
 public class SteamMatchmaking extends SteamInterface {
 
 	public enum LobbyType {
@@ -112,6 +114,24 @@ public class SteamMatchmaking extends SteamInterface {
 		}
 	}
 
+	public static class ChatEntry {
+
+		private long steamIDUser;
+		private int chatEntryType;
+
+		public ChatEntry() {
+
+		}
+
+		public SteamID getSteamIDUser() {
+			return new SteamID(steamIDUser);
+		}
+
+		public ChatEntryType getChatEntryType() {
+			return ChatEntryType.byCode(chatEntryType);
+		}
+	}
+
 	public SteamMatchmaking(SteamMatchmakingCallback callback) {
 		super(SteamAPI.getSteamMatchmakingPointer(), createCallback(new SteamMatchmakingCallbackAdapter(callback)));
 	}
@@ -176,8 +196,8 @@ public class SteamMatchmaking extends SteamInterface {
 		return getNumLobbyMembers(pointer, steamIDLobby.handle);
 	}
 
-	public SteamID getLobbyMemberByIndex(SteamID steamIDLobby, int member) {
-		return new SteamID(getLobbyMemberByIndex(pointer, steamIDLobby.handle, member));
+	public SteamID getLobbyMemberByIndex(SteamID steamIDLobby, int memberIndex) {
+		return new SteamID(getLobbyMemberByIndex(pointer, steamIDLobby.handle, memberIndex));
 	}
 
 	public String getLobbyData(SteamID steamIDLobby, String key) {
@@ -188,8 +208,130 @@ public class SteamMatchmaking extends SteamInterface {
 		return setLobbyData(pointer, steamIDLobby.handle, key, value);
 	}
 
+	public boolean setLobbyData(SteamID steamIDLobby, SteamMatchMakingKeyValuePair keyValuePair) {
+		return setLobbyData(pointer, steamIDLobby.handle, keyValuePair.getKey(), keyValuePair.getValue());
+	}
+
+	public int getLobbyDataCount(SteamID steamIDLobby) {
+		return getLobbyDataCount(pointer, steamIDLobby.handle);
+	}
+
+	public boolean getLobbyDataByIndex(SteamID steamIDLobby, int lobbyDataIndex,
+									   SteamMatchMakingKeyValuePair keyValuePair) {
+		return getLobbyDataByIndex(pointer, steamIDLobby.handle, lobbyDataIndex, keyValuePair);
+	}
+
 	public boolean deleteLobbyData(SteamID steamIDLobby, String key) {
 		return deleteLobbyData(pointer, steamIDLobby.handle, key);
+	}
+
+	/**
+	 * Sends chat message from a direct {@link ByteBuffer}.
+	 *
+	 * The message data sent ranges from <code>ByteBuffer.position()</code> to <code>ByteBuffer.limit()</code>.
+	 */
+	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data) throws SteamException {
+		int offset = data.position();
+		int size = data.limit() - offset;
+		return sendLobbyChatMsg(steamIDLobby, data, offset, size);
+	}
+
+	/**
+	 * Sends chat message from a direct {@link ByteBuffer}.
+	 *
+	 * This function ignores the buffer's internal position and limit properties.
+	 */
+	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data, int offset, int size) throws SteamException {
+
+		if (!data.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		if (data.capacity() < offset + size) {
+			throw new SteamException("Buffer capacity exceeded!");
+		}
+
+		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data, offset, size);
+	}
+
+	public boolean sendLobbyChatMsg(SteamID steamIDLobby, String data) {
+		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data);
+	}
+
+	/**
+	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
+	 * and a direct {@link ByteBuffer}.
+	 *
+	 * The message data is stored starting at <code>ByteBuffer.position()</code>, up to <code>ByteBuffer.limit()</code>.
+	 * On return, the buffer limit is set to <code>ByteBuffer.position()</code> plus the number of bytes received.
+	 */
+	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
+								 ByteBuffer dest) throws SteamException {
+
+		int offset = dest.position();
+		int capacity = dest.limit() - offset;
+
+		return getLobbyChatEntry(steamIDLobby, chatID, chatEntry, dest, offset, capacity);
+	}
+
+	/**
+	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
+	 * and a direct {@link ByteBuffer}.
+	 *
+	 * This function ignores the buffer's internal position and limit properties. On return, the buffer position is set
+	 * to <code>offset</code>, the buffer limit is set to <code>offset</code> plus the number of bytes received.
+	 */
+	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
+								 ByteBuffer dest, int offset, int capacity) throws SteamException {
+
+		if (!dest.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		if (dest.capacity() < offset + capacity) {
+			throw new SteamException("Buffer capacity exceeded!");
+		}
+
+		int bytesRead = getLobbyChatEntry(pointer, steamIDLobby.handle, chatID, chatEntry, dest, offset, capacity);
+
+		if (bytesRead >= 0) {
+			dest.position(offset);
+			dest.limit(offset + bytesRead);
+		}
+
+		return bytesRead;
+	}
+
+	public boolean requestLobbyData(SteamID steamIDLobby) {
+		return requestLobbyData(pointer, steamIDLobby.handle);
+	}
+
+	public boolean setLobbyMemberLimit(SteamID steamIDLobby, int maxMembers) {
+		return setLobbyMemberLimit(pointer, steamIDLobby.handle, maxMembers);
+	}
+
+	public boolean getLobbyMemberLimit(SteamID steamIDLobby) {
+		return getLobbyMemberLimit(pointer, steamIDLobby.handle);
+	}
+
+	public boolean setLobbyType(SteamID steamIDLobby, LobbyType lobbyType) {
+		return setLobbyType(pointer, steamIDLobby.handle, lobbyType.ordinal());
+	}
+
+	public boolean setLobbyJoinable(SteamID steamIDLobby, boolean joinable) {
+		return setLobbyJoinable(pointer, steamIDLobby.handle, joinable);
+	}
+
+	public SteamID getLobbyOwner(SteamID steamIDLobby) {
+		return new SteamID(getLobbyOwner(pointer, steamIDLobby.handle));
+	}
+
+	public boolean setLobbyOwner(SteamID steamIDLobby, SteamID steamIDNewOwner) {
+		return setLobbyOwner(pointer, steamIDLobby.handle, steamIDNewOwner.handle);
+	}
+
+	public boolean setLinkedLobby(SteamID steamIDLobby, SteamID steamIDLobbyDependent) {
+		return setLinkedLobby(pointer, steamIDLobby.handle, steamIDLobbyDependent.handle);
 	}
 
 	// @off
@@ -285,9 +427,9 @@ public class SteamMatchmaking extends SteamInterface {
 		return matchmaking->GetNumLobbyMembers((uint64) steamIDLobby);
 	*/
 
-	private static native long getLobbyMemberByIndex(long pointer, long steamIDLobby, int member); /*
+	private static native long getLobbyMemberByIndex(long pointer, long steamIDLobby, int memberIndex); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
-		CSteamID steamID = matchmaking->GetLobbyMemberByIndex((uint64) steamIDLobby, member);
+		CSteamID steamID = matchmaking->GetLobbyMemberByIndex((uint64) steamIDLobby, memberIndex);
 		return (int64) steamID.ConvertToUint64();
 	*/
 
@@ -302,9 +444,107 @@ public class SteamMatchmaking extends SteamInterface {
 		return matchmaking->SetLobbyData((uint64) steamIDLobby, key, value);
 	*/
 
+	private static native int getLobbyDataCount(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->GetLobbyDataCount((uint64) steamIDLobby);
+	*/
+
+	private static native boolean getLobbyDataByIndex(long pointer, long steamIDLobby, int lobbyDataIndex,
+													  SteamMatchMakingKeyValuePair keyValuePair); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		MatchMakingKeyValuePair_t result;
+		bool success = matchmaking->GetLobbyDataByIndex((uint64) steamIDLobby, lobbyDataIndex,
+			result.m_szKey, 256, result.m_szValue, 256);
+		if (success) {
+			jclass clazz = env->GetObjectClass(keyValuePair);
+
+			jstring key = env->NewStringUTF(result.m_szKey);
+			jfieldID field = env->GetFieldID(clazz, "key", "Ljava/lang/String;");
+			env->SetObjectField(keyValuePair, field, key);
+
+			jstring value = env->NewStringUTF(result.m_szValue);
+			field = env->GetFieldID(clazz, "value", "Ljava/lang/String;");
+			env->SetObjectField(keyValuePair, field, value);
+		}
+		return success;
+	*/
+
 	private static native boolean deleteLobbyData(long pointer, long steamIDLobby, String key); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->DeleteLobbyData((uint64) steamIDLobby, key);
+	*/
+
+	private static native boolean sendLobbyChatMsg(long pointer, long steamIDLobby,
+												   ByteBuffer data, int offset, int size); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SendLobbyChatMsg((uint64) steamIDLobby, &data[offset], size);
+	*/
+
+	private static native boolean sendLobbyChatMsg(long pointer, long steamIDLobby, String message); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		int len = (int) strlen(message) + 1;
+		return matchmaking->SendLobbyChatMsg((uint64) steamIDLobby, message, len);
+	*/
+
+	private static native int getLobbyChatEntry(long pointer, long steamIDLobby, int chatID, ChatEntry chatEntry,
+												ByteBuffer buffer, int offset, int size); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+
+		CSteamID steamIDUser;
+		EChatEntryType chatEntryType;
+		int received = matchmaking->GetLobbyChatEntry((uint64) steamIDLobby, chatID, &steamIDUser, &buffer[offset], size, &chatEntryType);
+
+		if (received >= 0) {
+			jclass clazz = env->GetObjectClass(chatEntry);
+
+			jfieldID field = env->GetFieldID(clazz, "steamIDUser", "J");
+			env->SetLongField(chatEntry, field, (jlong) steamIDUser.ConvertToUint64());
+
+			field = env->GetFieldID(clazz, "chatEntryType", "I");
+			env->SetIntField(chatEntry, field, (jint) chatEntryType);
+		}
+
+		return received;
+	*/
+
+	private static native boolean requestLobbyData(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->RequestLobbyData((uint64) steamIDLobby);
+	*/
+
+	private static native boolean setLobbyMemberLimit(long pointer, long steamIDLobby, int maxMembers); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLobbyMemberLimit((uint64) steamIDLobby, maxMembers);
+	*/
+
+	private static native boolean getLobbyMemberLimit(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->GetLobbyMemberLimit((uint64) steamIDLobby);
+	*/
+
+	private static native boolean setLobbyType(long pointer, long steamIDLobby, int lobbyType); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLobbyType((uint64) steamIDLobby, (ELobbyType) lobbyType);
+	*/
+
+	private static native boolean setLobbyJoinable(long pointer, long steamIDLobby, boolean joinable); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLobbyJoinable((uint64) steamIDLobby, joinable);
+	*/
+
+	private static native long getLobbyOwner(long pointer, long steamIDLobby); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return (int64) matchmaking->GetLobbyOwner((uint64) steamIDLobby).ConvertToUint64();
+	*/
+
+	private static native boolean setLobbyOwner(long pointer, long steamIDLobby, long steamIDNewOwner); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLobbyOwner((uint64) steamIDLobby, (uint64) steamIDNewOwner);
+	*/
+
+	private static native boolean setLinkedLobby(long pointer, long steamIDLobby, long steamIDLobbyDependent); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->SetLinkedLobby((uint64) steamIDLobby, (uint64) steamIDLobbyDependent);
 	*/
 
 }
