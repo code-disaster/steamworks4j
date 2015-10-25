@@ -8,6 +8,9 @@ abstract class SteamNativeHandle {
 		this.handle = handle;
 	}
 
+	/**
+	 * Marked as {@link Deprecated} because it is not meant to be called by user applications.
+	 */
 	@Deprecated
 	public long getNativeHandle() {
 		return handle;

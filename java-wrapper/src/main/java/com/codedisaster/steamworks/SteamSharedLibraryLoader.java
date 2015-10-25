@@ -104,8 +104,9 @@ class SteamSharedLibraryLoader {
 			if (length == -1) break;
 			output.write(buffer, 0, length);
 		}
-		input.close();
+
 		output.close();
+		zip.close();
 
 		return nativeFile.getAbsolutePath();
 	}

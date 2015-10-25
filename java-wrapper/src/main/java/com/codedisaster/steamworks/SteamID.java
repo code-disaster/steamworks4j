@@ -12,6 +12,10 @@ public class SteamID extends SteamNativeHandle {
 		super(steamID.handle);
 	}
 
+	/**
+	 * This constructor is package-private to not invite user applications to persist and recover
+	 * ID values. Instead, Steamworks API functions should always be used to obtain valid steam IDs.
+	 */
 	SteamID(long id) {
 		super(id);
 	}

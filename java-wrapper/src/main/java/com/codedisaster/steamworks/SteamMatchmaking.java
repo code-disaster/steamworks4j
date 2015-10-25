@@ -119,10 +119,6 @@ public class SteamMatchmaking extends SteamInterface {
 		private long steamIDUser;
 		private int chatEntryType;
 
-		public ChatEntry() {
-
-		}
-
 		public SteamID getSteamIDUser() {
 			return new SteamID(steamIDUser);
 		}
