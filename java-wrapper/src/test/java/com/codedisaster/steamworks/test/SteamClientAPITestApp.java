@@ -262,7 +262,17 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		}
 
 		@Override
+		public void onGameOverlayActivated(boolean active) {
+
+		}
+
+		@Override
 		public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
+
+		}
+
+		@Override
+		public void onAvatarImageLoaded(SteamID steamID, int image, int width, int height) {
 
 		}
 	};

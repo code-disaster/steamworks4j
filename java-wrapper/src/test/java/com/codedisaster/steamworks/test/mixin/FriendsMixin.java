@@ -31,10 +31,20 @@ public class FriendsMixin {
 		}
 
 		@Override
+		public void onGameOverlayActivated(boolean active) {
+
+		}
+
+		@Override
 		public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
 			System.out.println("Game lobby join requested");
 			System.out.println("  - lobby: " + Long.toHexString(steamIDLobby.getNativeHandle()));
 			System.out.println("  - by friend accountID: " + steamIDFriend.getAccountID());
+		}
+
+		@Override
+		public void onAvatarImageLoaded(SteamID steamID, int image, int width, int height) {
+
 		}
 	};
 

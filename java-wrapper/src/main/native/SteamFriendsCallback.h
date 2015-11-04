@@ -10,5 +10,7 @@ public:
 	~SteamFriendsCallback();
 
 	STEAM_CALLBACK(SteamFriendsCallback, onPersonaStateChange, PersonaStateChange_t, m_CallbackPersonaStateChange);
+	STEAM_CALLBACK(SteamFriendsCallback, onGameOverlayActivated, GameOverlayActivated_t, m_CallbackGameOverlayActivated);
 	STEAM_CALLBACK(SteamFriendsCallback, onGameLobbyJoinRequested, GameLobbyJoinRequested_t, m_CallbackGameLobbyJoinRequested);
+	STEAM_CALLBACK(SteamFriendsCallback, onAvatarImageLoaded, AvatarImageLoaded_t, m_CallbackAvatarImageLoaded);
 };

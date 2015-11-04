@@ -3,7 +3,8 @@
 - Added buffer validation check to SteamUtils.getImageRGBA().
 - Added SteamMatchmaking interface, implementing most lobby functions.
 - Added SteamMatchmakingTestApp.
-- API change: matchmaking added callback SteamFriendsCallback.onGameLobbyJoinRequested().
+- API change: added SteamFriendsCallback.onGameLobbyJoinRequested().
+- API change: added SteamFriendsCallback.onGameOverlayActivated(), onAvatarImageLoaded().
 
 [1.2.1]
 - Added UserStatsStored, UserAchievementStored callbacks.

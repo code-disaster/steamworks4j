@@ -18,8 +18,16 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 		}
 	}
 
+	void onGameOverlayActivated(boolean active) {
+		callback.onGameOverlayActivated(active);
+	}
+
 	void onGameLobbyJoinRequested(long steamIDLobby, long steamIDFriend) {
 		callback.onGameLobbyJoinRequested(new SteamID(steamIDLobby), new SteamID(steamIDFriend));
+	}
+
+	void onAvatarImageLoaded(long steamID, int image, int width, int height) {
+		callback.onAvatarImageLoaded(new SteamID(steamID), image, width, height);
 	}
 
 }
