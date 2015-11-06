@@ -14,7 +14,7 @@ Run ```mvn package -P with-dependencies``` to compile an additional jar with dep
 
 #### Prebuilt native libraries
 
-You don't need to build the native libraries yourself if you don't plan to *modify* the native code of *steamworks4j*. There are prebuilt versions located in the ```steamworks4j/natives/libs/``` folder. The Maven build packs them all into *steamworks4j-natives.jar* which is then bundled with the primary JAR file.
+You *do not need* to build the native libraries yourself if you don't plan to *modify* the native code of *steamworks4j*. There are prebuilt versions located in the ```steamworks4j/natives/libs/``` folder. The Maven build packs them all into *steamworks4j-natives.jar* which is then bundled with the primary JAR file.
 
 #### External dependencies
 

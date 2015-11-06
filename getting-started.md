@@ -8,6 +8,8 @@ layout: default
 
 To add Steamworks support, you just have to download and add ```steamworks4j-{{ site.steamworks4j.version }}.jar``` to your Java project.
 
+> *steamworks4j-{{ site.steamworks4j.version }}.jar* is the only file you need to ship with your game. It already embeds *steamworks4j-natives.jar*, which by itself contains all platform-dependent, native libraries.
+
 Major updates are released on Maven Central, so the easiest way is to add the library as an external dependency, using your favorite build environment.
 
 Maven:
@@ -28,19 +30,25 @@ dependencies {
 }
 ```
 
+If you don't use any build tools, direct downloads of .jar files are also available:
+
+```
+http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/steamworks4j/{{ site.steamworks4j.version }}
+```
+
 To learn how to build the library from source code, please refer to the [build instructions]({{ '/build-instructions.html' | prepend: site.baseurl | prepend: site.url }}).
 
 ### Basic usage
 
 #### Preparation
 
+> You'll notice that the library source code is documented very scarcely. That's a deliberate choice. I assume that you are a **registered Steam developer** and have access to the Steamworks documentation.
+
 Please refer to the official documentation to learn about the steps needed to prepare your application for use with Steam. Here's a very brief checklist:
 
 - You need a properly configured SteamApp depot, e.g. you should be able to upload to and run a development build from Steam.
 - The Steam client must be running.
-- A valid steam_appid.txt needs to be present in the working directory of your application.
-
-> You'll notice that the library source code is documented very scarcely. That's a deliberate choice. I assume that you are a **registered Steam developer** and have access to the Steamworks documentation.
+- For development, a valid steam_appid.txt needs to be present in the working directory of your application.
 
 #### Initialization
 
@@ -52,7 +60,7 @@ if (!SteamAPI.init()) {
 }
 ```
 
-By default, ```SteamAPI.init()``` tries to load the native libraries from *steamworks4j-natives.jar* found in your application's resource path. There's a second function which allows to specify the path to a custom JAR, or a folder containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries directly from ```steamworks4j/natives/libs/``` for development purposes.
+By default, ```SteamAPI.init()``` tries to automatically detect the operating system it runs on, then extracts the appropriate native libraries from *steamworks4j-natives.jar* found in your application's resource path to a temporary folder. There's a second function which allows to specify the path to a custom JAR, or to a directory containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries from ```steamworks4j/natives/libs/``` for development purposes.
 
 ```java
 if (!SteamAPI.init("../natives/libs")) {
@@ -74,7 +82,7 @@ if (SteamAPI.isSteamRunning()) {
 
 The *steamworks4j* library follows the Steamworks C++ API as close as feasible. In general, for each interface exposed by the C++ API, there's an equivalent Java class (if implemented). For example, the ```SteamUserStats``` Java class provides access to the ```ISteamUserStats``` C++ API.
 
-> At present, not *all* interfaces are implemented by the Java library. Some of them which are, do not expose the full API. In general, I've added everything I needed for our own games, plus what I've been asked to. Feel free to send feature requests, or even better, pull requests on Github to add the functions and interfaces still missing.
+> At present, not *all* interfaces are implemented by the Java library. Some of those which are, do not expose the full API. In general, I've added everything I needed for our own games, plus what I've been asked to. Feel free to send feature requests, or even better, pull requests on Github to add the functions and interfaces still missing.
 
 If a C++ interface contains functions which trigger ```STEAM_CALLBACK()``` or ```CCallResult<>``` style callbacks (say, most of them), the Java class is accompanied by a callback interface which must be implemented by the user application.
 
