@@ -52,6 +52,14 @@ Developer: [Sillysoft Games][sillysoft]<br>
 Uses: achievements, user stats, leaderboards<br>
 
 ---
+### [The Madness of Little Emma](http://store.steampowered.com/app/418150/)
+
+Developer: [Bartosz Bojarowski][madnessoflittleemma]<br>
+Uses: achievements, leaderboards<br>
+
+![The Madness of Little Emma](images/showcase_madnessoflittleemma.png)
+
+---
 ### [Mute Crimson+](http://store.steampowered.com/app/384280/)
 
 Developer: [Iced Lizard Games][icedlizardgames]<br>
@@ -114,6 +122,7 @@ Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 [digitalsoulgames]: http://www.digitalsoulgames.org
 [icedlizardgames]: http://icedlizardgames.com
 [hammerspacegames]: http://www.quarriesofscred.com
+[madnessoflittleemma]: http://madnessoflittleemma.com/
 [orangepixel]: http://www.orangepixel.net
 [phr00t]: http://www.phr00t.com
 [robotality]: http://robotality.com
