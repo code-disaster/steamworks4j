@@ -46,6 +46,12 @@ Uses: achievements<br>
 ![Heroes of Loot](images/showcase_heroesofloot.png)
 
 ---
+### [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/)
+
+Developer: [Shadebob Games][shadebobgames]<br>
+Uses: achievements, leaderboards, user-generated content<br>
+
+---
 ### [Lux Delux](http://store.steampowered.com/app/341950/)
 
 Developer: [Sillysoft Games][sillysoft]<br>
@@ -127,6 +133,7 @@ Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 [phr00t]: http://www.phr00t.com
 [robotality]: http://robotality.com
 [rflex]: http://rflex-game.com
+[shadebobgames]: http://www.shadebob.org
 [sillysoft]: http://sillysoft.net
 [snipefish]: http://solarwar.net
 [teamflow]: http://www.runordiegame.com
