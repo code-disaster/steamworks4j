@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-jnigen</artifactId>
-			<version>1.2.0</version>
+			<version>1.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.code-disaster.steamworks4j</groupId>
