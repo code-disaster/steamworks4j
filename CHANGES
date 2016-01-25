@@ -1,3 +1,6 @@
+[1.2.3]
+- Fixed native pointers possibly truncated on Windows 64 bit.
+
 [1.2.2]
 - Updated to Steamworks SDK v1.35.
 - Added buffer validation check to SteamUtils.getImageRGBA().
