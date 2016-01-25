@@ -126,7 +126,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
-		return (long) new SteamRemoteStorageCallback(env, javaCallback);
+		return (intp) new SteamRemoteStorageCallback(env, javaCallback);
 	*/
 
 	static private native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*

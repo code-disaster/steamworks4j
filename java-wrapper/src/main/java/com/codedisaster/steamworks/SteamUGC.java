@@ -227,7 +227,7 @@ public class SteamUGC extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamUGCCallbackAdapter javaCallback); /*
-		return (long) new SteamUGCCallback(env, javaCallback);
+		return (intp) new SteamUGCCallback(env, javaCallback);
 	*/
 
 	static private native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
@@ -236,7 +236,7 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryUserUGCRequest(accountID, (EUserUGCList) listType,
 			(EUGCMatchingUGCType) matchingType, (EUserUGCListSortOrder) sortOrder, creatorAppID, consumerAppID, page);
-		return (long) query;
+		return (intp) query;
 	*/
 
 	static private native long createQueryAllUGCRequest(long pointer, int queryType, int matchingType,
@@ -244,13 +244,13 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
 			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
-		return (long) query;
+		return (intp) query;
 	*/
 
 	static private native long createQueryUGCDetailsRequest(long pointer, long[] publishedFileIDs, int numPublishedFileIDs); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryUGCDetailsRequest((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
-		return (long) query;
+		return (intp) query;
 	*/
 
 	static private native boolean setReturnTotalOnly(long pointer, long query, boolean returnTotalOnly); /*

@@ -152,9 +152,9 @@ public class SteamNetworking extends SteamInterface {
 
 	static private native long createCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
 		if (isClient) {
-			return (long) new SteamNetworkingCallback(env, javaCallback);
+			return (intp) new SteamNetworkingCallback(env, javaCallback);
 		} else {
-			return (long) new SteamGameServerNetworkingCallback(env, javaCallback);
+			return (intp) new SteamGameServerNetworkingCallback(env, javaCallback);
 		}
 	*/
 

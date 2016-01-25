@@ -183,9 +183,9 @@ public class SteamHTTP extends SteamInterface {
 
 	private static native long createCallback(SteamHTTPCallbackAdapter javaCallback, boolean isClient); /*
 		if (isClient) {
-			return (long) new SteamHTTPCallback(env, javaCallback);
+			return (intp) new SteamHTTPCallback(env, javaCallback);
 		} else {
-			return (long) new SteamGameServerHTTPCallback(env, javaCallback);
+			return (intp) new SteamGameServerHTTPCallback(env, javaCallback);
 		}
 	*/
 

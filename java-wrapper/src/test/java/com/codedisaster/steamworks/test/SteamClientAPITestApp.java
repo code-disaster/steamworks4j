@@ -302,6 +302,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		friends = new SteamFriends(friendsCallback);
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
+		System.out.println("Local user friends name: " + friends.getPersonaName());
 		System.out.println("App ID: " + utils.getAppID());
 
 		System.out.println("App build ID: " + apps.getAppBuildId());

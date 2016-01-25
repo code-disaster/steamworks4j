@@ -154,7 +154,7 @@ public class SteamUserStats extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamUserStatsCallbackAdapter javaCallback); /*
-		return (long) new SteamUserStatsCallback(env, javaCallback);
+		return (intp) new SteamUserStatsCallback(env, javaCallback);
 	*/
 
 	static private native boolean requestCurrentStats(long pointer); /*

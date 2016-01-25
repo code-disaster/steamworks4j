@@ -75,19 +75,19 @@ public class SteamGameServerAPI {
 	*/
 
 	static native long getSteamGameServerPointer(); /*
-		return (long) SteamGameServer();
+		return (intp) SteamGameServer();
 	*/
 
 	static native long getSteamGameServerNetworkingPointer(); /*
-		return (long) SteamGameServerNetworking();
+		return (intp) SteamGameServerNetworking();
 	*/
 
 	static native long getSteamGameServerStatsPointer(); /*
-		return (long) SteamGameServerStats();
+		return (intp) SteamGameServerStats();
 	*/
 
 	static native long getSteamGameServerHTTPPointer(); /*
-		return (long) SteamGameServerHTTP();
+		return (intp) SteamGameServerHTTP();
 	*/
 
 }

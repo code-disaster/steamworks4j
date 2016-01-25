@@ -66,7 +66,7 @@ public class SteamGameServerStats extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamGameServerStatsCallbackAdapter javaCallback); /*
-		return (long) new SteamGameServerStatsCallback(env, javaCallback);
+		return (intp) new SteamGameServerStatsCallback(env, javaCallback);
 	*/
 
 	static private native long requestUserStats(long pointer, long steamIDUser); /*

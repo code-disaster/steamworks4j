@@ -60,43 +60,43 @@ public class SteamAPI {
 	*/
 
 	static native long getSteamAppsPointer(); /*
-		return (long) SteamApps();
+		return (intp) SteamApps();
 	*/
 
 	static native long getSteamFriendsPointer(); /*
-		return (long) SteamFriends();
+		return (intp) SteamFriends();
 	*/
 
 	static native long getSteamMatchmakingPointer(); /*
-		return (long) SteamMatchmaking();
+		return (intp) SteamMatchmaking();
 	*/
 
 	static native long getSteamNetworkingPointer(); /*
-		return (long) SteamNetworking();
+		return (intp) SteamNetworking();
 	*/
 
 	static native long getSteamRemoteStoragePointer(); /*
-		return (long) SteamRemoteStorage();
+		return (intp) SteamRemoteStorage();
 	*/
 
 	static native long getSteamHTTPPointer(); /*
-		return (long) SteamHTTP();
+		return (intp) SteamHTTP();
 	*/
 
 	static native long getSteamUGCPointer(); /*
-		return (long) SteamUGC();
+		return (intp) SteamUGC();
 	*/
 
 	static native long getSteamUserPointer(); /*
-		return (long) SteamUser();
+		return (intp) SteamUser();
 	*/
 
 	static native long getSteamUserStatsPointer(); /*
-		return (long) SteamUserStats();
+		return (intp) SteamUserStats();
 	*/
 
 	static native long getSteamUtilsPointer(); /*
-		return (long) SteamUtils();
+		return (intp) SteamUtils();
 	*/
 
 }

@@ -222,7 +222,7 @@ public class SteamGameServer extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamGameServerCallbackAdapter javaCallback); /*
-		return (long) new SteamGameServerCallback(env, javaCallback);
+		return (intp) new SteamGameServerCallback(env, javaCallback);
 	*/
 
 	static private native void setProduct(long pointer, String product); /*

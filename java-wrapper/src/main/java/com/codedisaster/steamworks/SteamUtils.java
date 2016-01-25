@@ -90,7 +90,7 @@ public class SteamUtils extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamUtilsCallbackAdapter javaCallback); /*
-		return (long) new SteamUtilsCallback(env, javaCallback);
+		return (intp) new SteamUtilsCallback(env, javaCallback);
 	*/
 
 	static private native int getImageWidth(long pointer, int image); /*

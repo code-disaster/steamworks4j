@@ -337,7 +337,7 @@ public class SteamMatchmaking extends SteamInterface {
 	*/
 
 	private static native long createCallback(SteamMatchmakingCallbackAdapter javaCallback); /*
-		return (long) new SteamMatchmakingCallback(env, javaCallback);
+		return (intp) new SteamMatchmakingCallback(env, javaCallback);
 	*/
 
 	private static native long requestLobbyList(long pointer, long callback); /*

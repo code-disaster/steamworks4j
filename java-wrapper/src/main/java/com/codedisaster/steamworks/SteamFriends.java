@@ -143,7 +143,7 @@ public class SteamFriends extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamFriendsCallbackAdapter javaCallback); /*
-		return (long) new SteamFriendsCallback(env, javaCallback);
+		return (intp) new SteamFriendsCallback(env, javaCallback);
 	*/
 
 	static private native String getPersonaName(long pointer); /*

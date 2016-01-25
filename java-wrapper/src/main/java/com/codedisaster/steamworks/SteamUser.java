@@ -44,7 +44,7 @@ public class SteamUser extends SteamInterface {
 	*/
 
 	static private native long createCallback(SteamUserCallbackAdapter javaCallback); /*
-		return (long) new SteamUserCallback(env, javaCallback);
+		return (intp) new SteamUserCallback(env, javaCallback);
 	*/
 
 	static private native long getSteamID(long pointer); /*
