@@ -6,7 +6,7 @@
 
 	<groupId>com.code-disaster.steamworks4j</groupId>
 	<artifactId>steamworks4j-parent</artifactId>
-	<version>1.2.3</version>
+	<version>1.2.4-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
