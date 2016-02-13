@@ -13,6 +13,14 @@ Developer: [Battlebard Games][battlebardgames]<br>
 Uses: achievements, user stats, leaderboards<br>
 
 ---
+### [Crazy Belts](http://store.steampowered.com/app/355510/)
+
+Developer: [jemchicomac][jemchicomac]<br>
+Uses: achievements<br>
+
+![Crazy Belts](images/showcase_crazybelts.png)
+
+---
 ### [Gunslugs](http://store.steampowered.com/app/371890/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -128,6 +136,7 @@ Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 [digitalsoulgames]: http://www.digitalsoulgames.org
 [icedlizardgames]: http://icedlizardgames.com
 [hammerspacegames]: http://www.quarriesofscred.com
+[jemchicomac]: http://www.jemchicomac.com
 [madnessoflittleemma]: http://madnessoflittleemma.com/
 [orangepixel]: http://www.orangepixel.net
 [phr00t]: http://www.phr00t.com
