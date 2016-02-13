@@ -14,27 +14,23 @@ Major updates are released on Maven Central, so the easiest way is to add the li
 
 Maven:
 
-```
+{% highlight xml %}
 <dependency>
   <groupId>com.code-disaster.steamworks4j</groupId>
   <artifactId>steamworks4j</artifactId>
   <version>{{ site.steamworks4j.version }}</version>
 </dependency>
-```
+{% endhighlight xml %}
 
 Gradle:
 
-```
+{% highlight groovy %}
 dependencies {
 	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.version }}"
 }
-```
+{% endhighlight groovy %}
 
-If you don't use any build tools, direct downloads of .jar files are also available:
-
-```
-http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/steamworks4j/{{ site.steamworks4j.version }}
-```
+If you don't use any build tools, [direct downloads of .jar files](http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/steamworks4j/{{ site.steamworks4j.version }}) are also available.
 
 To learn how to build the library from source code, please refer to the [build instructions]({{ '/build-instructions.html' | prepend: site.baseurl | prepend: site.url }}).
 
@@ -54,29 +50,29 @@ Please refer to the official documentation to learn about the steps needed to pr
 
 To load the native libraries and initialize the Steamworks client API, you just need to call ```SteamAPI.init()```.
 
-```java
+{% highlight java %}
 if (!SteamAPI.init()) {
 	// report error
 }
-```
+{% endhighlight java %}
 
 By default, ```SteamAPI.init()``` tries to automatically detect the operating system it runs on, then extracts the appropriate native libraries from *steamworks4j-natives.jar* found in your application's resource path to a temporary folder. There's a second function which allows to specify the path to a custom JAR, or to a directory containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries from ```steamworks4j/natives/libs/``` for development purposes.
 
-```java
+{% highlight java %}
 if (!SteamAPI.init("../natives/libs")) {
 	// report error
 }
-```
+{% endhighlight java %}
 
 #### Update ticks
 
 Add a call to ```SteamAPI.runCallbacks()``` to your game loop. Steamworks recommends it to be called at least 15 times per second, but I haven't seen any performance impact if e.g. called each frame at 60 fps.
 
-```java
+{% highlight java %}
 if (SteamAPI.isSteamRunning()) {
 	SteamAPI.runCallbacks();
 }
-```
+{% endhighlight java %}
 
 #### Creating interfaces
 
@@ -92,7 +88,7 @@ If a C++ interface contains functions which trigger ```STEAM_CALLBACK()``` or ``
 
 > If you really want to execute more of the same callback-triggering function in parallel, you have to create and maintain multiple instances of that interface.
 
-```java
+{% highlight java %}
 public class MyAppUserStatsCallback
         implements SteamUserStatsCallback {
 
@@ -101,21 +97,21 @@ public class MyAppUserStatsCallback
 
 SteamUserStatsCallback callback = new MyAppUserStatsCallback();
 SteamUserStats stats = new SteamUserStats(callback);
-```
+{% endhighlight java %}
 
 #### Shutdown
 
 Each interface instance (each instance of a class derived from ```SteamInterface```) allocates and owns at least a few bytes of native heap memory. You should call ```SteamInterface.dispose()``` on shutdown to prevent memory leaks.
 
-```java
+{% highlight java %}
 stats.dispose();
-```
+{% endhighlight java %}
 
 To shut down the Steamworks API, just call ```SteamAPI.shutdown()```. This may flush (sync) any pending client data, e.g. achievements and user stats, so you should make sure your application exists gracefully.
 
-```java
+{% highlight java %}
 SteamAPI.shutdown();
-```
+{% endhighlight java %}
 
 ### Sample applications
 

@@ -1,7 +1,5 @@
 baseurl: /steamworks4j
 
-markdown: redcarpet
-
 steamworks4j:
   version: 1.2.3
   sdk-version: 1.35

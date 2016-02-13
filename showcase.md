@@ -7,12 +7,14 @@ layout: default
 A list of games released on Steam, in alphabetical order, which are known to utilize *steamworks4j*. Feel free to contact me if you like your game to be added (or removed).
 
 ---
+
 ### [Bard to the Future](http://store.steampowered.com/app/337110/)
 
 Developer: [Battlebard Games][battlebardgames]<br>
 Uses: achievements, user stats, leaderboards<br>
 
 ---
+
 ### [Crazy Belts](http://store.steampowered.com/app/355510/)
 
 Developer: [jemchicomac][jemchicomac]<br>
@@ -21,6 +23,7 @@ Uses: achievements<br>
 ![Crazy Belts](images/showcase_crazybelts.png)
 
 ---
+
 ### [Gunslugs](http://store.steampowered.com/app/371890/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -29,6 +32,7 @@ Uses: achievements, leaderboards<br>
 ![Gunslugs](images/showcase_gunslugs.png)
 
 ---
+
 ### [Gunslugs 2](http://store.steampowered.com/app/340750/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -37,6 +41,7 @@ Uses: achievements, leaderboards<br>
 ![Gunslugs 2](images/showcase_gunslugs2.png)
 
 ---
+
 ### [Halfway](http://store.steampowered.com/app/253150/)
 
 Developer: [Robotality][robotality]<br>
@@ -46,6 +51,7 @@ Uses: achievements, user stats, remote storage, user-generated content<br>
 *The game which I eventually started writing steamworks4j for.*
 
 ---
+
 ### [Heroes of Loot](http://store.steampowered.com/app/359280/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -54,18 +60,21 @@ Uses: achievements<br>
 ![Heroes of Loot](images/showcase_heroesofloot.png)
 
 ---
+
 ### [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/)
 
 Developer: [Shadebob Games][shadebobgames]<br>
 Uses: achievements, leaderboards, user-generated content<br>
 
 ---
+
 ### [Lux Delux](http://store.steampowered.com/app/341950/)
 
 Developer: [Sillysoft Games][sillysoft]<br>
 Uses: achievements, user stats, leaderboards<br>
 
 ---
+
 ### [The Madness of Little Emma](http://store.steampowered.com/app/418150/)
 
 Developer: [Bartosz Bojarowski][madnessoflittleemma]<br>
@@ -74,6 +83,7 @@ Uses: achievements, leaderboards<br>
 ![The Madness of Little Emma](images/showcase_madnessoflittleemma.png)
 
 ---
+
 ### [Mute Crimson+](http://store.steampowered.com/app/384280/)
 
 Developer: [Iced Lizard Games][icedlizardgames]<br>
@@ -82,18 +92,21 @@ Uses: achievements, remote storage<br>
 ![Mute Crimson+](images/showcase_mutecrimsonplus.png)
 
 ---
+
 ### [Quarries of Scred](http://store.steampowered.com/app/346770/)
 
 Developer: [Hammerspace Games][hammerspacegames]<br>
 Uses: achievements<br>
 
 ---
+
 ### [RFLEX](http://store.steampowered.com/app/392020/)
 
 Developer: [Wesley LaFerriere][rflex]<br>
 Uses: achievements, remote storage, leaderboards<br>
 
 ---
+
 ### [Run or Die](http://store.steampowered.com/app/325150/)
 
 Developer: [Team Flow][teamflow]<br>
@@ -103,12 +116,14 @@ Uses: achievements, user-generated content<br>
 *I love the (unwitting?) Halfway reference. :-D*
 
 ---
+
 ### [Solar War](http://store.steampowered.com/app/340880/)
 
 Developer: [Snipefish Entertainment][snipefish]<br>
 Uses: achievements, remote storage<br>
 
 ---
+
 ### [Space Grunts](http://store.steampowered.com/app/371430/)
 
 Developer: [OrangePixel][orangepixel]<br>
@@ -117,6 +132,7 @@ Uses: achievements, leaderboards<br>
 ![Space Grunts](images/showcase_spacegrunts.png)
 
 ---
+
 ### [Spermination](http://store.steampowered.com/app/363460/)
 
 Developer: [Phr00t][phr00t]<br>
@@ -125,6 +141,7 @@ Uses: achievements<br>
 *I don't even ...*
 
 ---
+
 ### [Spy Bugs](http://store.steampowered.com/app/366860/)
 
 Developer: [Digital Soul Games][digitalsoulgames]<br>
