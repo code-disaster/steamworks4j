@@ -1,3 +1,9 @@
+[1.2.4]
+- API change: changed auth ticket API to use SteamAuthTicket objects instead of plain integer handles.
+- API change: getAuthSessionTicket() now takes an int[1] argument to return the the required buffer size.
+- Added buffer validation checks to auth ticket functions.
+- Added auth ticket test functions to SteamNetworkingTestApp.
+
 [1.2.3]
 - Fixed native pointers possibly truncated on Windows 64 bit.
 
