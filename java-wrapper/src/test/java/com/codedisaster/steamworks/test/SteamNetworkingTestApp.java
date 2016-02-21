@@ -41,6 +41,11 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 			System.out.println("Auth session response for userID " + steamID.getAccountID() + ": " +
 					authSessionResponse.name() + ", borrowed=" + (steamID.equals(ownerSteamID) ? "yes" : "no"));
+
+			if (authSessionResponse == SteamAuth.AuthSessionResponse.AuthTicketCanceled) {
+				// ticket owner has cancelled the ticket, end the session
+				endAuthSession();
+			}
 		}
 	};
 
@@ -88,6 +93,8 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 			SteamID steamIDSender = new SteamID();
 
+			packetReadBuffer.clear();
+
 			if (networking.readP2PPacket(steamIDSender, packetReadBuffer, defaultChannel) > 0) {
 
 				// register, if unknown
@@ -105,6 +112,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 					// extract ticket
 					remoteAuthTicketData.clear();
 					remoteAuthTicketData.put(bytes, magicBytes, bytesReceived - magicBytes);
+					remoteAuthTicketData.flip();
 					System.out.println("Auth ticket received: " + remoteAuthTicketData.toString() +
 							" [hash: " + remoteAuthTicketData.hashCode() + "]");
 					// auth
@@ -251,13 +259,15 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 		for (Map.Entry<Integer, SteamID> remoteUser : remoteUserIDs.entrySet()) {
 
-			System.out.println("Send auth to remote user: " + remoteUser.getKey());
+			System.out.println("Send auth to remote user: " + remoteUser.getKey() +
+					"[hash: " + userAuthTicketData.hashCode() + "]");
 
 			packetSendBuffer.clear(); // pos=0, limit=cap
 
 			packetSendBuffer.put(AUTH); // magic bytes
 			packetSendBuffer.put(userAuthTicketData);
 
+			userAuthTicketData.flip(); // limit=pos, pos=0
 			packetSendBuffer.flip(); // limit=pos, pos=0
 
 			networking.sendP2PPacket(remoteUser.getValue(), packetSendBuffer,
