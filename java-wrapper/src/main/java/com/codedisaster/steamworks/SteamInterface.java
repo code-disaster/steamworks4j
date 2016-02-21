@@ -6,10 +6,14 @@ abstract class SteamInterface {
 	protected long callback;
 
 	SteamInterface(long pointer) {
-		this(pointer, 0l);
+		this(pointer, 0L);
 	}
 
 	SteamInterface(long pointer, long callback) {
+		if (pointer == 0L) {
+			throw new RuntimeException("Steam interface created with null pointer." +
+							" Always check result of SteamAPI.init(), or with SteamAPI.isSteamRunning()!");
+		}
 		this.pointer = pointer;
 		this.callback = callback;
 	}
