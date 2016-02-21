@@ -22,7 +22,27 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 	private ByteBuffer packetReadBuffer = ByteBuffer.allocateDirect(readBufferCapacity);
 	private ByteBuffer packetSendBuffer = ByteBuffer.allocateDirect(sendBufferCapacity);
 
+	private SteamUser user;
 	private Map<Integer, SteamID> remoteUserIDs = new ConcurrentHashMap<Integer, SteamID>();
+
+	private SteamAuthTicket userAuthTicket;
+	private ByteBuffer userAuthTicketData = ByteBuffer.allocateDirect(256);
+
+	private SteamID remoteAuthUser;
+	private ByteBuffer remoteAuthTicketData = ByteBuffer.allocateDirect(256);
+
+	private final byte[] AUTH = "AUTH".getBytes();
+
+	private SteamUserCallback userCallback = new SteamUserCallback() {
+		@Override
+		public void onValidateAuthTicketResponse(SteamID steamID,
+												 SteamAuth.AuthSessionResponse authSessionResponse,
+												 SteamID ownerSteamID) {
+
+			System.out.println("Auth session response for userID " + steamID.getAccountID() + ": " +
+					authSessionResponse.name() + ", borrowed=" + (steamID.equals(ownerSteamID) ? "yes" : "no"));
+		}
+	};
 
 	private SteamNetworkingCallback peer2peerCallback = new SteamNetworkingCallback() {
 		@Override
@@ -43,6 +63,8 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
+		user = new SteamUser(userCallback);
+
 		friends = new FriendsMixin();
 		networking = new SteamNetworking(peer2peerCallback, SteamNetworking.API.Client);
 
@@ -51,6 +73,8 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	@Override
 	protected void unregisterInterfaces() {
+		cancelAuthTicket();
+		user.dispose();
 		friends.dispose();
 		networking.dispose();
 	}
@@ -66,18 +90,30 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 			if (networking.readP2PPacket(steamIDSender, packetReadBuffer, defaultChannel) > 0) {
 
+				// register, if unknown
+				registerRemoteSteamID(steamIDSender);
+
 				int bytesReceived = packetReadBuffer.limit();
 				System.out.println("Rcv packet: userID=" + steamIDSender.getAccountID() + ", " + bytesReceived + " bytes");
 
 				byte[] bytes = new byte[bytesReceived];
 				packetReadBuffer.get(bytes);
 
-				String message = new String(bytes, messageCharset);
-
-				System.out.println("Rcv message: \"" + message + "\"");
-
-				// register, if unknown
-				registerRemoteSteamID(steamIDSender);
+				// check for magic bytes first
+				int magicBytes = checkMagicBytes(packetReadBuffer, AUTH);
+				if (magicBytes > 0) {
+					// extract ticket
+					remoteAuthTicketData.clear();
+					remoteAuthTicketData.put(bytes, magicBytes, bytesReceived - magicBytes);
+					System.out.println("Auth ticket received: " + remoteAuthTicketData.toString() +
+							" [hash: " + remoteAuthTicketData.hashCode() + "]");
+					// auth
+					beginAuthSession(steamIDSender);
+				} else {
+					// plain text message
+					String message = new String(bytes, messageCharset);
+					System.out.println("Rcv message: \"" + message + "\"");
+				}
 			}
 
 		}
@@ -139,6 +175,17 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 			for (SteamID steamIDUser : remoteUserIDs.values()) {
 				System.out.println("  " + steamIDUser.getAccountID());
 			}
+		} else if (input.startsWith("auth ticket ")) {
+			String authCmd = input.substring("auth ticket ".length());
+			if (authCmd.equals("get")) {
+				getAuthTicket();
+			} else if (authCmd.equals("cancel")) {
+				cancelAuthTicket();
+			} else if (authCmd.equals("send")) {
+				broadcastAuthTicket();
+			} else if (authCmd.equals("end")) {
+				endAuthSession();
+			}
 		}
 
 		friends.processInput(input);
@@ -152,6 +199,79 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	private void unregisterRemoteSteamID(SteamID steamIDUser) {
 		remoteUserIDs.remove(steamIDUser.getAccountID());
+	}
+
+	private void getAuthTicket() throws SteamException {
+		cancelAuthTicket();
+		userAuthTicketData.clear();
+		int[] sizeRequired = new int[1];
+		userAuthTicket = user.getAuthSessionTicket(userAuthTicketData, sizeRequired);
+		if (userAuthTicket.isValid()) {
+			int numBytes = userAuthTicketData.limit();
+			System.out.println("Auth session ticket length: " + numBytes);
+			System.out.println("Auth ticket created: " + userAuthTicketData.toString() +
+					" [hash: " + userAuthTicketData.hashCode() + "]");
+		} else {
+			if (sizeRequired[0] < userAuthTicketData.capacity()) {
+				System.out.println("Error: failed creating auth ticket");
+			} else {
+				System.out.println("Error: buffer too small for auth ticket, need " + sizeRequired[0] + " bytes");
+			}
+		}
+	}
+
+	private void cancelAuthTicket() {
+		if (userAuthTicket != null && userAuthTicket.isValid()) {
+			System.out.println("Auth ticket cancelled");
+			user.cancelAuthTicket(userAuthTicket);
+			userAuthTicket = null;
+		}
+	}
+
+	private void beginAuthSession(SteamID steamIDSender) throws SteamException {
+		endAuthSession();
+		System.out.println("Starting auth session with user: " + steamIDSender.getAccountID());
+		remoteAuthUser = steamIDSender;
+		user.beginAuthSession(remoteAuthTicketData, remoteAuthUser);
+	}
+
+	private void endAuthSession() {
+		if (remoteAuthUser != null) {
+			System.out.println("End auth session with user: " + remoteAuthUser.getAccountID());
+			user.endAuthSession(remoteAuthUser);
+			remoteAuthUser = null;
+		}
+	}
+
+	private void broadcastAuthTicket() throws SteamException {
+		if (userAuthTicket == null || !userAuthTicket.isValid()) {
+			System.out.println("Error: won't broadcast nil auth ticket");
+			return;
+		}
+
+		for (Map.Entry<Integer, SteamID> remoteUser : remoteUserIDs.entrySet()) {
+
+			System.out.println("Send auth to remote user: " + remoteUser.getKey());
+
+			packetSendBuffer.clear(); // pos=0, limit=cap
+
+			packetSendBuffer.put(AUTH); // magic bytes
+			packetSendBuffer.put(userAuthTicketData);
+
+			packetSendBuffer.flip(); // limit=pos, pos=0
+
+			networking.sendP2PPacket(remoteUser.getValue(), packetSendBuffer,
+					SteamNetworking.P2PSend.Reliable, defaultChannel);
+		}
+	}
+
+	private int checkMagicBytes(ByteBuffer buffer, byte[] magicBytes) {
+		for (int b = 0; b < magicBytes.length; b++) {
+			if (buffer.get(b) != magicBytes[b]) {
+				return 0;
+			}
+		}
+		return magicBytes.length;
 	}
 
 	public static void main(String[] arguments) {

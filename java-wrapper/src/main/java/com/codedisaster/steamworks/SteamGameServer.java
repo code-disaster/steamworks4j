@@ -154,14 +154,27 @@ public class SteamGameServer extends SteamInterface {
 		return updateUserData(pointer, steamIDUser.handle, playerName, score);
 	}
 
-	public int getAuthSessionTicket(Buffer authTicket) {
-		int[] sizeInBytes = new int[1];
+	public SteamAuthTicket getAuthSessionTicket(Buffer authTicket, int[] sizeInBytes) throws SteamException {
+
+		if (!authTicket.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
 		int ticket = getAuthSessionTicket(pointer, authTicket, authTicket.capacity(), sizeInBytes);
-		authTicket.limit(sizeInBytes[0]);
-		return ticket;
+
+		if (ticket != SteamAuthTicket.AuthTicketInvalid) {
+			authTicket.limit(sizeInBytes[0]);
+		}
+
+		return new SteamAuthTicket(ticket);
 	}
 
-	public SteamAuth.BeginAuthSessionResult beginAuthSession(Buffer authTicket, SteamID steamID) {
+	public SteamAuth.BeginAuthSessionResult beginAuthSession(Buffer authTicket, SteamID steamID) throws SteamException {
+
+		if (!authTicket.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
 		int result = beginAuthSession(pointer, authTicket, authTicket.limit(), steamID.handle);
 		return SteamAuth.BeginAuthSessionResult.byOrdinal(result);
 	}
@@ -170,8 +183,8 @@ public class SteamGameServer extends SteamInterface {
 		endAuthSession(pointer, steamID.handle);
 	}
 
-	public void cancelAuthTicket(int authTicket) {
-		cancelAuthTicket(pointer, authTicket);
+	public void cancelAuthTicket(SteamAuthTicket authTicket) {
+		cancelAuthTicket(pointer, (int) authTicket.handle);
 	}
 
 	public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, long appID) {
