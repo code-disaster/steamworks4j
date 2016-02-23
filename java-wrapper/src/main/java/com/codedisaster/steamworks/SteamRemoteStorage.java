@@ -115,6 +115,16 @@ public class SteamRemoteStorage extends SteamInterface {
 		return updatePublishedFileDescription(pointer, updateHandle.handle, description);
 	}
 
+	public boolean updatePublishedFileVisibility(SteamPublishedFileUpdateHandle updateHandle,
+												 PublishedFileVisibility visibility) {
+
+		return updatePublishedFileVisibility(pointer, updateHandle.handle, visibility.ordinal());
+	}
+
+	public boolean updatePublishedFileTags(SteamPublishedFileUpdateHandle updateHandle, String[] tags) {
+		return updatePublishedFileTags(pointer, updateHandle.handle, tags, tags != null ? tags.length : 0);
+	}
+
 	public SteamAPICall commitPublishedFileUpdate(SteamPublishedFileUpdateHandle updateHandle) {
 		return new SteamAPICall(commitPublishedFileUpdate(pointer, callback, updateHandle.handle));
 	}
@@ -259,6 +269,30 @@ public class SteamRemoteStorage extends SteamInterface {
 	static private native boolean updatePublishedFileDescription(long pointer, long updateHandle, String description); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFileDescription(updateHandle, description);
+	*/
+
+	static private native boolean updatePublishedFileVisibility(long pointer, long updateHandle, int visibility); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->UpdatePublishedFileVisibility(updateHandle, (ERemoteStoragePublishedFileVisibility) visibility);
+	*/
+
+	static private native boolean updatePublishedFileTags(long pointer, long updateHandle, String[] tags, int numTags); /*
+		SteamParamStringArray_t arrayTags;
+		arrayTags.m_ppStrings = (numTags > 0) ? new const char*[numTags] : NULL;
+		arrayTags.m_nNumStrings = numTags;
+		for (int t = 0; t < numTags; t++) {
+			arrayTags.m_ppStrings[t] = env->GetStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), 0);
+		}
+
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		bool result = storage->UpdatePublishedFileTags(updateHandle, &arrayTags);
+
+		for (int t = 0; t < numTags; t++) {
+			env->ReleaseStringUTFChars((jstring) env->GetObjectArrayElement(tags, t), arrayTags.m_ppStrings[t]);
+		}
+		delete[] arrayTags.m_ppStrings;
+
+		return result;
 	*/
 
 	static private native long commitPublishedFileUpdate(long pointer, long callback, long updateHandle); /*
