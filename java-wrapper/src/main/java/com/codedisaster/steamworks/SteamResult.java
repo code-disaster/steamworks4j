@@ -104,6 +104,9 @@ public enum SteamResult {
 	EmailSendFailure(99),
 	NotSettled(100),
 	NeedCaptcha(101),
+	GSLTDenied(102),
+	GSOwnerDenied(103),
+	InvalidItemType(104),
 
 	/** If this is returned(), we missed to "port" an Steam error code above. */
 	UnknownErrorCode_NotImplementedByAPI(0);
