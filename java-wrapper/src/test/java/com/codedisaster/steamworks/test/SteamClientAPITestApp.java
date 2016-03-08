@@ -239,6 +239,21 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					   ", fileHandle=" + details.getFileHandle().toString() +
 					   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
 		}
+
+		@Override
+		public void onCreateItem(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
+
+		}
+
+		@Override
+		public void onSubmitItemUpdate(boolean needsToAcceptWLA, SteamResult result) {
+
+		}
+
+		@Override
+		public void onDownloadItemResult(long appID, SteamPublishedFileID publishedFileID, SteamResult result) {
+
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {

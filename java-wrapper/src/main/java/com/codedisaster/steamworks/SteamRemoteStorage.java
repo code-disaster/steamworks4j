@@ -17,7 +17,22 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public enum WorkshopFileType {
-		Community
+		Community,
+		Microtransaction,
+		Collection,
+		Art,
+		Video,
+		Screenshot,
+		Game,
+		Software,
+		Concept,
+		WebGuide,
+		IntegratedGuide,
+		Merch,
+		ControllerBinding,
+		SteamworksAccessInvite,
+		SteamVideo,
+		GameManagedItem
 	}
 
 	public SteamRemoteStorage(SteamRemoteStorageCallback callback) {

@@ -8,6 +8,8 @@ public abstract class SteamTestApp {
 
 	protected SteamUtils clientUtils;
 
+	protected static final int MS_PER_TICK = 1000 / 15;
+
 	private SteamAPIWarningMessageHook clMessageHook = new SteamAPIWarningMessageHook() {
 		@Override
 		public void onWarningMessage(int severity, String message) {
@@ -88,7 +90,7 @@ public abstract class SteamTestApp {
 
 			try {
 				// sleep a little (Steam says it should poll at least 15 times/second)
-				Thread.sleep(1000 / 15);
+				Thread.sleep(MS_PER_TICK);
 			} catch (InterruptedException e) {
 				// ignore
 			}
