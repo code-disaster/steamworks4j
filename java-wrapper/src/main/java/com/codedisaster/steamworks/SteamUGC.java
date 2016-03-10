@@ -336,6 +336,22 @@ public class SteamUGC extends SteamInterface {
 		return status;
 	}
 
+	public SteamAPICall setUserItemVote(SteamPublishedFileID publishedFileID, boolean voteUp) {
+		return new SteamAPICall(setUserItemVote(pointer, callback, publishedFileID.handle, voteUp));
+	}
+
+	public SteamAPICall getUserItemVote(SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(getUserItemVote(pointer, callback, publishedFileID.handle));
+	}
+
+	public SteamAPICall addItemToFavorites(long appID, SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(addItemToFavorites(pointer, callback, appID, publishedFileID.handle));
+	}
+
+	public SteamAPICall removeItemFromFavorites(long appID, SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(removeItemFromFavorites(pointer, callback, appID, publishedFileID.handle));
+	}
+
 	public SteamAPICall subscribeItem(SteamPublishedFileID publishedFileID) {
 		return new SteamAPICall(subscribeItem(pointer, callback, publishedFileID.handle));
 	}
@@ -659,6 +675,38 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		uint64* values = (uint64*) bytesProcessedAndTotal;
 		return ugc->GetItemUpdateProgress(update, &values[0], &values[1]);
+	*/
+
+	static private native long setUserItemVote(long pointer, long callback, long publishedFileID, boolean voteUp); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->SetUserItemVote(publishedFileID, voteUp);
+		cb->onSetUserItemVoteCall.Set(handle, cb, &SteamUGCCallback::onSetUserItemVote);
+		return handle;
+	*/
+
+	static private native long getUserItemVote(long pointer, long callback, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->GetUserItemVote(publishedFileID);
+		cb->onGetUserItemVoteCall.Set(handle, cb, &SteamUGCCallback::onGetUserItemVote);
+		return handle;
+	*/
+
+	static private native long addItemToFavorites(long pointer, long callback, long appID, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->AddItemToFavorites(appID, publishedFileID);
+		cb->onUserFavoriteItemsListChangedCall.Set(handle, cb, &SteamUGCCallback::onUserFavoriteItemsListChanged);
+		return handle;
+	*/
+
+	static private native long removeItemFromFavorites(long pointer, long callback, long appID, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->RemoveItemFromFavorites(appID, publishedFileID);
+		cb->onUserFavoriteItemsListChangedCall.Set(handle, cb, &SteamUGCCallback::onUserFavoriteItemsListChanged);
+		return handle;
 	*/
 
 	static private native long subscribeItem(long pointer, long callback, long publishedFileID); /*

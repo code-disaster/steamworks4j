@@ -28,4 +28,13 @@ public:
 	CCallResult<SteamUGCCallback, SubmitItemUpdateResult_t> onSubmitItemUpdateCall;
 
 	STEAM_CALLBACK(SteamUGCCallback, onDownloadItemResult, DownloadItemResult_t, m_CallbackDownloadItemResult);
+
+	void onUserFavoriteItemsListChanged(UserFavoriteItemsListChanged_t* callback, bool error);
+	CCallResult<SteamUGCCallback, UserFavoriteItemsListChanged_t> onUserFavoriteItemsListChangedCall;
+
+	void onSetUserItemVote(SetUserItemVoteResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, SetUserItemVoteResult_t> onSetUserItemVoteCall;
+
+	void onGetUserItemVote(GetUserItemVoteResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, GetUserItemVoteResult_t> onGetUserItemVoteCall;
 };

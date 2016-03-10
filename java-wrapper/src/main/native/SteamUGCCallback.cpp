@@ -62,3 +62,25 @@ void SteamUGCCallback::onDownloadItemResult(DownloadItemResult_t* callback) {
 		    (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
 	});
 }
+
+void SteamUGCCallback::onUserFavoriteItemsListChanged(UserFavoriteItemsListChanged_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onUserFavoriteItemsListChanged", "(JZI)V", (jlong) callback->m_nPublishedFileId,
+		    (jboolean) callback->m_bWasAddRequest, (jint) callback->m_eResult);
+	});
+}
+
+void SteamUGCCallback::onSetUserItemVote(SetUserItemVoteResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onSetUserItemVote", "(JZI)V", (jlong) callback->m_nPublishedFileId,
+		    (jboolean) callback->m_bVoteUp, (jint) callback->m_eResult);
+	});
+}
+
+void SteamUGCCallback::onGetUserItemVote(GetUserItemVoteResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onGetUserItemVote", "(JZZZI)V", (jlong) callback->m_nPublishedFileId,
+		    (jboolean) callback->m_bVotedUp, (jboolean) callback->m_bVotedDown,
+		    (jboolean) callback->m_bVoteSkipped, (jint) callback->m_eResult);
+	});
+}

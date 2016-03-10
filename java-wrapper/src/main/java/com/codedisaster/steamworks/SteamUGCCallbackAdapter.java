@@ -56,4 +56,18 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		callback.onDownloadItemResult(appID, new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
 	}
 
+	void onUserFavoriteItemsListChanged(long publishedFileID, boolean wasAddRequest, int result) {
+		callback.onUserFavoriteItemsListChanged(new SteamPublishedFileID(publishedFileID),
+				wasAddRequest, SteamResult.byValue(result));
+	}
+
+	void onSetUserItemVote(long publishedFileID, boolean voteUp, int result) {
+		callback.onSetUserItemVote(new SteamPublishedFileID(publishedFileID), voteUp, SteamResult.byValue(result));
+	}
+
+	void onGetUserItemVote(long publishedFileID, boolean votedUp, boolean votedDown, boolean voteSkipped, int result) {
+		callback.onGetUserItemVote(new SteamPublishedFileID(publishedFileID),
+				votedUp, votedDown, voteSkipped, SteamResult.byValue(result));
+	}
+
 }

@@ -254,6 +254,21 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		public void onDownloadItemResult(long appID, SteamPublishedFileID publishedFileID, SteamResult result) {
 
 		}
+
+		@Override
+		public void onUserFavoriteItemsListChanged(SteamPublishedFileID publishedFileID, boolean wasAddRequest, SteamResult result) {
+
+		}
+
+		@Override
+		public void onSetUserItemVote(SteamPublishedFileID publishedFileID, boolean voteUp, SteamResult result) {
+
+		}
+
+		@Override
+		public void onGetUserItemVote(SteamPublishedFileID publishedFileID, boolean votedUp, boolean votedDown, boolean voteSkipped, SteamResult result) {
+
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
