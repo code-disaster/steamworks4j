@@ -205,6 +205,34 @@ public class SteamUGC extends SteamInterface {
 		return getQueryUGCResult(pointer, query.handle, index, details);
 	}
 
+	public String getQueryUGCPreviewURL(SteamUGCQuery query, int index) {
+		return getQueryUGCPreviewURL(pointer, query.handle, index);
+	}
+
+	public String getQueryUGCMetadata(SteamUGCQuery query, int index) {
+		return getQueryUGCMetadata(pointer, query.handle, index);
+	}
+
+	public int getQueryUGCStatistic(SteamUGCQuery query, int index, ItemStatistic statType) {
+		return getQueryUGCStatistic(pointer, query.handle, index, statType.ordinal());
+	}
+
+	public int getQueryUGCNumAdditionalPreviews(SteamUGCQuery query, int index) {
+		return getQueryUGCNumAdditionalPreviews(pointer, query.handle, index);
+	}
+
+	public String getQueryUGCAdditionalPreview(SteamUGCQuery query, int index, int previewIndex, boolean[] isImage) {
+		return getQueryUGCAdditionalPreview(pointer, query.handle, index, previewIndex, isImage);
+	}
+
+	public int getQueryUGCNumKeyValueTags(SteamUGCQuery query, int index) {
+		return getQueryUGCNumKeyValueTags(pointer, query.handle, index);
+	}
+
+	public boolean getQueryUGCKeyValueTag(SteamUGCQuery query, int index, int keyValueTagIndex, String[] keyAndValue) {
+		return getQueryUGCKeyValueTag(pointer, query.handle, index, keyValueTagIndex, keyAndValue);
+	}
+
 	public boolean releaseQueryUserUGCRequest(SteamUGCQuery query) {
 		return releaseQueryUserUGCRequest(pointer, query.handle);
 	}
@@ -496,6 +524,81 @@ public class SteamUGC extends SteamInterface {
 		}
 
 		return false;
+	*/
+
+	static private native String getQueryUGCPreviewURL(long pointer, long query, int index); /*
+		char url[1024];
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		if (ugc->GetQueryUGCPreviewURL(query, index, url, 1024)) {
+			return env->NewStringUTF(url);
+		}
+
+		return nullptr;
+	*/
+
+	static private native String getQueryUGCMetadata(long pointer, long query, int index); /*
+		char metadata[k_cchDeveloperMetadataMax];
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		if (ugc->GetQueryUGCMetadata(query, index, metadata, k_cchDeveloperMetadataMax)) {
+			return env->NewStringUTF(metadata);
+		}
+
+		return nullptr;
+	*/
+
+//	static private native boolean getQueryUGCChildren(long pointer, long query, int index,
+//													  long[] publishedFileIDs, long maxEntries);
+
+	static private native int getQueryUGCStatistic(long pointer, long query, int index, int statType); /*
+		uint32 statValue;
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		if (ugc->GetQueryUGCStatistic(query, index, (EItemStatistic) statType, &statValue)) {
+			return statValue;
+		}
+
+		return 0;
+	*/
+
+	static private native int getQueryUGCNumAdditionalPreviews(long pointer, long query, int index); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->GetQueryUGCNumAdditionalPreviews(query, index);
+	*/
+
+	static private native String getQueryUGCAdditionalPreview(long pointer, long query, int index,
+															  int previewIndex, boolean[] isImage); /*
+		char urlOrVideoID[1024];
+		bool _isImage;
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		if (ugc->GetQueryUGCAdditionalPreview(query, index, previewIndex, urlOrVideoID, 1024, &_isImage)) {
+			isImage[0] = _isImage;
+			return env->NewStringUTF(urlOrVideoID);
+		}
+
+		return nullptr;
+	*/
+
+	static private native int getQueryUGCNumKeyValueTags(long pointer, long query, int index); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->GetQueryUGCNumKeyValueTags(query, index);
+	*/
+
+	static private native boolean getQueryUGCKeyValueTag(long pointer, long query, int index, int keyValueTagIndex, String[] keyAndValue); /*
+		char key[1024];
+		char value[1024];
+
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		bool success = ugc->GetQueryUGCKeyValueTag(query, index, keyValueTagIndex, key, 1024, value, 1024);
+
+		if (success) {
+			env->SetObjectArrayElement(keyAndValue, 0, env->NewStringUTF(key));
+			env->SetObjectArrayElement(keyAndValue, 1, env->NewStringUTF(value));
+		}
+
+		return success;
 	*/
 
 	static private native boolean releaseQueryUserUGCRequest(long pointer, long query); /*
