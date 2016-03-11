@@ -4,6 +4,9 @@
 - API change: getAuthSessionTicket() now takes an int[1] argument to return the the required buffer size.
 - Added buffer validation checks to auth ticket functions.
 - Added auth ticket test functions to SteamNetworkingTestApp.
+- Added two missing SteamRemoteStorage.updatePublishedFile*() functions.
+- Added public functions to serialize SteamID as plain 64 bit value.
+- Added ISteamUGC-based workshop functions.
 
 [1.2.3]
 - Fixed native pointers possibly truncated on Windows 64 bit.
