@@ -133,17 +133,28 @@ public class SteamUserStats extends SteamInterface {
 				leaderboardDataRequest.ordinal(), rangeStart, rangeEnd));
 	}
 
+	/**
+	 * @param details The array size denotes the maximum number of details returned.
+	 *                Check {@link SteamLeaderboardEntry#getNumDetails()} for the actual count. Can be null.
+	 */
 	public boolean getDownloadedLeaderboardEntry(SteamLeaderboardEntriesHandle leaderboardEntries,
-												 int index, SteamLeaderboardEntry entry) {
+												 int index, SteamLeaderboardEntry entry, int[] details) {
 
-		return getDownloadedLeaderboardEntry(pointer, leaderboardEntries.handle, index, entry);
+		return details == null
+				? getDownloadedLeaderboardEntry(pointer, leaderboardEntries.handle, index, entry)
+				: getDownloadedLeaderboardEntry(pointer, leaderboardEntries.handle, index, entry, details, details.length);
 	}
 
+	/**
+	 * @param scoreDetails Can be null.
+	 */
 	public SteamAPICall uploadLeaderboardScore(SteamLeaderboardHandle leaderboard,
 											   LeaderboardUploadScoreMethod method,
-											   int score) {
+											   int score, int[] scoreDetails) {
 
-		return new SteamAPICall(uploadLeaderboardScore(pointer, callback, leaderboard.handle, method.ordinal(), score));
+		return new SteamAPICall(scoreDetails == null
+				? uploadLeaderboardScore(pointer, callback, leaderboard.handle, method.ordinal(), score)
+				: uploadLeaderboardScore(pointer, callback, leaderboard.handle, method.ordinal(), score, scoreDetails, scoreDetails.length));
 	}
 
 	// @off
@@ -279,6 +290,35 @@ public class SteamUserStats extends SteamInterface {
 	*/
 
 	static private native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
+																SteamLeaderboardEntry entry,
+																int[] details, int detailsMax); /*
+
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		LeaderboardEntry_t result;
+
+		if (stats->GetDownloadedLeaderboardEntry(entries, index, &result, details, detailsMax)) {
+			jclass clazz = env->GetObjectClass(entry);
+
+			jfieldID field = env->GetFieldID(clazz, "steamIDUser", "J");
+			env->SetLongField(entry, field, (jlong) result.m_steamIDUser.ConvertToUint64());
+
+			field = env->GetFieldID(clazz, "globalRank", "I");
+			env->SetIntField(entry, field, (jint) result.m_nGlobalRank);
+
+			field = env->GetFieldID(clazz, "score", "I");
+			env->SetIntField(entry, field, (jint) result.m_nScore);
+
+			field = env->GetFieldID(clazz, "details", "I");
+			env->SetIntField(entry, field, (jint) result.m_cDetails);
+
+			return true;
+		}
+
+		return false;
+
+	*/
+
+	static private native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
 																SteamLeaderboardEntry entry); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
@@ -294,13 +334,32 @@ public class SteamUserStats extends SteamInterface {
 			env->SetIntField(entry, field, (jint) result.m_nGlobalRank);
 
 			field = env->GetFieldID(clazz, "score", "I");
-			env->SetLongField(entry, field, (jint) result.m_nScore);
+			env->SetIntField(entry, field, (jint) result.m_nScore);
+
+			field = env->GetFieldID(clazz, "details", "I");
+			env->SetIntField(entry, field, (jint) result.m_cDetails);
 
 			return true;
 		}
 
 		return false;
 
+	*/
+
+	static private native long uploadLeaderboardScore(long pointer, long callback,
+													  long leaderboard, int method, int score,
+													  int[] scoreDetails, int scoreDetailsCount); /*
+
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
+
+		SteamAPICall_t handle = stats->UploadLeaderboardScore(leaderboard,
+			(ELeaderboardUploadScoreMethod) method, score, scoreDetails, scoreDetailsCount);
+
+		cb->onLeaderboardScoreUploadedCall.Set(handle, cb,
+			&SteamUserStatsCallback::onLeaderboardScoreUploaded);
+
+		return handle;
 	*/
 
 	static private native long uploadLeaderboardScore(long pointer, long callback,

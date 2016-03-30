@@ -80,15 +80,24 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			System.out.println("Leaderboard scores downloaded: handle=" + leaderboard.toString() +
 					", entries=" + entries.toString() + ", count=" + numEntries);
 
+			int[] details = new int[16];
+
 			for (int i = 0; i < numEntries; i++) {
 
 				SteamLeaderboardEntry entry = new SteamLeaderboardEntry();
-				if (userStats.getDownloadedLeaderboardEntry(entries, i, entry)) {
+				if (userStats.getDownloadedLeaderboardEntry(entries, i, entry, details)) {
+
+					int numDetails = entry.getNumDetails();
 
 					System.out.println("Leaderboard entry #" + i +
 							": steamIDUser=" + entry.getSteamIDUser().getAccountID() +
 							", globalRank=" + entry.getGlobalRank() +
-							", score=" + entry.getScore());
+							", score=" + entry.getScore() +
+							", numDetails=" + numDetails);
+
+					for (int detail = 0; detail < numDetails; detail++) {
+						System.out.println("  ... detail #" + detail + "=" + details[detail]);
+					}
 
 					if (friends.requestUserInformation(entry.getSteamIDUser(), false)) {
 						System.out.println("  ... requested user information for entry");
@@ -505,7 +514,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			if (currentLeaderboard != null) {
 				System.out.println("uploading score " + score + " to leaderboard " + currentLeaderboard.toString());
 				userStats.uploadLeaderboardScore(currentLeaderboard,
-						SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score));
+						SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score), new int[] {});
 			}
 		} else if (input.startsWith("apps subscribed ")) {
 			String appId = input.substring("apps subscribed ".length());

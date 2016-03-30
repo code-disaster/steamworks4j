@@ -7,6 +7,7 @@ public class SteamLeaderboardEntry {
 	long steamIDUser;
 	int globalRank;
 	int score;
+	int details;
 
 	public SteamID getSteamIDUser() {
 		return new SteamID(steamIDUser);
@@ -18,6 +19,10 @@ public class SteamLeaderboardEntry {
 
 	public int getScore() {
 		return score;
+	}
+
+	public int getNumDetails() {
+		return details;
 	}
 
 }

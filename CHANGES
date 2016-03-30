@@ -9,6 +9,7 @@
 - Added ISteamUGC-based workshop functions.
 - API change: SteamUtils now exposes a SteamUtilsCallback interface.
 - Added SteamUtils.onSteamShutdown() callback.
+- Added game-defined details to leaderboard score queries & uploads.
 
 [1.2.3]
 - Fixed native pointers possibly truncated on Windows 64 bit.
