@@ -19,4 +19,8 @@ class SteamUtilsCallbackAdapter extends SteamCallbackAdapter<SteamUtilsCallback>
 		}
 	}
 
+	void onSteamShutdown() {
+		callback.onSteamShutdown();
+	}
+
 }

@@ -307,6 +307,13 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		}
 	};
 
+	private SteamUtilsCallback utilsCallback = new SteamUtilsCallback() {
+		@Override
+		public void onSteamShutdown() {
+			System.out.println("Steam client wants to shut down!");
+		}
+	};
+
 	@Override
 	protected void registerInterfaces() {
 
@@ -323,7 +330,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		ugc = new SteamUGC(ugcCallback);
 
 		System.out.println("Register Utils ...");
-		utils = new SteamUtils();
+		utils = new SteamUtils(utilsCallback);
 
 		System.out.println("Register Apps ...");
 		apps = new SteamApps();

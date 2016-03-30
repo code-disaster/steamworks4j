@@ -7,6 +7,8 @@
 - Added two missing SteamRemoteStorage.updatePublishedFile*() functions.
 - Added public functions to serialize SteamID as plain 64 bit value.
 - Added ISteamUGC-based workshop functions.
+- API change: SteamUtils now exposes a SteamUtilsCallback interface.
+- Added SteamUtils.onSteamShutdown() callback.
 
 [1.2.3]
 - Fixed native pointers possibly truncated on Windows 64 bit.

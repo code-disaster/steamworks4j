@@ -37,9 +37,9 @@ public class SteamUtils extends SteamInterface {
 
 	private SteamUtilsCallbackAdapter callbackAdapter;
 
-	public SteamUtils() {
+	public SteamUtils(SteamUtilsCallback callback) {
 		super(SteamAPI.getSteamUtilsPointer());
-		callbackAdapter = new SteamUtilsCallbackAdapter(new SteamUtilsCallback() {});
+		callbackAdapter = new SteamUtilsCallbackAdapter(callback);
 		setCallback(createCallback(callbackAdapter));
 	}
 

@@ -17,6 +17,13 @@ public abstract class SteamTestApp {
 		}
 	};
 
+	private SteamUtilsCallback clUtilsCallback = new SteamUtilsCallback() {
+		@Override
+		public void onSteamShutdown() {
+			System.err.println("Steam client requested to shut down!");
+		}
+	};
+
 	private class InputHandler implements Runnable {
 
 		private volatile boolean alive;
@@ -76,11 +83,13 @@ public abstract class SteamTestApp {
 
 		registerInterfaces();
 
-		clientUtils = new SteamUtils();
+		clientUtils = new SteamUtils(clUtilsCallback);
 		clientUtils.setWarningMessageHook(clMessageHook);
 
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
-		new Thread(inputHandler).start();
+
+		Thread inputThread = new Thread(inputHandler);
+		inputThread.start();
 
 		while (inputHandler.alive() && SteamAPI.isSteamRunning()) {
 
@@ -97,6 +106,12 @@ public abstract class SteamTestApp {
 		}
 
 		System.out.println("Shutting down Steam client API ...");
+
+		try {
+			inputThread.join();
+		} catch (InterruptedException e) {
+			throw new SteamException(e);
+		}
 
 		clientUtils.dispose();
 

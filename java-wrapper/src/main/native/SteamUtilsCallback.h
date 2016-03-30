@@ -11,4 +11,6 @@ public:
 
 	void enableWarningMessageHook(bool enabled);
 	void onWarningMessage(int severity, const char *debugText);
+
+    STEAM_CALLBACK(SteamUtilsCallback, onSteamShutdown, SteamShutdown_t, m_CallbackSteamShutdown);
 };

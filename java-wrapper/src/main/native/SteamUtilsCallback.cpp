@@ -3,7 +3,8 @@
 static SteamUtilsCallback* s_messageHookInstance = NULL;
 
 SteamUtilsCallback::SteamUtilsCallback(JNIEnv* env, jobject callback)
-	: SteamCallbackAdapter(env, callback) {
+	: SteamCallbackAdapter(env, callback)
+	, m_CallbackSteamShutdown(this, &SteamUtilsCallback::onSteamShutdown) {
 
 }
 
@@ -27,4 +28,10 @@ void SteamUtilsCallback::onWarningMessage(int severity, const char *debugText) {
 		callVoidMethod(env, "onWarningMessage", "(ILjava/lang/String;)V",
 			severity, env->NewStringUTF(debugText));
 	});
+}
+
+void SteamUtilsCallback::onSteamShutdown(SteamShutdown_t* callback) {
+    invokeCallback({
+        callVoidMethod(env, "onSteamShutdown", "()V");
+    });
 }
