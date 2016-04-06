@@ -15,12 +15,33 @@ Uses: achievements, user stats, leaderboards<br>
 
 ---
 
+### [Battlestation: Harbinger](http://store.steampowered.com/app/396480/)
+
+Developer: [Bugbyte Ltd][bugbyte]<br>
+Uses: achievements, remote storage<br>
+
+---
+
+### [BossConstructor](http://store.steampowered.com/app/330100/)
+
+Developer: [Mirko Seithe][mseithe]<br>
+Uses: achievements, remote storage, user-generated content<br>
+
+---
+
 ### [Crazy Belts](http://store.steampowered.com/app/355510/)
 
 Developer: [jemchicomac][jemchicomac]<br>
 Uses: achievements<br>
 
 ![Crazy Belts](images/showcase_crazybelts.png)
+
+---
+
+### [The Count Lucanor](http://store.steampowered.com/app/440880/)
+
+Developer: [Baroque Decay][baroquedecay]<br>
+Uses: achievements, remote storage<br>
 
 ---
 
@@ -93,6 +114,13 @@ Uses: achievements, remote storage<br>
 
 ---
 
+### [Prompt](http://store.steampowered.com/app/366590/)
+
+Developer: Peter Gutenko<br>
+Uses: achievements, remote storage<br>
+
+---
+
 ### [Quarries of Scred](http://store.steampowered.com/app/346770/)
 
 Developer: [Hammerspace Games][hammerspacegames]<br>
@@ -149,12 +177,15 @@ Uses: achievements, user stats, leaderboards, gameserver, web api<br>
 
 *The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
 
+[baroquedecay]: http://www.thecountlucanor.com
 [battlebardgames]: http://battlebardgames.com
+[bugbyte]: http://bugbyte.fi
 [digitalsoulgames]: http://www.digitalsoulgames.org
 [icedlizardgames]: http://icedlizardgames.com
 [hammerspacegames]: http://www.quarriesofscred.com
 [jemchicomac]: http://www.jemchicomac.com
 [madnessoflittleemma]: http://madnessoflittleemma.com/
+[mseithe]: http://bossconstructor.com
 [orangepixel]: http://www.orangepixel.net
 [phr00t]: http://www.phr00t.com
 [robotality]: http://robotality.com
