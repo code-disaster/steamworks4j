@@ -33,7 +33,7 @@ public class SteamUGC extends SteamInterface {
 		GameManagedItems(12),
 		All(~0);
 
-		private int value;
+		private final int value;
 
 		MatchingUGCType(int value) {
 			this.value = value;
@@ -134,6 +134,33 @@ public class SteamUGC extends SteamInterface {
 		ReportScore
 	}
 
+	public enum ItemPreviewType {
+		Image(0),
+		YouTubeVideo(1),
+		Sketchfab(2),
+		EnvironmentMap_HorizontalCross(3),
+		EnvironmentMap_LatLong(4),
+		ReservedMax(255),
+
+		UnknownPreviewType_NotImplementedByAPI(-1);
+
+		private final int value;
+		private static final ItemPreviewType[] values = values();
+
+		ItemPreviewType(int value) {
+			this.value = value;
+		}
+
+		static ItemPreviewType byValue(int value) {
+			for (ItemPreviewType type : values) {
+				if (type.value == value) {
+					return type;
+				}
+			}
+			return UnknownPreviewType_NotImplementedByAPI;
+		}
+	}
+
 	public static class ItemInstallInfo {
 		private String folder;
 		private int sizeOnDisk;
@@ -159,7 +186,25 @@ public class SteamUGC extends SteamInterface {
 			return bytesTotal;
 		}
 	}
-	
+
+	public static class ItemAdditionalPreview {
+		private String urlOrVideoID;
+		private String originalFileName;
+		private ItemPreviewType previewType;
+
+		public String getUrlOrVideoID() {
+			return urlOrVideoID;
+		}
+
+		public String getOriginalFileName() {
+			return originalFileName;
+		}
+
+		public ItemPreviewType getPreviewType() {
+			return previewType;
+		}
+	}
+
 	public SteamUGC(SteamUGCCallback callback) {
 		super(SteamAPI.getSteamUGCPointer(), createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
@@ -221,8 +266,10 @@ public class SteamUGC extends SteamInterface {
 		return getQueryUGCNumAdditionalPreviews(pointer, query.handle, index);
 	}
 
-	public String getQueryUGCAdditionalPreview(SteamUGCQuery query, int index, int previewIndex, boolean[] isImage) {
-		return getQueryUGCAdditionalPreview(pointer, query.handle, index, previewIndex, isImage);
+	public boolean getQueryUGCAdditionalPreview(SteamUGCQuery query, int index, int previewIndex,
+												ItemAdditionalPreview previewInfo) {
+
+		return getQueryUGCAdditionalPreview(pointer, query.handle, index, previewIndex, previewInfo);
 	}
 
 	public int getQueryUGCNumKeyValueTags(SteamUGCQuery query, int index) {
@@ -567,18 +614,31 @@ public class SteamUGC extends SteamInterface {
 		return ugc->GetQueryUGCNumAdditionalPreviews(query, index);
 	*/
 
-	static private native String getQueryUGCAdditionalPreview(long pointer, long query, int index,
-															  int previewIndex, boolean[] isImage); /*
-		char urlOrVideoID[1024];
-		bool _isImage;
+	static private native boolean getQueryUGCAdditionalPreview(long pointer, long query, int index,
+															   int previewIndex, ItemAdditionalPreview previewData); /*
+		char url[1024];
+		char fileName[1024];
+		EItemPreviewType type;
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
-		if (ugc->GetQueryUGCAdditionalPreview(query, index, previewIndex, urlOrVideoID, 1024, &_isImage)) {
-			isImage[0] = _isImage;
-			return env->NewStringUTF(urlOrVideoID);
+		bool success = ugc->GetQueryUGCAdditionalPreview(query, index, previewIndex, url, 1024, fileName, 1024, &type);
+
+		if (success) {
+			jclass clazz = env->GetObjectClass(previewData);
+
+			jstring urlOrVideoID = env->NewStringUTF(url);
+			jfieldID field = env->GetFieldID(clazz, "urlOrVideoID", "Ljava/lang/String;");
+			env->SetObjectField(previewData, field, urlOrVideoID);
+
+			jstring originalFileName = env->NewStringUTF(fileName);
+			field = env->GetFieldID(clazz, "originalFileName", "Ljava/lang/String;");
+			env->SetObjectField(previewData, field, originalFileName);
+
+			field = env->GetFieldID(clazz, "previewType", "I");
+			env->SetIntField(previewData, field, (jint) type);
 		}
 
-		return nullptr;
+		return success;
 	*/
 
 	static private native int getQueryUGCNumKeyValueTags(long pointer, long query, int index); /*
