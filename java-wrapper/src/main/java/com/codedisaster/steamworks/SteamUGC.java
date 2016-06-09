@@ -190,7 +190,7 @@ public class SteamUGC extends SteamInterface {
 	public static class ItemAdditionalPreview {
 		private String urlOrVideoID;
 		private String originalFileName;
-		private ItemPreviewType previewType;
+		private int previewType;
 
 		public String getUrlOrVideoID() {
 			return urlOrVideoID;
@@ -201,7 +201,7 @@ public class SteamUGC extends SteamInterface {
 		}
 
 		public ItemPreviewType getPreviewType() {
-			return previewType;
+			return ItemPreviewType.byValue(previewType);
 		}
 	}
 
