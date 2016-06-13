@@ -212,15 +212,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			for (int i = 0; i < numResultsReturned; i++) {
 				SteamUGCDetails details = new SteamUGCDetails();
 				ugc.getQueryUGCResult(query, i, details);
-
-				System.out.println("UGC details #" + i +
-								   ": publishedFileID=" + details.getPublishedFileID().toString() +
-								   ", result=" + details.getResult().toString() +
-								   ", title='" + details.getTitle() + "'" +
-								   ", description='" + details.getDescription() + "'" +
-								   ", fileName=" + details.getFileName() +
-								   ", fileHandle=" + details.getFileHandle().toString() +
-								   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
+				printUGCDetails("UGC details #" + i, details);
 			}
 
 			ugc.releaseQueryUserUGCRequest(query);
@@ -239,14 +231,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		@Override
 		public void onRequestUGCDetails(SteamUGCDetails details, SteamResult result) {
 			System.out.println("Request details result: result=" + result);
-			System.out.println("UGC details " +
-					   ": publishedFileID=" + details.getPublishedFileID().toString() +
-					   ", result=" + details.getResult().toString() +
-					   ", title='" + details.getTitle() + "'" +
-					   ", description='" + details.getDescription() + "'" +
-					   ", fileName=" + details.getFileName() +
-					   ", fileHandle=" + details.getFileHandle().toString() +
-					   ", previewFileHandle=" + details.getPreviewFileHandle().toString());
+			printUGCDetails("UGC details ", details);
 		}
 
 		@Override
@@ -277,6 +262,20 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		@Override
 		public void onGetUserItemVote(SteamPublishedFileID publishedFileID, boolean votedUp, boolean votedDown, boolean voteSkipped, SteamResult result) {
 
+		}
+
+		private void printUGCDetails(String prefix, SteamUGCDetails details) {
+			System.out.println(prefix +
+					": publishedFileID=" + details.getPublishedFileID().toString() +
+					", result=" + details.getResult().name() +
+					", type=" + details.getFileType().name() +
+					", title='" + details.getTitle() + "'" +
+					", description='" + details.getDescription() + "'" +
+					", tags='" + details.getTags() + "'" +
+					", fileName=" + details.getFileName() +
+					", fileHandle=" + details.getFileHandle().toString() +
+					", previewFileHandle=" + details.getPreviewFileHandle().toString() +
+					", url=" + details.getURL());
 		}
 	};
 

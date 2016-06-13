@@ -534,6 +534,9 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "result", "I");
 			env->SetIntField(details, field, (jint) result.m_eResult);
 
+			field = env->GetFieldID(clazz, "fileType", "I");
+			env->SetIntField(details, field, (jint) result.m_eFileType);
+
 			jstring title = env->NewStringUTF(result.m_rgchTitle);
 			field = env->GetFieldID(clazz, "title", "Ljava/lang/String;");
 			env->SetObjectField(details, field, title);
@@ -541,6 +544,22 @@ public class SteamUGC extends SteamInterface {
 			jstring description = env->NewStringUTF(result.m_rgchDescription);
 			field = env->GetFieldID(clazz, "description", "Ljava/lang/String;");
 			env->SetObjectField(details, field, description);
+
+			field = env->GetFieldID(clazz, "ownerID", "J");
+			env->SetLongField(details, field, (jlong) result.m_ulSteamIDOwner);
+
+			field = env->GetFieldID(clazz, "timeCreated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeCreated);
+
+			field = env->GetFieldID(clazz, "timeUpdated", "I");
+			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
+
+			field = env->GetFieldID(clazz, "tagsTruncated", "Z");
+			env->SetIntField(details, field, (jboolean) result.m_bTagsTruncated);
+
+			jstring tags = env->NewStringUTF(result.m_rgchTags);
+			field = env->GetFieldID(clazz, "tags", "Ljava/lang/String;");
+			env->SetObjectField(details, field, tags);
 
 			field = env->GetFieldID(clazz, "fileHandle", "J");
 			env->SetLongField(details, field, (jlong) result.m_hFile);
@@ -552,20 +571,21 @@ public class SteamUGC extends SteamInterface {
 			field = env->GetFieldID(clazz, "fileName", "Ljava/lang/String;");
 			env->SetObjectField(details, field, fileName);
 
+			field = env->GetFieldID(clazz, "fileSize", "I");
+			env->SetIntField(details, field, (jint) result.m_nFileSize);
+
+			field = env->GetFieldID(clazz, "previewFileSize", "I");
+			env->SetIntField(details, field, (jint) result.m_nPreviewFileSize);
+
+			jstring url = env->NewStringUTF(result.m_rgchURL);
+			field = env->GetFieldID(clazz, "url", "Ljava/lang/String;");
+			env->SetObjectField(details, field, url);
+
 			field = env->GetFieldID(clazz, "votesUp", "I");
 			env->SetIntField(details, field, (jint) result.m_unVotesUp);
 
 			field = env->GetFieldID(clazz, "votesDown", "I");
 			env->SetIntField(details, field, (jint) result.m_unVotesDown);
-
-			field = env->GetFieldID(clazz, "ownerID", "J");
-			env->SetLongField(details, field, (jlong) result.m_ulSteamIDOwner);
-
-			field = env->GetFieldID(clazz, "timeCreated", "I");
-			env->SetIntField(details, field, (jint) result.m_rtimeCreated);
-
-			field = env->GetFieldID(clazz, "timeUpdated", "I");
-			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
 
 			return true;
 		}

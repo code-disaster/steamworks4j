@@ -32,7 +32,13 @@ public class SteamRemoteStorage extends SteamInterface {
 		ControllerBinding,
 		SteamworksAccessInvite,
 		SteamVideo,
-		GameManagedItem
+		GameManagedItem;
+
+		private static final WorkshopFileType[] values = values();
+
+		static WorkshopFileType byOrdinal(int ordinal) {
+			return values[ordinal];
+		}
 	}
 
 	public SteamRemoteStorage(SteamRemoteStorageCallback callback) {
