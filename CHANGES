@@ -1,5 +1,10 @@
 []
 
+[1.3.1]
+- Updated to Steamworks SDK v1.37.
+- Added some missing SteamUtils functions (#35).
+- Added more fields returned in SteamUGCDetails (#34).
+
 [1.3.0]
 - Updated to Steamworks SDK v1.36.
 - API change: changed auth ticket API to use SteamAuthTicket objects instead of plain integer handles.
