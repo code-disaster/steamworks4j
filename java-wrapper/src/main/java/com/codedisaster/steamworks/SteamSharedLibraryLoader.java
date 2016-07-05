@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks;
 
 import java.io.*;
+import java.util.UUID;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -49,17 +50,24 @@ class SteamSharedLibraryLoader {
 
 		boolean is64Bit = osArch.equals("amd64") || osArch.equals("x86_64");
 
+		File extractLocation = discoverExtractLocation(
+				"steamworks4j/" + libraryCrc, UUID.randomUUID().toString());
+
+		if (extractLocation != null) {
+			extractLocation = extractLocation.getParentFile();
+		} else {
+			throw new IOException();
+		}
+
 		for (String libraryName : libraryNames) {
 
 			String librarySystemName = "";
 
 			if (isWindows) {
 				librarySystemName = getLibNameWindows(libraryName, is64Bit);
-			}
-			if (isLinux) {
+			} else if (isLinux) {
 				librarySystemName = getLibNameLinux(libraryName, is64Bit);
-			}
-			if (isMac) {
+			} else if (isMac) {
 				librarySystemName = getLibNameMac(libraryName);
 			}
 
@@ -67,7 +75,7 @@ class SteamSharedLibraryLoader {
 
 			if (fromJar) {
 				// extract library from Jar into temp folder
-				fullPath = extractLibrary(librarySystemName);
+				fullPath = extractLibrary(extractLocation, librarySystemName);
 			} else {
 				// load native library directly from specified path
 				fullPath = libraryPath + "/" + librarySystemName;
@@ -78,16 +86,9 @@ class SteamSharedLibraryLoader {
 		}
 	}
 
-	private String extractLibrary(String sharedLibName) throws IOException {
+	private String extractLibrary(File nativesPath, String sharedLibName) throws IOException {
 
-		File nativesPath = new File(System.getProperty("java.io.tmpdir") + "/steamworks4j/" + libraryCrc);
 		File nativeFile = new File(nativesPath, sharedLibName);
-
-		if (!nativesPath.exists()) {
-			if (!nativesPath.mkdirs()) {
-				throw new IOException("Error creating temp folder: " + nativesPath.getCanonicalPath());
-			}
-		}
 
 		ZipFile zip = new ZipFile(libraryPath);
 		ZipEntry entry = zip.getEntry(sharedLibName);
@@ -146,19 +147,21 @@ class SteamSharedLibraryLoader {
 				// if no library path is specified, extract steamworks4j-natives.jar from
 				// resource path into temporary folder
 
-				libraryPath = System.getProperty("java.io.tmpdir") + "/steamworks4j/steamworks4j-natives.jar";
-
-				File libraryDirectory = new File(libraryPath).getParentFile();
-				if (!libraryDirectory.exists()) {
-					if (!libraryDirectory.mkdirs()) {
-						return false;
-					}
+				File extractLocation = discoverExtractLocation("steamworks4j", "steamworks4j-natives.jar");
+				if (extractLocation == null) {
+					return false;
 				}
+
+				libraryPath = extractLocation.getPath();
 
 				try {
 
 					InputStream input = SteamSharedLibraryLoader.class.getResourceAsStream("/steamworks4j-natives.jar");
-					FileOutputStream output = new FileOutputStream(new File(libraryPath));
+					if (input == null) {
+						return false;
+					}
+
+					FileOutputStream output = new FileOutputStream(extractLocation);
 
 					byte[] cache = new byte[4096];
 					int length;
@@ -194,4 +197,94 @@ class SteamSharedLibraryLoader {
 		alreadyLoaded = true;
 		return true;
 	}
+
+	private static File discoverExtractLocation(String folderName, String fileName) {
+
+		// Java tmpdir
+
+		File path = new File(System.getProperty("java.io.tmpdir") + "/" + folderName, fileName);
+		if (canWrite(path)) {
+			return path;
+		}
+
+		// NIO temp file
+
+		try {
+			File file = File.createTempFile(folderName, null);
+			if (file.delete()) {
+				// uses temp file path as destination folder
+				path = new File(file, fileName);
+				if (canWrite(path)) {
+					return path;
+				}
+			}
+		} catch (IOException ignored) {
+
+		}
+
+		// $home
+
+		path = new File(System.getProperty("user.home") + "/." + folderName, fileName);
+		if (canWrite(path)) {
+			return path;
+		}
+
+		// working directory
+
+		path = new File(".tmp/" + folderName, fileName);
+		if (canWrite(path)) {
+			return path;
+		}
+
+		return null;
+	}
+
+	private static boolean canWrite(File file) {
+
+		File folder = file.getParentFile();
+
+		if (file.exists()) {
+			if (!file.canWrite() || !canExecute(file)) {
+				return false;
+			}
+		} else {
+			if (!folder.exists()) {
+				if (!folder.mkdirs()) {
+					return false;
+				}
+			}
+			if (!folder.isDirectory()) {
+				return false;
+			}
+		}
+
+		File testFile = new File(folder, UUID.randomUUID().toString());
+
+		try {
+			new FileOutputStream(testFile).close();
+			return canExecute(testFile);
+		} catch (IOException e) {
+			return false;
+		} finally {
+			testFile.delete();
+		}
+	}
+
+	private static boolean canExecute(File file) {
+
+		try {
+			if (file.canExecute()) {
+				return true;
+			}
+
+			if (file.setExecutable(true)) {
+				return file.canExecute();
+			}
+		} catch (Exception ignored) {
+
+		}
+
+		return false;
+	}
+
 }
