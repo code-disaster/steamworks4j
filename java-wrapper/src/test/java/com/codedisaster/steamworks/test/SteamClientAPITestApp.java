@@ -163,6 +163,11 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					", globalRankNew=" + globalRankNew +
 					", globalRankPrevious=" + globalRankPrevious);
 		}
+
+		@Override
+		public void onGlobalStatsReceived(long gameId, SteamResult result) {
+			System.out.println("Global stats received: gameId=" + gameId + ", result=" + result.toString());
+		}
 	};
 
 	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
@@ -376,7 +381,52 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	@Override
 	protected void processInput(String input) throws SteamException {
 
-		if (input.equals("stats request")) {
+		if (input.startsWith("stats global ")) {
+			String[] cmd = input.substring("stats global ".length()).split(" ");
+			if (cmd.length > 0) {
+				if (cmd[0].equals("request")) {
+					int days = 0;
+					if (cmd.length > 1) {
+						days = Integer.parseInt(cmd[1]);
+					}
+					userStats.requestGlobalStats(days);
+				} else if (cmd[0].equals("lget") && cmd.length > 1) {
+					int days = 0;
+					if (cmd.length > 2) {
+						days = Integer.parseInt(cmd[2]);
+					}
+					if (days == 0) {
+						long value = userStats.getGlobalStat(cmd[1], -1);
+						System.out.println("global stat (L) '" + cmd[1] + "' = " + value);
+					} else {
+						long[] data = new long[days];
+						int count = userStats.getGlobalStatHistory(cmd[1], data);
+						System.out.print("global stat history (L) for " + count + " of " + days + " days: ");
+						for (int i = 0; i < count; i++) {
+							System.out.print(Long.toString(data[i]));
+						}
+						System.out.println();
+					}
+				} else if (cmd[0].equals("dget") && cmd.length > 1) {
+					int days = 0;
+					if (cmd.length > 2) {
+						days = Integer.parseInt(cmd[2]);
+					}
+					if (days == 0) {
+						double value = userStats.getGlobalStat(cmd[1], -1.0);
+						System.out.println("global stat (D) '" + cmd[1] + "' = " + value);
+					} else {
+						double[] data = new double[days];
+						int count = userStats.getGlobalStatHistory(cmd[1], data);
+						System.out.print("global stat history (D) for " + count + " of " + days + " days: ");
+						for (int i = 0; i < count; i++) {
+							System.out.print(Double.toString(data[i]));
+						}
+						System.out.println();
+					}
+				}
+			}
+		} else if (input.equals("stats request")) {
 			userStats.requestCurrentStats();
 		} else if (input.equals("stats store")) {
 			userStats.storeStats();

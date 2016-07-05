@@ -27,4 +27,6 @@ public interface SteamUserStatsCallback {
 									int globalRankNew,
 									int globalRankPrevious);
 
+	void onGlobalStatsReceived(long gameId, SteamResult result);
+
 }

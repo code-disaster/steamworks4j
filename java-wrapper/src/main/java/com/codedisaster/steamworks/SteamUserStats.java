@@ -157,6 +157,34 @@ public class SteamUserStats extends SteamInterface {
 				: uploadLeaderboardScore(pointer, callback, leaderboard.handle, method.ordinal(), score, scoreDetails, scoreDetails.length));
 	}
 
+	public SteamAPICall requestGlobalStats(int historyDays) {
+		return new SteamAPICall(requestGlobalStats(pointer, callback, historyDays));
+	}
+
+	public long getGlobalStat(String name, long defaultValue) {
+		long[] values = new long[1];
+		if (getGlobalStat(pointer, name, values)) {
+			return values[0];
+		}
+		return defaultValue;
+	}
+
+	public double getGlobalStat(String name, double defaultValue) {
+		double[] values = new double[1];
+		if (getGlobalStat(pointer, name, values)) {
+			return values[0];
+		}
+		return defaultValue;
+	}
+
+	public int getGlobalStatHistory(String name, long[] data) {
+		return getGlobalStatHistory(pointer, name, data, data.length);
+	}
+
+	public int getGlobalStatHistory(String name, double[] data) {
+		return getGlobalStatHistory(pointer, name, data, data.length);
+	}
+
 	// @off
 
 	/*JNI
@@ -375,6 +403,37 @@ public class SteamUserStats extends SteamInterface {
 			&SteamUserStatsCallback::onLeaderboardScoreUploaded);
 
 		return handle;
+	*/
+
+	static private native long requestGlobalStats(long pointer, long callback, int historyDays); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
+
+		SteamAPICall_t handle = stats->RequestGlobalStats(historyDays);
+
+		cb->onGlobalStatsReceivedCall.Set(handle, cb, &SteamUserStatsCallback::onGlobalStatsReceived);
+
+		return handle;
+	*/
+
+	static private native boolean getGlobalStat(long pointer, String name, long[] value); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetGlobalStat(name, &((int64*) value)[0]);
+	*/
+
+	static private native boolean getGlobalStat(long pointer, String name, double[] value); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetGlobalStat(name, &value[0]);
+	*/
+
+	static private native int getGlobalStatHistory(long pointer, String name, long[] values, int count); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetGlobalStatHistory(name, values, count);
+	*/
+
+	static private native int getGlobalStatHistory(long pointer, String name, double[] values, int count); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		return stats->GetGlobalStatHistory(name, values, count);
 	*/
 
 }

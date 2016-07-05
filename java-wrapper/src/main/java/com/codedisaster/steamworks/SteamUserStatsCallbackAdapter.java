@@ -39,4 +39,8 @@ class SteamUserStatsCallbackAdapter extends SteamCallbackAdapter<SteamUserStatsC
 				globalRankNew, globalRankPrevious);
 	}
 
+	void onGlobalStatsReceived(long gameId, int result) {
+		callback.onGlobalStatsReceived(gameId, SteamResult.byValue(result));
+	}
+
 }

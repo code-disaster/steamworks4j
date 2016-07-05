@@ -62,3 +62,10 @@ void SteamUserStatsCallback::onLeaderboardScoreUploaded(LeaderboardScoreUploaded
             (jint) callback->m_nGlobalRankPrevious);
     });
 }
+
+void SteamUserStatsCallback::onGlobalStatsReceived(GlobalStatsReceived_t* callback, bool error) {
+    invokeCallback({
+        callVoidMethod(env, "onGlobalStatsReceived", "(JI)V", (jlong) callback->m_nGameID,
+            (jint) callback->m_eResult);
+    });
+}
