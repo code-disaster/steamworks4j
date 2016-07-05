@@ -428,12 +428,12 @@ public class SteamUserStats extends SteamInterface {
 
 	static private native int getGlobalStatHistory(long pointer, String name, long[] values, int count); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
-		return stats->GetGlobalStatHistory(name, values, count);
+		return stats->GetGlobalStatHistory(name, values, count * sizeof(int64));
 	*/
 
 	static private native int getGlobalStatHistory(long pointer, String name, double[] values, int count); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
-		return stats->GetGlobalStatHistory(name, values, count);
+		return stats->GetGlobalStatHistory(name, values, count * sizeof(double));
 	*/
 
 }

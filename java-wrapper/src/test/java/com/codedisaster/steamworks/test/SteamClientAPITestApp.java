@@ -401,9 +401,9 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					} else {
 						long[] data = new long[days];
 						int count = userStats.getGlobalStatHistory(cmd[1], data);
-						System.out.print("global stat history (L) for " + count + " of " + days + " days: ");
+						System.out.print("global stat history (L) for " + count + " of " + days + " days:");
 						for (int i = 0; i < count; i++) {
-							System.out.print(Long.toString(data[i]));
+							System.out.print(" " + Long.toString(data[i]));
 						}
 						System.out.println();
 					}
@@ -418,9 +418,9 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					} else {
 						double[] data = new double[days];
 						int count = userStats.getGlobalStatHistory(cmd[1], data);
-						System.out.print("global stat history (D) for " + count + " of " + days + " days: ");
+						System.out.print("global stat history (D) for " + count + " of " + days + " days:");
 						for (int i = 0; i < count; i++) {
-							System.out.print(Double.toString(data[i]));
+							System.out.print(" " + Double.toString(data[i]));
 						}
 						System.out.println();
 					}
