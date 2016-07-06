@@ -2,30 +2,19 @@ package com.codedisaster.steamworks;
 
 import java.io.*;
 import java.util.UUID;
-import java.util.zip.CRC32;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.*;
 
 class SteamSharedLibraryLoader {
 
 	private final String libraryPath;
-	private final boolean fromJar;
-
-	private String libraryCrc;
 
 	private static boolean alreadyLoaded = false;
+	private static File librarySystemPath;
 
-	private SteamSharedLibraryLoader(String libraryPath, boolean fromJar) {
+	private static final String extractSubFolder = "steamworks4j/";
+
+	private SteamSharedLibraryLoader(String libraryPath) {
 		this.libraryPath = libraryPath;
-		this.fromJar = fromJar;
-
-		if (libraryPath != null && fromJar) {
-			try {
-				libraryCrc = crc(new FileInputStream(new File(libraryPath)));
-			} catch (FileNotFoundException e) {
-				libraryCrc = Integer.toHexString(libraryPath.hashCode());
-			}
-		}
 	}
 
 	private String getLibNameWindows(String sharedLibName, boolean is64Bit) {
@@ -50,38 +39,55 @@ class SteamSharedLibraryLoader {
 
 		boolean is64Bit = osArch.equals("amd64") || osArch.equals("x86_64");
 
-		File extractLocation = discoverExtractLocation(
-				"steamworks4j/" + libraryCrc, UUID.randomUUID().toString());
+		String[] librarySystemNames = new String[libraryNames.length];
 
-		if (extractLocation != null) {
-			extractLocation = extractLocation.getParentFile();
-		} else {
-			throw new IOException();
+		for (int i = 0; i < libraryNames.length; i++) {
+			if (isWindows) {
+				librarySystemNames[i] = getLibNameWindows(libraryNames[i], is64Bit);
+			} else if (isLinux) {
+				librarySystemNames[i] = getLibNameLinux(libraryNames[i], is64Bit);
+			} else if (isMac) {
+				librarySystemNames[i] = getLibNameMac(libraryNames[i]);
+			} else {
+				throw new IOException("Unrecognized system architecture: " + osName + ", " + osArch);
+			}
 		}
 
-		for (String libraryName : libraryNames) {
+		if (libraryPath == null) {
 
-			String librarySystemName = "";
+			String libraryCrc = ".nohash";
+			CRC32 crc = new CRC32();
 
-			if (isWindows) {
-				librarySystemName = getLibNameWindows(libraryName, is64Bit);
-			} else if (isLinux) {
-				librarySystemName = getLibNameLinux(libraryName, is64Bit);
-			} else if (isMac) {
-				librarySystemName = getLibNameMac(libraryName);
+			for (String librarySystemName : librarySystemNames) {
+				libraryCrc = crc(crc, getClass().getResourceAsStream("/" + librarySystemName));
 			}
+
+			librarySystemPath = discoverExtractLocation(
+					extractSubFolder + libraryCrc, UUID.randomUUID().toString());
+
+			if (librarySystemPath == null) {
+				throw new IOException("Failed to create temp folder to extract native libraries");
+			}
+
+			librarySystemPath = librarySystemPath.getParentFile();
+		} else {
+			librarySystemPath = new File(libraryPath);
+		}
+
+		for (String librarySystemName : librarySystemNames) {
 
 			String fullPath;
 
-			if (fromJar) {
+			if (libraryPath == null) {
 				// extract library from Jar into temp folder
-				fullPath = extractLibrary(extractLocation, librarySystemName);
+				fullPath = extractLibrary(librarySystemPath, librarySystemName);
 			} else {
 				// load native library directly from specified path
-				fullPath = libraryPath + "/" + librarySystemName;
+				fullPath = librarySystemPath + "/" + librarySystemName;
 			}
 
 			String absolutePath = new File(fullPath).getCanonicalPath();
+
 			System.load(absolutePath);
 		}
 	}
@@ -90,12 +96,20 @@ class SteamSharedLibraryLoader {
 
 		File nativeFile = new File(nativesPath, sharedLibName);
 
-		ZipFile zip = new ZipFile(libraryPath);
-		ZipEntry entry = zip.getEntry(sharedLibName);
-		InputStream input = zip.getInputStream(entry);
+		InputStream input;
+		ZipFile zip = null;
+
+		if (libraryPath != null) {
+			zip = new ZipFile(libraryPath);
+			ZipEntry entry = zip.getEntry(sharedLibName);
+			input = zip.getInputStream(entry);
+		} else {
+			input = SteamSharedLibraryLoader.class.getResourceAsStream("/" + sharedLibName);
+		}
 
 		if (input == null) {
-			throw new IOException("Error extracting " + sharedLibName + " from " + libraryPath);
+			throw new IOException("Error extracting " + sharedLibName + " from " +
+					(libraryPath != null ? libraryPath : "resources"));
 		}
 
 		FileOutputStream output = new FileOutputStream(nativeFile);
@@ -107,13 +121,16 @@ class SteamSharedLibraryLoader {
 		}
 
 		output.close();
-		zip.close();
+		input.close();
+
+		if (zip != null) {
+			zip.close();
+		}
 
 		return nativeFile.getAbsolutePath();
 	}
 
-	private String crc(InputStream input) {
-		CRC32 crc = new CRC32();
+	private String crc(CRC32 crc, InputStream input) {
 		byte[] buffer = new byte[4096];
 		try {
 			while (true) {
@@ -132,66 +149,18 @@ class SteamSharedLibraryLoader {
 		return Long.toHexString(crc.getValue());
 	}
 
-	static boolean extractAndLoadLibraries(boolean fromJar, String libraryPath) {
+	static boolean loadLibraries(String libraryPath) throws SteamException {
 
 		if (alreadyLoaded) {
 			return true;
 		}
 
-		SteamSharedLibraryLoader loader;
-
-		if (fromJar) {
-
-			if (libraryPath == null) {
-
-				// if no library path is specified, extract steamworks4j-natives.jar from
-				// resource path into temporary folder
-
-				File extractLocation = discoverExtractLocation("steamworks4j", "steamworks4j-natives.jar");
-				if (extractLocation == null) {
-					return false;
-				}
-
-				libraryPath = extractLocation.getPath();
-
-				try {
-
-					InputStream input = SteamSharedLibraryLoader.class.getResourceAsStream("/steamworks4j-natives.jar");
-					if (input == null) {
-						return false;
-					}
-
-					FileOutputStream output = new FileOutputStream(extractLocation);
-
-					byte[] cache = new byte[4096];
-					int length;
-
-					do {
-						length = input.read(cache);
-						if (length > 0) {
-							output.write(cache, 0, length);
-						}
-					} while (length > 0);
-
-					input.close();
-					output.close();
-
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-
-			}
-
-		}
-
-		loader = new SteamSharedLibraryLoader(libraryPath, fromJar);
+		SteamSharedLibraryLoader loader = new SteamSharedLibraryLoader(libraryPath);
 
 		try {
 			loader.loadLibraries("steam_api", "steamworks4j");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
+		} catch (Throwable t) {
+			throw new SteamException(t);
 		}
 
 		alreadyLoaded = true;
@@ -200,9 +169,11 @@ class SteamSharedLibraryLoader {
 
 	private static File discoverExtractLocation(String folderName, String fileName) {
 
+		File path;
+
 		// Java tmpdir
 
-		File path = new File(System.getProperty("java.io.tmpdir") + "/" + folderName, fileName);
+		path = new File(System.getProperty("java.io.tmpdir") + "/" + folderName, fileName);
 		if (canWrite(path)) {
 			return path;
 		}
@@ -222,7 +193,7 @@ class SteamSharedLibraryLoader {
 
 		}
 
-		// $home
+		// user home
 
 		path = new File(System.getProperty("user.home") + "/." + folderName, fileName);
 		if (canWrite(path)) {

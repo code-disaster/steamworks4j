@@ -4,16 +4,15 @@ public class SteamAPI {
 
 	static private boolean isRunning = false;
 
-	static public boolean init() {
+	static public boolean init() throws SteamException {
 		return init(null);
 	}
 
-	static public boolean init(String pathToNativeLibraries) {
-		boolean fromJar = pathToNativeLibraries == null || pathToNativeLibraries.endsWith(".jar");
+	static public boolean init(String libraryPath) throws SteamException {
 
-		isRunning = SteamSharedLibraryLoader.extractAndLoadLibraries(fromJar, pathToNativeLibraries);
+		SteamSharedLibraryLoader.loadLibraries(libraryPath);
 
-		isRunning = isRunning && nativeInit();
+		isRunning = nativeInit();
 
 		return isRunning;
 	}

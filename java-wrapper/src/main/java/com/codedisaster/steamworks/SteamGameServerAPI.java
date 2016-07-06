@@ -12,20 +12,18 @@ public class SteamGameServerAPI {
 	private static boolean isRunning = false;
 
 	public static boolean init(int ip, short steamPort, short gamePort, short queryPort,
-							   ServerMode serverMode, String versionString) {
+							   ServerMode serverMode, String versionString) throws SteamException {
 
 		return init(null, ip, steamPort, gamePort, queryPort, serverMode, versionString);
 	}
 
-	public static boolean init(String pathToNativeLibraries,
+	public static boolean init(String libraryPath,
 							   int ip, short steamPort, short gamePort, short queryPort,
-							   ServerMode serverMode, String versionString) {
+							   ServerMode serverMode, String versionString) throws SteamException {
 
-		boolean fromJar = pathToNativeLibraries == null || pathToNativeLibraries.endsWith(".jar");
+		SteamSharedLibraryLoader.loadLibraries(libraryPath);
 
-		isRunning = SteamSharedLibraryLoader.extractAndLoadLibraries(fromJar, pathToNativeLibraries);
-
-		isRunning = isRunning && nativeInit(ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);
+		isRunning = nativeInit(ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);
 
 		return isRunning;
 	}
