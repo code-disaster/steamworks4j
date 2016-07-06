@@ -8,7 +8,7 @@ layout: default
 
 To add Steamworks support, you just have to download and add ```steamworks4j-{{ site.steamworks4j.version }}.jar``` to your Java project.
 
-> *steamworks4j-{{ site.steamworks4j.version }}.jar* is the only file you need to ship with your game. It already embeds *steamworks4j-natives.jar*, which by itself contains all platform-dependent, native libraries.
+> Starting with version 1.4.0, native libraries are contained in *steamworks4j-{{ site.steamworks4j.version }}.jar* directly. The *steamworks4j-natives.jar* archive has been removed.
 
 Major updates are released on Maven Central, so the easiest way is to add the library as an external dependency, using your favorite build environment.
 
@@ -51,16 +51,20 @@ Please refer to the official documentation to learn about the steps needed to pr
 To load the native libraries and initialize the Steamworks client API, you just need to call ```SteamAPI.init()```.
 
 {% highlight java %}
-if (!SteamAPI.init()) {
-	// report error
+try {
+    if (!SteamAPI.init()) {
+        // Steamworks initialization error, e.g. Steam client not running
+    }
+} catch (SteamException e) {
+    // Error extracting or loading native libraries
 }
 {% endhighlight java %}
 
-By default, ```SteamAPI.init()``` tries to automatically detect the operating system it runs on, then extracts the appropriate native libraries from *steamworks4j-natives.jar* found in your application's resource path to a temporary folder. There's a second function which allows to specify the path to a custom JAR, or to a directory containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries from ```steamworks4j/natives/libs/``` for development purposes.
+By default, ```SteamAPI.init()``` detects the operating system it runs on, then extracts the appropriate native libraries from your application's resource path to a temporary folder. There's a second function which allows to specify the path to a directory containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries from ```steamworks4j/java-wrapper/src/main/resources/``` directly for development purposes.
 
 {% highlight java %}
-if (!SteamAPI.init("../natives/libs")) {
-	// report error
+if (!SteamAPI.init("../java-wrapper/src/main/resources")) {
+	// Steamworks initialization error, e.g. Steam client not running
 }
 {% endhighlight java %}
 
