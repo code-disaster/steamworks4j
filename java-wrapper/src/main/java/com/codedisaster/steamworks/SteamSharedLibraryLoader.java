@@ -8,8 +8,8 @@ class SteamSharedLibraryLoader {
 
 	private final String libraryPath;
 
-	private static boolean alreadyLoaded = false;
-	private static File librarySystemPath;
+	static boolean alreadyLoaded = false;
+	static File librarySystemPath;
 
 	private static final String extractSubFolder = "steamworks4j/";
 

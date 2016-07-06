@@ -1,5 +1,7 @@
 package com.codedisaster.steamworks;
 
+import java.io.PrintStream;
+
 public class SteamAPI {
 
 	static private boolean isRunning = false;
@@ -24,6 +26,16 @@ public class SteamAPI {
 
 	static public boolean isSteamRunning() {
 		return isRunning && isSteamRunningNative();
+	}
+
+	public static void printDebugInfo(PrintStream stream) {
+		if (SteamSharedLibraryLoader.alreadyLoaded) {
+			stream.println("  shared libraries loaded from: " + SteamSharedLibraryLoader.librarySystemPath);
+		} else {
+			stream.println("  shared libraries not loaded");
+		}
+		stream.println("  Steam API initialized: " + isRunning);
+		stream.println("  Steam client active: " + isSteamRunning());
 	}
 
 	// @off

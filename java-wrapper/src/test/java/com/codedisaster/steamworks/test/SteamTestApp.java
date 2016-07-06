@@ -81,6 +81,8 @@ public abstract class SteamTestApp {
 			return false;
 		}
 
+		SteamAPI.printDebugInfo(System.out);
+
 		registerInterfaces();
 
 		clientUtils = new SteamUtils(clUtilsCallback);
