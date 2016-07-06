@@ -40,7 +40,6 @@
 	</scm>
 
 	<modules>
-		<module>natives</module>
 		<module>java-wrapper</module>
 		<module>jnigen</module>
 	</modules>
