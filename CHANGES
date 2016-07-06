@@ -1,4 +1,6 @@
 []
+
+[1.4.0]
 - Removed steamworks4j-natives subproject. Native libraries are now added as resources to steamworks4j.jar directly.
 - Added functions to query global stats. This also adds a new method to SteamUserStatsCallback (#36).
 - Updated shared library loader, adding a few fallbacks in case executables cannot be written to, or launched from, java.io.tmpdir.
