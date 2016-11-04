@@ -84,3 +84,21 @@ void SteamUGCCallback::onGetUserItemVote(GetUserItemVoteResult_t* callback, bool
 		    (jboolean) callback->m_bVoteSkipped, (jint) callback->m_eResult);
 	});
 }
+
+void SteamUGCCallback::onStartPlaytimeTracking(StartPlaytimeTrackingResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onStartPlaytimeTracking", "(I)V", (jint) callback->m_eResult);
+	});
+}
+
+void SteamUGCCallback::onStopPlaytimeTracking(StopPlaytimeTrackingResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onStopPlaytimeTracking", "(I)V", (jint) callback->m_eResult);
+	});
+}
+
+void SteamUGCCallback::onStopPlaytimeTrackingForAllItems(StopPlaytimeTrackingResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onStopPlaytimeTrackingForAllItems", "(I)V", (jint) callback->m_eResult);
+	});
+}

@@ -25,4 +25,10 @@ public interface SteamUGCCallback {
 	void onGetUserItemVote(SteamPublishedFileID publishedFileID, boolean votedUp,
 						   boolean votedDown, boolean voteSkipped, SteamResult result);
 
+	void onStartPlaytimeTracking(SteamResult result);
+
+	void onStopPlaytimeTracking(SteamResult result);
+
+	void onStopPlaytimeTrackingForAllItems(SteamResult result);
+
 }

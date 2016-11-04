@@ -4,6 +4,24 @@ import java.util.Collection;
 
 public class SteamFriends extends SteamInterface {
 
+	public enum FriendRelationship {
+		None,
+		Blocked,
+		Recipient,
+		Friend,
+		RequestInitiator,
+		Ignored,
+		IgnoredFriend,
+		Suggested_DEPRECATED,
+		Max;
+
+		private static final FriendRelationship[] values = values();
+
+		static FriendRelationship byOrdinal(int friendRelationship) {
+			return values[friendRelationship];
+		}
+	}
+
 	public enum PersonaState {
 		Offline,
 		Online,
@@ -109,6 +127,10 @@ public class SteamFriends extends SteamInterface {
 		return new SteamID(getFriendByIndex(pointer, friend, FriendFlags.asBits(friendFlags)));
 	}
 
+	public FriendRelationship getFriendRelationship(SteamID steamIDFriend) {
+		return FriendRelationship.byOrdinal(getFriendRelationship(pointer, steamIDFriend.handle));
+	}
+
 	public PersonaState getFriendPersonaState(SteamID steamIDFriend) {
 		return PersonaState.byOrdinal(getFriendPersonaState(pointer, steamIDFriend.handle));
 	}
@@ -167,6 +189,11 @@ public class SteamFriends extends SteamInterface {
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		CSteamID id = friends->GetFriendByIndex(friendIndex, friendFlags);
 		return id.ConvertToUint64();
+	*/
+
+	static private native int getFriendRelationship(long pointer, long steamIDFriend); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetFriendRelationship((uint64) steamIDFriend);
 	*/
 
 	static private native int getFriendPersonaState(long pointer, long steamIDFriend); /*

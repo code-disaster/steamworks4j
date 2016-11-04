@@ -70,4 +70,16 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 				votedUp, votedDown, voteSkipped, SteamResult.byValue(result));
 	}
 
+	void onStartPlaytimeTracking(int result) {
+		callback.onStartPlaytimeTracking(SteamResult.byValue(result));
+	}
+
+	void onStopPlaytimeTracking(int result) {
+		callback.onStopPlaytimeTracking(SteamResult.byValue(result));
+	}
+
+	void onStopPlaytimeTrackingForAllItems(int result) {
+		callback.onStopPlaytimeTrackingForAllItems(SteamResult.byValue(result));
+	}
+
 }

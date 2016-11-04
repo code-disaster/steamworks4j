@@ -282,6 +282,21 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					", previewFileHandle=" + details.getPreviewFileHandle().toString() +
 					", url=" + details.getURL());
 		}
+
+		@Override
+		public void onStartPlaytimeTracking(SteamResult result) {
+
+		}
+
+		@Override
+		public void onStopPlaytimeTracking(SteamResult result) {
+
+		}
+
+		@Override
+		public void onStopPlaytimeTrackingForAllItems(SteamResult result) {
+
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {

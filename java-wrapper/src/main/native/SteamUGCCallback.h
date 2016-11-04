@@ -37,4 +37,13 @@ public:
 
 	void onGetUserItemVote(GetUserItemVoteResult_t* callback, bool error);
 	CCallResult<SteamUGCCallback, GetUserItemVoteResult_t> onGetUserItemVoteCall;
+
+	void onStartPlaytimeTracking(StartPlaytimeTrackingResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, StartPlaytimeTrackingResult_t> onStartPlaytimeTrackingCall;
+
+	void onStopPlaytimeTracking(StopPlaytimeTrackingResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, StopPlaytimeTrackingResult_t> onStopPlaytimeTrackingCall;
+
+	void onStopPlaytimeTrackingForAllItems(StopPlaytimeTrackingResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, StopPlaytimeTrackingResult_t> onStopPlaytimeTrackingForAllItemsCall;
 };

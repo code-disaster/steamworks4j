@@ -63,7 +63,13 @@ public class SteamUGC extends SteamInterface {
 		RankedByTotalVotesAsc,
 		RankedByVotesUp,
 		RankedByTextSearch,
-		RankedByTotalUniqueSubscriptions
+		RankedByTotalUniqueSubscriptions,
+		RankedByPlaytimeTrend,
+		RankedByTotalPlaytime,
+		RankedByAveragePlaytimeTrend,
+		RankedByLifetimeAveragePlaytime,
+		RankedByPlaytimeSessionsTrend,
+		RankedByLifetimePlaytimeSessions
 	}
 
 	public enum ItemUpdateStatus {
@@ -131,7 +137,10 @@ public class SteamUGC extends SteamInterface {
 		NumUniqueFavorites,
 		NumUniqueFollowers,
 		NumUniqueWebsiteViews,
-		ReportScore
+		ReportScore,
+		NumSecondsPlayed,
+		NumPlaytimeSessions,
+		NumComments
 	}
 
 	public enum ItemPreviewType {
@@ -258,7 +267,7 @@ public class SteamUGC extends SteamInterface {
 		return getQueryUGCMetadata(pointer, query.handle, index);
 	}
 
-	public int getQueryUGCStatistic(SteamUGCQuery query, int index, ItemStatistic statType) {
+	public long getQueryUGCStatistic(SteamUGCQuery query, int index, ItemStatistic statType) {
 		return getQueryUGCStatistic(pointer, query.handle, index, statType.ordinal());
 	}
 
@@ -290,6 +299,10 @@ public class SteamUGC extends SteamInterface {
 
 	public boolean addExcludedTag(SteamUGCQuery query, String tagName) {
 		return addExcludedTag(pointer, query.handle, tagName);
+	}
+
+	public boolean setReturnOnlyIDs(SteamUGCQuery query, boolean returnOnlyIDs) {
+		return setReturnOnlyIDs(pointer, query.handle, returnOnlyIDs);
 	}
 
 	public boolean setReturnKeyValueTags(SteamUGCQuery query, boolean returnKeyValueTags) {
@@ -480,6 +493,30 @@ public class SteamUGC extends SteamInterface {
 		suspendDownloads(pointer, suspend);
 	}
 
+	public SteamAPICall startPlaytimeTracking(SteamPublishedFileID[] publishedFileIDs) {
+		long[] ids = new long[publishedFileIDs.length];
+
+		for (int i = 0; i < ids.length; i++) {
+			ids[i] = publishedFileIDs[i].handle;
+		}
+
+		return new SteamAPICall(startPlaytimeTracking(pointer, callback, ids, ids.length));
+	}
+
+	public SteamAPICall stopPlaytimeTracking(SteamPublishedFileID[] publishedFileIDs) {
+		long[] ids = new long[publishedFileIDs.length];
+
+		for (int i = 0; i < ids.length; i++) {
+			ids[i] = publishedFileIDs[i].handle;
+		}
+
+		return new SteamAPICall(stopPlaytimeTracking(pointer, callback, ids, ids.length));
+	}
+
+	public SteamAPICall stopPlaytimeTrackingForAllItems() {
+		return new SteamAPICall(stopPlaytimeTrackingForAllItems(pointer, callback));
+	}
+
 	// @off
 
 	/*JNI
@@ -618,8 +655,8 @@ public class SteamUGC extends SteamInterface {
 //	static private native boolean getQueryUGCChildren(long pointer, long query, int index,
 //													  long[] publishedFileIDs, long maxEntries);
 
-	static private native int getQueryUGCStatistic(long pointer, long query, int index, int statType); /*
-		uint32 statValue;
+	static private native long getQueryUGCStatistic(long pointer, long query, int index, int statType); /*
+		uint64 statValue;
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		if (ugc->GetQueryUGCStatistic(query, index, (EItemStatistic) statType, &statValue)) {
@@ -694,6 +731,11 @@ public class SteamUGC extends SteamInterface {
 	static private native boolean addExcludedTag(long pointer, long query, String tagName); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->AddExcludedTag(query, tagName);
+	*/
+
+	static private native boolean setReturnOnlyIDs(long pointer, long query, boolean returnOnlyIDs); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->SetReturnOnlyIDs(query, returnOnlyIDs);
 	*/
 
 	static private native boolean setReturnKeyValueTags(long pointer, long query, boolean returnKeyValueTags); /*
@@ -968,6 +1010,30 @@ public class SteamUGC extends SteamInterface {
 	static private native void suspendDownloads(long pointer, boolean suspend); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		ugc->SuspendDownloads(suspend);
+	*/
+
+	static private native long startPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->StartPlaytimeTracking((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
+		cb->onStartPlaytimeTrackingCall.Set(handle, cb, &SteamUGCCallback::onStartPlaytimeTracking);
+		return handle;
+	*/
+
+	static private native long stopPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->StopPlaytimeTracking((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
+		cb->onStopPlaytimeTrackingCall.Set(handle, cb, &SteamUGCCallback::onStopPlaytimeTracking);
+		return handle;
+	*/
+
+	static private native long stopPlaytimeTrackingForAllItems(long pointer, long callback); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->StopPlaytimeTrackingForAllItems();
+		cb->onStopPlaytimeTrackingForAllItemsCall.Set(handle, cb, &SteamUGCCallback::onStopPlaytimeTrackingForAllItems);
+		return handle;
 	*/
 
 }
