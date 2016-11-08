@@ -6,4 +6,6 @@ public interface SteamUserCallback {
 							  SteamAuth.AuthSessionResponse authSessionResponse,
 							  SteamID ownerSteamID);
 
+	void onMicroTxnAuthorization(int appID, long orderID, boolean authorized);
+
 }

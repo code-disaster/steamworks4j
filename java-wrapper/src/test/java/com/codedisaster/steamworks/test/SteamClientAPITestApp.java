@@ -21,7 +21,12 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	private SteamUserCallback userCallback = new SteamUserCallback() {
 		@Override
 		public void onValidateAuthTicket(SteamID steamID, SteamAuth.AuthSessionResponse authSessionResponse, SteamID ownerSteamID) {
-			// unused
+
+		}
+
+		@Override
+		public void onMicroTxnAuthorization(int appID, long orderID, boolean authorized) {
+
 		}
 	};
 

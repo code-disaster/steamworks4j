@@ -10,4 +10,5 @@ public:
 	~SteamUserCallback();
 
 	STEAM_CALLBACK(SteamUserCallback, onValidateAuthTicket, ValidateAuthTicketResponse_t, m_CallbackValidateAuthTicket);
+	STEAM_CALLBACK(SteamUserCallback, onMicroTxnAuthorization, MicroTxnAuthorizationResponse_t, m_CallbackMicroTxnAuthorization);
 };

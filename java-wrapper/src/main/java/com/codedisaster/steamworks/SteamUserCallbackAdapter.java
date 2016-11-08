@@ -12,4 +12,8 @@ class SteamUserCallbackAdapter extends SteamCallbackAdapter<SteamUserCallback> {
 				SteamAuth.AuthSessionResponse.byOrdinal(authSessionResponse), new SteamID(ownerSteamID));
 	}
 
+	void onMicroTxnAuthorization(int appID, long orderID, boolean authorized) {
+		callback.onMicroTxnAuthorization(appID, orderID, authorized);
+	}
+
 }

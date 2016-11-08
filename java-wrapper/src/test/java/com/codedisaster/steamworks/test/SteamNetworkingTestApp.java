@@ -47,6 +47,11 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 				endAuthSession();
 			}
 		}
+
+		@Override
+		public void onMicroTxnAuthorization(int appID, long orderID, boolean authorized) {
+
+		}
 	};
 
 	private SteamNetworkingCallback peer2peerCallback = new SteamNetworkingCallback() {
