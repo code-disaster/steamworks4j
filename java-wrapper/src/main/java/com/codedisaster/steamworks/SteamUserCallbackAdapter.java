@@ -7,8 +7,8 @@ class SteamUserCallbackAdapter extends SteamCallbackAdapter<SteamUserCallback> {
 		super(callback);
 	}
 
-	void onValidateAuthTicketResponse(long steamID, int authSessionResponse, long ownerSteamID) {
-		callback.onValidateAuthTicketResponse(new SteamID(steamID),
+	void onValidateAuthTicket(long steamID, int authSessionResponse, long ownerSteamID) {
+		callback.onValidateAuthTicket(new SteamID(steamID),
 				SteamAuth.AuthSessionResponse.byOrdinal(authSessionResponse), new SteamID(ownerSteamID));
 	}
 

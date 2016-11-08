@@ -20,7 +20,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 	private SteamUserCallback userCallback = new SteamUserCallback() {
 		@Override
-		public void onValidateAuthTicketResponse(SteamID steamID, SteamAuth.AuthSessionResponse authSessionResponse, SteamID ownerSteamID) {
+		public void onValidateAuthTicket(SteamID steamID, SteamAuth.AuthSessionResponse authSessionResponse, SteamID ownerSteamID) {
 			// unused
 		}
 	};

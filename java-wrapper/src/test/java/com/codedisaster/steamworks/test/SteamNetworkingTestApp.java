@@ -35,9 +35,9 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 
 	private SteamUserCallback userCallback = new SteamUserCallback() {
 		@Override
-		public void onValidateAuthTicketResponse(SteamID steamID,
-												 SteamAuth.AuthSessionResponse authSessionResponse,
-												 SteamID ownerSteamID) {
+		public void onValidateAuthTicket(SteamID steamID,
+										 SteamAuth.AuthSessionResponse authSessionResponse,
+										 SteamID ownerSteamID) {
 
 			System.out.println("Auth session response for userID " + steamID.getAccountID() + ": " +
 					authSessionResponse.name() + ", borrowed=" + (steamID.equals(ownerSteamID) ? "yes" : "no"));
