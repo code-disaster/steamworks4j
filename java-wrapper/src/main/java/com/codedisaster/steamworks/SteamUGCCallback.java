@@ -15,7 +15,7 @@ public interface SteamUGCCallback {
 
 	void onSubmitItemUpdate(boolean needsToAcceptWLA, SteamResult result);
 
-	void onDownloadItemResult(long appID, SteamPublishedFileID publishedFileID, SteamResult result);
+	void onDownloadItemResult(int appID, SteamPublishedFileID publishedFileID, SteamResult result);
 
 	void onUserFavoriteItemsListChanged(SteamPublishedFileID publishedFileID,
 										boolean wasAddRequest, SteamResult result);

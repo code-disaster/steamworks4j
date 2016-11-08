@@ -250,7 +250,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		}
 
 		@Override
-		public void onDownloadItemResult(long appID, SteamPublishedFileID publishedFileID, SteamResult result) {
+		public void onDownloadItemResult(int appID, SteamPublishedFileID publishedFileID, SteamResult result) {
 
 		}
 
@@ -582,7 +582,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 			}
 		} else if (input.startsWith("apps subscribed ")) {
 			String appId = input.substring("apps subscribed ".length());
-			boolean subscribed = apps.isSubscribedApp(Long.parseLong(appId));
+			boolean subscribed = apps.isSubscribedApp(Integer.parseInt(appId));
 			System.out.println("user described to app #" + appId + ": " + (subscribed ? "yes" : "no"));
 		}
 

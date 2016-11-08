@@ -220,14 +220,14 @@ public class SteamUGC extends SteamInterface {
 
 	public SteamUGCQuery createQueryUserUGCRequest(long accountID, UserUGCList listType,
 												   MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
-												   long creatorAppID, long consumerAppID, int page) {
+												   int creatorAppID, int consumerAppID, int page) {
 
 		return new SteamUGCQuery(createQueryUserUGCRequest(pointer, accountID, listType.ordinal(),
 				matchingType.value, sortOrder.ordinal(), creatorAppID, consumerAppID, page));
 	}
 
 	public SteamUGCQuery createQueryAllUGCRequest(UGCQueryType queryType, MatchingUGCType matchingType,
-												  long creatorAppID, long consumerAppID, int page) {
+												  int creatorAppID, int consumerAppID, int page) {
 
 		return new SteamUGCQuery(createQueryAllUGCRequest(pointer, queryType.ordinal(), matchingType.value,
 				creatorAppID, consumerAppID, page));
@@ -362,11 +362,11 @@ public class SteamUGC extends SteamInterface {
 		return new SteamAPICall(requestUGCDetails(pointer, callback, publishedFileID.handle, maxAgeSeconds));
 	}
 
-	public SteamAPICall createItem(long consumerAppID, SteamRemoteStorage.WorkshopFileType fileType) {
+	public SteamAPICall createItem(int consumerAppID, SteamRemoteStorage.WorkshopFileType fileType) {
 		return new SteamAPICall(createItem(pointer, callback, consumerAppID, fileType.ordinal()));
 	}
 
-	public SteamUGCUpdateHandle startItemUpdate(long consumerAppID, SteamPublishedFileID publishedFileID) {
+	public SteamUGCUpdateHandle startItemUpdate(int consumerAppID, SteamPublishedFileID publishedFileID) {
 		return new SteamUGCUpdateHandle(startItemUpdate(pointer, consumerAppID, publishedFileID.handle));
 	}
 
@@ -432,11 +432,11 @@ public class SteamUGC extends SteamInterface {
 		return new SteamAPICall(getUserItemVote(pointer, callback, publishedFileID.handle));
 	}
 
-	public SteamAPICall addItemToFavorites(long appID, SteamPublishedFileID publishedFileID) {
+	public SteamAPICall addItemToFavorites(int appID, SteamPublishedFileID publishedFileID) {
 		return new SteamAPICall(addItemToFavorites(pointer, callback, appID, publishedFileID.handle));
 	}
 
-	public SteamAPICall removeItemFromFavorites(long appID, SteamPublishedFileID publishedFileID) {
+	public SteamAPICall removeItemFromFavorites(int appID, SteamPublishedFileID publishedFileID) {
 		return new SteamAPICall(removeItemFromFavorites(pointer, callback, appID, publishedFileID.handle));
 	}
 
@@ -529,7 +529,7 @@ public class SteamUGC extends SteamInterface {
 
 	static private native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
 														 int matchingType, int sortOrder,
-														 long creatorAppID, long consumerAppID, int page); /*
+														 int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryUserUGCRequest(accountID, (EUserUGCList) listType,
 			(EUGCMatchingUGCType) matchingType, (EUserUGCListSortOrder) sortOrder, creatorAppID, consumerAppID, page);
@@ -537,7 +537,7 @@ public class SteamUGC extends SteamInterface {
 	*/
 
 	static private native long createQueryAllUGCRequest(long pointer, int queryType, int matchingType,
-														long creatorAppID, long consumerAppID, int page); /*
+														int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
 			(EUGCMatchingUGCType) matchingType, creatorAppID, consumerAppID, page);
@@ -811,7 +811,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long createItem(long pointer, long callback, long consumerAppID, int fileType); /*
+	static private native long createItem(long pointer, long callback, int consumerAppID, int fileType); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->CreateItem(consumerAppID, (EWorkshopFileType) fileType);
@@ -819,7 +819,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long startItemUpdate(long pointer, long consumerAppID, long publishedFileID); /*
+	static private native long startItemUpdate(long pointer, int consumerAppID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->StartItemUpdate(consumerAppID, publishedFileID);
 	*/
@@ -918,7 +918,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long addItemToFavorites(long pointer, long callback, long appID, long publishedFileID); /*
+	static private native long addItemToFavorites(long pointer, long callback, int appID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->AddItemToFavorites(appID, publishedFileID);
@@ -926,7 +926,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long removeItemFromFavorites(long pointer, long callback, long appID, long publishedFileID); /*
+	static private native long removeItemFromFavorites(long pointer, long callback, int appID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->RemoveItemFromFavorites(appID, publishedFileID);

@@ -108,7 +108,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamAPICall publishWorkshopFile(String file, String previewFile,
-										   long consumerAppID, String title, String description,
+										   int consumerAppID, String title, String description,
 										   PublishedFileVisibility visibility, String[] tags,
 										   WorkshopFileType workshopFileType) {
 
@@ -240,7 +240,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	*/
 
 	static private native long publishWorkshopFile(long pointer, long callback,
-												   String file, String previewFile, long consumerAppID,
+												   String file, String previewFile, int consumerAppID,
 												   String title, String description, int visibility, String[] tags,
 												   int numTags, int workshopFileType); /*
 

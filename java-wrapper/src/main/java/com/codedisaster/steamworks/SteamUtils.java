@@ -74,7 +74,7 @@ public class SteamUtils extends SteamInterface {
 		return getImageRGBA(pointer, image, dest, destSize);
 	}
 
-	public long getAppID() {
+	public int getAppID() {
 		return getAppID(pointer);
 	}
 
@@ -154,9 +154,9 @@ public class SteamUtils extends SteamInterface {
 		return utils->GetImageRGBA(image, (uint8*) dest, destSize);
 	*/
 
-	static private native long getAppID(long pointer); /*
+	static private native int getAppID(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
-		return (int64) utils->GetAppID();
+		return (AppId_t) utils->GetAppID();
 	*/
 
 	static private native void setOverlayNotificationPosition(long pointer, int position); /*

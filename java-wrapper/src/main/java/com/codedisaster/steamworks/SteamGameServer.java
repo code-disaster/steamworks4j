@@ -187,7 +187,7 @@ public class SteamGameServer extends SteamInterface {
 		cancelAuthTicket(pointer, (int) authTicket.handle);
 	}
 
-	public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, long appID) {
+	public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, int appID) {
 		return SteamAuth.UserHasLicenseForAppResult.byOrdinal(userHasLicenseForApp(pointer, steamID.handle, appID));
 	}
 
@@ -400,7 +400,7 @@ public class SteamGameServer extends SteamInterface {
 		server->CancelAuthTicket(authTicket);
 	*/
 
-	static private native int userHasLicenseForApp(long pointer, long steamID, long appID); /*
+	static private native int userHasLicenseForApp(long pointer, long steamID, int appID); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->UserHasLicenseForApp((uint64) steamID, (AppId_t) appID);
 	*/

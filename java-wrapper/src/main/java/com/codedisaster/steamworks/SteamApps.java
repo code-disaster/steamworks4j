@@ -6,7 +6,7 @@ public class SteamApps extends SteamInterface {
 		super(SteamAPI.getSteamAppsPointer());
 	}
 
-	public boolean isSubscribedApp(long appID) {
+	public boolean isSubscribedApp(int appID) {
 		return isSubscribedApp(pointer, appID);
 	}
 
@@ -32,7 +32,7 @@ public class SteamApps extends SteamInterface {
 		#include <steam_api.h>
 	*/
 
-	static private native boolean isSubscribedApp(long pointer, long appID); /*
+	static private native boolean isSubscribedApp(long pointer, int appID); /*
 		ISteamApps* apps = (ISteamApps*) pointer;
 		return apps->BIsSubscribedApp((AppId_t) appID);
 	*/

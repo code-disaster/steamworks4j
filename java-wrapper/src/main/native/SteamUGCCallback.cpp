@@ -58,7 +58,7 @@ void SteamUGCCallback::onSubmitItemUpdate(SubmitItemUpdateResult_t* callback, bo
 
 void SteamUGCCallback::onDownloadItemResult(DownloadItemResult_t* callback) {
 	invokeCallback({
-		callVoidMethod(env, "onDownloadItemResult", "(JJI)V", (jlong) callback->m_unAppID,
+		callVoidMethod(env, "onDownloadItemResult", "(IJI)V", (jint) callback->m_unAppID,
 		    (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
 	});
 }
