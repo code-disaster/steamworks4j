@@ -1,5 +1,8 @@
-[]
+[1.5.0]
 - Updated to Steamworks SDK v1.38a.
+- Added SteamUserCallback.onMicroTxnAuthorization() callback.
+- API change: renamed SteamUserCallback.onValidateAuthTicketResponse() to SteamUserCallback.onValidateAuthTicket().
+- API change: all uses of appID in member functions and callbacks now use 32-bit ints.
 
 [1.4.0]
 - Removed steamworks4j-natives subproject. Native libraries are now added as resources to steamworks4j.jar directly.
