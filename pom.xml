@@ -28,8 +28,7 @@
 		<developer>
 			<name>Daniel Ludwig</name>
 			<email>codi@code-disaster.com</email>
-			<organization>Robotality</organization>
-			<organizationUrl>http://www.robotality.com</organizationUrl>
+			<timezone>+1</timezone>
 		</developer>
 	</developers>
 
@@ -131,6 +130,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>2.2.1</version>
+				<configuration>
+					<excludeResources>true</excludeResources>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
