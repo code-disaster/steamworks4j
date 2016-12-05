@@ -74,8 +74,16 @@ public class SteamAPI {
 		return (intp) SteamApps();
 	*/
 
+	static native long getSteamControllerPointer(); /*
+		return (intp) SteamController();
+	*/
+
 	static native long getSteamFriendsPointer(); /*
 		return (intp) SteamFriends();
+	*/
+
+	static native long getSteamHTTPPointer(); /*
+		return (intp) SteamHTTP();
 	*/
 
 	static native long getSteamMatchmakingPointer(); /*
@@ -88,10 +96,6 @@ public class SteamAPI {
 
 	static native long getSteamRemoteStoragePointer(); /*
 		return (intp) SteamRemoteStorage();
-	*/
-
-	static native long getSteamHTTPPointer(); /*
-		return (intp) SteamHTTP();
 	*/
 
 	static native long getSteamUGCPointer(); /*
