@@ -19,7 +19,7 @@ public class SteamController extends SteamInterface {
 		Gyro
 	}
 
-	enum SourceMode {
+	public enum SourceMode {
 		None,
 		Dpad,
 		Buttons,
@@ -43,7 +43,7 @@ public class SteamController extends SteamInterface {
 		}
 	}
 
-	enum ActionOrigin {
+	public enum ActionOrigin {
 		None,
 		A,
 		B,
@@ -359,10 +359,10 @@ public class SteamController extends SteamInterface {
 			env->SetIntField(analogActionData, field, (jint) result.eMode);
 
 			field = env->GetFieldID(clazz, "x", "F");
-			env->SetBooleanField(analogActionData, field, (jfloat) result.x);
+			env->SetFloatField(analogActionData, field, (jfloat) result.x);
 
 			field = env->GetFieldID(clazz, "y", "F");
-			env->SetBooleanField(analogActionData, field, (jfloat) result.y);
+			env->SetFloatField(analogActionData, field, (jfloat) result.y);
 
 			field = env->GetFieldID(clazz, "active", "Z");
 			env->SetBooleanField(analogActionData, field, (jboolean) result.bActive);

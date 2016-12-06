@@ -11,11 +11,25 @@ public class SteamControllerTestApp extends SteamTestApp {
 	private SteamControllerMotionData motionData = new SteamControllerMotionData();
 	private long motionDataLastTime = System.currentTimeMillis();
 
+	private SteamControllerActionSetHandle setHandle;
+
+	private SteamControllerDigitalActionHandle digitalActionHandle;
+	private SteamControllerDigitalActionData digitalActionData = new SteamControllerDigitalActionData();
+
+	private SteamControllerAnalogActionHandle analogActionHandle;
+	private SteamControllerAnalogActionData analogActionData = new SteamControllerAnalogActionData();
+
 	@Override
 	protected void registerInterfaces() {
 		System.out.println("Register controller API ...");
 		controller = new SteamController();
 		controller.init();
+
+		try {
+			processInput("c list");
+		} catch (SteamException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -25,8 +39,16 @@ public class SteamControllerTestApp extends SteamTestApp {
 
 	@Override
 	protected void processUpdate() throws SteamException {
-		for (SteamControllerHandle handle : controllerHandles) {
-			long time = System.currentTimeMillis();
+
+		if (setHandle == null || setHandle.getNativeHandle() == 0) {
+			return;
+		}
+
+		for (int i = 0; i < numControllers; i++) {
+			SteamControllerHandle handle = controllerHandles[i];
+			controller.activateActionSet(handle, setHandle);
+
+			/*long time = System.currentTimeMillis();
 			if (time - motionDataLastTime > 1000) {
 				controller.getMotionData(handle, motionData);
 
@@ -43,13 +65,33 @@ public class SteamControllerTestApp extends SteamTestApp {
 								+ ", rotVelZ=" + motionData.getRotVelZ());
 
 				motionDataLastTime = time;
+			}*/
+
+			if (digitalActionHandle != null) {
+				controller.getDigitalActionData(handle, digitalActionHandle, digitalActionData);
+				if (digitalActionData.getActive() && digitalActionData.getState()) {
+					System.out.println("  digital action: " + digitalActionHandle.getNativeHandle());
+				}
+			}
+
+			if (analogActionHandle != null) {
+				controller.getAnalogActionData(handle, analogActionHandle, analogActionData);
+				if (analogActionData.getActive()) {
+					float x = analogActionData.getX();
+					float y = analogActionData.getY();
+					SteamController.SourceMode mode = analogActionData.getMode();
+					if (Math.abs(x) > 0.0001f && Math.abs(y) > 0.001f) {
+						System.out.println("  analog action: " + analogActionData.getX() +
+								", " + analogActionData.getY() + ", " + mode.name());
+					}
+				}
 			}
 		}
 	}
 
 	@Override
 	protected void processInput(String input) throws SteamException {
-		if (input.equals("controller list")) {
+		if (input.equals("c list")) {
 			controllerHandles = new SteamControllerHandle[SteamController.STEAM_CONTROLLER_MAX_COUNT];
 			numControllers = controller.getConnectedControllers(controllerHandles);
 
@@ -57,7 +99,7 @@ public class SteamControllerTestApp extends SteamTestApp {
 			for (int i = 0; i < numControllers; i++) {
 				System.out.println("  " + i + ": " + controllerHandles[i]);
 			}
-		} else if (input.startsWith("controller pulse ")) {
+		} else if (input.startsWith("c pulse ")) {
 			String[] params = input.substring("controller pulse ".length()).split(" ");
 			if (params.length > 1) {
 				SteamController.Pad pad = "left".equals(params[0]) ? SteamController.Pad.Left : SteamController.Pad.Right;
@@ -68,6 +110,18 @@ public class SteamControllerTestApp extends SteamTestApp {
 							Short.parseShort(params[2]), Short.parseShort(params[3]), 0);
 				}
 			}
+		} else if (input.startsWith("c set ")) {
+			String setName = input.substring("c set ".length());
+			setHandle = controller.getActionSetHandle(setName);
+			System.out.println("  handle for set '" + setName + "': " + setHandle.getNativeHandle());
+		} else if (input.startsWith("c d action ")) {
+			String actionName = input.substring("c d action ".length());
+			digitalActionHandle = controller.getDigitalActionHandle(actionName);
+			System.out.println("  handle for digital '" + actionName + "': " + digitalActionHandle.getNativeHandle());
+		} else if (input.startsWith("c a action ")) {
+			String actionName = input.substring("c a action ".length());
+			analogActionHandle = controller.getAnalogActionHandle(actionName);
+			System.out.println("  handle for analog '" + actionName + "': " + analogActionHandle.getNativeHandle());
 		}
 	}
 
