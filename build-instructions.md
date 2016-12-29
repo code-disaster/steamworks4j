@@ -42,7 +42,7 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
 - Mac OS
 
   - **XCode** must be installed.
-  - **premake4** needs to be available. One possible option is to install it as a **Mac Ports** package.
+  - **premake4** needs to be available. One possible option is to install it as a **Homebrew** or **Mac Ports** package.
 
 ### Build steps
 
