@@ -54,6 +54,16 @@ public class FriendsMixin {
 		public void onAvatarImageLoaded(SteamID steamID, int image, int width, int height) {
 
 		}
+
+		@Override
+		public void onFriendRichPresenceUpdate(SteamID steamIDFriend, int appID) {
+
+		}
+
+		@Override
+		public void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect) {
+
+		}
 	};
 
 	public FriendsMixin() {

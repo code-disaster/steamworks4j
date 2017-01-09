@@ -34,4 +34,12 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 		callback.onAvatarImageLoaded(new SteamID(steamID), image, width, height);
 	}
 
+	void onFriendRichPresenceUpdate(long steamIDFriend, int appID) {
+		callback.onFriendRichPresenceUpdate(new SteamID(steamIDFriend), appID);
+	}
+
+	void onGameRichPresenceJoinRequested(long steamIDFriend, String connect) {
+		callback.onGameRichPresenceJoinRequested(new SteamID(steamIDFriend), connect);
+	}
+
 }

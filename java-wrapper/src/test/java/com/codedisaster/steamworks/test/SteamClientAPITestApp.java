@@ -343,6 +343,16 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		public void onAvatarImageLoaded(SteamID steamID, int image, int width, int height) {
 
 		}
+
+		@Override
+		public void onFriendRichPresenceUpdate(SteamID steamIDFriend, int appID) {
+
+		}
+
+		@Override
+		public void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect) {
+
+		}
 	};
 
 	private SteamUtilsCallback utilsCallback = new SteamUtilsCallback() {

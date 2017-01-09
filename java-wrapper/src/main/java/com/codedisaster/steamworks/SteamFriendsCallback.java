@@ -11,4 +11,9 @@ public interface SteamFriendsCallback {
 	void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend);
 
 	void onAvatarImageLoaded(SteamID steamID, int image, int width, int height);
+
+	void onFriendRichPresenceUpdate(SteamID steamIDFriend, int appID);
+
+	void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect);
+
 }

@@ -16,4 +16,6 @@ public:
 	STEAM_CALLBACK(SteamFriendsCallback, onGameOverlayActivated, GameOverlayActivated_t, m_CallbackGameOverlayActivated);
 	STEAM_CALLBACK(SteamFriendsCallback, onGameLobbyJoinRequested, GameLobbyJoinRequested_t, m_CallbackGameLobbyJoinRequested);
 	STEAM_CALLBACK(SteamFriendsCallback, onAvatarImageLoaded, AvatarImageLoaded_t, m_CallbackAvatarImageLoaded);
+	STEAM_CALLBACK(SteamFriendsCallback, onFriendRichPresenceUpdate, FriendRichPresenceUpdate_t, m_CallbackFriendRichPresenceUpdate);
+	STEAM_CALLBACK(SteamFriendsCallback, onGameRichPresenceJoinRequested, GameRichPresenceJoinRequested_t, m_CallbackGameRichPresenceJoinRequested);
 };

@@ -222,6 +222,34 @@ public class SteamFriends extends SteamInterface {
 		activateGameOverlayInviteDialog(pointer, steamIDLobby.handle);
 	}
 
+	public boolean setRichPresence(String key, String value) {
+		return setRichPresence(pointer, key, value);
+	}
+
+	public void clearRichPresence() {
+		clearRichPresence(pointer);
+	}
+
+	public String getFriendRichPresence(SteamID steamIDFriend, String key) {
+		return getFriendRichPresence(pointer, steamIDFriend.handle, key);
+	}
+
+	public int getFriendRichPresenceKeyCount(SteamID steamIDFriend) {
+		return getFriendRichPresenceKeyCount(pointer, steamIDFriend.handle);
+	}
+
+	public String getFriendRichPresenceKeyByIndex(SteamID steamIDFriend, int index) {
+		return getFriendRichPresenceKeyByIndex(pointer, steamIDFriend.handle, index);
+	}
+
+	public void requestFriendRichPresence(SteamID steamIDFriend) {
+		requestFriendRichPresence(pointer, steamIDFriend.handle);
+	}
+
+	public boolean inviteUserToGame(SteamID steamIDFriend, String connectString) {
+		return inviteUserToGame(pointer, steamIDFriend.handle, connectString);
+	}
+
 	// @off
 
 	/*JNI
@@ -321,6 +349,41 @@ public class SteamFriends extends SteamInterface {
 	private static native void activateGameOverlayInviteDialog(long pointer, long steamIDLobby); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->ActivateGameOverlayInviteDialog((uint64) steamIDLobby);
+	*/
+
+	private static native boolean setRichPresence(long pointer, String key, String value); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->SetRichPresence(key, value);
+	*/
+
+	private static native void clearRichPresence(long pointer); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		friends->ClearRichPresence();
+	*/
+
+	private static native String getFriendRichPresence(long pointer, long steamIDFriend, String key); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return env->NewStringUTF(friends->GetFriendRichPresence((uint64) steamIDFriend, key));
+	*/
+
+	private static native int getFriendRichPresenceKeyCount(long pointer, long steamIDFriend); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->GetFriendRichPresenceKeyCount((uint64) steamIDFriend);
+	*/
+
+	private static native String getFriendRichPresenceKeyByIndex(long pointer, long steamIDFriend, int index); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return env->NewStringUTF(friends->GetFriendRichPresenceKeyByIndex((uint64) steamIDFriend, index));
+	*/
+
+	private static native void requestFriendRichPresence(long pointer, long steamIDFriend); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		friends->RequestFriendRichPresence((uint64) steamIDFriend);
+	*/
+
+	private static native boolean inviteUserToGame(long pointer, long steamIDFriend, String connectString); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->InviteUserToGame((uint64) steamIDFriend, connectString);
 	*/
 
 }
