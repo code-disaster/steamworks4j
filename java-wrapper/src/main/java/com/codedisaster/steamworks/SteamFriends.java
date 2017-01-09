@@ -99,6 +99,49 @@ public class SteamFriends extends SteamInterface {
 		}
 	}
 
+	public enum OverlayDialog {
+
+		Friends("Friends"),
+		Community("Community"),
+		Players("Players"),
+		Settings("Settings"),
+		OfficialGameGroup("OfficialGameGroup"),
+		Stats("Stats"),
+		Achievements("Achievements");
+
+		private final String id;
+
+		OverlayDialog(String id) {
+			this.id = id;
+		}
+	}
+
+	public enum OverlayToUserDialog {
+
+		SteamID("steamid"),
+		Chat("chat"),
+		JoinTrade("jointrade"),
+		Stats("stats"),
+		Achievements("achievements"),
+		FriendAdd("friendadd"),
+		FriendRemove("friendremove"),
+		FriendRequestAccept("friendrequestaccept"),
+		FriendRequestIgnore("friendrequestignore");
+
+		private final String id;
+
+		OverlayToUserDialog(String id) {
+			this.id = id;
+		}
+	}
+
+	public enum OverlayToStoreFlag {
+
+		None,
+		AddToCart,
+		AddToCartAndShow
+	}
+
 	public SteamFriends(SteamFriendsCallback callback) {
 		super(SteamAPI.getSteamFriendsPointer(), createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
@@ -159,8 +202,24 @@ public class SteamFriends extends SteamInterface {
 		return requestUserInformation(pointer, steamID.handle, requireNameOnly);
 	}
 
+	public void activateGameOverlay(OverlayDialog dialog) {
+		activateGameOverlay(pointer, dialog.id);
+	}
+
+	public void activateGameOverlayToUser(OverlayToUserDialog dialog, SteamID steamID) {
+		activateGameOverlayToUser(pointer, dialog.id, steamID.handle);
+	}
+
 	public void activateGameOverlayToWebPage(String url) {
 		activateGameOverlayToWebPage(pointer, url);
+	}
+
+	public void activateGameOverlayToStore(int appID, OverlayToStoreFlag flag) {
+		activateGameOverlayToStore(pointer, appID, flag.ordinal());
+	}
+
+	public void activateGameOverlayInviteDialog(SteamID steamIDLobby) {
+		activateGameOverlayInviteDialog(pointer, steamIDLobby.handle);
 	}
 
 	// @off
@@ -239,9 +298,29 @@ public class SteamFriends extends SteamInterface {
 		return friends->RequestUserInformation((uint64) steamID, requireNameOnly);
 	*/
 
-	static private native void activateGameOverlayToWebPage(long pointer, String url); /*
+	private static native void activateGameOverlay(long pointer, String dialog); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->ActivateGameOverlay(dialog);
+	*/
+
+	private static native void activateGameOverlayToUser(long pointer, String dialog, long steamID); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->ActivateGameOverlayToUser(dialog, (uint64) steamID);
+	*/
+
+	private static native void activateGameOverlayToWebPage(long pointer, String url); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->ActivateGameOverlayToWebPage(url);
+	*/
+
+	private static native void activateGameOverlayToStore(long pointer, int appID, int flag); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->ActivateGameOverlayToStore((AppId_t) appID, (EOverlayToStoreFlag) flag);
+	*/
+
+	private static native void activateGameOverlayInviteDialog(long pointer, long steamIDLobby); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->ActivateGameOverlayInviteDialog((uint64) steamIDLobby);
 	*/
 
 }
