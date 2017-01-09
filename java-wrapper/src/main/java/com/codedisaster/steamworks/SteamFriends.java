@@ -103,12 +103,16 @@ public class SteamFriends extends SteamInterface {
 		super(SteamAPI.getSteamFriendsPointer(), createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
 
-	public PersonaState getPersonaState() {
-		return PersonaState.byOrdinal(getPersonaState(pointer));
-	}
-
 	public String getPersonaName() {
 		return getPersonaName(pointer);
+	}
+
+	public SteamAPICall setPersonaName(String personaName) {
+		return new SteamAPICall(setPersonaName(pointer, callback, personaName));
+	}
+
+	public PersonaState getPersonaState() {
+		return PersonaState.byOrdinal(getPersonaState(pointer));
 	}
 
 	public int getFriendCount(FriendFlags friendFlag) {
@@ -173,6 +177,14 @@ public class SteamFriends extends SteamInterface {
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetPersonaName());
 		return name;
+	*/
+
+	private static native long setPersonaName(long pointer, long callback, String personaName); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		SteamFriendsCallback* cb = (SteamFriendsCallback*) callback;
+		SteamAPICall_t handle = friends->SetPersonaName(personaName);
+		cb->onSetPersonaNameResponseCall.Set(handle, cb, &SteamFriendsCallback::onSetPersonaNameResponse);
+		return handle;
 	*/
 
 	static private native int getPersonaState(long pointer); /*

@@ -306,6 +306,11 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
 		@Override
+		public void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result) {
+
+		}
+
+		@Override
 		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
 
 			switch (change) {
