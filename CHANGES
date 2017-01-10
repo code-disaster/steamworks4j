@@ -1,3 +1,10 @@
+[]
+- Added SteamFriends.setPersonaName().
+- Added remaining functions to activate Steam overlay.
+- Added functions for rich presence and game invites to SteamFriends (#38).
+- API change: the SteamFriendsCallback interface has been extended to reflect the latest additions.
+- API change: removed SteamID.getNativeHandle(). All native handles can now be queried with SteamNativeHandle.getNativeHandle().
+
 [1.6.0]
 - Added SteamController interface.
 - Fixed resource files (prebuilt native libraries) included in source jars.
