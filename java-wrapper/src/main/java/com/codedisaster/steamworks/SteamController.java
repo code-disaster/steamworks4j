@@ -16,7 +16,10 @@ public class SteamController extends SteamInterface {
 		Switch,
 		LeftTrigger,
 		RightTrigger,
-		Gyro
+		Gyro,
+		CenterTrackpad,
+		RightJoystick,
+		DPad
 	}
 
 	public enum SourceMode {
@@ -27,6 +30,7 @@ public class SteamController extends SteamInterface {
 		AbsoluteMouse,
 		RelativeMouse,
 		JoystickMove,
+		JoystickMouse,
 		JoystickCamera,
 		ScrollWheel,
 		Trigger,
@@ -82,13 +86,169 @@ public class SteamController extends SteamInterface {
 		Gyro_Move,
 		Gyro_Pitch,
 		Gyro_Yaw,
-		Gyro_Roll;
+		Gyro_Roll,
+
+		PS4_X,
+		PS4_Circle,
+		PS4_Triangle,
+		PS4_Square,
+		PS4_LeftBumper,
+		PS4_RightBumper,
+		PS4_Options,
+		PS4_Share,
+		PS4_LeftPad_Touch,
+		PS4_LeftPad_Swipe,
+		PS4_LeftPad_Click,
+		PS4_LeftPad_DPadNorth,
+		PS4_LeftPad_DPadSouth,
+		PS4_LeftPad_DPadWest,
+		PS4_LeftPad_DPadEast,
+		PS4_RightPad_Touch,
+		PS4_RightPad_Swipe,
+		PS4_RightPad_Click,
+		PS4_RightPad_DPadNorth,
+		PS4_RightPad_DPadSouth,
+		PS4_RightPad_DPadWest,
+		PS4_RightPad_DPadEast,
+		PS4_CenterPad_Touch,
+		PS4_CenterPad_Swipe,
+		PS4_CenterPad_Click,
+		PS4_CenterPad_DPadNorth,
+		PS4_CenterPad_DPadSouth,
+		PS4_CenterPad_DPadWest,
+		PS4_CenterPad_DPadEast,
+		PS4_LeftTrigger_Pull,
+		PS4_LeftTrigger_Click,
+		PS4_RightTrigger_Pull,
+		PS4_RightTrigger_Click,
+		PS4_LeftStick_Move,
+		PS4_LeftStick_Click,
+		PS4_LeftStick_DPadNorth,
+		PS4_LeftStick_DPadSouth,
+		PS4_LeftStick_DPadWest,
+		PS4_LeftStick_DPadEast,
+		PS4_RightStick_Move,
+		PS4_RightStick_Click,
+		PS4_RightStick_DPadNorth,
+		PS4_RightStick_DPadSouth,
+		PS4_RightStick_DPadWest,
+		PS4_RightStick_DPadEast,
+		PS4_DPad_North,
+		PS4_DPad_South,
+		PS4_DPad_West,
+		PS4_DPad_East,
+		PS4_Gyro_Move,
+		PS4_Gyro_Pitch,
+		PS4_Gyro_Yaw,
+		PS4_Gyro_Roll,
+
+		XBoxOne_A,
+		XBoxOne_B,
+		XBoxOne_X,
+		XBoxOne_Y,
+		XBoxOne_LeftBumper,
+		XBoxOne_RightBumper,
+		XBoxOne_Menu,
+		XBoxOne_View,
+		XBoxOne_LeftTrigger_Pull,
+		XBoxOne_LeftTrigger_Click,
+		XBoxOne_RightTrigger_Pull,
+		XBoxOne_RightTrigger_Click,
+		XBoxOne_LeftStick_Move,
+		XBoxOne_LeftStick_Click,
+		XBoxOne_LeftStick_DPadNorth,
+		XBoxOne_LeftStick_DPadSouth,
+		XBoxOne_LeftStick_DPadWest,
+		XBoxOne_LeftStick_DPadEast,
+		XBoxOne_RightStick_Move,
+		XBoxOne_RightStick_Click,
+		XBoxOne_RightStick_DPadNorth,
+		XBoxOne_RightStick_DPadSouth,
+		XBoxOne_RightStick_DPadWest,
+		XBoxOne_RightStick_DPadEast,
+		XBoxOne_DPad_North,
+		XBoxOne_DPad_South,
+		XBoxOne_DPad_West,
+		XBoxOne_DPad_East,
+
+		XBox360_A,
+		XBox360_B,
+		XBox360_X,
+		XBox360_Y,
+		XBox360_LeftBumper,
+		XBox360_RightBumper,
+		XBox360_Start,
+		XBox360_Back,
+		XBox360_LeftTrigger_Pull,
+		XBox360_LeftTrigger_Click,
+		XBox360_RightTrigger_Pull,
+		XBox360_RightTrigger_Click,
+		XBox360_LeftStick_Move,
+		XBox360_LeftStick_Click,
+		XBox360_LeftStick_DPadNorth,
+		XBox360_LeftStick_DPadSouth,
+		XBox360_LeftStick_DPadWest,
+		XBox360_LeftStick_DPadEast,
+		XBox360_RightStick_Move,
+		XBox360_RightStick_Click,
+		XBox360_RightStick_DPadNorth,
+		XBox360_RightStick_DPadSouth,
+		XBox360_RightStick_DPadWest,
+		XBox360_RightStick_DPadEast,
+		XBox360_DPad_North,
+		XBox360_DPad_South,
+		XBox360_DPad_West,
+		XBox360_DPad_East,
+
+		SteamV2_A,
+		SteamV2_B,
+		SteamV2_X,
+		SteamV2_Y,
+		SteamV2_LeftBumper,
+		SteamV2_RightBumper,
+		SteamV2_LeftGrip,
+		SteamV2_RightGrip,
+		SteamV2_Start,
+		SteamV2_Back,
+		SteamV2_LeftPad_Touch,
+		SteamV2_LeftPad_Swipe,
+		SteamV2_LeftPad_Click,
+		SteamV2_LeftPad_DPadNorth,
+		SteamV2_LeftPad_DPadSouth,
+		SteamV2_LeftPad_DPadWest,
+		SteamV2_LeftPad_DPadEast,
+		SteamV2_RightPad_Touch,
+		SteamV2_RightPad_Swipe,
+		SteamV2_RightPad_Click,
+		SteamV2_RightPad_DPadNorth,
+		SteamV2_RightPad_DPadSouth,
+		SteamV2_RightPad_DPadWest,
+		SteamV2_RightPad_DPadEast,
+		SteamV2_LeftTrigger_Pull,
+		SteamV2_LeftTrigger_Click,
+		SteamV2_RightTrigger_Pull,
+		SteamV2_RightTrigger_Click,
+		SteamV2_LeftStick_Move,
+		SteamV2_LeftStick_Click,
+		SteamV2_LeftStick_DPadNorth,
+		SteamV2_LeftStick_DPadSouth,
+		SteamV2_LeftStick_DPadWest,
+		SteamV2_LeftStick_DPadEast,
+		SteamV2_Gyro_Move,
+		SteamV2_Gyro_Pitch,
+		SteamV2_Gyro_Yaw,
+		SteamV2_Gyro_Roll;
 
 		private static final ActionOrigin[] values = values();
 
 		static ActionOrigin byOrdinal(int ordinal) {
 			return values[ordinal];
 		}
+	}
+
+	public enum LEDFlag {
+		SetColor,
+		RestoreUserDefault
 	}
 
 	public static final int STEAM_CONTROLLER_MAX_COUNT = 16;
@@ -227,6 +387,15 @@ public class SteamController extends SteamInterface {
 				durationMicroSec, offMicroSec, repeat, flags);
 	}
 
+	public void triggerVibration(SteamControllerHandle controller, short leftSpeed, short rightSpeed) {
+		triggerVibration(pointer, controller.handle, leftSpeed, rightSpeed);
+	}
+
+	public void setLEDColor(SteamControllerHandle controller, int colorR, int colorG, int colorB, LEDFlag flags) {
+		setLEDColor(pointer, controller.handle, (byte) (colorR & 0xff),
+				(byte) (colorG & 0xff), (byte) (colorB & 0xff), flags.ordinal());
+	}
+
 	public int getGamepadIndexForController(SteamControllerHandle controller) {
 		return getGamepadIndexForController(pointer, controller.handle);
 	}
@@ -253,6 +422,14 @@ public class SteamController extends SteamInterface {
 
 		return showAnalogActionOrigins(pointer, controller.handle,
 				analogActionHandle.handle, scale, xPosition, yPosition);
+	}
+
+	public String getStringForActionOrigin(ActionOrigin origin) {
+		return getStringForActionOrigin(pointer, origin.ordinal());
+	}
+
+	public String getGlyphForActionOrigin(ActionOrigin origin) {
+		return getGlyphForActionOrigin(pointer, origin.ordinal());
 	}
 
 	// @off
@@ -414,6 +591,24 @@ public class SteamController extends SteamInterface {
 				(unsigned short) offMicroSec, (unsigned short) repeat, (unsigned int) flags);
 	*/
 
+	private static native void triggerVibration(long pointer,
+												long controllerHandle,
+												short leftSpeed,
+												short rightSpeed); /*
+
+		ISteamController* controller = (ISteamController*) pointer;
+		controller->TriggerVibration((ControllerHandle_t) controllerHandle,
+			(unsigned short) leftSpeed, (unsigned short) rightSpeed);
+	*/
+
+	private static native void setLEDColor(long pointer, long controllerHandle,
+										   byte colorR, byte colorG, byte colorB, int flags); /*
+
+		ISteamController* controller = (ISteamController*) pointer;
+		controller->SetLEDColor((ControllerHandle_t) controllerHandle,
+			colorR, colorG, colorB, (unsigned int) flags);
+	*/
+
 	private static native int getGamepadIndexForController(long pointer, long controllerHandle); /*
 		ISteamController* controller = (ISteamController*) pointer;
 		return controller->GetGamepadIndexForController((ControllerHandle_t) controllerHandle);
@@ -458,6 +653,16 @@ public class SteamController extends SteamInterface {
 		ISteamController* controller = (ISteamController*) pointer;
 		return controller->ShowAnalogActionOrigins((ControllerHandle_t) controllerHandle,
 			(ControllerAnalogActionHandle_t) analogActionHandle, scale, xPosition, yPosition);
+	*/
+
+	private static native String getStringForActionOrigin(long pointer, int origin); /*
+		ISteamController* controller = (ISteamController*) pointer;
+		return env->NewStringUTF(controller->GetStringForActionOrigin((EControllerActionOrigin) origin));
+	*/
+
+	private static native String getGlyphForActionOrigin(long pointer, int origin ); /*
+		ISteamController* controller = (ISteamController*) pointer;
+		return env->NewStringUTF(controller->GetGlyphForActionOrigin((EControllerActionOrigin) origin));
 	*/
 
 }

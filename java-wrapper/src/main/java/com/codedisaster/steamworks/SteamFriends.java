@@ -52,7 +52,7 @@ public class SteamFriends extends SteamInterface {
 		RequestingInfo(0x100),
 		Ignored(0x200),
 		IgnoredFriend(0x400),
-		Suggested(0x800),
+		// Suggested(0x800),
 		ChatMember(0x1000),
 		All(0xFFFF);
 
