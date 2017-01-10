@@ -5,6 +5,8 @@ import com.codedisaster.steamworks.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.codedisaster.steamworks.SteamNativeHandle.getNativeHandle;
+
 public class FriendsMixin {
 
 	private SteamFriends friends;
@@ -46,7 +48,7 @@ public class FriendsMixin {
 		@Override
 		public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
 			System.out.println("Game lobby join requested");
-			System.out.println("  - lobby: " + Long.toHexString(steamIDLobby.getNativeHandle()));
+			System.out.println("  - lobby: " + Long.toHexString(getNativeHandle(steamIDLobby)));
 			System.out.println("  - by friend accountID: " + steamIDFriend.getAccountID());
 		}
 

@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.codedisaster.steamworks.SteamNativeHandle.getNativeHandle;
+
 public class SteamMatchmakingTestApp extends SteamTestApp {
 
 	private FriendsMixin friends;
@@ -36,7 +38,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 
 			System.out.println("  - auto-joining lobby ...");
 
-			lobbies.put(steamIDLobby.getNativeHandle(), steamIDLobby);
+			lobbies.put(getNativeHandle(steamIDLobby), steamIDLobby);
 			matchmaking.joinLobby(steamIDLobby);
 		}
 
@@ -106,7 +108,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			lobbies.clear();
 			for (int i = 0; i < lobbiesMatching; i++) {
 				SteamID lobby = matchmaking.getLobbyByIndex(i);
-				lobbies.put(lobby.getNativeHandle(), lobby);
+				lobbies.put(getNativeHandle(lobby), lobby);
 			}
 
 			listLobbies();
@@ -124,7 +126,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			System.out.println("Lobby created: " + steamIDLobby);
 			System.out.println("  - result: " + result.name());
 			if (result == SteamResult.OK) {
-				lobbies.put(steamIDLobby.getNativeHandle(), steamIDLobby);
+				lobbies.put(getNativeHandle(steamIDLobby), steamIDLobby);
 				matchmaking.setLobbyData(steamIDLobby, LobbyDataKey, LobbyDataValue);
 			}
 		}
@@ -178,7 +180,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 			matchmaking.requestLobbyList();
 		} else if (input.startsWith("lobby create ")) {
 			int maxMembers = Integer.parseInt(input.substring("lobby create ".length()));
-			System.out.println("  creating lobby for " + maxMembers+ " players.");
+			System.out.println("  creating lobby for " + maxMembers + " players.");
 			matchmaking.createLobby(SteamMatchmaking.LobbyType.Public, maxMembers);
 		} else if (input.startsWith("lobby join ")) {
 			long id = Long.parseLong(input.substring("lobby join ".length()), 16);

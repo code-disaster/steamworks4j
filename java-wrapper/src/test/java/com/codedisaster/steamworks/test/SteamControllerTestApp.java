@@ -2,6 +2,8 @@ package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
 
+import static com.codedisaster.steamworks.SteamNativeHandle.getNativeHandle;
+
 public class SteamControllerTestApp extends SteamTestApp {
 
 	private SteamController controller;
@@ -40,7 +42,7 @@ public class SteamControllerTestApp extends SteamTestApp {
 	@Override
 	protected void processUpdate() throws SteamException {
 
-		if (setHandle == null || setHandle.getNativeHandle() == 0) {
+		if (setHandle == null || getNativeHandle(setHandle) == 0) {
 			return;
 		}
 
@@ -70,7 +72,7 @@ public class SteamControllerTestApp extends SteamTestApp {
 			if (digitalActionHandle != null) {
 				controller.getDigitalActionData(handle, digitalActionHandle, digitalActionData);
 				if (digitalActionData.getActive() && digitalActionData.getState()) {
-					System.out.println("  digital action: " + digitalActionHandle.getNativeHandle());
+					System.out.println("  digital action: " + getNativeHandle(digitalActionHandle));
 				}
 			}
 
@@ -113,15 +115,15 @@ public class SteamControllerTestApp extends SteamTestApp {
 		} else if (input.startsWith("c set ")) {
 			String setName = input.substring("c set ".length());
 			setHandle = controller.getActionSetHandle(setName);
-			System.out.println("  handle for set '" + setName + "': " + setHandle.getNativeHandle());
+			System.out.println("  handle for set '" + setName + "': " + getNativeHandle(setHandle));
 		} else if (input.startsWith("c d action ")) {
 			String actionName = input.substring("c d action ".length());
 			digitalActionHandle = controller.getDigitalActionHandle(actionName);
-			System.out.println("  handle for digital '" + actionName + "': " + digitalActionHandle.getNativeHandle());
+			System.out.println("  handle for digital '" + actionName + "': " + getNativeHandle(digitalActionHandle));
 		} else if (input.startsWith("c a action ")) {
 			String actionName = input.substring("c a action ".length());
 			analogActionHandle = controller.getAnalogActionHandle(actionName);
-			System.out.println("  handle for analog '" + actionName + "': " + analogActionHandle.getNativeHandle());
+			System.out.println("  handle for analog '" + actionName + "': " + getNativeHandle(analogActionHandle));
 		}
 	}
 

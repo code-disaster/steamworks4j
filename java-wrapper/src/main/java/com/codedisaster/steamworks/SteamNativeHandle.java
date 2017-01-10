@@ -1,6 +1,6 @@
 package com.codedisaster.steamworks;
 
-abstract class SteamNativeHandle {
+public abstract class SteamNativeHandle {
 
 	long handle;
 
@@ -9,11 +9,13 @@ abstract class SteamNativeHandle {
 	}
 
 	/**
-	 * Marked as {@link Deprecated} because it is not meant to be called by user applications.
+	 * Returns the unsigned 64-bit value wrapped by this handle, cast to Java's signed long.
+	 *
+	 * In most cases this value should not be stored and used by the user application. See
+	 * {@link SteamID#createFromNativeHandle(long)} for a possible use case.
 	 */
-	@Deprecated
-	public long getNativeHandle() {
-		return handle;
+	public static <T extends SteamNativeHandle> long getNativeHandle(T handle) {
+		return handle.handle;
 	}
 
 	@Override
