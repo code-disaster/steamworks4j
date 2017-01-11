@@ -1,5 +1,5 @@
 baseurl: /steamworks4j
 
 steamworks4j:
-  version: 1.6.0
-  sdk-version: 1.38a
+  version: 1.6.1
+  sdk-version: 1.39
