@@ -1,4 +1,5 @@
-[]
+[1.6.1]
+- Updated to Steamworks SDK v1.39.
 - Added SteamFriends.setPersonaName().
 - Added remaining functions to activate Steam overlay.
 - Added functions for rich presence and game invites to SteamFriends (#38).
