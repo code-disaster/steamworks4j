@@ -223,7 +223,7 @@ public class SteamFriends extends SteamInterface {
 	}
 
 	public boolean setRichPresence(String key, String value) {
-		return setRichPresence(pointer, key, value);
+		return setRichPresence(pointer, key, value != null ? value : "");
 	}
 
 	public void clearRichPresence() {
