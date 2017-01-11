@@ -62,6 +62,10 @@ public class SteamAPI {
 		return SteamAPI_RestartAppIfNecessary(appId);
 	*/
 
+	public static native void releaseCurrentThreadMemory(); /*
+		SteamAPI_ReleaseCurrentThreadMemory();
+	*/
+
 	private static native boolean nativeInit(); /*
 		if (env->GetJavaVM(&staticVM) != 0) {
 			return false;

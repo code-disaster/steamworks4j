@@ -5,6 +5,7 @@
 - API change: the SteamFriendsCallback interface has been extended to reflect the latest additions.
 - API change: removed SteamID.getNativeHandle(). All native handles can now be queried with SteamNativeHandle.getNativeHandle().
 - The default behaviour of SteamAPI.isSteamRunning() has changed to *not* call SteamAPI_IsSteamRunning(), see JavaDocs for more information.
+- Added SteamAPI.releaseCurrentThreadMemory().
 
 [1.6.0]
 - Added SteamController interface.
