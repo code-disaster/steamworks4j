@@ -13,6 +13,7 @@
 
 	<artifactId>steamworks4j-jnigen</artifactId>
 	<packaging>jar</packaging>
+
 	<name>Steam API Java Wrapper - JNI code generator</name>
 
 	<dependencies>
