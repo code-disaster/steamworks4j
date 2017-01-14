@@ -12,9 +12,9 @@
     */
 
     #define invokeCallback(fn) \
-        JNIEnv* env = attachThread(); \
+        JNIEnv* env; bool attached = attachThread(&env); \
         fn \
-        detachThread();
+        if (attached) detachThread();
 
     // dummy function pointer type to please the compiler, this workaround doesn't call attach()
     typedef void (* SteamInvokeCallbackFunction) (JNIEnv* env);
@@ -44,7 +44,7 @@ protected:
 #ifndef MACOSX
 private:
 #endif
-	JNIEnv* attachThread() const;
+	bool attachThread(JNIEnv** env) const;
 	void detachThread() const;
 
 private:

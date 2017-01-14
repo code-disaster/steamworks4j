@@ -14,22 +14,31 @@ SteamCallbackAdapter::SteamCallbackAdapter(JNIEnv* env, jclass callbackClass) {
 
 SteamCallbackAdapter::~SteamCallbackAdapter() {
     if (m_callback != 0) {
-        JNIEnv* env = attachThread();
+        JNIEnv* env;
+        bool attached = attachThread(&env);
         env->DeleteGlobalRef(m_callback);
-        detachThread();
+        if (attached) {
+            detachThread();
+        }
     }
 }
 
 void SteamCallbackAdapter::attach(SteamInvokeCallbackFunction fn) const {
-    JNIEnv* env = attachThread();
+    JNIEnv* env;
+    bool attached = attachThread(&env);
     fn(env);
-    detachThread();
+    if (attached) {
+        detachThread();
+    }
 }
 
-JNIEnv* SteamCallbackAdapter::attachThread() const {
-	JNIEnv* env;
-	m_vm->AttachCurrentThread((void**) &env, NULL);
-	return env;
+bool SteamCallbackAdapter::attachThread(JNIEnv** env) const {
+    jint status = m_vm->GetEnv((void**) env, JNI_VERSION_1_6);
+    if (status == JNI_EDETACHED) {
+    	m_vm->AttachCurrentThread((void**) env, NULL);
+    	return true;
+    }
+    return false;
 }
 
 void SteamCallbackAdapter::detachThread() const {
