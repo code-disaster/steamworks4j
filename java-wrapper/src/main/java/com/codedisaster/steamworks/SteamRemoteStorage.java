@@ -156,26 +156,26 @@ public class SteamRemoteStorage extends SteamInterface {
 		#include "SteamRemoteStorageCallback.h"
 	*/
 
-	static private native long createCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamRemoteStorageCallbackAdapter javaCallback); /*
 		return (intp) new SteamRemoteStorageCallback(env, javaCallback);
 	*/
 
-	static private native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*
+	private static native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileWrite(name, data, length);
 	*/
 
-	static private native boolean fileRead(long pointer, String name, ByteBuffer buffer, int capacity); /*
+	private static native boolean fileRead(long pointer, String name, ByteBuffer buffer, int capacity); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileRead(name, buffer, capacity);
 	*/
 
-	static private native boolean fileDelete(long pointer, String name); /*
+	private static native boolean fileDelete(long pointer, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileDelete(name);
 	*/
 
-	static private native long fileShare(long pointer, long callback, String name); /*
+	private static native long fileShare(long pointer, long callback, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->FileShare(name);
@@ -183,48 +183,48 @@ public class SteamRemoteStorage extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long fileWriteStreamOpen(long pointer, String name); /*
+	private static native long fileWriteStreamOpen(long pointer, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileWriteStreamOpen(name);
 	*/
 
-	static private native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data, int length); /*
+	private static native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data, int length); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileWriteStreamWriteChunk((UGCFileWriteStreamHandle_t) stream, data, length);
 	*/
 
-	static private native boolean fileWriteStreamClose(long pointer, long stream); /*
+	private static native boolean fileWriteStreamClose(long pointer, long stream); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileWriteStreamClose((UGCFileWriteStreamHandle_t) stream);
 	*/
 
-	static private native boolean fileWriteStreamCancel(long pointer, long stream); /*
+	private static native boolean fileWriteStreamCancel(long pointer, long stream); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileWriteStreamCancel((UGCFileWriteStreamHandle_t) stream);
 	*/
 
-	static private native boolean fileExists(long pointer, String name); /*
+	private static native boolean fileExists(long pointer, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->FileExists(name);
 	*/
 
-	static private native int getFileSize(long pointer, String name); /*
+	private static native int getFileSize(long pointer, String name); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->GetFileSize(name);
 	*/
 
-	static private native int getFileCount(long pointer); /*
+	private static native int getFileCount(long pointer); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->GetFileCount();
 	*/
 
-	static private native String getFileNameAndSize(long pointer, int index, int[] sizes); /*
+	private static native String getFileNameAndSize(long pointer, int index, int[] sizes); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		jstring name = env->NewStringUTF(storage->GetFileNameAndSize(index, &sizes[0]));
 		return name;
 	*/
 
-	static private native long ugcDownload(long pointer, long callback, long content, int priority); /*
+	private static native long ugcDownload(long pointer, long callback, long content, int priority); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->UGCDownload(content, priority);
@@ -232,14 +232,14 @@ public class SteamRemoteStorage extends SteamInterface {
 		return handle;
 	*/
 
-	static private native int ugcRead(long pointer, long content, ByteBuffer buffer, int capacity,
+	private static native int ugcRead(long pointer, long content, ByteBuffer buffer, int capacity,
 									  int offset, int action); /*
 
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UGCRead(content, buffer, capacity, offset, (EUGCReadAction) action);
 	*/
 
-	static private native long publishWorkshopFile(long pointer, long callback,
+	private static native long publishWorkshopFile(long pointer, long callback,
 												   String file, String previewFile, int consumerAppID,
 												   String title, String description, int visibility, String[] tags,
 												   int numTags, int workshopFileType); /*
@@ -267,37 +267,37 @@ public class SteamRemoteStorage extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long createPublishedFileUpdateRequest(long pointer, long publishedFileID); /*
+	private static native long createPublishedFileUpdateRequest(long pointer, long publishedFileID); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->CreatePublishedFileUpdateRequest(publishedFileID);
 	*/
 
-	static private native boolean updatePublishedFileFile(long pointer, long updateHandle, String file); /*
+	private static native boolean updatePublishedFileFile(long pointer, long updateHandle, String file); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFileFile(updateHandle, file);
 	*/
 
-	static private native boolean updatePublishedFilePreviewFile(long pointer, long updateHandle, String previewFile); /*
+	private static native boolean updatePublishedFilePreviewFile(long pointer, long updateHandle, String previewFile); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFilePreviewFile(updateHandle, previewFile);
 	*/
 
-	static private native boolean updatePublishedFileTitle(long pointer, long updateHandle, String title); /*
+	private static native boolean updatePublishedFileTitle(long pointer, long updateHandle, String title); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFileTitle(updateHandle, title);
 	*/
 
-	static private native boolean updatePublishedFileDescription(long pointer, long updateHandle, String description); /*
+	private static native boolean updatePublishedFileDescription(long pointer, long updateHandle, String description); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFileDescription(updateHandle, description);
 	*/
 
-	static private native boolean updatePublishedFileVisibility(long pointer, long updateHandle, int visibility); /*
+	private static native boolean updatePublishedFileVisibility(long pointer, long updateHandle, int visibility); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UpdatePublishedFileVisibility(updateHandle, (ERemoteStoragePublishedFileVisibility) visibility);
 	*/
 
-	static private native boolean updatePublishedFileTags(long pointer, long updateHandle, String[] tags, int numTags); /*
+	private static native boolean updatePublishedFileTags(long pointer, long updateHandle, String[] tags, int numTags); /*
 		SteamParamStringArray_t arrayTags;
 		arrayTags.m_ppStrings = (numTags > 0) ? new const char*[numTags] : NULL;
 		arrayTags.m_nNumStrings = numTags;
@@ -316,7 +316,7 @@ public class SteamRemoteStorage extends SteamInterface {
 		return result;
 	*/
 
-	static private native long commitPublishedFileUpdate(long pointer, long callback, long updateHandle); /*
+	private static native long commitPublishedFileUpdate(long pointer, long callback, long updateHandle); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
 		SteamAPICall_t handle = storage->CommitPublishedFileUpdate(updateHandle);

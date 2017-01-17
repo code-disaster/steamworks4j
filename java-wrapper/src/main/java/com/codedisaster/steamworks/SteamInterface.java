@@ -30,7 +30,7 @@ abstract class SteamInterface {
 		#include "SteamCallbackAdapter.h"
 	*/
 
-	static protected native void deleteCallback(long callback); /*
+	protected static native void deleteCallback(long callback); /*
 		delete (SteamCallbackAdapter*) callback;
 	*/
 

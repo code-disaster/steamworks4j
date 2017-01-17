@@ -32,30 +32,30 @@ public class SteamApps extends SteamInterface {
 		#include <steam_api.h>
 	*/
 
-	static private native boolean isSubscribedApp(long pointer, int appID); /*
+	private static native boolean isSubscribedApp(long pointer, int appID); /*
 		ISteamApps* apps = (ISteamApps*) pointer;
 		return apps->BIsSubscribedApp((AppId_t) appID);
 	*/
 
-	static private native String getCurrentGameLanguage(long pointer); /*
+	private static native String getCurrentGameLanguage(long pointer); /*
         ISteamApps* apps = (ISteamApps*) pointer;
         jstring language = env->NewStringUTF(apps->GetCurrentGameLanguage());
         return language;
     */
 
-	static private native String getAvailableGameLanguages(long pointer); /*
+	private static native String getAvailableGameLanguages(long pointer); /*
         ISteamApps* apps = (ISteamApps*) pointer;
         jstring language = env->NewStringUTF(apps->GetAvailableGameLanguages());
         return language;
 	*/
 
-	static private native long getAppOwner(long pointer); /*
+	private static native long getAppOwner(long pointer); /*
         ISteamApps* apps = (ISteamApps*) pointer;
 		CSteamID steamID = apps->GetAppOwner();
 		return (int64) steamID.ConvertToUint64();
 	*/
 
-	static private native int getAppBuildId(long pointer); /*
+	private static native int getAppBuildId(long pointer); /*
         ISteamApps* apps = (ISteamApps*) pointer;
         return apps->GetAppBuildId();
 	*/

@@ -150,7 +150,7 @@ public class SteamNetworking extends SteamInterface {
 		#include "SteamGameServerNetworkingCallback.h"
 	*/
 
-	static private native long createCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
+	private static native long createCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
 		if (isClient) {
 			return (intp) new SteamNetworkingCallback(env, javaCallback);
 		} else {
@@ -158,19 +158,19 @@ public class SteamNetworking extends SteamInterface {
 		}
 	*/
 
-	static private native boolean sendP2PPacket(long pointer, long steamIDRemote, ByteBuffer data,
+	private static native boolean sendP2PPacket(long pointer, long steamIDRemote, ByteBuffer data,
 												int offset, int size, int sendType, int channel); /*
 
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->SendP2PPacket((uint64) steamIDRemote, &data[offset], size, (EP2PSend) sendType, channel);
 	*/
 
-	static private native boolean isP2PPacketAvailable(long pointer, int[] msgSize, int channel); /*
+	private static native boolean isP2PPacketAvailable(long pointer, int[] msgSize, int channel); /*
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->IsP2PPacketAvailable((uint32 *)msgSize, channel);
 	*/
 
-	static private native boolean readP2PPacket(long pointer, ByteBuffer dest, int offset, int capacity,
+	private static native boolean readP2PPacket(long pointer, ByteBuffer dest, int offset, int capacity,
 												int[] msgSizeInBytes, long[] steamIDRemote, int channel); /*
 
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
@@ -182,24 +182,24 @@ public class SteamNetworking extends SteamInterface {
 		return false;
 	*/
 
-	static private native boolean acceptP2PSessionWithUser(long pointer, long steamIDRemote); /*
+	private static native boolean acceptP2PSessionWithUser(long pointer, long steamIDRemote); /*
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->AcceptP2PSessionWithUser((uint64) steamIDRemote);
 	*/
 
-	static private native boolean closeP2PSessionWithUser(long pointer, long steamIDRemote); /*
+	private static native boolean closeP2PSessionWithUser(long pointer, long steamIDRemote); /*
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->CloseP2PSessionWithUser((uint64) steamIDRemote);
 	*/
 
-	static private native boolean closeP2PChannelWithUser(long pointer, long steamIDRemote, int channel); /*
+	private static native boolean closeP2PChannelWithUser(long pointer, long steamIDRemote, int channel); /*
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->CloseP2PChannelWithUser((uint64) steamIDRemote, channel);
 	*/
 
 	// [@code-disaster] note: removed GetP2PSessionState(), won't work that way
 
-	static private native boolean allowP2PPacketRelay(long pointer, boolean allow); /*
+	private static native boolean allowP2PPacketRelay(long pointer, boolean allow); /*
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		return net->AllowP2PPacketRelay(allow);
 	*/

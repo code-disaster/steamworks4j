@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 public class SteamAPI {
 
-	static private boolean isRunning = false;
+	private static boolean isRunning = false;
 
 	public static boolean init() throws SteamException {
 		return init(null);

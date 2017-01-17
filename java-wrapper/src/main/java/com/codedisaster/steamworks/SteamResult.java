@@ -114,13 +114,13 @@ public enum SteamResult {
 	UnknownErrorCode_NotImplementedByAPI(0);
 
 	private final int code;
-	static private final SteamResult[] valuesLookupTable;
+	private static final SteamResult[] valuesLookupTable;
 
 	SteamResult(int code) {
 		this.code = code;
 	}
 
-	static public SteamResult byValue(int resultCode) {
+	public static SteamResult byValue(int resultCode) {
 		if (resultCode < valuesLookupTable.length) {
 			return valuesLookupTable[resultCode];
 		} else {

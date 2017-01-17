@@ -523,11 +523,11 @@ public class SteamUGC extends SteamInterface {
 		#include "SteamUGCCallback.h"
 	*/
 
-	static private native long createCallback(SteamUGCCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamUGCCallbackAdapter javaCallback); /*
 		return (intp) new SteamUGCCallback(env, javaCallback);
 	*/
 
-	static private native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
+	private static native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
 														 int matchingType, int sortOrder,
 														 int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -536,7 +536,7 @@ public class SteamUGC extends SteamInterface {
 		return (intp) query;
 	*/
 
-	static private native long createQueryAllUGCRequest(long pointer, int queryType, int matchingType,
+	private static native long createQueryAllUGCRequest(long pointer, int queryType, int matchingType,
 														int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryAllUGCRequest((EUGCQuery) queryType,
@@ -544,13 +544,13 @@ public class SteamUGC extends SteamInterface {
 		return (intp) query;
 	*/
 
-	static private native long createQueryUGCDetailsRequest(long pointer, long[] publishedFileIDs, int numPublishedFileIDs); /*
+	private static native long createQueryUGCDetailsRequest(long pointer, long[] publishedFileIDs, int numPublishedFileIDs); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		UGCQueryHandle_t query = ugc->CreateQueryUGCDetailsRequest((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
 		return (intp) query;
 	*/
 
-	static private native long sendQueryUGCRequest(long pointer, long callback, long query); /*
+	private static native long sendQueryUGCRequest(long pointer, long callback, long query); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SendQueryUGCRequest(query);
@@ -558,7 +558,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native boolean getQueryUGCResult(long pointer, long query, int index, SteamUGCDetails details); /*
+	private static native boolean getQueryUGCResult(long pointer, long query, int index, SteamUGCDetails details); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCDetails_t result;
 
@@ -630,7 +630,7 @@ public class SteamUGC extends SteamInterface {
 		return false;
 	*/
 
-	static private native String getQueryUGCPreviewURL(long pointer, long query, int index); /*
+	private static native String getQueryUGCPreviewURL(long pointer, long query, int index); /*
 		char url[1024];
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -641,7 +641,7 @@ public class SteamUGC extends SteamInterface {
 		return nullptr;
 	*/
 
-	static private native String getQueryUGCMetadata(long pointer, long query, int index); /*
+	private static native String getQueryUGCMetadata(long pointer, long query, int index); /*
 		char metadata[k_cchDeveloperMetadataMax];
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -652,10 +652,10 @@ public class SteamUGC extends SteamInterface {
 		return nullptr;
 	*/
 
-//	static private native boolean getQueryUGCChildren(long pointer, long query, int index,
+//	private static native boolean getQueryUGCChildren(long pointer, long query, int index,
 //													  long[] publishedFileIDs, long maxEntries);
 
-	static private native long getQueryUGCStatistic(long pointer, long query, int index, int statType); /*
+	private static native long getQueryUGCStatistic(long pointer, long query, int index, int statType); /*
 		uint64 statValue;
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -666,12 +666,12 @@ public class SteamUGC extends SteamInterface {
 		return 0;
 	*/
 
-	static private native int getQueryUGCNumAdditionalPreviews(long pointer, long query, int index); /*
+	private static native int getQueryUGCNumAdditionalPreviews(long pointer, long query, int index); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetQueryUGCNumAdditionalPreviews(query, index);
 	*/
 
-	static private native boolean getQueryUGCAdditionalPreview(long pointer, long query, int index,
+	private static native boolean getQueryUGCAdditionalPreview(long pointer, long query, int index,
 															   int previewIndex, ItemAdditionalPreview previewData); /*
 		char url[1024];
 		char fileName[1024];
@@ -698,12 +698,12 @@ public class SteamUGC extends SteamInterface {
 		return success;
 	*/
 
-	static private native int getQueryUGCNumKeyValueTags(long pointer, long query, int index); /*
+	private static native int getQueryUGCNumKeyValueTags(long pointer, long query, int index); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetQueryUGCNumKeyValueTags(query, index);
 	*/
 
-	static private native boolean getQueryUGCKeyValueTag(long pointer, long query, int index, int keyValueTagIndex, String[] keyAndValue); /*
+	private static native boolean getQueryUGCKeyValueTag(long pointer, long query, int index, int keyValueTagIndex, String[] keyAndValue); /*
 		char key[1024];
 		char value[1024];
 
@@ -718,92 +718,92 @@ public class SteamUGC extends SteamInterface {
 		return success;
 	*/
 
-	static private native boolean releaseQueryUserUGCRequest(long pointer, long query); /*
+	private static native boolean releaseQueryUserUGCRequest(long pointer, long query); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->ReleaseQueryUGCRequest(query);
 	*/
 
-	static private native boolean addRequiredTag(long pointer, long query, String tagName); /*
+	private static native boolean addRequiredTag(long pointer, long query, String tagName); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->AddRequiredTag(query, tagName);
 	*/
 
-	static private native boolean addExcludedTag(long pointer, long query, String tagName); /*
+	private static native boolean addExcludedTag(long pointer, long query, String tagName); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->AddExcludedTag(query, tagName);
 	*/
 
-	static private native boolean setReturnOnlyIDs(long pointer, long query, boolean returnOnlyIDs); /*
+	private static native boolean setReturnOnlyIDs(long pointer, long query, boolean returnOnlyIDs); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnOnlyIDs(query, returnOnlyIDs);
 	*/
 
-	static private native boolean setReturnKeyValueTags(long pointer, long query, boolean returnKeyValueTags); /*
+	private static native boolean setReturnKeyValueTags(long pointer, long query, boolean returnKeyValueTags); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnKeyValueTags(query, returnKeyValueTags);
 	*/
 
-	static private native boolean setReturnLongDescription(long pointer, long query, boolean returnLongDescription); /*
+	private static native boolean setReturnLongDescription(long pointer, long query, boolean returnLongDescription); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnLongDescription(query, returnLongDescription);
 	*/
 
-	static private native boolean setReturnMetadata(long pointer, long query, boolean returnMetadata); /*
+	private static native boolean setReturnMetadata(long pointer, long query, boolean returnMetadata); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnMetadata(query, returnMetadata);
 	*/
 
-	static private native boolean setReturnChildren(long pointer, long query, boolean returnChildren); /*
+	private static native boolean setReturnChildren(long pointer, long query, boolean returnChildren); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnChildren(query, returnChildren);
 	*/
 
-	static private native boolean setReturnAdditionalPreviews(long pointer, long query, boolean returnAdditionalPreviews); /*
+	private static native boolean setReturnAdditionalPreviews(long pointer, long query, boolean returnAdditionalPreviews); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnAdditionalPreviews(query, returnAdditionalPreviews);
 	*/
 
-	static private native boolean setReturnTotalOnly(long pointer, long query, boolean returnTotalOnly); /*
+	private static native boolean setReturnTotalOnly(long pointer, long query, boolean returnTotalOnly); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnTotalOnly(query, returnTotalOnly);
 	*/
 
-	static private native boolean setLanguage(long pointer, long query, String language); /*
+	private static native boolean setLanguage(long pointer, long query, String language); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetLanguage(query, language);
 	*/
 
-	static private native boolean setAllowCachedResponse(long pointer, long query, int maxAgeSeconds); /*
+	private static native boolean setAllowCachedResponse(long pointer, long query, int maxAgeSeconds); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetAllowCachedResponse(query, maxAgeSeconds);
 	*/
 
-	static private native boolean setCloudFileNameFilter(long pointer, long query, String matchCloudFileName); /*
+	private static native boolean setCloudFileNameFilter(long pointer, long query, String matchCloudFileName); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetCloudFileNameFilter(query, matchCloudFileName);
 	*/
 
-	static private native boolean setMatchAnyTag(long pointer, long query, boolean matchAnyTag); /*
+	private static native boolean setMatchAnyTag(long pointer, long query, boolean matchAnyTag); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetMatchAnyTag(query, matchAnyTag);
 	*/
 
-	static private native boolean setSearchText(long pointer, long query, String searchText); /*
+	private static native boolean setSearchText(long pointer, long query, String searchText); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetSearchText(query, searchText);
 	*/
 
-	static private native boolean setRankedByTrendDays(long pointer, long query, int days); /*
+	private static native boolean setRankedByTrendDays(long pointer, long query, int days); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetRankedByTrendDays(query, days);
 	*/
 
-	static private native boolean addRequiredKeyValueTag(long pointer, long query, String key, String value); /*
+	private static native boolean addRequiredKeyValueTag(long pointer, long query, String key, String value); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->AddRequiredKeyValueTag(query, key, value);
 	*/
 
-	static private native long requestUGCDetails(long pointer, long callback, long publishedFileID, int maxAgeSeconds); /*
+	private static native long requestUGCDetails(long pointer, long callback, long publishedFileID, int maxAgeSeconds); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->RequestUGCDetails(publishedFileID, maxAgeSeconds);
@@ -811,7 +811,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long createItem(long pointer, long callback, int consumerAppID, int fileType); /*
+	private static native long createItem(long pointer, long callback, int consumerAppID, int fileType); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->CreateItem(consumerAppID, (EWorkshopFileType) fileType);
@@ -819,37 +819,37 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long startItemUpdate(long pointer, int consumerAppID, long publishedFileID); /*
+	private static native long startItemUpdate(long pointer, int consumerAppID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->StartItemUpdate(consumerAppID, publishedFileID);
 	*/
 
-	static private native boolean setItemTitle(long pointer, long update, String title); /*
+	private static native boolean setItemTitle(long pointer, long update, String title); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemTitle(update, title);
 	*/
 
-	static private native boolean setItemDescription(long pointer, long update, String description); /*
+	private static native boolean setItemDescription(long pointer, long update, String description); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemDescription(update, description);
 	*/
 
-	static private native boolean setItemUpdateLanguage(long pointer, long update, String language); /*
+	private static native boolean setItemUpdateLanguage(long pointer, long update, String language); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemUpdateLanguage(update, language);
 	*/
 
-	static private native boolean setItemMetadata(long pointer, long update, String metaData); /*
+	private static native boolean setItemMetadata(long pointer, long update, String metaData); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemMetadata(update, metaData);
 	*/
 
-	static private native boolean setItemVisibility(long pointer, long update, int visibility); /*
+	private static native boolean setItemVisibility(long pointer, long update, int visibility); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemVisibility(update, (ERemoteStoragePublishedFileVisibility) visibility);
 	*/
 
-	static private native boolean setItemTags(long pointer, long update, String[] tags, int numTags); /*
+	private static native boolean setItemTags(long pointer, long update, String[] tags, int numTags); /*
 		SteamParamStringArray_t arrayTags;
 		arrayTags.m_ppStrings = (numTags > 0) ? new const char*[numTags] : NULL;
 		arrayTags.m_nNumStrings = numTags;
@@ -868,27 +868,27 @@ public class SteamUGC extends SteamInterface {
 		return result;
 	*/
 
-	static private native boolean setItemContent(long pointer, long update, String contentFolder); /*
+	private static native boolean setItemContent(long pointer, long update, String contentFolder); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemContent(update, contentFolder);
 	*/
 
-	static private native boolean setItemPreview(long pointer, long update, String previewFile); /*
+	private static native boolean setItemPreview(long pointer, long update, String previewFile); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetItemPreview(update, previewFile);
 	*/
 
-	static private native boolean removeItemKeyValueTags(long pointer, long update, String key); /*
+	private static native boolean removeItemKeyValueTags(long pointer, long update, String key); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->RemoveItemKeyValueTags(update, key);
 	*/
 
-	static private native boolean addItemKeyValueTag(long pointer, long update, String key, String value); /*
+	private static native boolean addItemKeyValueTag(long pointer, long update, String key, String value); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->AddItemKeyValueTag(update, key, value);
 	*/
 
-	static private native long submitItemUpdate(long pointer, long callback, long update, String changeNote); /*
+	private static native long submitItemUpdate(long pointer, long callback, long update, String changeNote); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SubmitItemUpdate(update, changeNote);
@@ -896,13 +896,13 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native int getItemUpdateProgress(long pointer, long update, long[] bytesProcessedAndTotal); /*
+	private static native int getItemUpdateProgress(long pointer, long update, long[] bytesProcessedAndTotal); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		uint64* values = (uint64*) bytesProcessedAndTotal;
 		return ugc->GetItemUpdateProgress(update, &values[0], &values[1]);
 	*/
 
-	static private native long setUserItemVote(long pointer, long callback, long publishedFileID, boolean voteUp); /*
+	private static native long setUserItemVote(long pointer, long callback, long publishedFileID, boolean voteUp); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SetUserItemVote(publishedFileID, voteUp);
@@ -910,7 +910,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long getUserItemVote(long pointer, long callback, long publishedFileID); /*
+	private static native long getUserItemVote(long pointer, long callback, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->GetUserItemVote(publishedFileID);
@@ -918,7 +918,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long addItemToFavorites(long pointer, long callback, int appID, long publishedFileID); /*
+	private static native long addItemToFavorites(long pointer, long callback, int appID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->AddItemToFavorites(appID, publishedFileID);
@@ -926,7 +926,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long removeItemFromFavorites(long pointer, long callback, int appID, long publishedFileID); /*
+	private static native long removeItemFromFavorites(long pointer, long callback, int appID, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->RemoveItemFromFavorites(appID, publishedFileID);
@@ -934,7 +934,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long subscribeItem(long pointer, long callback, long publishedFileID); /*
+	private static native long subscribeItem(long pointer, long callback, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->SubscribeItem(publishedFileID);
@@ -942,7 +942,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	 */
 
-	static private native long unsubscribeItem(long pointer, long callback, long publishedFileID); /*
+	private static native long unsubscribeItem(long pointer, long callback, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->UnsubscribeItem(publishedFileID);
@@ -950,22 +950,22 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	 */
 
-	static private native int getNumSubscribedItems(long pointer); /*
+	private static native int getNumSubscribedItems(long pointer); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetNumSubscribedItems();
 	*/
 
-	static private native int getSubscribedItems(long pointer, long[] files, int maxEntries); /*
+	private static native int getSubscribedItems(long pointer, long[] files, int maxEntries); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetSubscribedItems((PublishedFileId_t*) files, maxEntries);
 	*/
 	
-	static private native int getItemState(long pointer, long publishedFileID); /*
+	private static native int getItemState(long pointer, long publishedFileID); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->GetItemState(publishedFileID);
 	*/
 
-	static private native boolean getItemInstallInfo(long pointer, long publishedFileID, ItemInstallInfo installInfo); /*
+	private static native boolean getItemInstallInfo(long pointer, long publishedFileID, ItemInstallInfo installInfo); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 
 		char folder[1024];
@@ -989,7 +989,7 @@ public class SteamUGC extends SteamInterface {
 		return false;
 	*/
 	
-	static private native boolean getItemDownloadInfo(long pointer, long publishedFileID,
+	private static native boolean getItemDownloadInfo(long pointer, long publishedFileID,
 													  long[] bytesDownloadedAndTotal); /*
 
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -997,22 +997,22 @@ public class SteamUGC extends SteamInterface {
 		return ugc->GetItemDownloadInfo(publishedFileID, &values[0], &values[1]);
 	*/
 
-	static private native boolean downloadItem(long pointer, long publishedFileID, boolean highPriority); /*
+	private static native boolean downloadItem(long pointer, long publishedFileID, boolean highPriority); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->DownloadItem(publishedFileID, highPriority);
 	*/
 
-	static private native boolean initWorkshopForGameServer(long pointer, int workshopDepotID, String folder); /*
+	private static native boolean initWorkshopForGameServer(long pointer, int workshopDepotID, String folder); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->BInitWorkshopForGameServer(workshopDepotID, folder);
 	*/
 
-	static private native void suspendDownloads(long pointer, boolean suspend); /*
+	private static native void suspendDownloads(long pointer, boolean suspend); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		ugc->SuspendDownloads(suspend);
 	*/
 
-	static private native long startPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
+	private static native long startPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->StartPlaytimeTracking((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
@@ -1020,7 +1020,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long stopPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
+	private static native long stopPlaytimeTracking(long pointer, long callback, long[] publishedFileIDs, int numPublishedFileIDs); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->StopPlaytimeTracking((PublishedFileId_t*) publishedFileIDs, numPublishedFileIDs);
@@ -1028,7 +1028,7 @@ public class SteamUGC extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long stopPlaytimeTrackingForAllItems(long pointer, long callback); /*
+	private static native long stopPlaytimeTrackingForAllItems(long pointer, long callback); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
 		SteamAPICall_t handle = ugc->StopPlaytimeTrackingForAllItems();

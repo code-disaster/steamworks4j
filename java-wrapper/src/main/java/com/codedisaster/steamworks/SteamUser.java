@@ -56,38 +56,38 @@ public class SteamUser extends SteamInterface {
 		#include "SteamUserCallback.h"
 	*/
 
-	static private native long createCallback(SteamUserCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamUserCallbackAdapter javaCallback); /*
 		return (intp) new SteamUserCallback(env, javaCallback);
 	*/
 
-	static private native long getSteamID(long pointer); /*
+	private static native long getSteamID(long pointer); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		CSteamID steamID = user->GetSteamID();
 		return (int64) steamID.ConvertToUint64();
 	*/
 
-	static private native int getAuthSessionTicket(long pointer, Buffer authTicket, int capacityInBytes, int[] sizeInBytes); /*
+	private static native int getAuthSessionTicket(long pointer, Buffer authTicket, int capacityInBytes, int[] sizeInBytes); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		int ticket = user->GetAuthSessionTicket(authTicket, capacityInBytes, (uint32*) sizeInBytes);
 		return ticket;
 	*/
 
-	static private native int beginAuthSession(long pointer, Buffer authTicket, int authTicketSizeInBytes, long steamID); /*
+	private static native int beginAuthSession(long pointer, Buffer authTicket, int authTicketSizeInBytes, long steamID); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		return user->BeginAuthSession(authTicket, authTicketSizeInBytes, (uint64) steamID);
 	*/
 
-	static private native void endAuthSession(long pointer, long steamID); /*
+	private static native void endAuthSession(long pointer, long steamID); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		user->EndAuthSession((uint64) steamID);
 	*/
 
-	static private native void cancelAuthTicket(long pointer, int authTicket); /*
+	private static native void cancelAuthTicket(long pointer, int authTicket); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		user->CancelAuthTicket(authTicket);
 	*/
 
-	static private native int userHasLicenseForApp(long pointer, long steamID, int appID); /*
+	private static native int userHasLicenseForApp(long pointer, long steamID, int appID); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		return user->UserHasLicenseForApp((uint64) steamID, (AppId_t) appID);
 	*/

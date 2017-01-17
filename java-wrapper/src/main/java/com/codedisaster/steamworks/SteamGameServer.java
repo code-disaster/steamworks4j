@@ -234,126 +234,126 @@ public class SteamGameServer extends SteamInterface {
 		#include "SteamGameServerCallback.h"
 	*/
 
-	static private native long createCallback(SteamGameServerCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamGameServerCallbackAdapter javaCallback); /*
 		return (intp) new SteamGameServerCallback(env, javaCallback);
 	*/
 
-	static private native void setProduct(long pointer, String product); /*
+	private static native void setProduct(long pointer, String product); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetProduct(product);
 	*/
 
-	static private native void setGameDescription(long pointer, String gameDescription); /*
+	private static native void setGameDescription(long pointer, String gameDescription); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetGameDescription(gameDescription);
 	*/
 
-	static private native void setModDir(long pointer, String modDir); /*
+	private static native void setModDir(long pointer, String modDir); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetModDir(modDir);
 	*/
 
-	static private native void setDedicatedServer(long pointer, boolean dedicated); /*
+	private static native void setDedicatedServer(long pointer, boolean dedicated); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetDedicatedServer(dedicated);
 	*/
 
-	static private native void logOn(long pointer, String token); /*
+	private static native void logOn(long pointer, String token); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->LogOn(token);
 	*/
 
-	static private native void logOnAnonymous(long pointer); /*
+	private static native void logOnAnonymous(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->LogOnAnonymous();
 	*/
 
-	static private native void logOff(long pointer); /*
+	private static native void logOff(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->LogOff();
 	*/
 
-	static private native boolean isLoggedOn(long pointer); /*
+	private static native boolean isLoggedOn(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->BLoggedOn();
 	*/
 
-	static private native boolean isSecure(long pointer); /*
+	private static native boolean isSecure(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->BSecure();
 	*/
 
-	static private native long getSteamID(long pointer); /*
+	private static native long getSteamID(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->GetSteamID().ConvertToUint64();
 	*/
 
-	static private native boolean wasRestartRequested(long pointer); /*
+	private static native boolean wasRestartRequested(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->WasRestartRequested();
 	*/
 
-	static private native void setMaxPlayerCount(long pointer, int playersMax); /*
+	private static native void setMaxPlayerCount(long pointer, int playersMax); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetMaxPlayerCount(playersMax);
 	*/
 
-	static private native void setBotPlayerCount(long pointer, int botplayers); /*
+	private static native void setBotPlayerCount(long pointer, int botplayers); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetBotPlayerCount(botplayers);
 	*/
 
-	static private native void setServerName(long pointer, String serverName); /*
+	private static native void setServerName(long pointer, String serverName); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetServerName(serverName);
 	*/
 
-	static private native void setMapName(long pointer, String mapName); /*
+	private static native void setMapName(long pointer, String mapName); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetMapName(mapName);
 	*/
 
-	static private native void setPasswordProtected(long pointer, boolean passwordProtected); /*
+	private static native void setPasswordProtected(long pointer, boolean passwordProtected); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetPasswordProtected(passwordProtected);
 	*/
 
-	static private native void setSpectatorPort(long pointer, short spectatorPort); /*
+	private static native void setSpectatorPort(long pointer, short spectatorPort); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetSpectatorPort(spectatorPort);
 	*/
 
-	static private native void setSpectatorServerName(long pointer, String spectatorServerName); /*
+	private static native void setSpectatorServerName(long pointer, String spectatorServerName); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetSpectatorServerName(spectatorServerName);
 	*/
 
-	static private native void clearAllKeyValues(long pointer); /*
+	private static native void clearAllKeyValues(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->ClearAllKeyValues();
 	*/
 
-	static private native void setKeyValue(long pointer, String key, String value); /*
+	private static native void setKeyValue(long pointer, String key, String value); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetKeyValue(key, value);
 	*/
 
-	static private native void setGameTags(long pointer, String gameTags); /*
+	private static native void setGameTags(long pointer, String gameTags); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetGameTags(gameTags);
 	*/
 
-	static private native void setGameData(long pointer, String gameData); /*
+	private static native void setGameData(long pointer, String gameData); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetGameData(gameData);
 	*/
 
-	static private native void setRegion(long pointer, String region); /*
+	private static native void setRegion(long pointer, String region); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetRegion(region);
 	*/
 
-	static private native boolean sendUserConnectAndAuthenticate(long pointer, int clientIP,
+	private static native boolean sendUserConnectAndAuthenticate(long pointer, int clientIP,
 																 Buffer authBlob, int authBlobSize, long[] steamIDUser); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		CSteamID user;
@@ -364,88 +364,88 @@ public class SteamGameServer extends SteamInterface {
 		return false;
 	*/
 
-	static private native long createUnauthenticatedUserConnection(long pointer); /*
+	private static native long createUnauthenticatedUserConnection(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->CreateUnauthenticatedUserConnection().ConvertToUint64();
 	*/
 
-	static private native void sendUserDisconnect(long pointer, long steamIDUser); /*
+	private static native void sendUserDisconnect(long pointer, long steamIDUser); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SendUserDisconnect((uint64) steamIDUser);
 	*/
 
-	static private native boolean updateUserData(long pointer, long steamIDUser, String playerName, int score); /*
+	private static native boolean updateUserData(long pointer, long steamIDUser, String playerName, int score); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->BUpdateUserData((uint64) steamIDUser, playerName, score);
 	*/
 
-	static private native int getAuthSessionTicket(long pointer, Buffer authTicket, int capacityInBytes, int[] sizeInBytes); /*
+	private static native int getAuthSessionTicket(long pointer, Buffer authTicket, int capacityInBytes, int[] sizeInBytes); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		int ticket = server->GetAuthSessionTicket(authTicket, capacityInBytes, (uint32*) sizeInBytes);
 		return ticket;
 	*/
 
-	static private native int beginAuthSession(long pointer, Buffer authTicket, int authTicketSizeInBytes, long steamID); /*
+	private static native int beginAuthSession(long pointer, Buffer authTicket, int authTicketSizeInBytes, long steamID); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->BeginAuthSession(authTicket, authTicketSizeInBytes, (uint64) steamID);
 	*/
 
-	static private native void endAuthSession(long pointer, long steamID); /*
+	private static native void endAuthSession(long pointer, long steamID); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->EndAuthSession((uint64) steamID);
 	*/
 
-	static private native void cancelAuthTicket(long pointer, int authTicket); /*
+	private static native void cancelAuthTicket(long pointer, int authTicket); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->CancelAuthTicket(authTicket);
 	*/
 
-	static private native int userHasLicenseForApp(long pointer, long steamID, int appID); /*
+	private static native int userHasLicenseForApp(long pointer, long steamID, int appID); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->UserHasLicenseForApp((uint64) steamID, (AppId_t) appID);
 	*/
 
-	static private native boolean requestUserGroupStatus(long pointer, long steamIDUser, long steamIDGroup); /*
+	private static native boolean requestUserGroupStatus(long pointer, long steamIDUser, long steamIDGroup); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->RequestUserGroupStatus((uint64) steamIDUser, (uint64) steamIDGroup);
 	*/
 
-	static private native int getPublicIP(long pointer); /*
+	private static native int getPublicIP(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->GetPublicIP();
 	*/
 
-	static private native boolean handleIncomingPacket(long pointer, Buffer data, int sizeInBytes, int srcIP, short srcPort); /*
+	private static native boolean handleIncomingPacket(long pointer, Buffer data, int sizeInBytes, int srcIP, short srcPort); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->HandleIncomingPacket(data, sizeInBytes, srcIP, srcPort);
 	*/
 
-	static private native int getNextOutgoingPacket(long pointer, Buffer out, int capacityInBytes, int[] netAdr, short[] port); /*
+	private static native int getNextOutgoingPacket(long pointer, Buffer out, int capacityInBytes, int[] netAdr, short[] port); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->GetNextOutgoingPacket(out, capacityInBytes, (uint32*) netAdr, (uint16*) port);
 	*/
 
-	static private native void enableHeartbeats(long pointer, boolean active); /*
+	private static native void enableHeartbeats(long pointer, boolean active); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->EnableHeartbeats(active);
 	*/
 
-	static private native void setHeartbeatInterval(long pointer, int heartbeatInterval); /*
+	private static native void setHeartbeatInterval(long pointer, int heartbeatInterval); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->SetHeartbeatInterval(heartbeatInterval);
 	*/
 
-	static private native void forceHeartbeat(long pointer); /*
+	private static native void forceHeartbeat(long pointer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		server->ForceHeartbeat();
 	*/
 
-	static private native long associateWithClan(long pointer, long steamIDClan); /*
+	private static native long associateWithClan(long pointer, long steamIDClan); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->AssociateWithClan((uint64) steamIDClan);
 	*/
 
-	static private native long computeNewPlayerCompatibility(long pointer, long steamIDNewPlayer); /*
+	private static native long computeNewPlayerCompatibility(long pointer, long steamIDNewPlayer); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		return server->ComputeNewPlayerCompatibility((uint64) steamIDNewPlayer);
 	*/

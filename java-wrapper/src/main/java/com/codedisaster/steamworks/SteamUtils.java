@@ -105,81 +105,81 @@ public class SteamUtils extends SteamInterface {
 		#include "SteamUtilsCallback.h"
 	*/
 
-	static private native long createCallback(SteamUtilsCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamUtilsCallbackAdapter javaCallback); /*
 		return (intp) new SteamUtilsCallback(env, javaCallback);
 	*/
 
-	static private native int getSecondsSinceAppActive(long pointer); /*
+	private static native int getSecondsSinceAppActive(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetSecondsSinceAppActive();
 	*/
 
-	static private native int getSecondsSinceComputerActive(long pointer); /*
+	private static native int getSecondsSinceComputerActive(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetSecondsSinceComputerActive();
 	*/
 
-	static private native int getConnectedUniverse(long pointer); /*
+	private static native int getConnectedUniverse(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetConnectedUniverse();
 	*/
 
 	// This will overflow in year 2038.
-	static private native int getServerRealTime(long pointer); /*
+	private static native int getServerRealTime(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetServerRealTime();
 	*/
 
-	static private native String getIPCountry(long pointer); /*
+	private static native String getIPCountry(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return env->NewStringUTF(utils->GetIPCountry());
 	*/
 
-	static private native int getImageWidth(long pointer, int image); /*
+	private static native int getImageWidth(long pointer, int image); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		uint32 width, height;
 		bool result = utils->GetImageSize(image, &width, &height);
 		return result ? width : -1;
 	*/
 
-	static private native int getImageHeight(long pointer, int image); /*
+	private static native int getImageHeight(long pointer, int image); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		uint32 width, height;
 		bool result = utils->GetImageSize(image, &width, &height);
 		return result ? height : -1;
 	*/
 
-	static private native boolean getImageRGBA(long pointer, int image, ByteBuffer dest, int destSize); /*
+	private static native boolean getImageRGBA(long pointer, int image, ByteBuffer dest, int destSize); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetImageRGBA(image, (uint8*) dest, destSize);
 	*/
 
-	static private native int getAppID(long pointer); /*
+	private static native int getAppID(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return (AppId_t) utils->GetAppID();
 	*/
 
-	static private native void setOverlayNotificationPosition(long pointer, int position); /*
+	private static native void setOverlayNotificationPosition(long pointer, int position); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		utils->SetOverlayNotificationPosition((ENotificationPosition) position);
 	*/
 
-	static private native boolean isAPICallCompleted(long pointer, long handle, boolean[] result); /*
+	private static native boolean isAPICallCompleted(long pointer, long handle, boolean[] result); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->IsAPICallCompleted((SteamAPICall_t) handle, &result[0]);
 	*/
 
-	static private native int getAPICallFailureReason(long pointer, long handle); /*
+	private static native int getAPICallFailureReason(long pointer, long handle); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->GetAPICallFailureReason((SteamAPICall_t) handle);
 	*/
 
-	static private native void enableWarningMessageHook(long callback, boolean enable); /*
+	private static native void enableWarningMessageHook(long callback, boolean enable); /*
 		SteamUtilsCallback* cb = (SteamUtilsCallback*) callback;
 		cb->enableWarningMessageHook(enable);
 	*/
 
-	static private native boolean isOverlayEnabled(long pointer); /*
+	private static native boolean isOverlayEnabled(long pointer); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
 		return utils->IsOverlayEnabled();
 	*/

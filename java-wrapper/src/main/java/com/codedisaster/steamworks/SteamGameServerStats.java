@@ -65,56 +65,56 @@ public class SteamGameServerStats extends SteamInterface {
 		#include "SteamGameServerStatsCallback.h"
 	*/
 
-	static private native long createCallback(SteamGameServerStatsCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamGameServerStatsCallbackAdapter javaCallback); /*
 		return (intp) new SteamGameServerStatsCallback(env, javaCallback);
 	*/
 
-	static private native long requestUserStats(long pointer, long steamIDUser); /*
+	private static native long requestUserStats(long pointer, long steamIDUser); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->RequestUserStats((uint64) steamIDUser);
 	*/
 
-	static private native boolean getUserStat(long pointer, long steamIDUser, String name, int[] value); /*
+	private static native boolean getUserStat(long pointer, long steamIDUser, String name, int[] value); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->GetUserStat((uint64) steamIDUser, name, &((int32*) value)[0]);
 	*/
 
-	static private native boolean getUserStat(long pointer, long steamIDUser, String name, float[] value); /*
+	private static native boolean getUserStat(long pointer, long steamIDUser, String name, float[] value); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->GetUserStat((uint64) steamIDUser, name, &value[0]);
 	*/
 
-	static private native boolean getUserAchievement(long pointer, long steamIDUser, String name, boolean[] achieved); /*
+	private static native boolean getUserAchievement(long pointer, long steamIDUser, String name, boolean[] achieved); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->GetUserAchievement((uint64) steamIDUser, name, &achieved[0]);
 	*/
 
-	static private native boolean setUserStat(long pointer, long steamIDUser, String name, int value); /*
+	private static native boolean setUserStat(long pointer, long steamIDUser, String name, int value); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->SetUserStat((uint64) steamIDUser, name, (int32) value);
 	*/
 
-	static private native boolean setUserStat(long pointer, long steamIDUser, String name, float value); /*
+	private static native boolean setUserStat(long pointer, long steamIDUser, String name, float value); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->SetUserStat((uint64) steamIDUser, name, value);
 	*/
 
-	static private native boolean updateUserAvgRateStat(long pointer, long steamIDUser, String name, float countThisSession, double sessionLength); /*
+	private static native boolean updateUserAvgRateStat(long pointer, long steamIDUser, String name, float countThisSession, double sessionLength); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->UpdateUserAvgRateStat((uint64) steamIDUser, name, countThisSession, sessionLength);
 	*/
 
-	static private native boolean setUserAchievement(long pointer, long steamIDUser, String name); /*
+	private static native boolean setUserAchievement(long pointer, long steamIDUser, String name); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->SetUserAchievement((uint64) steamIDUser, name);
 	*/
 
-	static private native boolean clearUserAchievement(long pointer, long steamIDUser, String name); /*
+	private static native boolean clearUserAchievement(long pointer, long steamIDUser, String name); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->ClearUserAchievement((uint64) steamIDUser, name);
 	*/
 
-	static private native long storeUserStats(long pointer, long steamIDUser); /*
+	private static native long storeUserStats(long pointer, long steamIDUser); /*
 		ISteamGameServerStats* stats = (ISteamGameServerStats*) pointer;
 		return stats->StoreUserStats((uint64) steamIDUser);
 	*/

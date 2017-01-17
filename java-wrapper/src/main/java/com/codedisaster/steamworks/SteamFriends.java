@@ -256,11 +256,11 @@ public class SteamFriends extends SteamInterface {
 		#include "SteamFriendsCallback.h"
 	*/
 
-	static private native long createCallback(SteamFriendsCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamFriendsCallbackAdapter javaCallback); /*
 		return (intp) new SteamFriendsCallback(env, javaCallback);
 	*/
 
-	static private native String getPersonaName(long pointer); /*
+	private static native String getPersonaName(long pointer); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetPersonaName());
 		return name;
@@ -274,54 +274,54 @@ public class SteamFriends extends SteamInterface {
 		return handle;
 	*/
 
-	static private native int getPersonaState(long pointer); /*
+	private static native int getPersonaState(long pointer); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetPersonaState();
 	*/
 
-	static private native int getFriendCount(long pointer, int friendFlags); /*
+	private static native int getFriendCount(long pointer, int friendFlags); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetFriendCount(friendFlags);
 	*/
 
-	static private native long getFriendByIndex(long pointer, int friendIndex, int friendFlags); /*
+	private static native long getFriendByIndex(long pointer, int friendIndex, int friendFlags); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		CSteamID id = friends->GetFriendByIndex(friendIndex, friendFlags);
 		return id.ConvertToUint64();
 	*/
 
-	static private native int getFriendRelationship(long pointer, long steamIDFriend); /*
+	private static native int getFriendRelationship(long pointer, long steamIDFriend); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetFriendRelationship((uint64) steamIDFriend);
 	*/
 
-	static private native int getFriendPersonaState(long pointer, long steamIDFriend); /*
+	private static native int getFriendPersonaState(long pointer, long steamIDFriend); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetFriendPersonaState((uint64) steamIDFriend);
 	*/
 
-	static private native String getFriendPersonaName(long pointer, long steamID); /*
+	private static native String getFriendPersonaName(long pointer, long steamID); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamID));
 		return name;
 	*/
 
-	static private native int getSmallFriendAvatar(long pointer, long steamID); /*
+	private static native int getSmallFriendAvatar(long pointer, long steamID); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetSmallFriendAvatar((uint64) steamID);
 	*/
 
-	static private native int getMediumFriendAvatar(long pointer, long steamID); /*
+	private static native int getMediumFriendAvatar(long pointer, long steamID); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetMediumFriendAvatar((uint64) steamID);
 	*/
 
-	static private native int getLargeFriendAvatar(long pointer, long steamID); /*
+	private static native int getLargeFriendAvatar(long pointer, long steamID); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->GetLargeFriendAvatar((uint64) steamID);
 	*/
 
-	static private native boolean requestUserInformation(long pointer, long steamID, boolean requireNameOnly); /*
+	private static native boolean requestUserInformation(long pointer, long steamID, boolean requireNameOnly); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		return friends->RequestUserInformation((uint64) steamID, requireNameOnly);
 	*/

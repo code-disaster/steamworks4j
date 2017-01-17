@@ -192,78 +192,78 @@ public class SteamUserStats extends SteamInterface {
 		#include "SteamUserStatsCallback.h"
 	*/
 
-	static private native long createCallback(SteamUserStatsCallbackAdapter javaCallback); /*
+	private static native long createCallback(SteamUserStatsCallbackAdapter javaCallback); /*
 		return (intp) new SteamUserStatsCallback(env, javaCallback);
 	*/
 
-	static private native boolean requestCurrentStats(long pointer); /*
+	private static native boolean requestCurrentStats(long pointer); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->RequestCurrentStats();
 	*/
 
-	static private native boolean getStat(long pointer, String name, int[] value); /*
+	private static native boolean getStat(long pointer, String name, int[] value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetStat(name, &((int32*) value)[0]);
 	*/
 
-	static private native boolean setStat(long pointer, String name, int value); /*
+	private static native boolean setStat(long pointer, String name, int value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->SetStat(name, (int32) value);
 	*/
 
-	static private native boolean getStat(long pointer, String name, float[] value); /*
+	private static native boolean getStat(long pointer, String name, float[] value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetStat(name, &value[0]);
 	*/
 
-	static private native boolean setStat(long pointer, String name, float value); /*
+	private static native boolean setStat(long pointer, String name, float value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->SetStat(name, value);
 	*/
 
-	static private native boolean getAchievement(long pointer, String name, boolean[] achieved); /*
+	private static native boolean getAchievement(long pointer, String name, boolean[] achieved); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetAchievement(name, &achieved[0]);
 	*/
 
-	static private native boolean setAchievement(long pointer, String name); /*
+	private static native boolean setAchievement(long pointer, String name); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->SetAchievement(name);
 	*/
 
-	static private native boolean clearAchievement(long pointer, String name); /*
+	private static native boolean clearAchievement(long pointer, String name); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->ClearAchievement(name);
 	*/
 
-	static private native boolean storeStats(long pointer); /*
+	private static native boolean storeStats(long pointer); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->StoreStats();
 	*/
 
-	static private native boolean indicateAchievementProgress(long pointer, String name,
+	private static native boolean indicateAchievementProgress(long pointer, String name,
 															  int curProgress, int maxProgress); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->IndicateAchievementProgress(name, curProgress, maxProgress);
 	*/
 
-	static private native int getNumAchievements(long pointer); /*
+	private static native int getNumAchievements(long pointer); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetNumAchievements();
 	*/
 
-	static private native String getAchievementName(long pointer, int index); /*
+	private static native String getAchievementName(long pointer, int index); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		jstring name = env->NewStringUTF(stats->GetAchievementName(index));
 		return name;
 	*/
 
-	static private native boolean resetAllStats(long pointer, boolean achievementsToo); /*
+	private static native boolean resetAllStats(long pointer, boolean achievementsToo); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->ResetAllStats(achievementsToo);
 	*/
 
-	static private native long findOrCreateLeaderboard(long pointer, long callback, String leaderboardName,
+	private static native long findOrCreateLeaderboard(long pointer, long callback, String leaderboardName,
 													   int leaderboardSortMethod, int leaderboardDisplayType); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
@@ -273,7 +273,7 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long findLeaderboard(long pointer, long callback, String leaderboardName); /*
+	private static native long findLeaderboard(long pointer, long callback, String leaderboardName); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 		SteamAPICall_t handle = stats->FindLeaderboard(leaderboardName);
@@ -281,28 +281,28 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native String getLeaderboardName(long pointer, long leaderboard); /*
+	private static native String getLeaderboardName(long pointer, long leaderboard); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		jstring name = env->NewStringUTF(stats->GetLeaderboardName(leaderboard));
 		return name;
 	*/
 
-	static private native int getLeaderboardEntryCount(long pointer, long leaderboard); /*
+	private static native int getLeaderboardEntryCount(long pointer, long leaderboard); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetLeaderboardEntryCount(leaderboard);
 	*/
 
-	static private native int getLeaderboardSortMethod(long pointer, long leaderboard); /*
+	private static native int getLeaderboardSortMethod(long pointer, long leaderboard); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetLeaderboardSortMethod(leaderboard);
 	*/
 
-	static private native int getLeaderboardDisplayType(long pointer, long leaderboard); /*
+	private static native int getLeaderboardDisplayType(long pointer, long leaderboard); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetLeaderboardDisplayType(leaderboard);
 	*/
 
-	static private native long downloadLeaderboardEntries(long pointer, long callback, long leaderboard,
+	private static native long downloadLeaderboardEntries(long pointer, long callback, long leaderboard,
 														  int leaderboardDataRequest, int rangeStart, int rangeEnd); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
@@ -317,7 +317,7 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
+	private static native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
 																SteamLeaderboardEntry entry,
 																int[] details, int detailsMax); /*
 
@@ -346,7 +346,7 @@ public class SteamUserStats extends SteamInterface {
 
 	*/
 
-	static private native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
+	private static native boolean getDownloadedLeaderboardEntry(long pointer, long entries, int index,
 																SteamLeaderboardEntry entry); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
@@ -374,7 +374,7 @@ public class SteamUserStats extends SteamInterface {
 
 	*/
 
-	static private native long uploadLeaderboardScore(long pointer, long callback,
+	private static native long uploadLeaderboardScore(long pointer, long callback,
 													  long leaderboard, int method, int score,
 													  int[] scoreDetails, int scoreDetailsCount); /*
 
@@ -390,7 +390,7 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long uploadLeaderboardScore(long pointer, long callback,
+	private static native long uploadLeaderboardScore(long pointer, long callback,
 													  long leaderboard, int method, int score); /*
 
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
@@ -405,7 +405,7 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native long requestGlobalStats(long pointer, long callback, int historyDays); /*
+	private static native long requestGlobalStats(long pointer, long callback, int historyDays); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 
@@ -416,22 +416,22 @@ public class SteamUserStats extends SteamInterface {
 		return handle;
 	*/
 
-	static private native boolean getGlobalStat(long pointer, String name, long[] value); /*
+	private static native boolean getGlobalStat(long pointer, String name, long[] value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetGlobalStat(name, &((int64*) value)[0]);
 	*/
 
-	static private native boolean getGlobalStat(long pointer, String name, double[] value); /*
+	private static native boolean getGlobalStat(long pointer, String name, double[] value); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetGlobalStat(name, &value[0]);
 	*/
 
-	static private native int getGlobalStatHistory(long pointer, String name, long[] values, int count); /*
+	private static native int getGlobalStatHistory(long pointer, String name, long[] values, int count); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetGlobalStatHistory(name, values, count * sizeof(int64));
 	*/
 
-	static private native int getGlobalStatHistory(long pointer, String name, double[] values, int count); /*
+	private static native int getGlobalStatHistory(long pointer, String name, double[] values, int count); /*
 		ISteamUserStats* stats = (ISteamUserStats*) pointer;
 		return stats->GetGlobalStatHistory(name, values, count * sizeof(double));
 	*/
