@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+@SuppressWarnings("WeakerAccess")
 public class SteamLeaderboardEntry {
 
 	/* Contains only a subset of LeaderboardEntry_t. */

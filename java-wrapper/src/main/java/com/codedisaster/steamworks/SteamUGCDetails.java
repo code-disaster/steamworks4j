@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+@SuppressWarnings("WeakerAccess")
 public class SteamUGCDetails {
 
 	/* Contains only a subset of SteamUGCDetails_t. */
