@@ -112,15 +112,30 @@ class SteamSharedLibraryLoader {
 					(libraryPath != null ? libraryPath : "resources"));
 		}
 
-		FileOutputStream output = new FileOutputStream(nativeFile);
-		byte[] buffer = new byte[4096];
-		while (true) {
-			int length = input.read(buffer);
-			if (length == -1) break;
-			output.write(buffer, 0, length);
+		/*
+			Extracting the library may fail, for example because 'nativeFile' already exists and is in
+			use by another process. In this case, we fail silently and just try to load the existing file.
+		 */
+
+		try {
+
+			FileOutputStream output = new FileOutputStream(nativeFile);
+
+			byte[] buffer = new byte[4096];
+			while (true) {
+				int length = input.read(buffer);
+				if (length == -1) break;
+				output.write(buffer, 0, length);
+			}
+
+			output.close();
+
+		} catch (IOException e) {
+			if (!nativeFile.exists()) {
+				throw e;
+			}
 		}
 
-		output.close();
 		input.close();
 
 		if (zip != null) {
