@@ -1,3 +1,8 @@
+[1.6.2]
+- Cleaned up Maven project structure. Removed superfluous releases of 'steamworks4j-parent' and 'steamworks4j-jnigen' repositories.
+- Reduced JNI overhead for invocations of callback adapters.
+- Fixed crash when trying to run multiple processes using steamworks4j simultaneously.
+
 [1.6.1]
 - Updated to Steamworks SDK v1.39.
 - Added SteamFriends.setPersonaName().
