@@ -25,4 +25,26 @@ class SteamRemoteStorageCallbackAdapter extends SteamCallbackAdapter<SteamRemote
 		callback.onUpdatePublishedFileResult(new SteamPublishedFileID(publishedFileID),
 				needsToAcceptWLA, SteamResult.byValue(result));
 	}
+
+	void onPublishedFileSubscribed(long publishedFileID, int appID) {
+		callback.onPublishedFileSubscribed(new SteamPublishedFileID(publishedFileID), appID);
+	}
+
+	void onPublishedFileUnsubscribed(long publishedFileID, int appID) {
+		callback.onPublishedFileUnsubscribed(new SteamPublishedFileID(publishedFileID), appID);
+	}
+
+	void onPublishedFileDeleted(long publishedFileID, int appID) {
+		callback.onPublishedFileDeleted(new SteamPublishedFileID(publishedFileID), appID);
+	}
+
+	void onFileWriteAsyncComplete(int result) {
+		callback.onFileWriteAsyncComplete(SteamResult.byValue(result));
+	}
+
+	void onFileReadAsyncComplete(long fileReadAsync, int result, int offset, int read) {
+		callback.onFileReadAsyncComplete(new SteamAPICall(fileReadAsync),
+				SteamResult.byValue(result), offset, read);
+	}
+
 }

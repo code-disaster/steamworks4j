@@ -177,6 +177,16 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 	private SteamRemoteStorageCallback remoteStorageCallback = new SteamRemoteStorageCallback() {
 		@Override
+		public void onFileWriteAsyncComplete(SteamResult result) {
+
+		}
+
+		@Override
+		public void onFileReadAsyncComplete(SteamAPICall fileReadAsync, SteamResult result, int offset, int read) {
+
+		}
+
+		@Override
 		public void onFileShareResult(SteamUGCHandle fileHandle, String fileName, SteamResult result) {
 			System.out.println("Remote storage file share result: handle='" + fileHandle.toString() +
 					", name=" + fileName + "', result=" + result.toString());
@@ -209,6 +219,21 @@ public class SteamClientAPITestApp extends SteamTestApp {
 		public void onUpdatePublishedFileResult(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
 			System.out.println("Remote storage update published file result: publishedFileID=" + publishedFileID.toString() +
 					", needsToAcceptWLA=" + needsToAcceptWLA + ", result=" + result.toString());
+		}
+
+		@Override
+		public void onPublishedFileSubscribed(SteamPublishedFileID publishedFileID, int appID) {
+
+		}
+
+		@Override
+		public void onPublishedFileUnsubscribed(SteamPublishedFileID publishedFileID, int appID) {
+
+		}
+
+		@Override
+		public void onPublishedFileDeleted(SteamPublishedFileID publishedFileID, int appID) {
+
 		}
 	};
 
@@ -479,9 +504,9 @@ public class SteamClientAPITestApp extends SteamTestApp {
 
 			for (int i = 0; i < numFiles; i++) {
 				int[] sizes = new int[1];
-				String name = remoteStorage.getFileNameAndSize(i, sizes);
-				boolean exists = remoteStorage.fileExists(name);
-				System.out.println("# " + i + " : name=" + name + ", size=" + sizes[0] + ", exists=" + (exists ? "yes" : "no"));
+				String file = remoteStorage.getFileNameAndSize(i, sizes);
+				boolean exists = remoteStorage.fileExists(file);
+				System.out.println("# " + i + " : name=" + file + ", size=" + sizes[0] + ", exists=" + (exists ? "yes" : "no"));
 			}
 		} else if (input.startsWith("file write ")) {
 			String path = input.substring("file write ".length());

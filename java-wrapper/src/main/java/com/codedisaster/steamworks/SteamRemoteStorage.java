@@ -4,6 +4,38 @@ import java.nio.ByteBuffer;
 
 public class SteamRemoteStorage extends SteamInterface {
 
+	public enum RemoteStoragePlatform {
+		None(0),
+		Windows(1),
+		OSX(1 << 1),
+		PS3(1 << 2),
+		Linux(1 << 3),
+		Reserved2(1 << 4),
+
+		All(0xffffffff);
+
+		private final int mask;
+		private static final RemoteStoragePlatform[] values = values();
+
+		RemoteStoragePlatform(int mask) {
+			this.mask = mask;
+		}
+
+		static RemoteStoragePlatform[] byMask(int mask) {
+			int bits = Integer.bitCount(mask);
+			RemoteStoragePlatform[] result = new RemoteStoragePlatform[bits];
+
+			int idx = 0;
+			for (RemoteStoragePlatform value : values) {
+				if ((value.mask & mask) != 0) {
+					result[idx++] = value;
+				}
+			}
+
+			return result;
+		}
+	}
+
 	public enum UGCReadAction {
 		ContinueReadingUntilFinished,
 		ContinueReading,
@@ -45,26 +77,49 @@ public class SteamRemoteStorage extends SteamInterface {
 		super(SteamAPI.getSteamRemoteStoragePointer(), createCallback(new SteamRemoteStorageCallbackAdapter(callback)));
 	}
 
-	public boolean fileWrite(String name, ByteBuffer data, int length) throws SteamException {
+	public boolean fileWrite(String file, ByteBuffer data, int length) throws SteamException {
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return fileWrite(pointer, name, data, length);
+		return fileWrite(pointer, file, data, length);
 	}
 
-	public boolean fileRead(String name, ByteBuffer buffer, int capacity) throws SteamException {
+	public boolean fileRead(String file, ByteBuffer buffer, int capacity) throws SteamException {
 		if (!buffer.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return fileRead(pointer, name, buffer, capacity);
+		return fileRead(pointer, file, buffer, capacity);
 	}
 
-	public boolean fileDelete(String name) {
-		return fileDelete(pointer, name);
+	public SteamAPICall fileWriteAsync(String file, ByteBuffer data) throws SteamException {
+		if (!data.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+		return new SteamAPICall(fileWriteAsync(pointer, callback, file, data, data.remaining()));
 	}
 
-	public SteamAPICall fileShare(String name) {
-		return new SteamAPICall(fileShare(pointer, callback, name));
+	public SteamAPICall fileReadAsync(String file, int offset, int toRead) {
+		return new SteamAPICall(fileReadAsync(pointer, callback, file, offset, toRead));
+	}
+
+	public boolean fileReadAsyncComplete(SteamAPICall readCall, ByteBuffer buffer, int toRead) {
+		return fileReadAsyncComplete(pointer, readCall.handle, buffer, toRead);
+	}
+
+	public boolean fileForget(String file) {
+		return fileForget(pointer, file);
+	}
+
+	public boolean fileDelete(String file) {
+		return fileDelete(pointer, file);
+	}
+
+	public SteamAPICall fileShare(String file) {
+		return new SteamAPICall(fileShare(pointer, callback, file));
+	}
+
+	public boolean setSyncPlatforms(String file, RemoteStoragePlatform remoteStoragePlatform) {
+		return setSyncPlatforms(pointer, file, remoteStoragePlatform.mask);
 	}
 
 	public SteamUGCFileWriteStreamHandle fileWriteStreamOpen(String name) {
@@ -83,12 +138,25 @@ public class SteamRemoteStorage extends SteamInterface {
 		return fileWriteStreamCancel(pointer, stream.handle);
 	}
 
-	public boolean fileExists(String name) {
-		return fileExists(pointer, name);
+	public boolean fileExists(String file) {
+		return fileExists(pointer, file);
 	}
 
-	public int getFileSize(String name) {
-		return getFileSize(pointer, name);
+	public boolean filePersisted(String file) {
+		return filePersisted(pointer, file);
+	}
+
+	public int getFileSize(String file) {
+		return getFileSize(pointer, file);
+	}
+
+	public long getFileTimestamp(String file) {
+		return getFileTimestamp(pointer, file);
+	}
+
+	public RemoteStoragePlatform[] getSyncPlatforms(String file) {
+		int mask = getSyncPlatforms(pointer, file);
+		return RemoteStoragePlatform.byMask(mask);
 	}
 
 	public int getFileCount() {
@@ -99,12 +167,40 @@ public class SteamRemoteStorage extends SteamInterface {
 		return getFileNameAndSize(pointer, index, sizes);
 	}
 
+	public boolean getQuota(long[] totalBytes, long[] availableBytes) {
+		return getQuota(pointer, totalBytes, availableBytes);
+	}
+
+	public boolean isCloudEnabledForAccount() {
+		return isCloudEnabledForAccount(pointer);
+	}
+
+	public boolean isCloudEnabledForApp() {
+		return isCloudEnabledForApp(pointer);
+	}
+
+	public void setCloudEnabledForApp(boolean enabled) {
+		setCloudEnabledForApp(pointer, enabled);
+	}
+
 	public SteamAPICall ugcDownload(SteamUGCHandle fileHandle, int priority) {
 		return new SteamAPICall(ugcDownload(pointer, callback, fileHandle.handle, priority));
 	}
 
+	public boolean getUGCDownloadProgress(SteamUGCHandle fileHandle, int[] bytesDownloaded, int[] bytesExpected) {
+		return getUGCDownloadProgress(pointer, fileHandle.handle, bytesDownloaded, bytesExpected);
+	}
+
 	public int ugcRead(SteamUGCHandle fileHandle, ByteBuffer buffer, int capacity, int offset, UGCReadAction action) {
 		return ugcRead(pointer, fileHandle.handle, buffer, capacity, offset, action.ordinal());
+	}
+
+	public int getCachedUGCCount() {
+		return getCachedUGCCount(pointer);
+	}
+
+	public SteamUGCHandle getCachedUGCHandle(int cachedContent) {
+		return new SteamUGCHandle(getCachedUGCHandle(pointer, cachedContent));
 	}
 
 	public SteamAPICall publishWorkshopFile(String file, String previewFile,
@@ -160,32 +256,63 @@ public class SteamRemoteStorage extends SteamInterface {
 		return (intp) new SteamRemoteStorageCallback(env, javaCallback);
 	*/
 
-	private static native boolean fileWrite(long pointer, String name, ByteBuffer data, int length); /*
+	private static native boolean fileWrite(long pointer, String file, ByteBuffer data, int length); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileWrite(name, data, length);
+		return storage->FileWrite(file, data, length);
 	*/
 
-	private static native boolean fileRead(long pointer, String name, ByteBuffer buffer, int capacity); /*
+	private static native boolean fileRead(long pointer, String file, ByteBuffer buffer, int capacity); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileRead(name, buffer, capacity);
+		return storage->FileRead(file, buffer, capacity);
 	*/
 
-	private static native boolean fileDelete(long pointer, String name); /*
-		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileDelete(name);
-	*/
-
-	private static native long fileShare(long pointer, long callback, String name); /*
+	private static native long fileWriteAsync(long pointer, long callback, String file, ByteBuffer data, int length); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
-		SteamAPICall_t handle = storage->FileShare(name);
+		SteamAPICall_t handle = storage->FileWriteAsync(file, data, (uint32) length);
+		cb->onFileWriteAsyncCompleteCall.Set(handle, cb, &SteamRemoteStorageCallback::onFileWriteAsyncComplete);
+		return handle;
+	*/
+
+	private static native long fileReadAsync(long pointer, long callback, String file, int offset, int toRead); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
+		SteamAPICall_t handle = storage->FileReadAsync(file, (uint32) offset, (uint32) toRead);
+        cb->onFileReadAsyncCompleteCall.Set(handle, cb, &SteamRemoteStorageCallback::onFileReadAsyncComplete);
+		return handle;
+	*/
+
+	private static native boolean fileReadAsyncComplete(long pointer, long readCall, ByteBuffer buffer, int toRead); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileReadAsyncComplete((SteamAPICall_t) readCall, buffer, (uint32) toRead);
+	*/
+
+	private static native boolean fileForget(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileForget(file);
+	*/
+
+	private static native boolean fileDelete(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileDelete(file);
+	*/
+
+	private static native long fileShare(long pointer, long callback, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
+		SteamAPICall_t handle = storage->FileShare(file);
 		cb->onFileShareResultCall.Set(handle, cb, &SteamRemoteStorageCallback::onFileShareResult);
 		return handle;
 	*/
 
-	private static native long fileWriteStreamOpen(long pointer, String name); /*
+	private static native boolean setSyncPlatforms(long pointer, String file, int remoteStoragePlatform); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileWriteStreamOpen(name);
+		return storage->SetSyncPlatforms(file, (ERemoteStoragePlatform) remoteStoragePlatform);
+	*/
+
+	private static native long fileWriteStreamOpen(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->FileWriteStreamOpen(file);
 	*/
 
 	private static native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data, int length); /*
@@ -203,14 +330,29 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->FileWriteStreamCancel((UGCFileWriteStreamHandle_t) stream);
 	*/
 
-	private static native boolean fileExists(long pointer, String name); /*
+	private static native boolean fileExists(long pointer, String file); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileExists(name);
+		return storage->FileExists(file);
 	*/
 
-	private static native int getFileSize(long pointer, String name); /*
+	private static native boolean filePersisted(long pointer, String file); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->GetFileSize(name);
+		return storage->FilePersisted(file);
+	*/
+
+	private static native int getFileSize(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetFileSize(file);
+	*/
+
+	private static native long getFileTimestamp(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetFileTimestamp(file);
+	*/
+
+	private static native int getSyncPlatforms(long pointer, String file); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetSyncPlatforms(file);
 	*/
 
 	private static native int getFileCount(long pointer); /*
@@ -224,6 +366,26 @@ public class SteamRemoteStorage extends SteamInterface {
 		return name;
 	*/
 
+	private static native boolean getQuota(long pointer, long[] totalBytes, long[] availableBytes); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetQuota((uint64*) &totalBytes[0], (uint64*) &availableBytes[0]);
+	*/
+
+	private static native boolean isCloudEnabledForAccount(long pointer); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->IsCloudEnabledForAccount();
+	*/
+
+	private static native boolean isCloudEnabledForApp(long pointer); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->IsCloudEnabledForApp();
+	*/
+
+	private static native void setCloudEnabledForApp(long pointer, boolean enabled); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		storage->SetCloudEnabledForApp(enabled);
+	*/
+
 	private static native long ugcDownload(long pointer, long callback, long content, int priority); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
@@ -232,11 +394,28 @@ public class SteamRemoteStorage extends SteamInterface {
 		return handle;
 	*/
 
+	private static native boolean getUGCDownloadProgress(long pointer, long content,
+														 int[] bytesDownloaded, int[] bytesExpected); /*
+
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetUGCDownloadProgress((UGCHandle_t) content, (int32*) &bytesDownloaded[0], (int32*) &bytesExpected[0]);
+	*/
+
 	private static native int ugcRead(long pointer, long content, ByteBuffer buffer, int capacity,
 									  int offset, int action); /*
 
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		return storage->UGCRead(content, buffer, capacity, offset, (EUGCReadAction) action);
+	*/
+
+	private static native int getCachedUGCCount(long pointer); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetCachedUGCCount();
+	*/
+
+	private static native long getCachedUGCHandle(long pointer, int cachedContent); /*
+		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
+		return storage->GetCachedUGCHandle(cachedContent);
 	*/
 
 	private static native long publishWorkshopFile(long pointer, long callback,
