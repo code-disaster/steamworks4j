@@ -1,3 +1,9 @@
+[]
+- Added SteamRemoteStorage callbacks to notify application about external changes to workshop item subscriptions. (#42)
+- Added SteamRemoteStorage functions for asynchronous file access and file/cloud queries.
+- API change: the SteamRemoteStorageCallback interface has been updated accordingly.
+- Added SteamNetworking.getP2PSessionState(). (#43)
+
 [1.6.2]
 - Cleaned up Maven project structure. Removed superfluous releases of 'steamworks4j-parent' and 'steamworks4j-jnigen' repositories.
 - Reduced JNI overhead for invocations of callback adapters.
