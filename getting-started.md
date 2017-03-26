@@ -8,7 +8,7 @@ layout: default
 
 To add Steamworks support, you just have to download and add ```steamworks4j-{{ site.steamworks4j.version }}.jar``` to your Java project.
 
-> Starting with version 1.4.0, native libraries are contained in *steamworks4j-{{ site.steamworks4j.version }}.jar* directly. The *steamworks4j-natives.jar* archive has been removed.
+> Starting with version 1.4.0, native libraries are contained in *steamworks4j.jar* directly. The *steamworks4j-natives.jar* archive has been removed.
 
 #### Release versions
 
@@ -55,7 +55,7 @@ Maven:
 <dependency>
   <groupId>com.code-disaster.steamworks4j</groupId>
   <artifactId>steamworks4j</artifactId>
-  <version>{{ site.steamworks4j.snapshot-version }}</version>
+  <version>{{ site.steamworks4j.snapshot-version }}-SNAPSHOT</version>
 </dependency>
 {% endhighlight xml %}
 
@@ -69,7 +69,7 @@ repositories {
 }
 
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.snapshot-version }}"
+	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.snapshot-version }}-SNAPSHOT"
 }
 {% endhighlight groovy %}
 
