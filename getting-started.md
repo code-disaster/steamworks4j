@@ -10,16 +10,20 @@ To add Steamworks support, you just have to download and add ```steamworks4j-{{ 
 
 > Starting with version 1.4.0, native libraries are contained in *steamworks4j-{{ site.steamworks4j.version }}.jar* directly. The *steamworks4j-natives.jar* archive has been removed.
 
+#### Release versions
+
 Major updates are released on Maven Central, so the easiest way is to add the library as an external dependency, using your favorite build environment.
 
 Maven:
 
 {% highlight xml %}
-<dependency>
-  <groupId>com.code-disaster.steamworks4j</groupId>
-  <artifactId>steamworks4j</artifactId>
-  <version>{{ site.steamworks4j.version }}</version>
-</dependency>
+<dependencies>
+  <dependency>
+    <groupId>com.code-disaster.steamworks4j</groupId>
+    <artifactId>steamworks4j</artifactId>
+    <version>{{ site.steamworks4j.version }}</version>
+  </dependency>
+</dependencies>
 {% endhighlight xml %}
 
 Gradle:
@@ -31,6 +35,45 @@ dependencies {
 {% endhighlight groovy %}
 
 If you don't use any build tools, [direct downloads of .jar files](http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/steamworks4j/{{ site.steamworks4j.version }}) are also available.
+
+#### Snapshot versions
+
+I've started releasing snapshot builds on [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/).
+
+Maven:
+
+{% highlight xml %}
+<repositories>
+  <repository>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+</repositories>
+
+<dependency>
+  <groupId>com.code-disaster.steamworks4j</groupId>
+  <artifactId>steamworks4j</artifactId>
+  <version>{{ site.steamworks4j.snapshot-version }}</version>
+</dependency>
+{% endhighlight xml %}
+
+Gradle:
+
+{% highlight groovy %}
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.snapshot-version }}"
+}
+{% endhighlight groovy %}
+
+#### Build from source
 
 To learn how to build the library from source code, please refer to the [build instructions]({{ '/build-instructions.html' | prepend: site.baseurl | prepend: site.url }}).
 
