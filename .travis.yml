@@ -8,7 +8,7 @@ branches:
     - master
 
 after_success:
-  - mvn deploy --settings .travis-settings.xml -DskipTests=true -B
+  - mvn -pl java-wrapper deploy --settings .travis-settings.xml -DskipTests=true -B
 
 env:
   global:
