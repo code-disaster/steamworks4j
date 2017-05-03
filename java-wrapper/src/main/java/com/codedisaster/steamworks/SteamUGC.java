@@ -140,7 +140,9 @@ public class SteamUGC extends SteamInterface {
 		ReportScore,
 		NumSecondsPlayed,
 		NumPlaytimeSessions,
-		NumComments
+		NumComments,
+		NumSecondsPlayedDuringTimePeriod,
+		NumPlaytimeSessionsDuringTimePeriod
 	}
 
 	public enum ItemPreviewType {
@@ -327,6 +329,10 @@ public class SteamUGC extends SteamInterface {
 
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
 		return setReturnTotalOnly(pointer, query.handle, returnTotalOnly);
+	}
+
+	public boolean setReturnPlaytimeStats(SteamUGCQuery query, int days) {
+		return setReturnPlaytimeStats(pointer, query.handle, days);
 	}
 
 	public boolean setLanguage(SteamUGCQuery query, String language) {
@@ -766,6 +772,11 @@ public class SteamUGC extends SteamInterface {
 	private static native boolean setReturnTotalOnly(long pointer, long query, boolean returnTotalOnly); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnTotalOnly(query, returnTotalOnly);
+	*/
+
+	private static native boolean setReturnPlaytimeStats(long pointer, long query, int days); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->SetReturnPlaytimeStats(query, (uint32) days);
 	*/
 
 	private static native boolean setLanguage(long pointer, long query, String language); /*
