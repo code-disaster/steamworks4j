@@ -26,3 +26,9 @@ void SteamUserCallback::onMicroTxnAuthorization(MicroTxnAuthorizationResponse_t*
 			(jboolean) callback->m_bAuthorized);
 	});
 }
+
+void SteamUserCallback::onRequestEncryptedAppTicket(EncryptedAppTicketResponse_t* callback, bool error) {
+    invokeCallback({
+        callVoidMethod(env, "onEncryptedAppTicket", "(I)V", (jint) callback->m_eResult);
+    });
+}

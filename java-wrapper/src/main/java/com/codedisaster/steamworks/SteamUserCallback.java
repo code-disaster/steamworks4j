@@ -8,4 +8,6 @@ public interface SteamUserCallback {
 
 	void onMicroTxnAuthorization(int appID, long orderID, boolean authorized);
 
+	void onEncryptedAppTicket(SteamResult result);
+
 }

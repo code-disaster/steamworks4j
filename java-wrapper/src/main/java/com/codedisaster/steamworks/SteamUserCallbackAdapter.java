@@ -16,4 +16,8 @@ class SteamUserCallbackAdapter extends SteamCallbackAdapter<SteamUserCallback> {
 		callback.onMicroTxnAuthorization(appID, orderID, authorized);
 	}
 
+	void onEncryptedAppTicket(int result) {
+		callback.onEncryptedAppTicket(SteamResult.byValue(result));
+	}
+
 }
