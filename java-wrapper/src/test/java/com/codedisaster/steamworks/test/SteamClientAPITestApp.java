@@ -124,7 +124,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 							ByteBuffer image = ByteBuffer.allocateDirect(w * h * 4);
 
 							try {
-								if (utils.getImageRGBA(smallAvatar, image, w * h * 4)) {
+								if (utils.getImageRGBA(smallAvatar, image)) {
 									System.out.println("  ... small avatar retrieve avatar image successful");
 
 									int nonZeroes = w * h;
@@ -525,7 +525,8 @@ public class SteamClientAPITestApp extends SteamTestApp {
 					while((bytesRead = in.read(bytes, 0, bytes.length)) > 0) {
 						ByteBuffer buffer = ByteBuffer.allocateDirect(bytesRead);
 						buffer.put(bytes, 0, bytesRead);
-						remoteStorage.fileWriteStreamWriteChunk(remoteFile, buffer, buffer.limit());
+						buffer.flip();
+						remoteStorage.fileWriteStreamWriteChunk(remoteFile, buffer);
 					}
 					remoteStorage.fileWriteStreamClose(remoteFile);
 				}

@@ -129,16 +129,15 @@ public class SteamHTTP extends SteamInterface {
 		return getHTTPResponseHeaderSize(pointer, request.handle, headerName);
 	}
 
-	public boolean getHTTPResponseHeaderValue(SteamHTTPRequestHandle request, String headerName, ByteBuffer value) throws SteamException {
+	public boolean getHTTPResponseHeaderValue(SteamHTTPRequestHandle request, String headerName,
+											  ByteBuffer value) throws SteamException {
 
 		if (!value.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		int offset = value.position();
-		int capacity = value.limit() - offset;
-
-		return getHTTPResponseHeaderValue(pointer, request.handle, headerName, value, offset, capacity);
+		return getHTTPResponseHeaderValue(pointer, request.handle, headerName,
+				value, value.position(), value.remaining());
 	}
 
 	public int getHTTPResponseBodySize(SteamHTTPRequestHandle request) {
@@ -151,10 +150,7 @@ public class SteamHTTP extends SteamInterface {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		int offset = data.position();
-		int capacity = data.limit() - offset;
-
-		return getHTTPResponseBodyData(pointer, request.handle, data, offset, capacity);
+		return getHTTPResponseBodyData(pointer, request.handle, data, data.position(), data.remaining());
 	}
 
 	public boolean getHTTPStreamingResponseBodyData(SteamHTTPRequestHandle request, int bodyDataOffset,
@@ -164,10 +160,8 @@ public class SteamHTTP extends SteamInterface {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		int offset = data.position();
-		int capacity = data.limit() - offset;
-
-		return getHTTPStreamingResponseBodyData(pointer, request.handle, bodyDataOffset, data, offset, capacity);
+		return getHTTPStreamingResponseBodyData(pointer, request.handle, bodyDataOffset,
+				data, data.position(), data.remaining());
 	}
 
 	public boolean releaseHTTPRequest(SteamHTTPRequestHandle request) {
@@ -250,10 +244,10 @@ public class SteamHTTP extends SteamInterface {
 	*/
 
 	private static native boolean getHTTPResponseHeaderValue(long pointer, long request, String headerName,
-															 ByteBuffer value, int offset, int capacity); /*
+															 ByteBuffer value, int offset, int size); /*
 
 		ISteamHTTP* http = (ISteamHTTP*) pointer;
-		return http->GetHTTPResponseHeaderValue((HTTPRequestHandle) request, headerName, (uint8*) &value[offset], capacity);
+		return http->GetHTTPResponseHeaderValue((HTTPRequestHandle) request, headerName, (uint8*) &value[offset], size);
 	*/
 
 	private static native int getHTTPResponseBodySize(long pointer, long request); /*
@@ -266,17 +260,17 @@ public class SteamHTTP extends SteamInterface {
 	*/
 
 	private static native boolean getHTTPResponseBodyData(long pointer, long request,
-														  ByteBuffer data, int offset, int capacity); /*
+														  ByteBuffer data, int offset, int size); /*
 
 		ISteamHTTP* http = (ISteamHTTP*) pointer;
-		return http->GetHTTPResponseBodyData((HTTPRequestHandle) request, (uint8*) &data[offset], capacity);
+		return http->GetHTTPResponseBodyData((HTTPRequestHandle) request, (uint8*) &data[offset], size);
 	*/
 
 	private static native boolean getHTTPStreamingResponseBodyData(long pointer, long request, int bodyDataOffset,
-																   ByteBuffer data, int offset, int capacity); /*
+																   ByteBuffer data, int offset, int size); /*
 
 		ISteamHTTP* http = (ISteamHTTP*) pointer;
-		return http->GetHTTPStreamingResponseBodyData((HTTPRequestHandle) request, bodyDataOffset, (uint8*) &data[offset], capacity);
+		return http->GetHTTPStreamingResponseBodyData((HTTPRequestHandle) request, bodyDataOffset, (uint8*) &data[offset], size);
 	*/
 
 	private static native boolean releaseHTTPRequest(long pointer, long request); /*

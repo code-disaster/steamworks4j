@@ -86,36 +86,15 @@ public class SteamNetworking extends SteamInterface {
 				createCallback(new SteamNetworkingCallbackAdapter(callback), api == API.Client));
 	}
 
-	/**
-	 * Sends packet data from a direct {@link ByteBuffer}.
-	 *
-	 * The packet data sent ranges from <code>ByteBuffer.position()</code> to <code>ByteBuffer.limit()</code>.
-	 */
 	public boolean sendP2PPacket(SteamID steamIDRemote, ByteBuffer data,
-								 P2PSend sendType, int channel) throws SteamException {
-
-		int offset = data.position();
-		int size = data.limit() - offset;
-		return sendP2PPacket(steamIDRemote, data, offset, size, sendType, channel);
-	}
-
-	/**
-	 * Sends packet data from a direct {@link ByteBuffer}.
-	 *
-	 * This function ignores the buffer's internal position and limit properties.
-	 */
-	public boolean sendP2PPacket(SteamID steamIDRemote, ByteBuffer data, int offset, int size,
 								 P2PSend sendType, int channel) throws SteamException {
 
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		if (data.capacity() < offset + size) {
-			throw new SteamException("Buffer capacity exceeded!");
-		}
-
-		return sendP2PPacket(pointer, steamIDRemote.handle, data, offset, size, sendType.ordinal(), channel);
+		return sendP2PPacket(pointer, steamIDRemote.handle, data,
+				data.position(), data.remaining(), sendType.ordinal(), channel);
 	}
 
 	public int isP2PPacketAvailable(int channel) {
@@ -128,41 +107,16 @@ public class SteamNetworking extends SteamInterface {
 	/**
 	 * Read incoming packet data into a direct {@link ByteBuffer}.
 	 *
-	 * The packet data is stored starting at <code>ByteBuffer.position()</code>, up to <code>ByteBuffer.limit()</code>.
-	 * On return, the buffer limit is set to <code>ByteBuffer.position()</code> plus the number of bytes received.
-	 *
 	 * On success, returns the number of bytes received, and the <code>steamIDRemote</code> parameter contains the
 	 * sender's ID.
 	 */
 	public int readP2PPacket(SteamID steamIDRemote, ByteBuffer dest, int channel) throws SteamException {
-		int offset = dest.position();
-		int capacity = dest.limit() - offset;
-		return readP2PPacket(steamIDRemote, dest, offset, capacity, channel);
-	}
-
-	/**
-	 * Read incoming packet data into a direct {@link ByteBuffer}.
-	 *
-	 * This function ignores the buffer's internal position and limit properties. On return, the buffer position is set
-	 * to <code>offset</code>, the buffer limit is set to <code>offset</code> plus the number of bytes received.
-	 *
-	 * On success, returns the number of bytes received, and the <code>steamIDRemote</code> parameter contains the
-	 * sender's ID.
-	 */
-	public int readP2PPacket(SteamID steamIDRemote, ByteBuffer dest,
-							 int offset, int capacity, int channel) throws SteamException {
 
 		if (!dest.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		if (dest.capacity() < offset + capacity) {
-			throw new SteamException("Buffer capacity exceeded!");
-		}
-
-		if (readP2PPacket(pointer, dest, offset, capacity, tmpIntResult, tmpLongResult, channel)) {
-			dest.position(offset);
-			dest.limit(offset + tmpIntResult[0]);
+		if (readP2PPacket(pointer, dest, dest.position(), dest.remaining(), tmpIntResult, tmpLongResult, channel)) {
 			steamIDRemote.handle = tmpLongResult[0];
 			return tmpIntResult[0];
 		}
@@ -217,12 +171,12 @@ public class SteamNetworking extends SteamInterface {
 		return net->IsP2PPacketAvailable((uint32 *)msgSize, channel);
 	*/
 
-	private static native boolean readP2PPacket(long pointer, ByteBuffer dest, int offset, int capacity,
+	private static native boolean readP2PPacket(long pointer, ByteBuffer dest, int offset, int size,
 												int[] msgSizeInBytes, long[] steamIDRemote, int channel); /*
 
 		ISteamNetworking* net = (ISteamNetworking*) pointer;
 		CSteamID remote;
-		if (net->ReadP2PPacket(&dest[offset], capacity, (uint32*) msgSizeInBytes, &remote, channel)) {
+		if (net->ReadP2PPacket(&dest[offset], size, (uint32*) msgSizeInBytes, &remote, channel)) {
 			steamIDRemote[0] = remote.ConvertToUint64();
 			return true;
 		}

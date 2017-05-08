@@ -1,6 +1,6 @@
 package com.codedisaster.steamworks;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -131,12 +131,12 @@ public class SteamGameServer extends SteamInterface {
 	}
 
 	public SteamID sendUserConnectAndAuthenticate(int clientIP,
-												  Buffer authBlob,
-												  int authBlobSize,
+												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
 
 		long[] ids = new long[1];
-		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob, authBlobSize, ids)) {
+		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob,
+				authBlob.position(), authBlob.remaining(), ids)) {
 			return new SteamID(ids[0]);
 		}
 		return null;
@@ -154,28 +154,30 @@ public class SteamGameServer extends SteamInterface {
 		return updateUserData(pointer, steamIDUser.handle, playerName, score);
 	}
 
-	public SteamAuthTicket getAuthSessionTicket(Buffer authTicket, int[] sizeInBytes) throws SteamException {
+	public SteamAuthTicket getAuthSessionTicket(ByteBuffer authTicket, int[] sizeInBytes) throws SteamException {
 
 		if (!authTicket.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		int ticket = getAuthSessionTicket(pointer, authTicket, authTicket.capacity(), sizeInBytes);
+		int ticket = getAuthSessionTicket(pointer, authTicket,
+				authTicket.position(), authTicket.remaining(), sizeInBytes);
 
 		if (ticket != SteamAuthTicket.AuthTicketInvalid) {
-			authTicket.limit(sizeInBytes[0]);
+			// TODO: this doesn't match the rest of the API
+			authTicket.limit(authTicket.position() + sizeInBytes[0]);
 		}
 
 		return new SteamAuthTicket(ticket);
 	}
 
-	public SteamAuth.BeginAuthSessionResult beginAuthSession(Buffer authTicket, SteamID steamID) throws SteamException {
+	public SteamAuth.BeginAuthSessionResult beginAuthSession(ByteBuffer authTicket, SteamID steamID) throws SteamException {
 
 		if (!authTicket.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		int result = beginAuthSession(pointer, authTicket, authTicket.limit(), steamID.handle);
+		int result = beginAuthSession(pointer, authTicket, authTicket.position(), authTicket.remaining(), steamID.handle);
 		return SteamAuth.BeginAuthSessionResult.byOrdinal(result);
 	}
 
@@ -199,13 +201,13 @@ public class SteamGameServer extends SteamInterface {
 		return getPublicIP(pointer);
 	}
 
-	public boolean handleIncomingPacket(Buffer data, int srcIP, short srcPort) {
-		return handleIncomingPacket(pointer, data, data.limit(), srcIP, srcPort);
+	public boolean handleIncomingPacket(ByteBuffer data, int srcIP, short srcPort) {
+		return handleIncomingPacket(pointer, data, data.position(), data.remaining(), srcIP, srcPort);
 	}
 
-	public int getNextOutgoingPacket(Buffer out, int[] netAdr, short[] port) {
+	public int getNextOutgoingPacket(ByteBuffer out, int[] netAdr, short[] port) {
 		// todo: improve return values (buffers? dedicated data type?)
-		return getNextOutgoingPacket(pointer, out, out.capacity(), netAdr, port);
+		return getNextOutgoingPacket(pointer, out, out.position(), out.remaining(), netAdr, port);
 	}
 
 	public void enableHeartbeats(boolean active) {
@@ -353,11 +355,11 @@ public class SteamGameServer extends SteamInterface {
 		server->SetRegion(region);
 	*/
 
-	private static native boolean sendUserConnectAndAuthenticate(long pointer, int clientIP,
-																 Buffer authBlob, int authBlobSize, long[] steamIDUser); /*
+	private static native boolean sendUserConnectAndAuthenticate(long pointer, int clientIP, ByteBuffer authBlob,
+																 int offset, int size, long[] steamIDUser); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
 		CSteamID user;
-		if (server->SendUserConnectAndAuthenticate(clientIP, authBlob, authBlobSize, &user)) {
+		if (server->SendUserConnectAndAuthenticate(clientIP, &authBlob[offset], size, &user)) {
 			steamIDUser[0] = user.ConvertToUint64();
 			return true;
 		}
@@ -379,15 +381,17 @@ public class SteamGameServer extends SteamInterface {
 		return server->BUpdateUserData((uint64) steamIDUser, playerName, score);
 	*/
 
-	private static native int getAuthSessionTicket(long pointer, Buffer authTicket, int capacityInBytes, int[] sizeInBytes); /*
+	private static native int getAuthSessionTicket(long pointer, ByteBuffer authTicket,
+												   int offset, int size, int[] sizeInBytes); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
-		int ticket = server->GetAuthSessionTicket(authTicket, capacityInBytes, (uint32*) sizeInBytes);
+		int ticket = server->GetAuthSessionTicket(&authTicket[offset], size, (uint32*) sizeInBytes);
 		return ticket;
 	*/
 
-	private static native int beginAuthSession(long pointer, Buffer authTicket, int authTicketSizeInBytes, long steamID); /*
+	private static native int beginAuthSession(long pointer, ByteBuffer authTicket,
+											   int offset, int size, long steamID); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
-		return server->BeginAuthSession(authTicket, authTicketSizeInBytes, (uint64) steamID);
+		return server->BeginAuthSession(&authTicket[offset], size, (uint64) steamID);
 	*/
 
 	private static native void endAuthSession(long pointer, long steamID); /*
@@ -415,14 +419,16 @@ public class SteamGameServer extends SteamInterface {
 		return server->GetPublicIP();
 	*/
 
-	private static native boolean handleIncomingPacket(long pointer, Buffer data, int sizeInBytes, int srcIP, short srcPort); /*
+	private static native boolean handleIncomingPacket(long pointer, ByteBuffer data,
+													   int offset, int size, int srcIP, short srcPort); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
-		return server->HandleIncomingPacket(data, sizeInBytes, srcIP, srcPort);
+		return server->HandleIncomingPacket(&data[offset], size, srcIP, srcPort);
 	*/
 
-	private static native int getNextOutgoingPacket(long pointer, Buffer out, int capacityInBytes, int[] netAdr, short[] port); /*
+	private static native int getNextOutgoingPacket(long pointer, ByteBuffer out,
+													int offset, int size, int[] netAdr, short[] port); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;
-		return server->GetNextOutgoingPacket(out, capacityInBytes, (uint32*) netAdr, (uint16*) port);
+		return server->GetNextOutgoingPacket(&out[offset], size, (uint32*) netAdr, (uint16*) port);
 	*/
 
 	private static native void enableHeartbeats(long pointer, boolean active); /*

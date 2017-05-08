@@ -223,31 +223,14 @@ public class SteamMatchmaking extends SteamInterface {
 
 	/**
 	 * Sends chat message from a direct {@link ByteBuffer}.
-	 *
-	 * The message data sent ranges from <code>ByteBuffer.position()</code> to <code>ByteBuffer.limit()</code>.
 	 */
 	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data) throws SteamException {
-		int offset = data.position();
-		int size = data.limit() - offset;
-		return sendLobbyChatMsg(steamIDLobby, data, offset, size);
-	}
-
-	/**
-	 * Sends chat message from a direct {@link ByteBuffer}.
-	 *
-	 * This function ignores the buffer's internal position and limit properties.
-	 */
-	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data, int offset, int size) throws SteamException {
 
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		if (data.capacity() < offset + size) {
-			throw new SteamException("Buffer capacity exceeded!");
-		}
-
-		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data, offset, size);
+		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data, data.position(), data.remaining());
 	}
 
 	public boolean sendLobbyChatMsg(SteamID steamIDLobby, String data) {
@@ -257,45 +240,16 @@ public class SteamMatchmaking extends SteamInterface {
 	/**
 	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
 	 * and a direct {@link ByteBuffer}.
-	 *
-	 * The message data is stored starting at <code>ByteBuffer.position()</code>, up to <code>ByteBuffer.limit()</code>.
-	 * On return, the buffer limit is set to <code>ByteBuffer.position()</code> plus the number of bytes received.
 	 */
-	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
-								 ByteBuffer dest) throws SteamException {
-
-		int offset = dest.position();
-		int capacity = dest.limit() - offset;
-
-		return getLobbyChatEntry(steamIDLobby, chatID, chatEntry, dest, offset, capacity);
-	}
-
-	/**
-	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
-	 * and a direct {@link ByteBuffer}.
-	 *
-	 * This function ignores the buffer's internal position and limit properties. On return, the buffer position is set
-	 * to <code>offset</code>, the buffer limit is set to <code>offset</code> plus the number of bytes received.
-	 */
-	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
-								 ByteBuffer dest, int offset, int capacity) throws SteamException {
+	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID,
+								 ChatEntry chatEntry, ByteBuffer dest) throws SteamException {
 
 		if (!dest.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		if (dest.capacity() < offset + capacity) {
-			throw new SteamException("Buffer capacity exceeded!");
-		}
-
-		int bytesRead = getLobbyChatEntry(pointer, steamIDLobby.handle, chatID, chatEntry, dest, offset, capacity);
-
-		if (bytesRead >= 0) {
-			dest.position(offset);
-			dest.limit(offset + bytesRead);
-		}
-
-		return bytesRead;
+		return getLobbyChatEntry(pointer, steamIDLobby.handle, chatID, chatEntry,
+				dest, dest.position(), dest.remaining());
 	}
 
 	public boolean requestLobbyData(SteamID steamIDLobby) {
