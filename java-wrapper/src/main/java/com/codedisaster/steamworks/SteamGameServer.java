@@ -3,7 +3,6 @@ package com.codedisaster.steamworks;
 import java.nio.Buffer;
 
 /**
- *
  * @author Francisco "Franz" Bischoff
  */
 public class SteamGameServer extends SteamInterface {
@@ -130,16 +129,19 @@ public class SteamGameServer extends SteamInterface {
 		setRegion(pointer, region);
 	}
 
-	public SteamID sendUserConnectAndAuthenticate(int clientIP,
+	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  Buffer authBlob,
 												  int authBlobSize,
 												  SteamID steamIDUser) {
 
 		long[] ids = new long[1];
+
 		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob, authBlobSize, ids)) {
-			return new SteamID(ids[0]);
+			steamIDUser.handle = ids[0];
+			return true;
 		}
-		return null;
+
+		return false;
 	}
 
 	public SteamID createUnauthenticatedUserConnection() {
