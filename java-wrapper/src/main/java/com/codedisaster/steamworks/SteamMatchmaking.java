@@ -194,13 +194,13 @@ public class SteamMatchmaking extends SteamInterface {
 	
 	/**
 	 * Returns the details of the game server
-	 * <br>count is of range [0, GetFavoriteGameCount())
+	 * <br>index is of range [0, GetFavoriteGameCount())
 	 * <br>ip, connPort are filled in the with IP:port of the game server
 	 * <br>flags specify whether the game server was stored as an explicit favorite or in the history of connections
 	 * <br>lastPlayedOnServer is filled in the with the Unix time the favorite was added
 	 */
-	public boolean getFavoriteGame(int count, FavoriteGameEntry favoriteGameEntry) {
-		return getFavoriteGame(pointer, count, favoriteGameEntry);
+	public boolean getFavoriteGame(int index, FavoriteGameEntry favoriteGameEntry) {
+		return getFavoriteGame(pointer, index, favoriteGameEntry);
 	}
 	
 	/**
@@ -672,7 +672,7 @@ public class SteamMatchmaking extends SteamInterface {
 	CSteamID steamIDGameServer;
 	uint32 gameServerIP;
 	uint16 gameServerPort;
-	
+
 	bool success = matchmaking->GetLobbyGameServer((uint64) steamIDLobby, &gameServerIP, &gameServerPort, &steamIDGameServer);
 
 	if (success) {
@@ -687,7 +687,7 @@ public class SteamMatchmaking extends SteamInterface {
 		field = env->GetFieldID(clazz, "gameServerPort", "S");
 		env->SetShortField(gameServerEntry, field, (jshort) gameServerPort);
 	}
-	
+
 	return success;
 	*/
 	
