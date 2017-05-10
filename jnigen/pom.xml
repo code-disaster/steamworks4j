@@ -27,6 +27,11 @@
 			<artifactId>steamworks4j</artifactId>
 			<version>1.6.3-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.code-disaster.steamworks4j</groupId>
+			<artifactId>steamworks4j-server</artifactId>
+			<version>1.6.3-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
