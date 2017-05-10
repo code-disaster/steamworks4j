@@ -2,6 +2,8 @@ package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
 
+import com.codedisaster.steamworks.SteamMatchmaking.ChatEntry;
+
 public class SteamMatchmaking extends SteamInterface {
 
 	public enum LobbyType {
