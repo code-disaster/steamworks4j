@@ -80,6 +80,44 @@
 	</properties>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>../sdk/redistributable_bin</directory>
+				<includes>
+					<include>*.dll</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>../sdk/redistributable_bin/linux32</directory>
+				<includes>
+					<include>*.so</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>../sdk/redistributable_bin/linux64</directory>
+				<includes>
+					<include>*.so</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>../sdk/redistributable_bin/osx32</directory>
+				<includes>
+					<include>*.dylib</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>../sdk/redistributable_bin/win64</directory>
+				<includes>
+					<include>*.dll</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
