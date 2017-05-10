@@ -220,7 +220,7 @@ public class SteamUGC extends SteamInterface {
 		super(SteamAPI.getSteamUGCPointer(), createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
 
-	public SteamUGCQuery createQueryUserUGCRequest(long accountID, UserUGCList listType,
+	public SteamUGCQuery createQueryUserUGCRequest(int accountID, UserUGCList listType,
 												   MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
 												   int creatorAppID, int consumerAppID, int page) {
 
@@ -533,7 +533,7 @@ public class SteamUGC extends SteamInterface {
 		return (intp) new SteamUGCCallback(env, javaCallback);
 	*/
 
-	private static native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
+	private static native long createQueryUserUGCRequest(long pointer, int accountID, int listType,
 														 int matchingType, int sortOrder,
 														 int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
