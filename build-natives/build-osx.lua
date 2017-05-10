@@ -1,27 +1,77 @@
 solution "steamworks4j"
 	configurations { "ReleaseDLL" }
 
+	buildoptions {
+		"-std=c++0x",
+		"-Wall",
+		"-mmacosx-version-min=10.6"
+	}
+
+	includedirs {
+		"../java-wrapper/src/main/native/include/jni",
+		"../java-wrapper/src/main/native/include/jni/mac",
+		"../sdk/public/steam",
+		"/System/Library/Frameworks/JavaVM.framework/Headers"
+	}
+
+	defines {
+		"NDEBUG",
+		"MACOSX"
+	}
+
+	flags {
+		"Optimize"
+	}
+
+	linkoptions {
+		"-framework CoreFoundation",
+		"-mmacosx-version-min=10.6"
+	}
+
+	platforms {
+		"universal"
+	}
+
 	project "steamworks4j"
 
 		kind "SharedLib"
 		language "C++"
 
-		buildoptions { "-std=c++0x", "-Wall", "-mmacosx-version-min=10.6" }
+		files {
+			"../java-wrapper/src/main/native/**.h",
+			"../java-wrapper/src/main/native/**.cpp"
+		}
 
-		files { "../java-wrapper/src/main/native/**.h", "../java-wrapper/src/main/native/**.cpp" }
 		includedirs {
-			"../java-wrapper/src/main/native",
-			"../java-wrapper/src/main/native/include/jni",
-			"../java-wrapper/src/main/native/include/jni/mac",
-			"../sdk/public",
-			"../sdk/public/steam",
-			"/System/Library/Frameworks/JavaVM.framework/Headers" }
+			"../java-wrapper/src/main/native"
+		}
 
-		defines { "NDEBUG", "MACOSX" }
-		flags { "Optimize" }
+		libdirs {
+			"../sdk/redistributable_bin/osx32"
+		}
 
-		libdirs { "../sdk/redistributable_bin/osx32" }
-		links { "steam_api" }
-		linkoptions { "-framework CoreFoundation", "-mmacosx-version-min=10.6" }
+		links {
+			"steam_api"
+		}
 
-		platforms { "universal" }
+	project "steamworks4j-server"
+
+		kind "SharedLib"
+		language "C++"
+
+		files {
+			"../server/src/main/native/**.h",
+			"../server/src/main/native/**.cpp"
+		}
+
+		includedirs {
+			"../server/src/main/native"
+		}
+
+		libdirs {
+			"../sdk/public/steam/lib/osx32"
+		}
+
+		links {
+			"sdkencryptedappticket"
+		}
