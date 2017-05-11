@@ -2,10 +2,6 @@ package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 public class SteamGameServer extends SteamInterface {
 
 	public enum DenyReason {
@@ -130,16 +126,19 @@ public class SteamGameServer extends SteamInterface {
 		setRegion(pointer, region);
 	}
 
-	public SteamID sendUserConnectAndAuthenticate(int clientIP,
+	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
 
 		long[] ids = new long[1];
+
 		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob,
 				authBlob.position(), authBlob.remaining(), ids)) {
-			return new SteamID(ids[0]);
+			steamIDUser.handle = ids[0];
+			return true;
 		}
-		return null;
+
+		return false;
 	}
 
 	public SteamID createUnauthenticatedUserConnection() {

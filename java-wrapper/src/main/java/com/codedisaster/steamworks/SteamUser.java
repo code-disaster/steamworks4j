@@ -13,6 +13,27 @@ public class SteamUser extends SteamInterface {
 		return new SteamID(getSteamID(pointer));
 	}
 
+	public int initiateGameConnection(ByteBuffer authBlob, SteamID steamIDGameServer,
+									  int serverIP, short serverPort, boolean secure) throws SteamException {
+
+		if (!authBlob.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		int bytesWritten = initiateGameConnection(pointer, authBlob, authBlob.position(), authBlob.remaining(),
+				steamIDGameServer.handle, serverIP, serverPort, secure);
+
+		if (bytesWritten > 0) {
+			authBlob.limit(bytesWritten);
+		}
+
+		return bytesWritten;
+	}
+
+	public void terminateGameConnection(int serverIP, short serverPort) {
+		terminateGameConnection(pointer, serverIP, serverPort);
+	}
+
 	public SteamAuthTicket getAuthSessionTicket(ByteBuffer authTicket, int[] sizeInBytes) throws SteamException {
 
 		if (!authTicket.isDirect()) {
@@ -72,6 +93,14 @@ public class SteamUser extends SteamInterface {
 		return getEncryptedAppTicket(pointer, ticket, ticket.position(), ticket.remaining(), sizeInBytes);
 	}
 
+	public boolean isBehindNAT() {
+		return isBehindNAT(pointer);
+	}
+
+	public void advertiseGame(SteamID steamIDGameServer, int serverIP, short serverPort) {
+		advertiseGame(pointer, steamIDGameServer.handle, serverIP, serverPort);
+	}
+
 	// @off
 
 	/*JNI
@@ -86,6 +115,20 @@ public class SteamUser extends SteamInterface {
 		ISteamUser* user = (ISteamUser*) pointer;
 		CSteamID steamID = user->GetSteamID();
 		return (int64) steamID.ConvertToUint64();
+	*/
+
+	private static native int initiateGameConnection(long pointer, ByteBuffer authBlob,
+													 int bufferOffset, int bufferSize, long steamIDGameServer,
+													 int serverIP, short serverPort, boolean secure); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		int bytesWritten = user->InitiateGameConnection(&authBlob[bufferOffset], bufferSize,
+			(uint64) steamIDGameServer, serverIP, serverPort, secure);
+		return bytesWritten;
+	*/
+
+	private static native void terminateGameConnection(long pointer, int serverIP, short serverPort); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		user->TerminateGameConnection(serverIP, serverPort);
 	*/
 
 	private static native int getAuthSessionTicket(long pointer, ByteBuffer authTicket,
@@ -126,9 +169,19 @@ public class SteamUser extends SteamInterface {
 	*/
 
 	private static native boolean getEncryptedAppTicket(long pointer, ByteBuffer ticket,
-												   		int bufferOffset, int bufferCapacity, int[] sizeInBytes); /*
+														int bufferOffset, int bufferCapacity, int[] sizeInBytes); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		return user->GetEncryptedAppTicket(&ticket[bufferOffset], bufferCapacity, (uint32*) sizeInBytes);
+	*/
+
+	private static native boolean isBehindNAT(long pointer); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		return user->BIsBehindNAT();
+	*/
+
+	private static native void advertiseGame(long pointer, long steamID, int serverIP, short serverPort); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		user->AdvertiseGame((uint64) steamID, serverIP, serverPort);
 	*/
 
 }

@@ -2,10 +2,6 @@ package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
 
-/**
- *
- * @author Francisco "Franz" Bischoff
- */
 public class SteamNetworking extends SteamInterface {
 
 	public enum API {
