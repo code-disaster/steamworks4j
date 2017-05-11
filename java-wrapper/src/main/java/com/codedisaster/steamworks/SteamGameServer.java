@@ -2,9 +2,6 @@ package com.codedisaster.steamworks;
 
 import java.nio.Buffer;
 
-/**
- * @author Francisco "Franz" Bischoff
- */
 public class SteamGameServer extends SteamInterface {
 
 	public enum DenyReason {
