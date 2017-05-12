@@ -22,6 +22,9 @@ Makefile
 .idea/
 *.iml
 
-# misc
+# build tools
 premake5.exe
+
+# test resources
 steam_appid.txt
+encryptedappticket.key

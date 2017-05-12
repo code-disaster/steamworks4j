@@ -29,7 +29,7 @@ class SteamSharedLibraryLoader {
 		return "lib" + sharedLibName + ".dylib";
 	}
 
-	private void loadLibraries(String... libraryNames) throws IOException {
+	private void loadLibraries(String[] libraryNames) throws IOException {
 		String osName = System.getProperty("os.name");
 		String osArch = System.getProperty("os.arch");
 
@@ -164,22 +164,15 @@ class SteamSharedLibraryLoader {
 		return Long.toHexString(crc.getValue());
 	}
 
-	static boolean loadLibraries(String libraryPath) throws SteamException {
-
-		if (alreadyLoaded) {
-			return true;
-		}
+	static void loadLibraries(String libraryPath, String... libraryNames) throws SteamException {
 
 		SteamSharedLibraryLoader loader = new SteamSharedLibraryLoader(libraryPath);
 
 		try {
-			loader.loadLibraries("steam_api", "steamworks4j");
+			loader.loadLibraries(libraryNames);
 		} catch (Throwable t) {
 			throw new SteamException(t);
 		}
-
-		alreadyLoaded = true;
-		return true;
 	}
 
 	private static File discoverExtractLocation(String folderName, String fileName) {

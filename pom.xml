@@ -16,6 +16,7 @@
 		<module>java-wrapper</module>
 		<module>jnigen</module>
 		<module>server</module>
+		<module>tests</module>
 	</modules>
 
 </project>

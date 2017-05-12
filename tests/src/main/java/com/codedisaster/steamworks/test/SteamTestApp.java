@@ -6,9 +6,9 @@ import java.util.Scanner;
 
 public abstract class SteamTestApp {
 
-	SteamUtils clientUtils;
+	protected SteamUtils clientUtils;
 
-	private static final int MS_PER_TICK = 1000 / 15;
+	protected static final int MS_PER_TICK = 1000 / 15;
 
 	private SteamAPIWarningMessageHook clMessageHook = new SteamAPIWarningMessageHook() {
 		@Override
@@ -30,7 +30,7 @@ public abstract class SteamTestApp {
 		private Thread mainThread;
 		private Scanner scanner;
 
-		InputHandler(Thread mainThread) {
+		public InputHandler(Thread mainThread) {
 			this.alive = true;
 			this.mainThread = mainThread;
 
@@ -60,14 +60,14 @@ public abstract class SteamTestApp {
 			}
 		}
 
-		boolean alive() {
+		public boolean alive() {
 			return alive;
 		}
 	}
 
-	protected abstract void registerInterfaces();
+	protected abstract void registerInterfaces() throws SteamException;
 
-	protected abstract void unregisterInterfaces();
+	protected abstract void unregisterInterfaces() throws SteamException;
 
 	protected abstract void processUpdate() throws SteamException;
 
@@ -77,7 +77,7 @@ public abstract class SteamTestApp {
 
 		System.out.println("Initialise Steam client API ...");
 
-		if (!SteamAPI.init()) {
+		if (!SteamAPI.init(/*"../java-wrapper/src/main/resources"*/)) {
 			SteamAPI.printDebugInfo(System.err);
 			return false;
 		}
@@ -125,7 +125,7 @@ public abstract class SteamTestApp {
 		return true;
 	}
 
-	void clientMain(String[] arguments) {
+	protected void clientMain(String[] arguments) {
 		try {
 
 			if (!runAsClient(arguments)) {
