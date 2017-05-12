@@ -7,5 +7,7 @@ branches:
   only:
     - master
 
+install: true
+
 script:
   - mvn -pl java-wrapper,server install -P!libs -DskipTests=true -B
