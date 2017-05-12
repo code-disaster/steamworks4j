@@ -52,14 +52,14 @@ solution "steamworks4j"
 				"steam_api"
 			}
 
-	project "steamworks4j-server"
+	project "steamworks4j-encryptedappticket"
 
 		kind "SharedLib"
 		language "C++"
 
 		files {
-			"../server/src/main/native/**.h",
-			"../server/src/main/native/**.cpp"
+			"../server/src/main/native/**EncryptedAppTicket*.h",
+			"../server/src/main/native/**EncryptedAppTicket*.cpp"
 		}
 
 		includedirs {
