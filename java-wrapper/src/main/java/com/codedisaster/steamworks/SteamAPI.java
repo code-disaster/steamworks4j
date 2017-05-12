@@ -106,6 +106,10 @@ public class SteamAPI {
 		return (intp) SteamMatchmaking();
 	*/
 
+	static native long getSteamMatchmakingServersPointer(); /*
+		return (intp) SteamMatchmakingServers();
+	*/
+
 	static native long getSteamNetworkingPointer(); /*
 		return (intp) SteamNetworking();
 	*/
