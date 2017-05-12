@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SteamNetworkingTestApp extends SteamTestApp {
+public class SteamNetworkingTest extends SteamTestApp {
 
 	private static final int defaultChannel = 1;
 	private static final Charset messageCharset = Charset.forName("UTF-8");
@@ -295,7 +295,7 @@ public class SteamNetworkingTestApp extends SteamTestApp {
 	}
 
 	public static void main(String[] arguments) {
-		new SteamNetworkingTestApp().clientMain(arguments);
+		new SteamNetworkingTest().clientMain(arguments);
 	}
 
 }

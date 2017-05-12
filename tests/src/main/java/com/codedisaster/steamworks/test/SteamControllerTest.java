@@ -4,7 +4,7 @@ import com.codedisaster.steamworks.*;
 
 import static com.codedisaster.steamworks.SteamNativeHandle.getNativeHandle;
 
-public class SteamControllerTestApp extends SteamTestApp {
+public class SteamControllerTest extends SteamTestApp {
 
 	private SteamController controller;
 	private SteamControllerHandle[] controllerHandles = {};
@@ -128,7 +128,7 @@ public class SteamControllerTestApp extends SteamTestApp {
 	}
 
 	public static void main(String[] arguments) {
-		new SteamControllerTestApp().clientMain(arguments);
+		new SteamControllerTest().clientMain(arguments);
 	}
 
 }

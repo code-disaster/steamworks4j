@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static com.codedisaster.steamworks.SteamNativeHandle.getNativeHandle;
 
-public class SteamMatchmakingTestApp extends SteamTestApp {
+public class SteamMatchmakingTest extends SteamTestApp {
 
 	private FriendsMixin friends;
 	private SteamMatchmaking matchmaking;
@@ -254,7 +254,7 @@ public class SteamMatchmakingTestApp extends SteamTestApp {
 	}
 
 	public static void main(String[] arguments) {
-		new SteamMatchmakingTestApp().clientMain(arguments);
+		new SteamMatchmakingTest().clientMain(arguments);
 	}
 
 }

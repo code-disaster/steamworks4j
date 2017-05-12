@@ -6,7 +6,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 
-public class SteamClientAPITestApp extends SteamTestApp {
+public class SteamClientAPITest extends SteamTestApp {
 
 	private SteamUser user;
 	private SteamUserStats userStats;
@@ -640,7 +640,7 @@ public class SteamClientAPITestApp extends SteamTestApp {
 	}
 
 	public static void main(String[] arguments) {
-		new SteamClientAPITestApp().clientMain(arguments);
+		new SteamClientAPITest().clientMain(arguments);
 	}
 
 }

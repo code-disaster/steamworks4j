@@ -4,7 +4,7 @@ import com.codedisaster.steamworks.*;
 
 import java.nio.ByteBuffer;
 
-public class SteamHTTPTestApp extends SteamTestApp {
+public class SteamHTTPTest extends SteamTestApp {
 
 	private SteamHTTP http;
 
@@ -120,7 +120,7 @@ public class SteamHTTPTestApp extends SteamTestApp {
 	}
 
 	public static void main(String[] arguments) {
-		new SteamHTTPTestApp().clientMain(arguments);
+		new SteamHTTPTest().clientMain(arguments);
 	}
 
 }
