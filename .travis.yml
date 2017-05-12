@@ -6,3 +6,6 @@ jdk:
 branches:
   only:
     - master
+
+script:
+  - mvn -pl java-wrapper,server install -P!libs -DskipTests=true -B

@@ -77,7 +77,7 @@
 			</distributionManagement>
 		</profile>
 		<profile>
-			<id>devel</id>
+			<id>libs</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -89,7 +89,7 @@
 						<version>1.0</version>
 						<executions>
 							<execution>
-								<id>copy-dll</id>
+								<id>copy-libs</id>
 								<phase>compile</phase>
 								<goals>
 									<goal>copy</goal>

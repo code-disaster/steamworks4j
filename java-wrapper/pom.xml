@@ -76,6 +76,54 @@
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
+		<profile>
+            <id>libs</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+					<plugin>
+						<groupId>com.coderplus.maven.plugins</groupId>
+						<artifactId>copy-rename-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>copy-libs</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<fileSets>
+										<fileSet>
+											<sourceFile>../sdk/redistributable_bin/linux32/libsteam_api.so</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsteam_api.so</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/redistributable_bin/linux64/libsteam_api.so</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsteam_api64.so</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/redistributable_bin/osx32/libsteam_api.dylib</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsteam_api.dylib</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/redistributable_bin/steam_api.dll</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/steam_api.dll</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/redistributable_bin/win64/steam_api64.dll</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/steam_api64.dll</destinationFile>
+										</fileSet>
+									</fileSets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+                </plugins>
+            </build>
+		</profile>
 	</profiles>
 
 	<properties>
@@ -130,44 +178,6 @@
 						</goals>
 						<configuration>
 							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.coderplus.maven.plugins</groupId>
-				<artifactId>copy-rename-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<id>copy-redistributables</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<fileSets>
-								<fileSet>
-									<sourceFile>../sdk/redistributable_bin/linux32/libsteam_api.so</sourceFile>
-									<destinationFile>${project.build.outputDirectory}/libsteam_api.so</destinationFile>
-								</fileSet>
-								<fileSet>
-									<sourceFile>../sdk/redistributable_bin/linux64/libsteam_api.so</sourceFile>
-									<destinationFile>${project.build.outputDirectory}/libsteam_api64.so</destinationFile>
-								</fileSet>
-								<fileSet>
-									<sourceFile>../sdk/redistributable_bin/osx32/libsteam_api.dylib</sourceFile>
-									<destinationFile>${project.build.outputDirectory}/libsteam_api.dylib</destinationFile>
-								</fileSet>
-								<fileSet>
-									<sourceFile>../sdk/redistributable_bin/steam_api.dll</sourceFile>
-									<destinationFile>${project.build.outputDirectory}/steam_api.dll</destinationFile>
-								</fileSet>
-								<fileSet>
-									<sourceFile>../sdk/redistributable_bin/win64/steam_api64.dll</sourceFile>
-									<destinationFile>${project.build.outputDirectory}/steam_api64.dll</destinationFile>
-								</fileSet>
-							</fileSets>
 						</configuration>
 					</execution>
 				</executions>
