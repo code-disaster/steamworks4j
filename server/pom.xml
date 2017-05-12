@@ -72,6 +72,54 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>devel</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.coderplus.maven.plugins</groupId>
+						<artifactId>copy-rename-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>copy-dll</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<fileSets>
+										<fileSet>
+											<sourceFile>../sdk/public/steam/lib/linux32/libsdkencryptedappticket.so</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.so</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/public/steam/lib/linux64/libsdkencryptedappticket.so</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket64.so</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/public/steam/lib/osx32/libsdkencryptedappticket.dylib</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.dylib</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/public/steam/lib/win32/sdkencryptedappticket.dll</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/sdkencryptedappticket.dll</destinationFile>
+										</fileSet>
+										<fileSet>
+											<sourceFile>../sdk/public/steam/lib/win64/sdkencryptedappticket64.dll</sourceFile>
+											<destinationFile>${project.build.outputDirectory}/sdkencryptedappticket64.dll</destinationFile>
+										</fileSet>
+									</fileSets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<properties>
