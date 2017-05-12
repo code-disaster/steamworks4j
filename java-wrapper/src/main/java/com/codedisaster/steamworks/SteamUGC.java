@@ -598,7 +598,7 @@ public class SteamUGC extends SteamInterface {
 			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
 
 			field = env->GetFieldID(clazz, "tagsTruncated", "Z");
-			env->SetIntField(details, field, (jboolean) result.m_bTagsTruncated);
+			env->SetBooleanField(details, field, (jboolean) result.m_bTagsTruncated);
 
 			jstring tags = env->NewStringUTF(result.m_rgchTags);
 			field = env->GetFieldID(clazz, "tags", "Ljava/lang/String;");
