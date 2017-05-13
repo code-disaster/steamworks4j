@@ -204,7 +204,7 @@ public class SteamMatchmaking extends SteamInterface {
 		return setLobbyData(pointer, steamIDLobby.handle, key, value);
 	}
 
-	public boolean setLobbyData(SteamID steamIDLobby, SteamMatchMakingKeyValuePair keyValuePair) {
+	public boolean setLobbyData(SteamID steamIDLobby, SteamMatchmakingKeyValuePair keyValuePair) {
 		return setLobbyData(pointer, steamIDLobby.handle, keyValuePair.getKey(), keyValuePair.getValue());
 	}
 
@@ -213,7 +213,7 @@ public class SteamMatchmaking extends SteamInterface {
 	}
 
 	public boolean getLobbyDataByIndex(SteamID steamIDLobby, int lobbyDataIndex,
-									   SteamMatchMakingKeyValuePair keyValuePair) {
+									   SteamMatchmakingKeyValuePair keyValuePair) {
 		return getLobbyDataByIndex(pointer, steamIDLobby.handle, lobbyDataIndex, keyValuePair);
 	}
 
@@ -400,7 +400,7 @@ public class SteamMatchmaking extends SteamInterface {
 	*/
 
 	private static native boolean getLobbyDataByIndex(long pointer, long steamIDLobby, int lobbyDataIndex,
-													  SteamMatchMakingKeyValuePair keyValuePair); /*
+													  SteamMatchmakingKeyValuePair keyValuePair); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		MatchMakingKeyValuePair_t result;
 		bool success = matchmaking->GetLobbyDataByIndex((uint64) steamIDLobby, lobbyDataIndex,

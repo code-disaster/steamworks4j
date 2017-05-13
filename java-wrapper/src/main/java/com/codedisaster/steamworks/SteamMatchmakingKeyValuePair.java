@@ -1,15 +1,15 @@
 package com.codedisaster.steamworks;
 
-public class SteamMatchMakingKeyValuePair {
+public class SteamMatchmakingKeyValuePair {
 
 	private String key;
 	private String value;
 
-	public SteamMatchMakingKeyValuePair() {
+	public SteamMatchmakingKeyValuePair() {
 
 	}
 
-	public SteamMatchMakingKeyValuePair(String key, String value) {
+	public SteamMatchmakingKeyValuePair(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}

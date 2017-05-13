@@ -223,7 +223,7 @@ public class SteamMatchmakingTest extends SteamTestApp {
 				SteamID steamIDLobby = lobbies.get(id);
 				int count = matchmaking.getLobbyDataCount(steamIDLobby);
 				System.out.println("  " + count + " lobby data for " + Long.toHexString(id));
-				SteamMatchMakingKeyValuePair pair = new SteamMatchMakingKeyValuePair();
+				SteamMatchmakingKeyValuePair pair = new SteamMatchmakingKeyValuePair();
 				for (int i = 0; i < count; i++) {
 					if (matchmaking.getLobbyDataByIndex(steamIDLobby, i, pair)) {
 						System.out.println("  - " + pair.getKey() + " : " + pair.getValue());
