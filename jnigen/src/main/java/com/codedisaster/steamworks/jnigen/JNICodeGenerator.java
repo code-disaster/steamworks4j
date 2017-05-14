@@ -8,11 +8,18 @@ public class JNICodeGenerator {
 
 		try {
 			new NativeCodeGenerator().generate(
-					"src/main/java",
-					"target/classes",
-					"src/main/native",
+					"java-wrapper/src/main/java",
+					"java-wrapper/target/classes",
+					"java-wrapper/src/main/native",
 					new String[] { "**/*.java" },
-					new String[] { "**/JNICodeGenerator.java", "**/SteamSharedLibraryLoader.java" });
+					new String[] { "**/SteamSharedLibraryLoader.java" });
+
+			new NativeCodeGenerator().generate(
+					"server/src/main/java",
+					"server/target/classes",
+					"server/src/main/native",
+					new String[] { "**/*Native.java" },
+					null);
 
 		} catch (Exception e) {
 			e.printStackTrace();

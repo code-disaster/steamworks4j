@@ -21,7 +21,7 @@ public class SteamGameServerAPI {
 							   int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) throws SteamException {
 
-		SteamSharedLibraryLoader.loadLibraries(libraryPath);
+		SteamSharedLibraryLoader.loadLibraries(libraryPath, "steam_api", "steamworks4j");
 
 		isRunning = nativeInit(ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);
 

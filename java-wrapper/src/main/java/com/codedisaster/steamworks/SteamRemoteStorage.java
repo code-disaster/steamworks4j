@@ -77,25 +77,25 @@ public class SteamRemoteStorage extends SteamInterface {
 		super(SteamAPI.getSteamRemoteStoragePointer(), createCallback(new SteamRemoteStorageCallbackAdapter(callback)));
 	}
 
-	public boolean fileWrite(String file, ByteBuffer data, int length) throws SteamException {
+	public boolean fileWrite(String file, ByteBuffer data) throws SteamException {
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return fileWrite(pointer, file, data, length);
+		return fileWrite(pointer, file, data, data.position(), data.remaining());
 	}
 
-	public boolean fileRead(String file, ByteBuffer buffer, int capacity) throws SteamException {
+	public boolean fileRead(String file, ByteBuffer buffer) throws SteamException {
 		if (!buffer.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return fileRead(pointer, file, buffer, capacity);
+		return fileRead(pointer, file, buffer, buffer.position(), buffer.remaining());
 	}
 
 	public SteamAPICall fileWriteAsync(String file, ByteBuffer data) throws SteamException {
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return new SteamAPICall(fileWriteAsync(pointer, callback, file, data, data.remaining()));
+		return new SteamAPICall(fileWriteAsync(pointer, callback, file, data, data.position(), data.remaining()));
 	}
 
 	public SteamAPICall fileReadAsync(String file, int offset, int toRead) {
@@ -103,7 +103,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public boolean fileReadAsyncComplete(SteamAPICall readCall, ByteBuffer buffer, int toRead) {
-		return fileReadAsyncComplete(pointer, readCall.handle, buffer, toRead);
+		return fileReadAsyncComplete(pointer, readCall.handle, buffer, buffer.position(), toRead);
 	}
 
 	public boolean fileForget(String file) {
@@ -126,8 +126,8 @@ public class SteamRemoteStorage extends SteamInterface {
 		return new SteamUGCFileWriteStreamHandle(fileWriteStreamOpen(pointer, name));
 	}
 
-	public boolean fileWriteStreamWriteChunk(SteamUGCFileWriteStreamHandle stream, ByteBuffer data, int length) {
-		return fileWriteStreamWriteChunk(pointer, stream.handle, data, length);
+	public boolean fileWriteStreamWriteChunk(SteamUGCFileWriteStreamHandle stream, ByteBuffer data) {
+		return fileWriteStreamWriteChunk(pointer, stream.handle, data, data.position(), data.remaining());
 	}
 
 	public boolean fileWriteStreamClose(SteamUGCFileWriteStreamHandle stream) {
@@ -191,8 +191,8 @@ public class SteamRemoteStorage extends SteamInterface {
 		return getUGCDownloadProgress(pointer, fileHandle.handle, bytesDownloaded, bytesExpected);
 	}
 
-	public int ugcRead(SteamUGCHandle fileHandle, ByteBuffer buffer, int capacity, int offset, UGCReadAction action) {
-		return ugcRead(pointer, fileHandle.handle, buffer, capacity, offset, action.ordinal());
+	public int ugcRead(SteamUGCHandle fileHandle, ByteBuffer buffer, int dataToRead, int offset, UGCReadAction action) {
+		return ugcRead(pointer, fileHandle.handle, buffer, buffer.position(), dataToRead, offset, action.ordinal());
 	}
 
 	public int getCachedUGCCount() {
@@ -256,20 +256,23 @@ public class SteamRemoteStorage extends SteamInterface {
 		return (intp) new SteamRemoteStorageCallback(env, javaCallback);
 	*/
 
-	private static native boolean fileWrite(long pointer, String file, ByteBuffer data, int length); /*
+	private static native boolean fileWrite(long pointer, String file, ByteBuffer data,
+											int bufferOffset, int bufferSize); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileWrite(file, data, length);
+		return storage->FileWrite(file, &data[bufferOffset], bufferSize);
 	*/
 
-	private static native boolean fileRead(long pointer, String file, ByteBuffer buffer, int capacity); /*
+	private static native boolean fileRead(long pointer, String file, ByteBuffer buffer,
+										   int bufferOffset, int bufferSize); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileRead(file, buffer, capacity);
+		return storage->FileRead(file, &buffer[bufferOffset], bufferSize);
 	*/
 
-	private static native long fileWriteAsync(long pointer, long callback, String file, ByteBuffer data, int length); /*
+	private static native long fileWriteAsync(long pointer, long callback, String file, ByteBuffer data,
+											  int bufferOffset, int bufferSize); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
 		SteamRemoteStorageCallback* cb = (SteamRemoteStorageCallback*) callback;
-		SteamAPICall_t handle = storage->FileWriteAsync(file, data, (uint32) length);
+		SteamAPICall_t handle = storage->FileWriteAsync(file, &data[bufferOffset], (uint32) bufferSize);
 		cb->onFileWriteAsyncCompleteCall.Set(handle, cb, &SteamRemoteStorageCallback::onFileWriteAsyncComplete);
 		return handle;
 	*/
@@ -282,9 +285,10 @@ public class SteamRemoteStorage extends SteamInterface {
 		return handle;
 	*/
 
-	private static native boolean fileReadAsyncComplete(long pointer, long readCall, ByteBuffer buffer, int toRead); /*
+	private static native boolean fileReadAsyncComplete(long pointer, long readCall, ByteBuffer buffer,
+														long bufferOffset, int toRead); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileReadAsyncComplete((SteamAPICall_t) readCall, buffer, (uint32) toRead);
+		return storage->FileReadAsyncComplete((SteamAPICall_t) readCall, &buffer[bufferOffset], (uint32) toRead);
 	*/
 
 	private static native boolean fileForget(long pointer, String file); /*
@@ -315,9 +319,10 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->FileWriteStreamOpen(file);
 	*/
 
-	private static native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data, int length); /*
+	private static native boolean fileWriteStreamWriteChunk(long pointer, long stream, ByteBuffer data,
+															int bufferOffset, int length); /*
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->FileWriteStreamWriteChunk((UGCFileWriteStreamHandle_t) stream, data, length);
+		return storage->FileWriteStreamWriteChunk((UGCFileWriteStreamHandle_t) stream, &data[bufferOffset], length);
 	*/
 
 	private static native boolean fileWriteStreamClose(long pointer, long stream); /*
@@ -401,11 +406,12 @@ public class SteamRemoteStorage extends SteamInterface {
 		return storage->GetUGCDownloadProgress((UGCHandle_t) content, (int32*) &bytesDownloaded[0], (int32*) &bytesExpected[0]);
 	*/
 
-	private static native int ugcRead(long pointer, long content, ByteBuffer buffer, int capacity,
+	private static native int ugcRead(long pointer, long content, ByteBuffer buffer,
+									  int bufferOffset, int dataToRead,
 									  int offset, int action); /*
 
 		ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-		return storage->UGCRead(content, buffer, capacity, offset, (EUGCReadAction) action);
+		return storage->UGCRead(content, &buffer[bufferOffset], dataToRead, offset, (EUGCReadAction) action);
 	*/
 
 	private static native int getCachedUGCCount(long pointer); /*

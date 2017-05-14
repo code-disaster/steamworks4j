@@ -3,6 +3,7 @@ sdk/
 
 # generated sources
 java-wrapper/src/main/native/com.codedisaster.steamworks.*
+server/src/main/native/com.codedisaster.steamworks.*
 
 # output
 build/
@@ -21,6 +22,9 @@ Makefile
 .idea/
 *.iml
 
-# misc
+# build tools
 premake5.exe
+
+# test resources
 steam_appid.txt
+encryptedappticket.key

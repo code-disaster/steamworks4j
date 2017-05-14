@@ -12,7 +12,7 @@ public class SteamAPI {
 
 	public static boolean init(String libraryPath) throws SteamException {
 
-		SteamSharedLibraryLoader.loadLibraries(libraryPath);
+		SteamSharedLibraryLoader.loadLibraries(libraryPath, "steam_api", "steamworks4j");
 
 		isRunning = nativeInit();
 
@@ -104,6 +104,10 @@ public class SteamAPI {
 
 	static native long getSteamMatchmakingPointer(); /*
 		return (intp) SteamMatchmaking();
+	*/
+
+	static native long getSteamMatchmakingServersPointer(); /*
+		return (intp) SteamMatchmakingServers();
 	*/
 
 	static native long getSteamNetworkingPointer(); /*

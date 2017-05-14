@@ -67,11 +67,11 @@ public class SteamUtils extends SteamInterface {
 		return getImageHeight(pointer, image);
 	}
 
-	public boolean getImageRGBA(int image, ByteBuffer dest, int destSize) throws SteamException {
+	public boolean getImageRGBA(int image, ByteBuffer dest) throws SteamException {
 		if (!dest.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
-		return getImageRGBA(pointer, image, dest, destSize);
+		return getImageRGBA(pointer, image, dest, dest.position(), dest.remaining());
 	}
 
 	public int getAppID() {
@@ -149,9 +149,10 @@ public class SteamUtils extends SteamInterface {
 		return result ? height : -1;
 	*/
 
-	private static native boolean getImageRGBA(long pointer, int image, ByteBuffer dest, int destSize); /*
+	private static native boolean getImageRGBA(long pointer, int image, ByteBuffer dest,
+											   int bufferOffset, int bufferSize); /*
 		ISteamUtils* utils = (ISteamUtils*) pointer;
-		return utils->GetImageRGBA(image, (uint8*) dest, destSize);
+		return utils->GetImageRGBA(image, (uint8*) &dest[bufferOffset], bufferSize);
 	*/
 
 	private static native int getAppID(long pointer); /*

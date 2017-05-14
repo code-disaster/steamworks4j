@@ -140,7 +140,9 @@ public class SteamUGC extends SteamInterface {
 		ReportScore,
 		NumSecondsPlayed,
 		NumPlaytimeSessions,
-		NumComments
+		NumComments,
+		NumSecondsPlayedDuringTimePeriod,
+		NumPlaytimeSessionsDuringTimePeriod
 	}
 
 	public enum ItemPreviewType {
@@ -218,7 +220,7 @@ public class SteamUGC extends SteamInterface {
 		super(SteamAPI.getSteamUGCPointer(), createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
 
-	public SteamUGCQuery createQueryUserUGCRequest(long accountID, UserUGCList listType,
+	public SteamUGCQuery createQueryUserUGCRequest(int accountID, UserUGCList listType,
 												   MatchingUGCType matchingType, UserUGCListSortOrder sortOrder,
 												   int creatorAppID, int consumerAppID, int page) {
 
@@ -327,6 +329,10 @@ public class SteamUGC extends SteamInterface {
 
 	public boolean setReturnTotalOnly(SteamUGCQuery query, boolean returnTotalOnly) {
 		return setReturnTotalOnly(pointer, query.handle, returnTotalOnly);
+	}
+
+	public boolean setReturnPlaytimeStats(SteamUGCQuery query, int days) {
+		return setReturnPlaytimeStats(pointer, query.handle, days);
 	}
 
 	public boolean setLanguage(SteamUGCQuery query, String language) {
@@ -527,7 +533,7 @@ public class SteamUGC extends SteamInterface {
 		return (intp) new SteamUGCCallback(env, javaCallback);
 	*/
 
-	private static native long createQueryUserUGCRequest(long pointer, long accountID, int listType,
+	private static native long createQueryUserUGCRequest(long pointer, int accountID, int listType,
 														 int matchingType, int sortOrder,
 														 int creatorAppID, int consumerAppID, int page); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
@@ -592,7 +598,7 @@ public class SteamUGC extends SteamInterface {
 			env->SetIntField(details, field, (jint) result.m_rtimeUpdated);
 
 			field = env->GetFieldID(clazz, "tagsTruncated", "Z");
-			env->SetIntField(details, field, (jboolean) result.m_bTagsTruncated);
+			env->SetBooleanField(details, field, (jboolean) result.m_bTagsTruncated);
 
 			jstring tags = env->NewStringUTF(result.m_rgchTags);
 			field = env->GetFieldID(clazz, "tags", "Ljava/lang/String;");
@@ -766,6 +772,11 @@ public class SteamUGC extends SteamInterface {
 	private static native boolean setReturnTotalOnly(long pointer, long query, boolean returnTotalOnly); /*
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		return ugc->SetReturnTotalOnly(query, returnTotalOnly);
+	*/
+
+	private static native boolean setReturnPlaytimeStats(long pointer, long query, int days); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		return ugc->SetReturnPlaytimeStats(query, (uint32) days);
 	*/
 
 	private static native boolean setLanguage(long pointer, long query, String language); /*
