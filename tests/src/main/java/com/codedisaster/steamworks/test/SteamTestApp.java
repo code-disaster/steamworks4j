@@ -77,7 +77,7 @@ public abstract class SteamTestApp {
 
 		System.out.println("Initialise Steam client API ...");
 
-		if (!SteamAPI.init(/*"../java-wrapper/src/main/resources"*/)) {
+		if (!SteamAPI.init()) {
 			SteamAPI.printDebugInfo(System.err);
 			return false;
 		}
@@ -126,6 +126,10 @@ public abstract class SteamTestApp {
 	}
 
 	protected void clientMain(String[] arguments) {
+
+		// development mode, read Steamworks libraries from ./sdk folder
+		System.setProperty("com.codedisaster.steamworks.Debug", "true");
+
 		try {
 
 			if (!runAsClient(arguments)) {
