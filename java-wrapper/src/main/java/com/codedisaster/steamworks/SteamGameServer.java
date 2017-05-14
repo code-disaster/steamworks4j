@@ -50,10 +50,20 @@ public class SteamGameServer extends SteamInterface {
 		setDedicatedServer(pointer, dedicated);
 	}
 
+	/**
+	 * Begin process to login to a persistent game server account
+	 * You need to register for callbacks to determine the result of this operation.
+	 * @see SteamServersConnected_t
+	 * @see SteamServerConnectFailure_t
+	 * @see SteamServersDisconnected_t
+	 */
 	public void logOn(String token) {
 		logOn(pointer, token);
 	}
 
+	/**
+	 * Login to a generic, anonymous account.
+	 */
 	public void logOnAnonymous() {
 		logOnAnonymous(pointer);
 	}
@@ -126,9 +136,27 @@ public class SteamGameServer extends SteamInterface {
 		setRegion(pointer, region);
 	}
 
+<<<<<<< HEAD
 	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
+=======
+	/**
+	 * Handles receiving a new connection from a Steam user.  This call will ask the Steam
+	 * servers to validate the users identity, app ownership, and VAC status.  If the Steam servers 
+	 * are off-line, then it will validate the cached ticket itself which will validate app ownership 
+	 * and identity.  The AuthBlob here should be acquired on the game client using SteamUser()->InitiateGameConnection()
+	 * and must then be sent up to the game server for authentication.
+	 * 
+	 * @return Returns true if the users ticket passes basic checks. pSteamIDUser will contain the Steam ID of this user. 
+	 * pSteamIDUser must NOT be NULL. If the call succeeds then you should expect a GSClientApprove_t or GSClientDeny_t 
+	 * callback which will tell you whether authentication for the user has succeeded or failed (the steamid in the callback 
+	 * will match the one returned by this call)
+	 */
+	public SteamID sendUserConnectAndAuthenticate(int clientIP,
+												  Buffer authBlob,
+												  int authBlobSize) {
+>>>>>>> refs/remotes/origin/Multiplayer
 
 		long[] ids = new long[1];
 
@@ -141,6 +169,12 @@ public class SteamGameServer extends SteamInterface {
 		return false;
 	}
 
+	/**
+	 * Creates a fake user (ie, a bot) which will be listed as playing on the server, but skips validation.  
+	 * 
+	 * @return Returns a SteamID for the user to be tracked with, you should call HandleUserDisconnect()
+	 * when this user leaves the server just like you would for a real user.
+	 */
 	public SteamID createUnauthenticatedUserConnection() {
 		return new SteamID(createUnauthenticatedUserConnection(pointer));
 	}
@@ -149,6 +183,13 @@ public class SteamGameServer extends SteamInterface {
 		sendUserDisconnect(pointer, steamIDUser.handle);
 	}
 
+	/**
+	 * Update the data to be displayed in the server browser and matchmaking interfaces for a user
+	 * currently connected to the server.  For regular users you must call this after you receive a
+	 * GSUserValidationSuccess callback.
+	 * 
+	 * @return true if successful, false if failure (ie, steamIDUser wasn't for an active player)
+	 */
 	public boolean updateUserData(SteamID steamIDUser, String playerName, int score) {
 		return updateUserData(pointer, steamIDUser.handle, playerName, score);
 	}
