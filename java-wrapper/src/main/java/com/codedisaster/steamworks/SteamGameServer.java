@@ -136,28 +136,9 @@ public class SteamGameServer extends SteamInterface {
 		setRegion(pointer, region);
 	}
 
-<<<<<<< HEAD
 	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
-=======
-	/**
-	 * Handles receiving a new connection from a Steam user.  This call will ask the Steam
-	 * servers to validate the users identity, app ownership, and VAC status.  If the Steam servers 
-	 * are off-line, then it will validate the cached ticket itself which will validate app ownership 
-	 * and identity.  The AuthBlob here should be acquired on the game client using SteamUser()->InitiateGameConnection()
-	 * and must then be sent up to the game server for authentication.
-	 * 
-	 * @return Returns true if the users ticket passes basic checks. pSteamIDUser will contain the Steam ID of this user. 
-	 * pSteamIDUser must NOT be NULL. If the call succeeds then you should expect a GSClientApprove_t or GSClientDeny_t 
-	 * callback which will tell you whether authentication for the user has succeeded or failed (the steamid in the callback 
-	 * will match the one returned by this call)
-	 */
-	public SteamID sendUserConnectAndAuthenticate(int clientIP,
-												  Buffer authBlob,
-												  int authBlobSize) {
->>>>>>> refs/remotes/origin/Multiplayer
-
 		long[] ids = new long[1];
 
 		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob,
