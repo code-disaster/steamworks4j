@@ -12,7 +12,14 @@ public class SteamAPI {
 
 	public static boolean init(String libraryPath) throws SteamException {
 
-		SteamSharedLibraryLoader.loadLibraries(libraryPath, "steam_api", "steamworks4j");
+		if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
+			String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
+			SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
+		} else {
+			SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
+		}
+
+		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
 
 		isRunning = nativeInit();
 
@@ -41,11 +48,6 @@ public class SteamAPI {
 	}
 
 	public static void printDebugInfo(PrintStream stream) {
-		if (SteamSharedLibraryLoader.alreadyLoaded) {
-			stream.println("  shared libraries loaded from: " + SteamSharedLibraryLoader.librarySystemPath);
-		} else {
-			stream.println("  shared libraries not loaded");
-		}
 		stream.println("  Steam API initialized: " + isRunning);
 		stream.println("  Steam client active: " + isSteamRunning());
 	}

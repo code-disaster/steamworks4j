@@ -6,9 +6,20 @@ public class SteamEncryptedAppTicket extends SteamInterface {
 
 	public static final int SymmetricKeyLen = 32;
 
-	public static void init(String libraryPath) throws SteamException {
-		SteamSharedLibraryLoader.loadLibraries(libraryPath,
-				"sdkencryptedappticket", "steamworks4j-encryptedappticket");
+	public static void loadLibraries() throws SteamException {
+		loadLibraries(null);
+	}
+
+	public static void loadLibraries(String libraryPath) throws SteamException {
+
+		if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
+			String sdkPath = SteamSharedLibraryLoader.getSdkLibraryPath();
+			SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", sdkPath);
+		} else {
+			SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", libraryPath);
+		}
+
+		SteamSharedLibraryLoader.loadLibrary("steamworks4j-encryptedappticket", libraryPath);
 	}
 
 	public SteamEncryptedAppTicket() {

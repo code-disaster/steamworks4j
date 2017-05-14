@@ -75,7 +75,7 @@ public class SteamEncryptedAppTicketTest extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() throws SteamException {
-		SteamEncryptedAppTicket.init(null);
+		SteamEncryptedAppTicket.loadLibraries();
 		user = new SteamUser(userCallback);
 		encryptedAppTicket = new SteamEncryptedAppTicket();
 	}
