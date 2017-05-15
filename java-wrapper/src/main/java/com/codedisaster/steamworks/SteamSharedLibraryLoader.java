@@ -2,7 +2,6 @@ package com.codedisaster.steamworks;
 
 import java.io.*;
 import java.util.UUID;
-import java.util.zip.*;
 
 class SteamSharedLibraryLoader {
 
@@ -100,15 +99,15 @@ class SteamSharedLibraryLoader {
 
 	static void loadLibrary(String libraryName, String libraryPath) throws SteamException {
 		try {
-			File librarySystemPath;
 			String librarySystemName = getPlatformLibName(libraryName);
 
+			File librarySystemPath = discoverExtractLocation(
+					SHARED_LIBRARY_EXTRACT_DIRECTORY + "/" + Version.getVersion(), librarySystemName);
+
 			if (libraryPath == null) {
-				String checksum = crc(librarySystemName);
-				librarySystemPath = discoverExtractLocation(SHARED_LIBRARY_EXTRACT_DIRECTORY + "/" + checksum, librarySystemName);
 				extractLibrary(librarySystemPath, librarySystemName);
 			} else {
-				librarySystemPath = new File(libraryPath, librarySystemName);
+				extractLibrary(librarySystemPath, new File(libraryPath, librarySystemName));
 			}
 
 			String absolutePath = librarySystemPath.getCanonicalPath();
@@ -119,7 +118,15 @@ class SteamSharedLibraryLoader {
 	}
 
 	private static void extractLibrary(File librarySystemPath, String librarySystemName) throws IOException {
-		InputStream input = SteamSharedLibraryLoader.class.getResourceAsStream("/" + librarySystemName);
+		extractLibrary(librarySystemPath,
+				SteamSharedLibraryLoader.class.getResourceAsStream("/" + librarySystemName));
+	}
+
+	private static void extractLibrary(File librarySystemPath, File librarySourcePath) throws IOException {
+		extractLibrary(librarySystemPath, new FileInputStream(librarySourcePath));
+	}
+
+	private static void extractLibrary(File librarySystemPath, InputStream input) throws IOException {
 		if (input != null) {
 			try {
 				FileOutputStream output = new FileOutputStream(librarySystemPath);
@@ -141,26 +148,8 @@ class SteamSharedLibraryLoader {
 			} finally {
 				input.close();
 			}
-		}
-	}
-
-	private static String crc(String librarySystemName) throws IOException {
-		CRC32 checksum = new CRC32();
-		InputStream input = SteamSharedLibraryLoader.class.getResourceAsStream("/" + librarySystemName);
-		if (input != null) {
-			try {
-				byte[] buffer = new byte[4096];
-				while (true) {
-					int length = input.read(buffer);
-					if (length == -1) break;
-					checksum.update(buffer, 0, length);
-				}
-			} finally {
-				input.close();
-			}
-			return Long.toHexString(checksum.getValue());
 		} else {
-			throw new IOException("Failed to read " + librarySystemName + " as a resource");
+			throw new IOException("Failed to read input stream for " + librarySystemPath.getCanonicalPath());
 		}
 	}
 
