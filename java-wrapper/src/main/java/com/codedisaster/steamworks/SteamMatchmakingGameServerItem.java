@@ -24,7 +24,7 @@ public class SteamMatchmakingGameServerItem {
 
 	long steamID;
 
-	SteamMatchmakingGameServerItem() {
+	public SteamMatchmakingGameServerItem() {
 
 	}
 

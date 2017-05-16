@@ -2,12 +2,9 @@ package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
 
-import java.nio.ByteBuffer;
-
 public class SteamMatchmakingServerTest extends SteamTestApp {
 
 	private SteamMatchmakingServers servers;
-	private SteamServerListRequest serverListRequest;
 
 	private SteamMatchmakingServerListResponse serverListResponse;
 
@@ -18,26 +15,40 @@ public class SteamMatchmakingServerTest extends SteamTestApp {
 		serverListResponse = new SteamMatchmakingServerListResponse() {
 			@Override
 			public void serverResponded(SteamServerListRequest request, int server) {
-				System.out.println("server responded: " + server);
+				SteamMatchmakingGameServerItem serverInfo = new SteamMatchmakingGameServerItem();
+				if (servers.getServerDetails(request, server, serverInfo)) {
+					printServerInfo(server, serverInfo, "responded");
+				} else {
+					System.err.println("failed to get server info for #" + server);
+				}
 			}
 
 			@Override
 			public void serverFailedToRespond(SteamServerListRequest request, int server) {
-				System.out.println("server failed to respond: " + server);
+				SteamMatchmakingGameServerItem serverInfo = new SteamMatchmakingGameServerItem();
+				if (servers.getServerDetails(request, server, serverInfo)) {
+					printServerInfo(server, serverInfo, "failed to respond");
+				} else {
+					System.err.println("failed to get server info for #" + server);
+				}
 			}
 
 			@Override
 			public void refreshComplete(SteamServerListRequest request, Response response) {
 				System.out.println("server list refresh complete: " + response.name());
+				servers.releaseRequest(request);
+			}
+
+			private void printServerInfo(int server, SteamMatchmakingGameServerItem serverItem, String status) {
+				System.out.println("server info for #" + server + " (" + status + ")");
+				System.out.println("  name: " + serverItem.getServerName());
 			}
 		};
 	}
 
 	@Override
 	protected void unregisterInterfaces() throws SteamException {
-		if (serverListRequest != null && serverListRequest.isValid()) {
-			servers.releaseRequest(serverListRequest);
-		}
+		serverListResponse.dispose();
 		servers.dispose();
 	}
 
@@ -48,12 +59,26 @@ public class SteamMatchmakingServerTest extends SteamTestApp {
 
 	@Override
 	protected void processInput(String input) throws SteamException {
-		if (input.equals("request")) {
+		if (input.startsWith("request ")) {
 			SteamMatchmakingKeyValuePair[] filters = {
 					new SteamMatchmakingKeyValuePair("gamedir", "spacewar"),
 					new SteamMatchmakingKeyValuePair("secure", "1")
 			};
-			serverListRequest = servers.requestInternetServerList(clientUtils.getAppID(), filters, serverListResponse);
+			SteamServerListRequest serverListRequest;
+			String type = input.substring("request ".length());
+			if (type.equals("lan")) {
+				serverListRequest = servers.requestLANServerList(
+						clientUtils.getAppID(), serverListResponse);
+			} else if (type.equals("history")) {
+				serverListRequest = servers.requestHistoryServerList(
+						clientUtils.getAppID(), filters, serverListResponse);
+			} else if (type.equals("friends")) {
+				serverListRequest = servers.requestFriendsServerList(
+						clientUtils.getAppID(), filters, serverListResponse);
+			} else {
+				serverListRequest = servers.requestInternetServerList(
+						clientUtils.getAppID(), filters, serverListResponse);
+			}
 			if (!serverListRequest.isValid()) {
 				System.err.println("request failed, null return value");
 			}
