@@ -11,18 +11,18 @@ SteamMatchmakingServerListResponse::~SteamMatchmakingServerListResponse() {
 
 void SteamMatchmakingServerListResponse::ServerResponded(HServerListRequest hRequest, int iServer) {
 	invokeCallback({
-		callVoidMethod(env, "serverResponded", "(LI)V", (jlong) hRequest, iServer);
+		callVoidMethod(env, "serverResponded", "(JI)V", (jlong) hRequest, iServer);
 	});
 }
 
 void SteamMatchmakingServerListResponse::ServerFailedToRespond(HServerListRequest hRequest, int iServer) {
 	invokeCallback({
-		callVoidMethod(env, "serverFailedToRespond", "(LI)V", (jlong) hRequest, iServer);
+		callVoidMethod(env, "serverFailedToRespond", "(JI)V", (jlong) hRequest, iServer);
 	});
 }
 
 void SteamMatchmakingServerListResponse::RefreshComplete(HServerListRequest hRequest, EMatchMakingServerResponse response) {
 	invokeCallback({
-		callVoidMethod(env, "refreshComplete", "(LI)V", (jlong) hRequest, (jint) response);
+		callVoidMethod(env, "refreshComplete", "(JI)V", (jlong) hRequest, (jint) response);
 	});
 }

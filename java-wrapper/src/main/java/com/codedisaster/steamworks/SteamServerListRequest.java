@@ -6,4 +6,8 @@ public class SteamServerListRequest extends SteamNativeHandle {
 		super(handle);
 	}
 
+	public boolean isValid() {
+		return handle != 0L;
+	}
+
 }

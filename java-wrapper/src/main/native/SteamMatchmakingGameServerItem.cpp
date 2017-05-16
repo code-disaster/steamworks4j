@@ -2,10 +2,10 @@
 
 void convertGameServerItem(jobject item, JNIEnv* env, const gameserveritem_t& server) {
 	jclass ex = env->FindClass("com/codedisaster/steamworks/SteamException");
-	jclass itemClazz = env->FindClass("com/codedisaster/steamworks4j/SteamMatchmakingGameServerItem");
+	jclass itemClazz = env->FindClass("com/codedisaster/steamworks/SteamMatchmakingGameServerItem");
 
-	jfieldID field = env->GetFieldID(itemClazz, "netAdr", "Lcom/codedisaster/steamworks4j/SteamMatchmakingServerNetAdr;");
-	jclass netAdrClazz = env->FindClass("com/codedisaster/steamworks4j/SteamMatchmakingServerNetAdr");
+	jfieldID field = env->GetFieldID(itemClazz, "netAdr", "Lcom/codedisaster/steamworks/SteamMatchmakingServerNetAdr;");
+	jclass netAdrClazz = env->FindClass("com/codedisaster/steamworks/SteamMatchmakingServerNetAdr");
 	jobject netAdr = env->GetObjectField(item, field);
 	if (netAdrClazz != nullptr && netAdr != nullptr) {
 		field = env->GetFieldID(netAdrClazz, "connectionPort", "S");
@@ -75,7 +75,7 @@ void convertGameServerItem(jobject item, JNIEnv* env, const gameserveritem_t& se
 jobject createGameServerItem(JNIEnv* env, const gameserveritem_t& server) {
 
 	jclass ex = env->FindClass("com/codedisaster/steamworks/SteamException");
-	jclass itemClazz = env->FindClass("com/codedisaster/steamworks4j/SteamMatchmakingGameServerItem");
+	jclass itemClazz = env->FindClass("com/codedisaster/steamworks/SteamMatchmakingGameServerItem");
 
 	if (itemClazz != nullptr) {
 		jmethodID itemCtor = env->GetMethodID(itemClazz, "<init>", "()V");

@@ -3,9 +3,9 @@
 int convertKeyValuePairArray(
 	JNIEnv* env,
 	jobjectArray sourcePairs, int32 sourceSize,
-	MatchMakingKeyValuePair_t* targetPairs, MatchMakingKeyValuePair_t** targetPairsTable, int32 targetSize) {
+	MatchMakingKeyValuePair_t* targetPairs, int32 targetSize) {
 
-	jclass clazz = env->FindClass("com/codedisaster/steamworks4j/SteamMatchmakingKeyValuePair");
+	jclass clazz = env->FindClass("com/codedisaster/steamworks/SteamMatchmakingKeyValuePair");
 
 	int32 size = sourceSize < targetSize ? sourceSize : targetSize;
 
@@ -24,12 +24,6 @@ int convertKeyValuePairArray(
 		sourceChars = env->GetStringUTFChars(source, nullptr);
 		strncpy(targetPair->m_szValue, sourceChars, sizeof(targetPair->m_szValue));
 		env->ReleaseStringUTFChars(source, sourceChars);
-
-		targetPairsTable[i] = targetPair;
-	}
-
-	for (int32 j = size; j < targetSize; j++) {
-		targetPairsTable[j] = nullptr;
 	}
 
 	return size;

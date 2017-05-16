@@ -33,8 +33,8 @@ public class SteamMatchmakingServers extends SteamInterface {
 				filters, filters.length, requestServersResponse.callback));
 	}
 
-	public SteamServerListRequest requesttHistoryServerList(int appID, SteamMatchmakingKeyValuePair[] filters,
-															SteamMatchmakingServerListResponse requestServersResponse) {
+	public SteamServerListRequest requestHistoryServerList(int appID, SteamMatchmakingKeyValuePair[] filters,
+														   SteamMatchmakingServerListResponse requestServersResponse) {
 
 		return new SteamServerListRequest(requestHistoryServerList(pointer, appID,
 				filters, filters.length, requestServersResponse.callback));
@@ -97,6 +97,11 @@ public class SteamMatchmakingServers extends SteamInterface {
 		#include <steam_api.h>
 		#include "SteamMatchmakingGameServerItem.h"
 		#include "SteamMatchmakingKeyValuePair.h"
+		#include "SteamMatchmakingPingResponse.h"
+		#include "SteamMatchmakingPlayersResponse.h"
+		#include "SteamMatchmakingRulesResponse.h"
+		#include "SteamMatchmakingServerListResponse.h"
+
 		#define MAX_FILTERS 16
 	*/
 
@@ -105,20 +110,19 @@ public class SteamMatchmakingServers extends SteamInterface {
 														 long requestServersResponse); /*
 
 		MatchMakingKeyValuePair_t _pairs[MAX_FILTERS];
-		MatchMakingKeyValuePair_t* pairs[MAX_FILTERS];
-
-		count = convertKeyValuePairArray(env, filters, count, _pairs, pairs, MAX_FILTERS);
+		MatchMakingKeyValuePair_t* pairs = _pairs;
+		count = convertKeyValuePairArray(env, filters, count, pairs, MAX_FILTERS);
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
-		return (jlong) servers->RequestInternetServerList(appID, pairs, count, response);
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
+		return (jlong) servers->RequestInternetServerList(appID, &pairs, count, response);
 	*/
 
 	private static native long requestLANServerList(long pointer, int appID,
 													long requestServersResponse); /*
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
 		return (jlong) servers->RequestLANServerList(appID, response);
 	*/
 
@@ -127,13 +131,12 @@ public class SteamMatchmakingServers extends SteamInterface {
 														long requestServersResponse); /*
 
 		MatchMakingKeyValuePair_t _pairs[MAX_FILTERS];
-		MatchMakingKeyValuePair_t* pairs[MAX_FILTERS];
-
-		count = convertKeyValuePairArray(env, filters, count, _pairs, pairs, MAX_FILTERS);
+		MatchMakingKeyValuePair_t* pairs = _pairs;
+		count = convertKeyValuePairArray(env, filters, count, pairs, MAX_FILTERS);
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
-		return (jlong) servers->RequestFriendsServerList(appID, pairs, count, response);
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
+		return (jlong) servers->RequestFriendsServerList(appID, &pairs, count, response);
 	*/
 
 	private static native long requestFavoritesServerList(long pointer, int appID,
@@ -141,13 +144,12 @@ public class SteamMatchmakingServers extends SteamInterface {
 														  long requestServersResponse); /*
 
 		MatchMakingKeyValuePair_t _pairs[MAX_FILTERS];
-		MatchMakingKeyValuePair_t* pairs[MAX_FILTERS];
-
-		count = convertKeyValuePairArray(env, filters, count, _pairs, pairs, MAX_FILTERS);
+		MatchMakingKeyValuePair_t* pairs = _pairs;
+		count = convertKeyValuePairArray(env, filters, count, pairs, MAX_FILTERS);
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
-		return (jlong) servers->RequestFavoritesServerList(appID, pairs, count, response);
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
+		return (jlong) servers->RequestFavoritesServerList(appID, &pairs, count, response);
 	*/
 
 	private static native long requestHistoryServerList(long pointer, int appID,
@@ -155,13 +157,12 @@ public class SteamMatchmakingServers extends SteamInterface {
 														long requestServersResponse); /*
 
 		MatchMakingKeyValuePair_t _pairs[MAX_FILTERS];
-		MatchMakingKeyValuePair_t* pairs[MAX_FILTERS];
-
-		count = convertKeyValuePairArray(env, filters, count, _pairs, pairs, MAX_FILTERS);
+		MatchMakingKeyValuePair_t* pairs = _pairs;
+		count = convertKeyValuePairArray(env, filters, count, pairs, MAX_FILTERS);
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
-		return (jlong) servers->RequestHistoryServerList(appID, pairs, count, response);
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
+		return (jlong) servers->RequestHistoryServerList(appID, &pairs, count, response);
 	*/
 
 	private static native long requestSpectatorServerList(long pointer, int appID,
@@ -169,13 +170,12 @@ public class SteamMatchmakingServers extends SteamInterface {
 														  long requestServersResponse); /*
 
 		MatchMakingKeyValuePair_t _pairs[MAX_FILTERS];
-		MatchMakingKeyValuePair_t* pairs[MAX_FILTERS];
-
-		count = convertKeyValuePairArray(env, filters, count, _pairs, pairs, MAX_FILTERS);
+		MatchMakingKeyValuePair_t* pairs = _pairs;
+		count = convertKeyValuePairArray(env, filters, count, pairs, MAX_FILTERS);
 
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingServerListResponse* response = (ISteamMatchmakingServerListResponse*) requestServersResponse;
-		return (jlong) servers->RequestSpectatorServerList(appID, pairs, count, response);
+		SteamMatchmakingServerListResponse* response = (SteamMatchmakingServerListResponse*) requestServersResponse;
+		return (jlong) servers->RequestSpectatorServerList(appID, &pairs, count, response);
 	*/
 
 	private static native void releaseRequest(long pointer, long request); /*
@@ -221,19 +221,19 @@ public class SteamMatchmakingServers extends SteamInterface {
 
 	private static native int pingServer(long pointer, int ip, short port, long requestServersResponse); /*
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingPingResponse* response = (ISteamMatchmakingPingResponse*) requestServersResponse;
+		SteamMatchmakingPingResponse* response = (SteamMatchmakingPingResponse*) requestServersResponse;
 		return servers->PingServer(ip, port, response);
 	*/
 
 	private static native int playerDetails(long pointer, int ip, short port, long requestServersResponse); /*
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingPlayersResponse* response = (ISteamMatchmakingPlayersResponse*) requestServersResponse;
+		SteamMatchmakingPlayersResponse* response = (SteamMatchmakingPlayersResponse*) requestServersResponse;
 		return servers->PlayerDetails(ip, port, response);
 	*/
 
 	private static native int serverRules(long pointer, int ip, short port, long requestServersResponse); /*
 		ISteamMatchmakingServers* servers = (ISteamMatchmakingServers*) pointer;
-		ISteamMatchmakingRulesResponse* response = (ISteamMatchmakingRulesResponse*) requestServersResponse;
+		SteamMatchmakingRulesResponse* response = (SteamMatchmakingRulesResponse*) requestServersResponse;
 		return servers->ServerRules(ip, port, response);
 	*/
 
