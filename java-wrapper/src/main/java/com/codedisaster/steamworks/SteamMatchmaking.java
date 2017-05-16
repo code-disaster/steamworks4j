@@ -113,7 +113,60 @@ public class SteamMatchmaking extends SteamInterface {
 			return Invalid;
 		}
 	}
+	
+	public static class FavoriteGameEntry {
 
+		private int appID;
+		private int ip;
+		private short connPort;
+		private short queryPort;
+		private int flags;
+		private int lastPlayedOnServer;
+		
+		public int getAppID() {
+			return appID;
+		}
+		
+		public int getIP() {
+			return ip;
+		}
+		
+		public short getConnPort() {
+			return connPort;
+		}
+		
+		public short getQueryPort() {
+			return queryPort;
+		}
+		
+		public int getFlags() {
+			return flags;
+		}
+		
+		public int getLastPlayedOnServer() {
+			return lastPlayedOnServer;
+		}
+	}
+	
+	public static class GameServerEntry {
+
+		private long steamIDGameServer;
+		private int gameServerIP;
+		private short gameServerPort;
+
+		public SteamID getSteamIDGameServer() {
+			return new SteamID(steamIDGameServer);
+		}
+
+		public int getGameServerIP() {
+			return gameServerIP;
+		}
+		
+		public short getGameServerPort() {
+			return gameServerPort;
+		}
+	}
+	
 	public static class ChatEntry {
 
 		private long steamIDUser;
@@ -132,6 +185,47 @@ public class SteamMatchmaking extends SteamInterface {
 		super(SteamAPI.getSteamMatchmakingPointer(), createCallback(new SteamMatchmakingCallbackAdapter(callback)));
 	}
 
+	/**
+	 * Returns the number of favorites servers the user has stored
+	 */
+	public int getFavoriteGameCount() {
+		return getFavoriteGameCount(pointer);
+	}
+	
+	/**
+	 * Returns the details of the game server
+	 * <br>index is of range [0, GetFavoriteGameCount())
+	 * <br>ip, connPort are filled in the with IP:port of the game server
+	 * <br>flags specify whether the game server was stored as an explicit favorite or in the history of connections
+	 * <br>lastPlayedOnServer is filled in the with the Unix time the favorite was added
+	 */
+	public boolean getFavoriteGame(int index, FavoriteGameEntry favoriteGameEntry) {
+		return getFavoriteGame(pointer, index, favoriteGameEntry);
+	}
+	
+	/**
+	 * Adds the game server to the local list; updates the time played of the server if it already exists in the list
+	 */
+	public int addFavoriteGame(int appID, int ip, short connPort, short queryPort, int flags, int lastPlayedOnServer) {
+		return addFavoriteGame(pointer, appID, ip, connPort, queryPort, flags, lastPlayedOnServer);
+	}
+	
+	/**
+	 * Removes the game server from the local storage
+	 * @return true if one was removed
+	 */
+	public boolean removeFavoriteGame(FavoriteGameEntry favoriteGameEntry) {
+		return removeFavoriteGame(favoriteGameEntry.getAppID(), favoriteGameEntry.getIP(), favoriteGameEntry.getConnPort(), favoriteGameEntry.getQueryPort(), favoriteGameEntry.getFlags());
+	}
+	
+	/**
+	 * Removes the game server from the local storage
+	 * @return true if one was removed
+	 */
+	public boolean removeFavoriteGame(int appID, int ip, short connPort, short queryPort, int flags) {
+		return removeFavoriteGame(pointer, appID, ip, connPort, queryPort, flags);
+	}
+	
 	public SteamAPICall requestLobbyList() {
 		return new SteamAPICall(requestLobbyList(pointer, callback));
 	}
@@ -223,14 +317,31 @@ public class SteamMatchmaking extends SteamInterface {
 
 	/**
 	 * Sends chat message from a direct {@link ByteBuffer}.
+	 *
+	 * The message data sent ranges from <code>ByteBuffer.position()</code> to <code>ByteBuffer.limit()</code>.
 	 */
 	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data) throws SteamException {
+		int offset = data.position();
+		int size = data.limit() - offset;
+		return sendLobbyChatMsg(steamIDLobby, data, offset, size);
+	}
+
+	/**
+	 * Sends chat message from a direct {@link ByteBuffer}.
+	 *
+	 * This function ignores the buffer's internal position and limit properties.
+	 */
+	public boolean sendLobbyChatMsg(SteamID steamIDLobby, ByteBuffer data, int offset, int size) throws SteamException {
 
 		if (!data.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data, data.position(), data.remaining());
+		if (data.capacity() < offset + size) {
+			throw new SteamException("Buffer capacity exceeded!");
+		}
+
+		return sendLobbyChatMsg(pointer, steamIDLobby.handle, data, offset, size);
 	}
 
 	public boolean sendLobbyChatMsg(SteamID steamIDLobby, String data) {
@@ -240,22 +351,66 @@ public class SteamMatchmaking extends SteamInterface {
 	/**
 	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
 	 * and a direct {@link ByteBuffer}.
+	 *
+	 * The message data is stored starting at <code>ByteBuffer.position()</code>, up to <code>ByteBuffer.limit()</code>.
+	 * On return, the buffer limit is set to <code>ByteBuffer.position()</code> plus the number of bytes received.
 	 */
-	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID,
-								 ChatEntry chatEntry, ByteBuffer dest) throws SteamException {
+	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
+								 ByteBuffer dest) throws SteamException {
+
+		int offset = dest.position();
+		int capacity = dest.limit() - offset;
+
+		return getLobbyChatEntry(steamIDLobby, chatID, chatEntry, dest, offset, capacity);
+	}
+
+	/**
+	 * Read incoming chat entry into a {@link com.codedisaster.steamworks.SteamMatchmaking.ChatEntry} structure,
+	 * and a direct {@link ByteBuffer}.
+	 *
+	 * This function ignores the buffer's internal position and limit properties. On return, the buffer position is set
+	 * to <code>offset</code>, the buffer limit is set to <code>offset</code> plus the number of bytes received.
+	 */
+	public int getLobbyChatEntry(SteamID steamIDLobby, int chatID, ChatEntry chatEntry,
+								 ByteBuffer dest, int offset, int capacity) throws SteamException {
 
 		if (!dest.isDirect()) {
 			throw new SteamException("Direct buffer required!");
 		}
 
-		return getLobbyChatEntry(pointer, steamIDLobby.handle, chatID, chatEntry,
-				dest, dest.position(), dest.remaining());
+		if (dest.capacity() < offset + capacity) {
+			throw new SteamException("Buffer capacity exceeded!");
+		}
+
+		int bytesRead = getLobbyChatEntry(pointer, steamIDLobby.handle, chatID, chatEntry, dest, offset, capacity);
+
+		if (bytesRead >= 0) {
+			dest.position(offset);
+			dest.limit(offset + bytesRead);
+		}
+
+		return bytesRead;
 	}
 
 	public boolean requestLobbyData(SteamID steamIDLobby) {
 		return requestLobbyData(pointer, steamIDLobby.handle);
 	}
-
+	
+	/**
+	 * Sets the game server associated with the lobby either the IP/Port or the steamID of the game server has to be valid, depending on how you want the clients to be able to connect
+	 */
+	public void setLobbyGameServer(SteamID steamIDLobby, int gameServerIP, short gameServerPort, SteamID steamIDGameServer) {
+		setLobbyGameServer(pointer, steamIDLobby.handle, gameServerIP, gameServerPort, steamIDGameServer.handle);
+	}
+	
+	/**
+	 * Returns the details of a game server set in a lobby
+	 * @return false if there is no game server set, or that lobby doesn't exist
+	 */
+	public boolean getLobbyGameServer(SteamID steamIDLobby, GameServerEntry gameServerEntry) {
+		return getLobbyGameServer(pointer, steamIDLobby.handle, gameServerEntry);
+	}
+	
 	public boolean setLobbyMemberLimit(SteamID steamIDLobby, int maxMembers) {
 		return setLobbyMemberLimit(pointer, steamIDLobby.handle, maxMembers);
 	}
@@ -293,7 +448,59 @@ public class SteamMatchmaking extends SteamInterface {
 	private static native long createCallback(SteamMatchmakingCallbackAdapter javaCallback); /*
 		return (intp) new SteamMatchmakingCallback(env, javaCallback);
 	*/
+	
+	private static native int getFavoriteGameCount(long pointer); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+	return matchmaking->GetFavoriteGameCount();
+	*/
+	
+	private static native boolean getFavoriteGame(long pointer, int count, FavoriteGameEntry favoriteGameEntry); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 
+	AppId_t appID;
+	uint32 ip;
+	uint16 connPort;
+	uint16 queryPort;
+	uint32 flags;
+	uint32 lastPlayedOnServer;
+
+	bool success = matchmaking->GetFavoriteGame(count, &appID, &ip, &connPort, &queryPort, &flags, &lastPlayedOnServer);
+
+	if (success) {
+		jclass clazz = env->GetObjectClass(favoriteGameEntry);
+
+		jfieldID field = env->GetFieldID(clazz, "appID", "I");
+		env->SetIntField(favoriteGameEntry, field, (jint) appID);
+
+		field = env->GetFieldID(clazz, "ip", "I");
+		env->SetIntField(favoriteGameEntry, field, (jint) ip);
+		
+		field = env->GetFieldID(clazz, "connPort", "S");
+		env->SetShortField(favoriteGameEntry, field, (jshort) connPort);
+		
+		field = env->GetFieldID(clazz, "queryPort", "S");
+		env->SetShortField(favoriteGameEntry, field, (jshort) queryPort);
+		
+		field = env->GetFieldID(clazz, "flags", "I");
+		env->SetIntField(favoriteGameEntry, field, (jint) flags);
+		
+		field = env->GetFieldID(clazz, "lastPlayedOnServer", "I");
+		env->SetIntField(favoriteGameEntry, field, (jint) lastPlayedOnServer);
+	}
+	
+	return success;
+	*/
+	
+	private static native int addFavoriteGame(long pointer, int appID, int ip, short connPort, short queryPort, int flags, int lastPlayedOnServer); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+	return matchmaking->AddFavoriteGame((AppId_t) appID, ip, connPort, queryPort, flags, lastPlayedOnServer);
+	*/
+	
+	private static native boolean removeFavoriteGame(long pointer, int appID, int ip, short connPort, short queryPort, int flags); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+	return matchmaking->RemoveFavoriteGame((AppId_t) appID, ip, connPort, queryPort, flags);
+	*/
+	
 	private static native long requestLobbyList(long pointer, long callback); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		SteamAPICall_t handle = matchmaking->RequestLobbyList();
@@ -461,7 +668,37 @@ public class SteamMatchmaking extends SteamInterface {
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->RequestLobbyData((uint64) steamIDLobby);
 	*/
+	
+	private static native void setLobbyGameServer(long pointer, long steamIDLobby, int gameServerIP, short gameServerPort, long steamIDGameServer); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+	matchmaking->SetLobbyGameServer((uint64) steamIDLobby, gameServerIP, gameServerPort, (uint64) steamIDGameServer);
+	*/
+	
+	private static native boolean getLobbyGameServer(long pointer, long steamIDLobby, GameServerEntry gameServerEntry); /*
+	ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+	
+	CSteamID steamIDGameServer;
+	uint32 gameServerIP;
+	uint16 gameServerPort;
 
+	bool success = matchmaking->GetLobbyGameServer((uint64) steamIDLobby, &gameServerIP, &gameServerPort, &steamIDGameServer);
+
+	if (success) {
+		jclass clazz = env->GetObjectClass(gameServerEntry);
+
+		jfieldID field = env->GetFieldID(clazz, "steamIDGameServer", "J");
+		env->SetLongField(gameServerEntry, field, (jlong) steamIDGameServer.ConvertToUint64());
+
+		field = env->GetFieldID(clazz, "gameServerIP", "I");
+		env->SetIntField(gameServerEntry, field, (jint) gameServerIP);
+		
+		field = env->GetFieldID(clazz, "gameServerPort", "S");
+		env->SetShortField(gameServerEntry, field, (jshort) gameServerPort);
+	}
+
+	return success;
+	*/
+	
 	private static native boolean setLobbyMemberLimit(long pointer, long steamIDLobby, int maxMembers); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->SetLobbyMemberLimit((uint64) steamIDLobby, maxMembers);

@@ -50,10 +50,20 @@ public class SteamGameServer extends SteamInterface {
 		setDedicatedServer(pointer, dedicated);
 	}
 
+	/**
+	 * Begin process to login to a persistent game server account
+	 * You need to register for callbacks to determine the result of this operation.
+	 * @see SteamServersConnected_t
+	 * @see SteamServerConnectFailure_t
+	 * @see SteamServersDisconnected_t
+	 */
 	public void logOn(String token) {
 		logOn(pointer, token);
 	}
 
+	/**
+	 * Login to a generic, anonymous account.
+	 */
 	public void logOnAnonymous() {
 		logOnAnonymous(pointer);
 	}
@@ -129,7 +139,6 @@ public class SteamGameServer extends SteamInterface {
 	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
-
 		long[] ids = new long[1];
 
 		if (sendUserConnectAndAuthenticate(pointer, clientIP, authBlob,
@@ -141,6 +150,12 @@ public class SteamGameServer extends SteamInterface {
 		return false;
 	}
 
+	/**
+	 * Creates a fake user (ie, a bot) which will be listed as playing on the server, but skips validation.  
+	 * 
+	 * @return Returns a SteamID for the user to be tracked with, you should call HandleUserDisconnect()
+	 * when this user leaves the server just like you would for a real user.
+	 */
 	public SteamID createUnauthenticatedUserConnection() {
 		return new SteamID(createUnauthenticatedUserConnection(pointer));
 	}
@@ -149,6 +164,13 @@ public class SteamGameServer extends SteamInterface {
 		sendUserDisconnect(pointer, steamIDUser.handle);
 	}
 
+	/**
+	 * Update the data to be displayed in the server browser and matchmaking interfaces for a user
+	 * currently connected to the server.  For regular users you must call this after you receive a
+	 * GSUserValidationSuccess callback.
+	 * 
+	 * @return true if successful, false if failure (ie, steamIDUser wasn't for an active player)
+	 */
 	public boolean updateUserData(SteamID steamIDUser, String playerName, int score) {
 		return updateUserData(pointer, steamIDUser.handle, playerName, score);
 	}
