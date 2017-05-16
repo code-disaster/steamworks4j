@@ -132,6 +132,23 @@ public class SteamMatchmaking extends SteamInterface {
 		super(SteamAPI.getSteamMatchmakingPointer(), createCallback(new SteamMatchmakingCallbackAdapter(callback)));
 	}
 
+	public int getFavoriteGameCount() {
+		return getFavoriteGameCount(pointer);
+	}
+
+	public boolean getFavoriteGame(int game, int[] appID, int[] ip, short[] connPort,
+								   short[] queryPort, int[] flags, int[] lastPlayedOnServer) {
+		return getFavoriteGame(pointer, game, appID, ip, connPort, queryPort, flags, lastPlayedOnServer);
+	}
+
+	public int addFavoriteGame(int appID, int ip, short connPort, short queryPort, int flags, int lastPlayedOnServer) {
+		return addFavoriteGame(pointer, appID, ip, connPort, queryPort, flags, lastPlayedOnServer);
+	}
+
+	public boolean removeFavoriteGame(int appID, int ip, short connPort, short queryPort, int flags) {
+		return removeFavoriteGame(pointer, appID, ip, connPort, queryPort, flags);
+	}
+
 	public SteamAPICall requestLobbyList() {
 		return new SteamAPICall(requestLobbyList(pointer, callback));
 	}
@@ -256,6 +273,23 @@ public class SteamMatchmaking extends SteamInterface {
 		return requestLobbyData(pointer, steamIDLobby.handle);
 	}
 
+	public void setLobbyGameServer(SteamID steamIDLobby, int gameServerIP,
+								   short gameServerPort, SteamID steamIDGameServer) {
+		setLobbyGameServer(pointer, steamIDLobby.handle, gameServerIP, gameServerPort, steamIDGameServer.handle);
+	}
+
+	public boolean getLobbyGameServer(SteamID steamIDLobby, int[] gameServerIP,
+									  short[] gameServerPort, SteamID steamIDGameServer) {
+		long[] id = new long[1];
+
+		if (getLobbyGameServer(pointer, steamIDLobby.handle, gameServerIP, gameServerPort, id)) {
+			steamIDGameServer.handle = id[0];
+			return true;
+		}
+
+		return false;
+	}
+
 	public boolean setLobbyMemberLimit(SteamID steamIDLobby, int maxMembers) {
 		return setLobbyMemberLimit(pointer, steamIDLobby.handle, maxMembers);
 	}
@@ -292,6 +326,30 @@ public class SteamMatchmaking extends SteamInterface {
 
 	private static native long createCallback(SteamMatchmakingCallbackAdapter javaCallback); /*
 		return (intp) new SteamMatchmakingCallback(env, javaCallback);
+	*/
+
+	private static native int getFavoriteGameCount(long pointer); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->GetFavoriteGameCount();
+	*/
+
+	private static native boolean getFavoriteGame(long pointer, int game, int[] appID, int[] ip, short[] connPort,
+												  short[] queryPort, int[] flags, int[] lastPlayedOnServer); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->GetFavoriteGame(game, (AppId_t*) appID, (uint32*) ip, (uint16*) connPort,
+			(uint16*) queryPort, (uint32*) flags, (uint32*) lastPlayedOnServer);
+	*/
+
+	private static native int addFavoriteGame(long pointer, int appID, int ip, short connPort,
+											  short queryPort, int flags, int lastPlayedOnServer); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->AddFavoriteGame((AppId_t) appID, ip, connPort, queryPort, flags, lastPlayedOnServer);
+	*/
+
+	private static native boolean removeFavoriteGame(long pointer, int appID, int ip,
+													 short connPort, short queryPort, int flags); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		return matchmaking->RemoveFavoriteGame((AppId_t) appID, ip, connPort, queryPort, flags);
 	*/
 
 	private static native long requestLobbyList(long pointer, long callback); /*
@@ -460,6 +518,24 @@ public class SteamMatchmaking extends SteamInterface {
 	private static native boolean requestLobbyData(long pointer, long steamIDLobby); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->RequestLobbyData((uint64) steamIDLobby);
+	*/
+
+	private static native void setLobbyGameServer(long pointer, long steamIDLobby, int gameServerIP,
+												  short gameServerPort, long steamIDGameServer); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		matchmaking->SetLobbyGameServer((uint64) steamIDLobby, gameServerIP, gameServerPort, (uint64) steamIDGameServer);
+	*/
+
+	private static native boolean getLobbyGameServer(long pointer, long steamIDLobby, int[] gameServerIP,
+													 short[] gameServerPort, long[] steamIDGameServer); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		CSteamID _steamIDGameServer;
+		if (matchmaking->GetLobbyGameServer((uint64) steamIDLobby, (uint32*) gameServerIP,
+			(uint16*) gameServerPort, &_steamIDGameServer)) {
+			*steamIDGameServer = (jlong) _steamIDGameServer.ConvertToUint64();
+			return true;
+		}
+		return false;
 	*/
 
 	private static native boolean setLobbyMemberLimit(long pointer, long steamIDLobby, int maxMembers); /*
