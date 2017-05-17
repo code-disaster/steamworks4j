@@ -78,9 +78,6 @@
 		</profile>
 		<profile>
             <id>libs</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
 					<plugin>
@@ -139,18 +136,6 @@
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>2.4</version>
 				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>templating-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>generate-version-class</id>
-							<goals>
-								<goal>filter-sources</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -193,10 +178,6 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
