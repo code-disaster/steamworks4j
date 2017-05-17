@@ -1,8 +1,8 @@
 []
 - Updated to Steamworks SDK v1.40.
-- Reviewed all API functions which use NIO buffers. They now all use direct *byte* buffers and properly adapt to `ByteBuffer#position()` as offset and `ByteBuffer#remaining()` as size/capacity markers. Also, they never change the buffer state, so for functions returning data, the caller must ensure that buffer position and/or limit are updated accordingly.
+- Reviewed all API functions which use NIO buffers. They now all use direct *byte* buffers and properly read `ByteBuffer#position()` as offset and `ByteBuffer#remaining()` as size/capacity markers. Also, they never change the buffer state, so for functions returning data, the caller must ensure that buffer position and/or limit are updated accordingly.
 - Removed redistributable shared libraries from source control. They are now pulled from the `./sdk/redistributable_bin/` folder directly by Maven.
-- Added `steamworks4j-server` module. For now, this only contains functions to work with encrypted app tickets.
+- Added `steamworks4j-server` module.
 - Added `tests` module, which now contains all test apps.
 - Added SteamRemoteStorage callbacks to notify application about external changes to workshop item subscriptions. (#42)
 - Added SteamRemoteStorage functions for asynchronous file access and file/cloud queries.
@@ -10,6 +10,11 @@
 - Added SteamUser functions to request encrypted app ticket. (#45)
 - Added SteamEncryptedAppTicket server functions. (#45)
 - API change: adjusted SteamGameServer.sendUserConnectAndAuthenticate() to better mimic the C++ API.
+- Added SteamMatchmakingServers wrapper.
+- Refactored shared library loader to work with the new `server` and `test` modules.
+- Added some options to customize the shared library loader behavior during development.
+- Moved all SteamGameServer* classes to the server module.
+- API change: Removed `API` parameter when creating HTTP and networking wrappers. Added SteamGameServerHTTP and SteamGameServerNetworking to create server-side versions.
 
 [1.6.2]
 - Cleaned up Maven project structure. Removed superfluous releases of 'steamworks4j-parent' and 'steamworks4j-jnigen' repositories.
