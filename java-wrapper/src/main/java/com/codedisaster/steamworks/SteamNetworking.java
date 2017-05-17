@@ -4,11 +4,6 @@ import java.nio.ByteBuffer;
 
 public class SteamNetworking extends SteamInterface {
 
-	public enum API {
-		Client,
-		Server
-	}
-
 	public enum P2PSend {
 		Unreliable,
 		UnreliableNoDelay,
@@ -76,10 +71,12 @@ public class SteamNetworking extends SteamInterface {
 	private final int[] tmpIntResult = new int[1];
 	private final long[] tmpLongResult = new long[1];
 
-	public SteamNetworking(SteamNetworkingCallback callback, API api) {
-		super(api == API.Client ? SteamAPI.getSteamNetworkingPointer()
-				: SteamGameServerAPI.getSteamGameServerNetworkingPointer(),
-				createCallback(new SteamNetworkingCallbackAdapter(callback), api == API.Client));
+	public SteamNetworking(SteamNetworkingCallback callback) {
+		this(SteamAPI.getSteamNetworkingPointer(), callback, true);
+	}
+
+	SteamNetworking(long pointer, SteamNetworkingCallback callback, boolean isClient) {
+		super(pointer, createCallback(new SteamNetworkingCallbackAdapter(callback), isClient));
 	}
 
 	public boolean sendP2PPacket(SteamID steamIDRemote, ByteBuffer data,

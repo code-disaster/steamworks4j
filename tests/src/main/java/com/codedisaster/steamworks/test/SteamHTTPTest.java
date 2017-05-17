@@ -80,7 +80,7 @@ public class SteamHTTPTest extends SteamTestApp {
 	protected void registerInterfaces() {
 
 		System.out.println("Register http ...");
-		http = new SteamHTTP(httpCallback, SteamHTTP.API.Client);
+		http = new SteamHTTP(httpCallback);
 	}
 
 	@Override

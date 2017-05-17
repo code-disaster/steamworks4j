@@ -81,7 +81,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 		user = new SteamUser(userCallback);
 
 		friends = new FriendsMixin();
-		networking = new SteamNetworking(peer2peerCallback, SteamNetworking.API.Client);
+		networking = new SteamNetworking(peer2peerCallback);
 
 		networking.allowP2PPacketRelay(true);
 	}

@@ -4,11 +4,6 @@ import java.nio.ByteBuffer;
 
 public class SteamHTTP extends SteamInterface {
 
-	public enum API {
-		Client,
-		Server
-	}
-
 	public enum HTTPMethod {
 		Invalid,
 		GET,
@@ -87,10 +82,12 @@ public class SteamHTTP extends SteamInterface {
 		}
 	}
 
-	public SteamHTTP(SteamHTTPCallback callback, API api) {
-		super(api == API.Client ? SteamAPI.getSteamHTTPPointer()
-				: SteamGameServerAPI.getSteamGameServerHTTPPointer(),
-				createCallback(new SteamHTTPCallbackAdapter(callback), api == API.Client));
+	public SteamHTTP(SteamHTTPCallback callback) {
+		this(SteamAPI.getSteamHTTPPointer(), callback, true);
+	}
+
+	SteamHTTP(long pointer, SteamHTTPCallback callback, boolean isClient) {
+		super(pointer, createCallback(new SteamHTTPCallbackAdapter(callback), isClient));
 	}
 
 	public SteamHTTPRequestHandle createHTTPRequest(HTTPMethod requestMethod, String absoluteURL) {
