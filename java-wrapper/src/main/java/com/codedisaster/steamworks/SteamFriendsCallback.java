@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks;
 
-public interface SteamFriendsCallback {
+public interface SteamFriendsCallback
+{
 
 	void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result);
 
@@ -16,4 +17,5 @@ public interface SteamFriendsCallback {
 
 	void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect);
 
+	void onGameServerChangeRequested(String server, String password);
 }

@@ -42,4 +42,7 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 		callback.onGameRichPresenceJoinRequested(new SteamID(steamIDFriend), connect);
 	}
 
+	void onGameServerChangeRequested(String server, String password) {
+		callback.onGameServerChangeRequested(server, password);
+	}
 }
