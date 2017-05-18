@@ -1,7 +1,6 @@
 package com.codedisaster.steamworks;
 
-public interface SteamFriendsCallback
-{
+public interface SteamFriendsCallback {
 
 	void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result);
 
