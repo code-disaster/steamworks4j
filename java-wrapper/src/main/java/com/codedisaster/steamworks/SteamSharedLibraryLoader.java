@@ -21,10 +21,10 @@ class SteamSharedLibraryLoader {
 			"com.codedisaster.steamworks.SharedLibraryExtractPath");
 
 	private static final String SDK_REDISTRIBUTABLE_BIN_PATH = System.getProperty(
-			"com.codedisaster.steamworks.SDKRedistributableBinPath", "./sdk/redistributable_bin");
+			"com.codedisaster.steamworks.SDKRedistributableBinPath", "sdk/redistributable_bin");
 
 	private static final String SDK_LIBRARY_PATH = System.getProperty(
-			"com.codedisaster.steamworks.SDKLibraryPath", "./sdk/public/steam/lib");
+			"com.codedisaster.steamworks.SDKLibraryPath", "sdk/public/steam/lib");
 
 	static final boolean DEBUG = Boolean.parseBoolean(System.getProperty(
 			"com.codedisaster.steamworks.Debug", "false"));
@@ -51,12 +51,20 @@ class SteamSharedLibraryLoader {
 			case Windows:
 				return libName + (IS_64_BIT ? "64" : "") + ".dll";
 			case Linux:
-				return "lib" + libName + (IS_64_BIT ? "64" : "") + ".so";
+				boolean append64 = IS_64_BIT && !isSdkLibName(libName);
+				return "lib" + libName + (append64 ? "64" : "") + ".so";
 			case MacOS:
 				return "lib" + libName + ".dylib";
 		}
 
 		throw new RuntimeException("Unknown host architecture");
+	}
+
+	/**
+	 * This hackery is required because on Linux, names for 32-bit and 64-bit shared libraries are the same.
+	 */
+	private static boolean isSdkLibName(String libName) {
+		return libName.equals("steam_api") || libName.equals("sdkencryptedappticket");
 	}
 
 	static String getSdkRedistributableBinPath() {
