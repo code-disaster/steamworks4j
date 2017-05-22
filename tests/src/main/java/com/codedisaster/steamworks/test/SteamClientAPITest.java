@@ -383,6 +383,12 @@ public class SteamClientAPITest extends SteamTestApp {
 		public void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect) {
 
 		}
+
+		@Override
+		public void onGameServerChangeRequested(String server, String password)
+		{
+			
+		}
 	};
 
 	private SteamUtilsCallback utilsCallback = new SteamUtilsCallback() {
