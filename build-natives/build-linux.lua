@@ -52,7 +52,7 @@ solution "steamworks4j"
 				"steam_api"
 			}
 
-	project "steamworks4j-encryptedappticket"
+	project "steamworks4j-server"
 
 		kind "SharedLib"
 		language "C++"

@@ -29,6 +29,7 @@ public class SteamGameServerAPI {
 		}
 
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
+		SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
 
 		isRunning = SteamGameServerAPINative.nativeInit(
 				ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);

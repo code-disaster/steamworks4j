@@ -19,7 +19,7 @@ public class SteamEncryptedAppTicket extends SteamInterface {
 			SteamSharedLibraryLoader.loadLibrary("sdkencryptedappticket", libraryPath);
 		}
 
-		SteamSharedLibraryLoader.loadLibrary("steamworks4j-encryptedappticket", libraryPath);
+		SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
 	}
 
 	public SteamEncryptedAppTicket() {
