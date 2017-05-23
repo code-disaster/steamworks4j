@@ -83,11 +83,12 @@ public class SteamHTTP extends SteamInterface {
 	}
 
 	public SteamHTTP(SteamHTTPCallback callback) {
-		this(SteamAPI.getSteamHTTPPointer(), callback, true);
+		this(SteamAPI.getSteamHTTPPointer(),
+				createCallback(new SteamHTTPCallbackAdapter(callback)));
 	}
 
-	SteamHTTP(long pointer, SteamHTTPCallback callback, boolean isClient) {
-		super(pointer, createCallback(new SteamHTTPCallbackAdapter(callback), isClient));
+	SteamHTTP(long pointer, long callback) {
+		super(pointer, callback);
 	}
 
 	public SteamHTTPRequestHandle createHTTPRequest(HTTPMethod requestMethod, String absoluteURL) {
@@ -169,15 +170,10 @@ public class SteamHTTP extends SteamInterface {
 
 	/*JNI
 		#include "SteamHTTPCallback.h"
-		#include "SteamGameServerHTTPCallback.h"
 	*/
 
-	private static native long createCallback(SteamHTTPCallbackAdapter javaCallback, boolean isClient); /*
-		if (isClient) {
-			return (intp) new SteamHTTPCallback(env, javaCallback);
-		} else {
-			return (intp) new SteamGameServerHTTPCallback(env, javaCallback);
-		}
+	private static native long createCallback(SteamHTTPCallbackAdapter javaCallback); /*
+		return (intp) new SteamHTTPCallback(env, javaCallback);
 	*/
 
 	private static native long createHTTPRequest(long pointer, int requestMethod, String absoluteURL); /*

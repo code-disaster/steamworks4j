@@ -1,7 +1,7 @@
 #include "SteamGameServerHTTPCallback.h"
 
 SteamGameServerHTTPCallback::SteamGameServerHTTPCallback(JNIEnv* env, jobject callback)
-	: SteamCallbackAdapter(env, callback)
+	: SteamGameServerCallbackAdapter(env, callback)
 	, m_CallbackHTTPRequestHeadersReceived(this, &SteamGameServerHTTPCallback::onHTTPRequestHeadersReceived)
 	, m_CallbackHTTPRequestDataReceived(this, &SteamGameServerHTTPCallback::onHTTPRequestDataReceived) {
 

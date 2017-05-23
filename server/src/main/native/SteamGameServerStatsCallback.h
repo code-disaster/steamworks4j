@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SteamCallbackAdapter.h"
+#include "SteamGameServerCallbackAdapter.h"
 #include <steam_gameserver.h>
 
-class SteamGameServerStatsCallback : public SteamCallbackAdapter {
+class SteamGameServerStatsCallback : public SteamGameServerCallbackAdapter {
 
 public:
 	SteamGameServerStatsCallback(JNIEnv* env, jobject callback);

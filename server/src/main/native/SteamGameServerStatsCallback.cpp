@@ -1,7 +1,7 @@
 #include "SteamGameServerStatsCallback.h"
 
 SteamGameServerStatsCallback::SteamGameServerStatsCallback(JNIEnv* env, jobject callback)
-	: SteamCallbackAdapter(env, callback)
+	: SteamGameServerCallbackAdapter(env, callback)
 	, m_CallbackStatsReceived(this, &SteamGameServerStatsCallback::onStatsReceived)
 	, m_CallbackStatsStored(this, &SteamGameServerStatsCallback::onStatsStored)
 	, m_CallbackStatsUnloaded(this, &SteamGameServerStatsCallback::onStatsUnloaded) {

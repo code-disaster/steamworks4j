@@ -1,7 +1,7 @@
 #include "SteamGameServerCallback.h"
 
 SteamGameServerCallback::SteamGameServerCallback(JNIEnv* env, jobject callback)
-	: SteamCallbackAdapter(env, callback)
+	: SteamGameServerCallbackAdapter(env, callback)
 	, m_CallbackValidateAuthTicket(this, &SteamGameServerCallback::onValidateAuthTicketResponse)
 	, m_CallbackSteamServersConnected(this, &SteamGameServerCallback::onSteamServersConnected)
 	, m_CallbackSteamServerConnectFailure(this, &SteamGameServerCallback::onSteamServerConnectFailure)

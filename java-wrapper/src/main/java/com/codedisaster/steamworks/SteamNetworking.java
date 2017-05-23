@@ -72,11 +72,12 @@ public class SteamNetworking extends SteamInterface {
 	private final long[] tmpLongResult = new long[1];
 
 	public SteamNetworking(SteamNetworkingCallback callback) {
-		this(SteamAPI.getSteamNetworkingPointer(), callback, true);
+		this(SteamAPI.getSteamNetworkingPointer(),
+				createCallback(new SteamNetworkingCallbackAdapter(callback)));
 	}
 
-	SteamNetworking(long pointer, SteamNetworkingCallback callback, boolean isClient) {
-		super(pointer, createCallback(new SteamNetworkingCallbackAdapter(callback), isClient));
+	SteamNetworking(long pointer, long callback) {
+		super(pointer, callback);
 	}
 
 	public boolean sendP2PPacket(SteamID steamIDRemote, ByteBuffer data,
@@ -141,15 +142,10 @@ public class SteamNetworking extends SteamInterface {
 
 	/*JNI
 		#include "SteamNetworkingCallback.h"
-		#include "SteamGameServerNetworkingCallback.h"
 	*/
 
-	private static native long createCallback(SteamNetworkingCallbackAdapter javaCallback, boolean isClient); /*
-		if (isClient) {
-			return (intp) new SteamNetworkingCallback(env, javaCallback);
-		} else {
-			return (intp) new SteamGameServerNetworkingCallback(env, javaCallback);
-		}
+	private static native long createCallback(SteamNetworkingCallbackAdapter javaCallback); /*
+		return (intp) new SteamNetworkingCallback(env, javaCallback);
 	*/
 
 	private static native boolean sendP2PPacket(long pointer, long steamIDRemote, ByteBuffer data,
