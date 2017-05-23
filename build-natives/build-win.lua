@@ -60,8 +60,8 @@ solution "steamworks4j"
 		language "C++"
 
 		files {
-			"../server/src/main/native/**EncryptedAppTicket*.h",
-			"../server/src/main/native/**EncryptedAppTicket*.cpp"
+			"../server/src/main/native/**.h",
+			"../server/src/main/native/**.cpp"
 		}
 
 		includedirs {
@@ -70,16 +70,20 @@ solution "steamworks4j"
 
 		filter "platforms:x32"
 			libdirs {
+				"../sdk/redistributable_bin",
 				"../sdk/public/steam/lib/win32"
 			}
 			links {
+				"steam_api",
 				"sdkencryptedappticket"
 			}
 
 		filter "platforms:x64"
 			libdirs {
+				"../sdk/redistributable_bin/win64",
 				"../sdk/public/steam/lib/win64"
 			}
 			links {
+				"steam_api64",
 				"sdkencryptedappticket64"
 			}
