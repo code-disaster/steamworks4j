@@ -16,4 +16,5 @@ public interface SteamFriendsCallback {
 
 	void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect);
 
+	void onGameServerChangeRequested(String server, String password);
 }

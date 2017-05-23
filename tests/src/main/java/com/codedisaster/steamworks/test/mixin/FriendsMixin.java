@@ -66,6 +66,12 @@ public class FriendsMixin {
 		public void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect) {
 
 		}
+
+		@Override
+		public void onGameServerChangeRequested(String server, String password)
+		{
+			
+		}
 	};
 
 	public FriendsMixin() {

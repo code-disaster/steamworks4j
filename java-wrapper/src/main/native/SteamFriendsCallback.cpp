@@ -7,7 +7,8 @@ SteamFriendsCallback::SteamFriendsCallback(JNIEnv* env, jobject callback)
 	, m_CallbackGameLobbyJoinRequested(this, &SteamFriendsCallback::onGameLobbyJoinRequested)
 	, m_CallbackAvatarImageLoaded(this, &SteamFriendsCallback::onAvatarImageLoaded)
 	, m_CallbackFriendRichPresenceUpdate(this, &SteamFriendsCallback::onFriendRichPresenceUpdate)
-    , m_CallbackGameRichPresenceJoinRequested(this, &SteamFriendsCallback::onGameRichPresenceJoinRequested) {
+    , m_CallbackGameRichPresenceJoinRequested(this, &SteamFriendsCallback::onGameRichPresenceJoinRequested)
+	, m_CallbackGameServerChangeRequested(this, &SteamFriendsCallback::onGameServerChangeRequested) {
 
 }
 
@@ -63,5 +64,13 @@ void SteamFriendsCallback::onGameRichPresenceJoinRequested(GameRichPresenceJoinR
 		callVoidMethod(env, "onGameRichPresenceJoinRequested", "(JLjava/lang/String;)V",
 			(jlong) callback->m_steamIDFriend.ConvertToUint64(),
 			env->NewStringUTF(callback->m_rgchConnect));
+	});
+}
+
+void SteamFriendsCallback::onGameServerChangeRequested(GameServerChangeRequested_t* callback) {
+	invokeCallback({
+		callVoidMethod(env, "onGameServerChangeRequested", "(Ljava/lang/String;Ljava/lang/String;)V",
+		env->NewStringUTF(callback->m_rgchServer),
+		env->NewStringUTF(callback->m_rgchPassword));
 	});
 }
