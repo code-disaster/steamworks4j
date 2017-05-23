@@ -94,12 +94,8 @@
 								<configuration>
 									<fileSets>
 										<fileSet>
-											<sourceFile>../sdk/public/steam/lib/linux32/libsdkencryptedappticket.so</sourceFile>
-											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.so</destinationFile>
-										</fileSet>
-										<fileSet>
 											<sourceFile>../sdk/public/steam/lib/linux64/libsdkencryptedappticket.so</sourceFile>
-											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket64.so</destinationFile>
+											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.so</destinationFile>
 										</fileSet>
 										<fileSet>
 											<sourceFile>../sdk/public/steam/lib/osx32/libsdkencryptedappticket.dylib</sourceFile>

@@ -78,7 +78,10 @@
 		</profile>
 		<profile>
             <id>libs</id>
-            <build>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
                 <plugins>
 					<plugin>
 						<groupId>com.coderplus.maven.plugins</groupId>
@@ -94,12 +97,8 @@
 								<configuration>
 									<fileSets>
 										<fileSet>
-											<sourceFile>../sdk/redistributable_bin/linux32/libsteam_api.so</sourceFile>
-											<destinationFile>${project.build.outputDirectory}/libsteam_api.so</destinationFile>
-										</fileSet>
-										<fileSet>
 											<sourceFile>../sdk/redistributable_bin/linux64/libsteam_api.so</sourceFile>
-											<destinationFile>${project.build.outputDirectory}/libsteam_api64.so</destinationFile>
+											<destinationFile>${project.build.outputDirectory}/libsteam_api.so</destinationFile>
 										</fileSet>
 										<fileSet>
 											<sourceFile>../sdk/redistributable_bin/osx32/libsteam_api.dylib</sourceFile>
