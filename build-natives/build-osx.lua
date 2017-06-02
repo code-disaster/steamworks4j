@@ -38,7 +38,6 @@ solution "steamworks4j"
 		language "C++"
 
 		files {
-			"../java-wrapper/src/main/native/**.h",
 			"../java-wrapper/src/main/native/**.cpp"
 		}
 
@@ -60,8 +59,11 @@ solution "steamworks4j"
 		language "C++"
 
 		files {
-			"../server/src/main/native/**.h",
 			"../server/src/main/native/**.cpp"
+		}
+
+		excludes {
+			"../server/src/main/native/**EncryptedAppTicket*.cpp"
 		}
 
 		includedirs {
@@ -69,11 +71,30 @@ solution "steamworks4j"
 		}
 
 		libdirs {
-			"../sdk/redistributable_bin/osx32",
+			"../sdk/redistributable_bin/osx32"
+		}
+
+		links {
+		    "steam_api"
+		}
+
+	project "steamworks4j-encryptedappticket"
+
+		kind "SharedLib"
+		language "C++"
+
+		files {
+			"../server/src/main/native/**EncryptedAppTicket*.cpp"
+		}
+
+		includedirs {
+			"../server/src/main/native"
+		}
+
+		libdirs {
 			"../sdk/public/steam/lib/osx32"
 		}
 
 		links {
-		    "steam_api",
 			"sdkencryptedappticket"
 		}

@@ -32,7 +32,6 @@ solution "steamworks4j"
 		language "C++"
 
 		files {
-			"../java-wrapper/src/main/native/**.h",
 			"../java-wrapper/src/main/native/**.cpp"
 		}
 
