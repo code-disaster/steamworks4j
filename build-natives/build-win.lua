@@ -2,6 +2,9 @@ solution "steamworks4j"
 	configurations { "ReleaseDLL" }
 	platforms { "x32", "x64" }
 
+    -- Premake 5.0.0 alpha 11 : SDK version needs to be specified for VS2017
+	systemversion("10.0.15063.0")
+
 	includedirs {
 		"../java-wrapper/src/main/native/include/jni",
 		"../java-wrapper/src/main/native/include/jni/win32",
@@ -60,8 +63,11 @@ solution "steamworks4j"
 		language "C++"
 
 		files {
-			"../server/src/main/native/**.h",
 			"../server/src/main/native/**.cpp"
+		}
+
+		excludes {
+			"../server/src/main/native/**EncryptedAppTicket*.cpp"
 		}
 
 		includedirs {
@@ -70,20 +76,45 @@ solution "steamworks4j"
 
 		filter "platforms:x32"
 			libdirs {
-				"../sdk/redistributable_bin",
+				"../sdk/redistributable_bin"
+			}
+			links {
+				"steam_api"
+			}
+
+		filter "platforms:x64"
+			libdirs {
+				"../sdk/redistributable_bin/win64"
+			}
+			links {
+				"steam_api64"
+			}
+
+	project "steamworks4j-encryptedappticket"
+
+		kind "SharedLib"
+		language "C++"
+
+		files {
+			"../server/src/main/native/**EncryptedAppTicket*.cpp"
+		}
+
+		includedirs {
+			"../server/src/main/native"
+		}
+
+		filter "platforms:x32"
+			libdirs {
 				"../sdk/public/steam/lib/win32"
 			}
 			links {
-				"steam_api",
 				"sdkencryptedappticket"
 			}
 
 		filter "platforms:x64"
 			libdirs {
-				"../sdk/redistributable_bin/win64",
 				"../sdk/public/steam/lib/win64"
 			}
 			links {
-				"steam_api64",
 				"sdkencryptedappticket64"
 			}

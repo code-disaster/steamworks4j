@@ -144,4 +144,68 @@ public abstract class SteamTestApp {
 		}
 	}
 
+	private boolean runAsGameServer(@SuppressWarnings("unused") String[] arguments) throws SteamException {
+
+		System.out.println("Initialise Steam GameServer API ...");
+
+		if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
+				SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1")) {
+			return false;
+		}
+
+		registerInterfaces();
+
+		InputHandler inputHandler = new InputHandler(Thread.currentThread());
+
+		Thread inputThread = new Thread(inputHandler);
+		inputThread.start();
+
+		while (inputHandler.alive()) {
+
+			SteamGameServerAPI.runCallbacks();
+
+			processUpdate();
+
+			try {
+				// sleep a little (Steam says it should poll at least 15 times/second)
+				Thread.sleep(MS_PER_TICK);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+		}
+
+		System.out.println("Shutting down Steam GameServer API ...");
+
+		try {
+			inputThread.join();
+		} catch (InterruptedException e) {
+			throw new SteamException(e);
+		}
+
+		unregisterInterfaces();
+
+		SteamGameServerAPI.shutdown();
+
+		return true;
+	}
+
+	protected void serverMain(String[] arguments) {
+
+		// development mode, read Steamworks libraries from ./sdk folder
+		System.setProperty("com.codedisaster.steamworks.Debug", "true");
+
+		try {
+
+			if (!runAsGameServer(arguments)) {
+				System.exit(-1);
+			}
+
+			System.out.println("Bye!");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
 }

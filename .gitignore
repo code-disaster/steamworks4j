@@ -23,6 +23,7 @@ Makefile
 *.iml
 
 # build tools
+build-natives/bin/
 premake5.exe
 
 # test resources
