@@ -18,7 +18,7 @@ class SteamSharedLibraryLoader {
 			"com.codedisaster.steamworks.SharedLibraryExtractDirectory", "steamworks4j");
 
 	private static final String SHARED_LIBRARY_EXTRACT_PATH = System.getProperty(
-			"com.codedisaster.steamworks.SharedLibraryExtractPath");
+			"com.codedisaster.steamworks.SharedLibraryExtractPath", null);
 
 	private static final String SDK_REDISTRIBUTABLE_BIN_PATH = System.getProperty(
 			"com.codedisaster.steamworks.SDKRedistributableBinPath", "sdk/redistributable_bin");
@@ -105,9 +105,19 @@ class SteamSharedLibraryLoader {
 					SHARED_LIBRARY_EXTRACT_DIRECTORY + "/" + Version.getVersion(), librarySystemName);
 
 			if (libraryPath == null) {
+				// extract library from resource
 				extractLibrary(librarySystemPath, librarySystemName);
 			} else {
-				extractLibrary(librarySystemPath, new File(libraryPath, librarySystemName));
+				// read library from given path
+				File librarySourcePath = new File(libraryPath, librarySystemName);
+
+				if (OS != PLATFORM.Windows) {
+					// on MacOS & Linux, "extract" (copy) from source location
+					extractLibrary(librarySystemPath, librarySourcePath);
+				} else {
+					// on Windows, load the library from the source location
+					librarySystemPath = librarySourcePath;
+				}
 			}
 
 			String absolutePath = librarySystemPath.getCanonicalPath();
