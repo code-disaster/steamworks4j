@@ -92,6 +92,10 @@ public class SteamAPI {
 		return (intp) SteamApps();
 	*/
 
+	static native long getSteamAppListPointer(); /*
+		return (intp) SteamAppList();
+	*/
+
 	static native long getSteamControllerPointer(); /*
 		return (intp) SteamController();
 	*/
