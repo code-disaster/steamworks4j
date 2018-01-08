@@ -48,8 +48,9 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		callback.onCreateItem(new SteamPublishedFileID(publishedFileID), needsToAcceptWLA, SteamResult.byValue(result));
 	}
 
-	void onSubmitItemUpdate(boolean needsToAcceptWLA, int result) {
-		callback.onSubmitItemUpdate(needsToAcceptWLA, SteamResult.byValue(result));
+	void onSubmitItemUpdate(long publishedFileID, boolean needsToAcceptWLA, int result) {
+		callback.onSubmitItemUpdate(new SteamPublishedFileID(publishedFileID),
+				needsToAcceptWLA, SteamResult.byValue(result));
 	}
 
 	void onDownloadItemResult(int appID, long publishedFileID, int result) {

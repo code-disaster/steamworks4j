@@ -19,7 +19,9 @@ public class SteamController extends SteamInterface {
 		Gyro,
 		CenterTrackpad,
 		RightJoystick,
-		DPad
+		DPad,
+		Key,
+		Mouse
 	}
 
 	public enum SourceMode {
@@ -262,6 +264,21 @@ public class SteamController extends SteamInterface {
 		RestoreUserDefault
 	}
 
+	public enum InputType {
+		Unknown,
+		SteamController,
+		XBox360Controller,
+		XBoxOneController,
+		GenericXInput,
+		PS4Controller;
+
+		private static final InputType[] values = values();
+
+		static InputType byOrdinal(int ordinal) {
+			return values[ordinal];
+		}
+	}
+
 	public static final int STEAM_CONTROLLER_MAX_COUNT = 16;
 	public static final int STEAM_CONTROLLER_MAX_ANALOG_ACTIONS = 16;
 	public static final int STEAM_CONTROLLER_MAX_DIGITAL_ACTIONS = 128;
@@ -441,6 +458,10 @@ public class SteamController extends SteamInterface {
 
 	public String getGlyphForActionOrigin(ActionOrigin origin) {
 		return getGlyphForActionOrigin(pointer, origin.ordinal());
+	}
+
+	public InputType getInputTypeForHandle(SteamControllerHandle controller) {
+		return InputType.byOrdinal(getInputTypeForHandle(pointer, controller.handle));
 	}
 
 	// @off
@@ -671,9 +692,14 @@ public class SteamController extends SteamInterface {
 		return env->NewStringUTF(controller->GetStringForActionOrigin((EControllerActionOrigin) origin));
 	*/
 
-	private static native String getGlyphForActionOrigin(long pointer, int origin ); /*
+	private static native String getGlyphForActionOrigin(long pointer, int origin); /*
 		ISteamController* controller = (ISteamController*) pointer;
 		return env->NewStringUTF(controller->GetGlyphForActionOrigin((EControllerActionOrigin) origin));
+	*/
+
+	private static native int getInputTypeForHandle(long pointer, long controllerHandle); /*
+		ISteamController* controller = (ISteamController*) pointer;
+		return controller->GetInputTypeForHandle((ControllerHandle_t) controllerHandle);
 	*/
 
 }

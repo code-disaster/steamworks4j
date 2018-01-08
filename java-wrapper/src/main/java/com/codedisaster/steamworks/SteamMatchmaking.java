@@ -44,7 +44,8 @@ public class SteamMatchmaking extends SteamInterface {
 		ClanDisabled(8),
 		CommunityBan(9),
 		MemberBlockedYou(10),
-		YouBlockedMember(11);
+		YouBlockedMember(11),
+		RatelimitExceeded(15);
 
 		private final int code;
 		private static final ChatRoomEnterResponse[] values = values();

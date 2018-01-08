@@ -2,7 +2,9 @@ package com.codedisaster.steamworks;
 
 public enum SteamResult {
 
-	/** Error codes. Values need to map directly to SDK error codes! */
+	/**
+	 * Error codes. Values need to map directly to SDK error codes!
+	 */
 	OK(1),
 	Fail(2),
 	NoConnection(3),
@@ -111,8 +113,14 @@ public enum SteamResult {
 	GLSTExpired(106),
 	InsufficientFunds(107),
 	TooManyPending(108),
+	NoSiteLicensesFound(109),
+	WGNetworkSendExceeded(110),
+	AccountNotFriends(111),
+	LimitedUserAccount(112),
 
-	/** If this is returned(), we missed to "port" an Steam error code above. */
+	/**
+	 * If this is returned(), we missed to "port" an Steam error code above.
+	 */
 	UnknownErrorCode_NotImplementedByAPI(0);
 
 	private final int code;

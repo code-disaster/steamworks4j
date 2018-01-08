@@ -207,7 +207,7 @@ public class SteamClientAPITest extends SteamTestApp {
 
 			do {
 				bytesRead = remoteStorage.ugcRead(fileHandle, buffer, buffer.limit(), offset,
-					SteamRemoteStorage.UGCReadAction.ContinueReadingUntilFinished);
+						SteamRemoteStorage.UGCReadAction.ContinueReadingUntilFinished);
 				offset += bytesRead;
 			} while (bytesRead > 0);
 
@@ -247,7 +247,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		public void onUGCQueryCompleted(SteamUGCQuery query, int numResultsReturned, int totalMatchingResults,
 										boolean isCachedData, SteamResult result) {
 			System.out.println("UGC query completed: handle=" + query.toString() + ", " + numResultsReturned + " of " +
-							   totalMatchingResults + " results returned, result=" + result.toString());
+					totalMatchingResults + " results returned, result=" + result.toString());
 
 			for (int i = 0; i < numResultsReturned; i++) {
 				SteamUGCDetails details = new SteamUGCDetails();
@@ -280,7 +280,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		}
 
 		@Override
-		public void onSubmitItemUpdate(boolean needsToAcceptWLA, SteamResult result) {
+		public void onSubmitItemUpdate(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
 
 		}
 
@@ -385,9 +385,8 @@ public class SteamClientAPITest extends SteamTestApp {
 		}
 
 		@Override
-		public void onGameServerChangeRequested(String server, String password)
-		{
-			
+		public void onGameServerChangeRequested(String server, String password) {
+
 		}
 	};
 
@@ -528,7 +527,7 @@ public class SteamClientAPITest extends SteamTestApp {
 				if (remoteFile != null) {
 					byte[] bytes = new byte[1024];
 					int bytesRead;
-					while((bytesRead = in.read(bytes, 0, bytes.length)) > 0) {
+					while ((bytesRead = in.read(bytes, 0, bytes.length)) > 0) {
 						ByteBuffer buffer = ByteBuffer.allocateDirect(bytesRead);
 						buffer.put(bytes, 0, bytesRead);
 						buffer.flip();

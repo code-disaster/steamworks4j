@@ -51,7 +51,7 @@ void SteamUGCCallback::onCreateItem(CreateItemResult_t* callback, bool error) {
 
 void SteamUGCCallback::onSubmitItemUpdate(SubmitItemUpdateResult_t* callback, bool error) {
 	invokeCallback({
-		callVoidMethod(env, "onSubmitItemUpdate", "(ZI)V",
+		callVoidMethod(env, "onSubmitItemUpdate", "(JZI)V", (jlong) callback->m_nPublishedFileId,
 		    (jboolean) callback->m_bUserNeedsToAcceptWorkshopLegalAgreement, (jint) callback->m_eResult);
 	});
 }

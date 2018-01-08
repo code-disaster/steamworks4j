@@ -13,7 +13,8 @@ public interface SteamUGCCallback {
 
 	void onCreateItem(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result);
 
-	void onSubmitItemUpdate(boolean needsToAcceptWLA, SteamResult result);
+	void onSubmitItemUpdate(SteamPublishedFileID publishedFileID,
+							boolean needsToAcceptWLA, SteamResult result);
 
 	void onDownloadItemResult(int appID, SteamPublishedFileID publishedFileID, SteamResult result);
 
