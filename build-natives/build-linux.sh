@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 premake4 --file=build-linux.lua gmake
 make clean config=release64
 make config=release64
