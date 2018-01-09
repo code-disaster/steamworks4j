@@ -120,6 +120,10 @@ public class SteamAPI {
 		return (intp) SteamRemoteStorage();
 	*/
 
+	static native long getSteamScreenshotsPointer(); /*
+		return (intp) SteamScreenshots();
+	*/
+
 	static native long getSteamUGCPointer(); /*
 		return (intp) SteamUGC();
 	*/
