@@ -521,8 +521,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		} else if (input.startsWith("file write ")) {
 			String path = input.substring("file write ".length());
 			File file = new File(path);
-			try {
-				FileInputStream in = new FileInputStream(file);
+			try (FileInputStream in = new FileInputStream(file)) {
 				SteamUGCFileWriteStreamHandle remoteFile = remoteStorage.fileWriteStreamOpen(path);
 				if (remoteFile != null) {
 					byte[] bytes = new byte[1024];
@@ -627,14 +626,14 @@ public class SteamClientAPITest extends SteamTestApp {
 			if (currentLeaderboard != null && params.length >= 2) {
 				userStats.downloadLeaderboardEntries(currentLeaderboard,
 						SteamUserStats.LeaderboardDataRequest.Global,
-						Integer.valueOf(params[0]), Integer.valueOf(params[1]));
+						Integer.parseInt(params[0]), Integer.parseInt(params[1]));
 			}
 		} else if (input.startsWith("leaderboard score ")) {
 			String score = input.substring("leaderboard score ".length());
 			if (currentLeaderboard != null) {
 				System.out.println("uploading score " + score + " to leaderboard " + currentLeaderboard.toString());
 				userStats.uploadLeaderboardScore(currentLeaderboard,
-						SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.valueOf(score), new int[] {});
+						SteamUserStats.LeaderboardUploadScoreMethod.KeepBest, Integer.parseInt(score), new int[] {});
 			}
 		} else if (input.startsWith("apps subscribed ")) {
 			String appId = input.substring("apps subscribed ".length());

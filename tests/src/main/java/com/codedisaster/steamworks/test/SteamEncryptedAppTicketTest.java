@@ -4,6 +4,7 @@ import com.codedisaster.steamworks.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -58,7 +59,7 @@ public class SteamEncryptedAppTicketTest extends SteamTestApp {
 							dataIncluded.limit(dataLength);
 							byte[] userData = new byte[dataLength];
 							dataIncluded.get(userData);
-							String userString = new String(userData);
+							String userString = new String(userData, Charset.defaultCharset());
 							System.out.println("included user data: " + dataLength + " bytes, '" + userString + "'");
 						}
 					} else {
@@ -94,7 +95,7 @@ public class SteamEncryptedAppTicketTest extends SteamTestApp {
 	@Override
 	protected void processInput(String input) throws SteamException {
 		if (input.equals("encrypt")) {
-			byte[] ident = "Hello World!".getBytes();
+			byte[] ident = "Hello World!".getBytes(Charset.defaultCharset());
 			ByteBuffer dataToInclude = ByteBuffer.allocateDirect(ident.length);
 			dataToInclude.put(ident);
 			dataToInclude.flip();

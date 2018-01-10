@@ -138,8 +138,7 @@ class SteamSharedLibraryLoader {
 
 	private static void extractLibrary(File librarySystemPath, InputStream input) throws IOException {
 		if (input != null) {
-			try {
-				FileOutputStream output = new FileOutputStream(librarySystemPath);
+			try (FileOutputStream output = new FileOutputStream(librarySystemPath)) {
 				byte[] buffer = new byte[4096];
 				while (true) {
 					int length = input.read(buffer);

@@ -172,6 +172,7 @@ public class SteamUGC extends SteamInterface {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static class ItemInstallInfo {
 		private String folder;
 		private int sizeOnDisk;
@@ -198,6 +199,7 @@ public class SteamUGC extends SteamInterface {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static class ItemAdditionalPreview {
 		private String urlOrVideoID;
 		private String originalFileName;

@@ -31,7 +31,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 	private SteamID remoteAuthUser;
 	private ByteBuffer remoteAuthTicketData = ByteBuffer.allocateDirect(256);
 
-	private final byte[] AUTH = "AUTH".getBytes();
+	private final byte[] AUTH = "AUTH".getBytes(Charset.defaultCharset());
 
 	private SteamUserCallback userCallback = new SteamUserCallback() {
 		@Override
@@ -143,7 +143,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 
 		if (input.startsWith("p2p send ")) {
 			String[] params = input.substring("p2p send ".length()).split(" ");
-			int receiverID = Integer.valueOf(params[0]);
+			int receiverID = Integer.parseInt(params[0]);
 
 			SteamID steamIDReceiver = null;
 			if (remoteUserIDs.containsKey(receiverID)) {
@@ -172,7 +172,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 						SteamNetworking.P2PSend.Unreliable, defaultChannel);
 			}
 		} else if (input.startsWith("p2p close ")) {
-			int remoteID = Integer.valueOf(input.substring("p2p close ".length()));
+			int remoteID = Integer.parseInt(input.substring("p2p close ".length()));
 
 			SteamID steamIDRemote = null;
 			if (remoteUserIDs.containsKey(remoteID)) {

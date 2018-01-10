@@ -3,6 +3,7 @@ package com.codedisaster.steamworks.test;
 import com.codedisaster.steamworks.*;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 public class SteamHTTPTest extends SteamTestApp {
 
@@ -25,7 +26,7 @@ public class SteamHTTPTest extends SteamTestApp {
 					byte[] dest = new byte[bodyData.limit()];
 					bodyData.get(dest);
 
-					String result = new String(dest);
+					String result = new String(dest, Charset.defaultCharset());
 					System.out.println("=== begin result:\n" + result + "\n=== end result");
 
 				} else {
@@ -60,7 +61,7 @@ public class SteamHTTPTest extends SteamTestApp {
 					byte[] dest = new byte[bodyData.limit()];
 					bodyData.get(dest);
 
-					String result = new String(dest);
+					String result = new String(dest, Charset.defaultCharset());
 					System.out.println("=== begin result:\n" + result + "\n=== end result");
 
 				} else {

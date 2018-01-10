@@ -34,7 +34,7 @@ public abstract class SteamTestApp {
 			this.alive = true;
 			this.mainThread = mainThread;
 
-			this.scanner = new Scanner(System.in);
+			this.scanner = new Scanner(System.in, "UTF-8");
 			scanner.useDelimiter("[\r\n\t]");
 		}
 
