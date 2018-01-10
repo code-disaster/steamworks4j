@@ -24,6 +24,18 @@ public class SteamScreenshots extends SteamInterface {
 		hookScreenshots(pointer, hook);
 	}
 
+	public boolean setLocation(SteamScreenshotHandle screenshot, String location) {
+		return setLocation(pointer, screenshot.handle, location);
+	}
+
+	public boolean tagUser(SteamScreenshotHandle screenshot, SteamID steamID) {
+		return tagUser(pointer, screenshot.handle, steamID.handle);
+	}
+
+	public boolean tagPublishedFile(SteamScreenshotHandle screenshot, SteamPublishedFileID publishedFileID) {
+		return tagPublishedFile(pointer, screenshot.handle, publishedFileID.handle);
+	}
+
 	public boolean isScreenshotsHooked() {
 		return isScreenshotsHooked(pointer);
 	}
@@ -60,6 +72,21 @@ public class SteamScreenshots extends SteamInterface {
 	private static native void hookScreenshots(long pointer, boolean hook); /*
 		ISteamScreenshots* screenshots = (ISteamScreenshots*) pointer;
 		screenshots->HookScreenshots(hook);
+	*/
+
+	private static native boolean setLocation(long pointer, int screenshot, String location); /*
+		ISteamScreenshots* screenshots = (ISteamScreenshots*) pointer;
+		return screenshots->SetLocation(screenshot, location);
+	*/
+
+	private static native boolean tagUser(long pointer, int screenshot, long steamID); /*
+		ISteamScreenshots* screenshots = (ISteamScreenshots*) pointer;
+		return screenshots->TagUser(screenshot, (uint64) steamID);
+	*/
+
+	private static native boolean tagPublishedFile(long pointer, int screenshot, long publishedFileID); /*
+		ISteamScreenshots* screenshots = (ISteamScreenshots*) pointer;
+		return screenshots->TagPublishedFile(screenshot, publishedFileID);
 	*/
 
 	private static native boolean isScreenshotsHooked(long pointer); /*
