@@ -20,6 +20,8 @@
 - Updated native Windows build to a newer version of premake 5 (alpha 11).
 - Added some missing SteamApps functions. (#50)
 - Added SteamScreenshots wrapper.
+- All Maven modules are now compiled with Java 7.
+- Added SteamUtils.getImageSize(). (#62)
 
 [1.6.2]
 - Cleaned up Maven project structure. Removed superfluous releases of 'steamworks4j-parent' and 'steamworks4j-jnigen' repositories.

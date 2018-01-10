@@ -89,6 +89,10 @@ public abstract class SteamTestApp {
 		clientUtils = new SteamUtils(clUtilsCallback);
 		clientUtils.setWarningMessageHook(clMessageHook);
 
+		if (SteamAPI.restartAppIfNecessary(clientUtils.getAppID())) {
+			System.out.println("SteamAPI_RestartAppIfNecessary returned 'false'");
+		}
+
 		InputHandler inputHandler = new InputHandler(Thread.currentThread());
 
 		Thread inputThread = new Thread(inputHandler);
