@@ -5,6 +5,22 @@ public class SteamApps extends SteamInterface {
 	public SteamApps() {
 		super(SteamAPI.getSteamAppsPointer());
 	}
+	
+	public boolean isSubscribed() {
+		return isSubscribed(pointer);
+	}
+
+	public boolean isLowViolence() {
+		return isLowViolence(pointer);
+	}
+
+	public boolean isCybercafe() {
+		return isCybercafe(pointer);
+	}
+
+	public boolean isVACBanned() {
+		return isVACBanned(pointer);
+	}
 
 	public boolean isSubscribed() {
 		return isSubscribed(pointer);
@@ -12,6 +28,30 @@ public class SteamApps extends SteamInterface {
 
 	public boolean isLowViolence() {
 		return isLowViolence(pointer);
+	}
+	
+	public boolean isDlcInstalled(int appID) {
+		return isDlcInstalled(pointer, appID);
+	}
+
+	public int getEarliestPurchaseUnixTime(int appID) {
+		return getEarliestPurchaseUnixTime(pointer, appID);
+	}
+
+	public boolean isSubscribedFromFreeWeekend() {
+		return isSubscribedFromFreeWeekend(pointer);
+	}
+
+	public int getDLCCount() {
+		return getDLCCount(pointer);
+	}
+
+	public void installDLC(int appID) {
+		installDLC(pointer, appID);
+	}
+
+	public void uninstallDLC(int appID) {
+		uninstallDLC(pointer, appID);
 	}
 
 	public boolean isCybercafe() {
@@ -71,6 +111,26 @@ public class SteamApps extends SteamInterface {
 	/*JNI
 		#include <steam_api.h>
 	*/
+	
+	private static native boolean isSubscribed(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsSubscribed();
+	*/
+
+	private static native boolean isLowViolence(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsLowViolence();
+	*/
+
+	private static native boolean isCybercafe(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsCybercafe();
+	*/
+
+	private static native boolean isVACBanned(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsVACBanned();
+	*/
 
 	private static native boolean isSubscribed(long pointer); /*
 		ISteamApps* apps = (ISteamApps*) pointer;
@@ -91,6 +151,36 @@ public class SteamApps extends SteamInterface {
 		ISteamApps* apps = (ISteamApps*) pointer;
 		return apps->BIsVACBanned();
 	*/
+	
+	private static native boolean isDlcInstalled(long pointer, int appID); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsDlcInstalled((AppId_t) appID);
+	*/
+
+	private static native int getEarliestPurchaseUnixTime(long pointer, int appID); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->GetEarliestPurchaseUnixTime((AppId_t) appID);
+	*/
+
+	private static native boolean isSubscribedFromFreeWeekend(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->BIsSubscribedFromFreeWeekend();
+	*/
+
+	private static native int getDLCCount(long pointer); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		return apps->GetDLCCount();
+	*/
+
+	private static native void installDLC(long pointer, int appID); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		apps->InstallDLC((AppId_t) appID);
+	*/
+
+	private static native void uninstallDLC(long pointer, int appID); /*
+		ISteamApps* apps = (ISteamApps*) pointer;
+		apps->UninstallDLC((AppId_t) appID);
+    */
 
 	private static native String getCurrentGameLanguage(long pointer); /*
 		ISteamApps* apps = (ISteamApps*) pointer;
