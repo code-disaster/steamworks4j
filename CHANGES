@@ -1,4 +1,4 @@
-[]
+[1.7.0]
 - Updated to Steamworks SDK v1.42.
 - Reviewed all API functions which use NIO buffers. They now all use direct *byte* buffers and properly read `ByteBuffer#position()` as offset and `ByteBuffer#remaining()` as size/capacity markers. Also, they never change the buffer state, so for functions returning data, the caller must ensure that buffer position and/or limit are updated accordingly.
 - Removed redistributable shared libraries from source control. They are now pulled from the `./sdk/redistributable_bin/` folder directly by Maven.
@@ -22,6 +22,7 @@
 - Added SteamScreenshots wrapper.
 - All Maven modules are now compiled with Java 7.
 - Added SteamUtils.getImageSize(). (#62)
+- Added com.codedisaster.steamworks.Version to query library version at runtime.
 
 [1.6.2]
 - Cleaned up Maven project structure. Removed superfluous releases of 'steamworks4j-parent' and 'steamworks4j-jnigen' repositories.
