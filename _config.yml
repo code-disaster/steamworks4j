@@ -1,6 +1,6 @@
 baseurl: /steamworks4j
 
 steamworks4j:
-  version: 1.6.2
-  snapshot-version: 1.6.3
-  sdk-version: 1.39
+  version: 1.7.0
+  snapshot-version: 1.7.0
+  sdk-version: 1.42

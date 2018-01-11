@@ -16,18 +16,28 @@ Callbacks are dealt with in a similar manner. Native callbacks are received by *
 
 ### Technical limitations
 
+> Note: with v1.7.0 of *steamworks4j*, the following requirements have been updated.
+
 #### SDK version
 
 The prebuilt native libraries of *steamworks4j* are currently compiled with Steamworks SDK **v{{ site.steamworks4j.sdk-version }}**.
 
 #### Java version
 
-The Java code compiles with Java 6.
+The Java code compiles with Java language level 7.
 
 #### Mac OS
 
 OS X 10.6 and later are supported.
 
+#### Linux
+
+Linux 64-bit is supported. Support for 32-bit versions has been dropped in *steamworks4j* v1.7.0.
+
+#### Windows
+
+Both 32-bit and 64-bit versions are supported.
+
 ### Copyright notice
 
-The *steamworks4j* project is released under the MIT license. The *steamworks4j* package does not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.
+The *steamworks4j* project is released under the MIT license. The *steamworks4j* packages do not contain any source/header files owned by Valve. The only files included from the Steamworks SDK are the redistributable steam_api runtime libraries to accompany the prebuilt native libraries.

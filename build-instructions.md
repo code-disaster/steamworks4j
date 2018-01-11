@@ -4,26 +4,28 @@ layout: default
 
 ## Build instructions
 
-### Java
+### Steamworks SDK
 
-Just use Maven with ```mvn package``` in the root directory to compile a jar ready to be used in your application, or ```mvn install``` to deploy it to your local Maven cache.
-
-Run ```mvn package -P with-dependencies``` to compile an additional jar with dependencies ([jnigen](https://github.com/libgdx/libgdx/wiki/jnigen)) included.
-
-### Native libraries
-
-#### Prebuilt native libraries
-
-You *do not need* to build the native libraries yourself if you don't plan to *modify* the native code of *steamworks4j*. There are prebuilt versions located in the ```steamworks4j/java-wrapper/src/main/resources/``` folder.
-
-#### External dependencies
-
-To build the native libraries, download the latest Steamworks SDK. Unzip and copy the following folders into the **steamworks4j/** root directory:
+Starting with *steamworks4j* v1.7.0, the SDK is required to build/package from source. Download the latest Steamworks SDK, then unzip and copy the following folders into the **steamworks4j/** root directory:
 
 - *steamworks4j/*
     - *sdk/*
         - *public/*
         - *redistributable_bin/*
+
+### Java
+
+Just use Maven with ```mvn package``` in the root directory to compile a jar ready to be used in your application, or ```mvn install``` to deploy it to your local Maven cache.
+
+During the compile phase, the Maven build pulls shared libraries out of the *sdk/redistributable_bin/* folder and adds them as resources to the *steamworks4j* module. For copyright reasons, this is **not** done for *steamworks4j-server* and the *sdkencryptedappticket* library. If you want to create such a package, this can be enforced manually with ```mvn package -Plibs```.
+
+### Native libraries
+
+#### Prebuilt native libraries
+
+You *do not need* to build the native libraries yourself if you don't plan to *modify* the native code of *steamworks4j*. There are prebuilt versions provided as resources of *steamworks4j* and *steamworks4j-server*.
+
+#### External dependencies
 
 [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) is used to generate parts of the native code, and [premake4/5](http://industriousone.com/premake) to compile native code into dynamic libraries.
 
@@ -31,7 +33,7 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
 
 - Windows
 
-  - The **Visual Studio 2013** command line environment must be available. It's sufficient to use the Community or Express editions. The default location for the batch file to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat*
+  - A **Visual Studio 2013/2015** command line environment must be available. It's sufficient to use the Community editions. For Visual Studio 2013, the default script to setup the build environment is *c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat*
   - **premake5.exe** must be available in the path, e.g. in the ```steamworks4j/build-natives/``` folder.
 
 - Linux
@@ -48,10 +50,10 @@ To build the native libraries, download the latest Steamworks SDK. Unzip and cop
 
 The first step is to let [jnigen](https://github.com/libgdx/libgdx/wiki/jnigen) generate C++ source files for the embedded JNI functions. The `com.codedisaster.steamworks.jnigen.JNICodeGenerator` class in the `jnigen` sub-project contains the code to do that.
 
-- The working directory must be the ```steamworks4j/java-wrapper/``` folder.
+- The working directory must be the ```steamworks4j/``` root folder.
 - You can just run `JNICodeGenerator.main()` as a plain Java application from inside your favorite IDE. No arguments are required.
-- The generated code is written to ```steamworks4j/java-wrapper/src/main/native/```.
+- The generated code is written to ```steamworks4j/java-wrapper/src/main/native/``` and ```steamworks4j/server/src/main/native/```.
 
-If everything is setup correctly, you now only need to run the right `build-osx.sh, build-linux.sh or build-win.bat` shell script in the ```steamworks4j/build-natives/``` folder to compile and link the native libraries on each target platform. The scripts also copy both the compiled and redistributable libraries to the ```steamworks4j/java-wrapper/src/main/resources/``` folder.
+If everything is setup correctly, you now only need to run the right `build-osx.sh, build-linux.sh or build-win.bat` shell script in the ```steamworks4j/build-natives/``` folder to compile and link the native libraries on each target platform. The scripts also copy the compiled libraries to the appropriate ```src/main/resources/``` folder.
 
-In case of errors you should be able to open the workspace/project files created by **premake4/5** in their respective IDE for troubleshooting.
+In case of errors, you should be able to open the workspace/project files created by **premake4/5** in their respective IDE for troubleshooting.

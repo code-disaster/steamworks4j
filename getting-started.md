@@ -6,9 +6,10 @@ layout: default
 
 ### Project setup
 
-To add Steamworks support, you just have to download and add ```steamworks4j-{{ site.steamworks4j.version }}.jar``` to your Java project.
+To add Steamworks support, you just have to download and add the appropriate JAR files to your Java project.
 
-> Starting with version 1.4.0, native libraries are contained in *steamworks4j.jar* directly. The *steamworks4j-natives.jar* archive has been removed.
+- ```steamworks4j-{{ site.steamworks4j.version }}.jar``` should be sufficient for most uses
+- ```steamworks4j-server-{{ site.steamworks4j.version }}.jar``` if you need to support game servers or encrypted app tickets.
 
 #### Release versions
 
@@ -23,6 +24,11 @@ Maven:
     <artifactId>steamworks4j</artifactId>
     <version>{{ site.steamworks4j.version }}</version>
   </dependency>
+  <dependency>
+    <groupId>com.code-disaster.steamworks4j</groupId>
+    <artifactId>steamworks4j-server</artifactId>
+    <version>{{ site.steamworks4j.version }}</version>
+  </dependency>
 </dependencies>
 {% endhighlight xml %}
 
@@ -30,11 +36,12 @@ Gradle:
 
 {% highlight groovy %}
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.version }}"
+  compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.version }}"
+  compile "com.code-disaster.steamworks4j:steamworks4j-server:{{ site.steamworks4j.version }}"
 }
 {% endhighlight groovy %}
 
-If you don't use any build tools, [direct downloads of .jar files](http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/steamworks4j/{{ site.steamworks4j.version }}) are also available.
+If you don't use any build tools, [direct downloads of .jar files](http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/) are also available.
 
 #### Snapshot versions
 
@@ -52,11 +59,18 @@ Maven:
   </repository>
 </repositories>
 
-<dependency>
-  <groupId>com.code-disaster.steamworks4j</groupId>
-  <artifactId>steamworks4j</artifactId>
-  <version>{{ site.steamworks4j.snapshot-version }}-SNAPSHOT</version>
-</dependency>
+<dependencies>
+  <dependency>
+    <groupId>com.code-disaster.steamworks4j</groupId>
+    <artifactId>steamworks4j</artifactId>
+    <version>{{ site.steamworks4j.snapshot-version }}-SNAPSHOT</version>
+  </dependency>
+  <dependency>
+    <groupId>com.code-disaster.steamworks4j</groupId>
+    <artifactId>steamworks4j-server</artifactId>
+    <version>{{ site.steamworks4j.snapshot-version }}-SNAPSHOT</version>
+  </dependency>
+</dependencies>
 {% endhighlight xml %}
 
 Gradle:
@@ -69,7 +83,8 @@ repositories {
 }
 
 dependencies {
-	compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.snapshot-version }}-SNAPSHOT"
+  compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.snapshot-version }}-SNAPSHOT"
+  compile "com.code-disaster.steamworks4j:steamworks4j-server:{{ site.steamworks4j.snapshot-version }}-SNAPSHOT"
 }
 {% endhighlight groovy %}
 
@@ -81,7 +96,7 @@ To learn how to build the library from source code, please refer to the [build i
 
 #### Preparation
 
-> You'll notice that the library source code is documented very scarcely. That's a deliberate choice. I assume that you are a **registered Steam developer** and have access to the Steamworks documentation.
+> You'll notice that the library source code is documented very scarcely. That's a deliberate choice. I assume that you are a **registered Steam developer** and have access to the Steamworks documentation as your primary source of information.
 
 Please refer to the official documentation to learn about the steps needed to prepare your application for use with Steam. Here's a very brief checklist:
 
@@ -103,11 +118,11 @@ try {
 }
 {% endhighlight java %}
 
-By default, ```SteamAPI.init()``` detects the operating system it runs on, then extracts the appropriate native libraries from your application's resource path to a temporary folder. There's a second function which allows to specify the path to a directory containing the native libraries. For example, this is used by the sample applications to load the prebuilt libraries from ```steamworks4j/java-wrapper/src/main/resources/``` directly for development purposes.
+By default, ```SteamAPI.init()``` detects the operating system it runs on, then extracts the appropriate native libraries from your application's resource path to a temporary folder. There's a second function which allows to specify the path to a directory containing the native libraries.
 
 {% highlight java %}
-if (!SteamAPI.init("../java-wrapper/src/main/resources")) {
-	// Steamworks initialization error, e.g. Steam client not running
+if (!SteamAPI.init("./libs")) {
+    // Steamworks initialization error, e.g. Steam client not running
 }
 {% endhighlight java %}
 
@@ -117,7 +132,7 @@ Add a call to ```SteamAPI.runCallbacks()``` to your game loop. Steamworks recomm
 
 {% highlight java %}
 if (SteamAPI.isSteamRunning()) {
-	SteamAPI.runCallbacks();
+    SteamAPI.runCallbacks();
 }
 {% endhighlight java %}
 
@@ -139,7 +154,7 @@ If a C++ interface contains functions which trigger ```STEAM_CALLBACK()``` or ``
 public class MyAppUserStatsCallback
         implements SteamUserStatsCallback {
 
-	// ... application-specific implementation
+    // ... application-specific implementation
 }
 
 SteamUserStatsCallback callback = new MyAppUserStatsCallback();
@@ -160,6 +175,48 @@ To shut down the Steamworks API, just call ```SteamAPI.shutdown()```. This may f
 SteamAPI.shutdown();
 {% endhighlight java %}
 
+### The steamworks4j-server module
+
+With *steamworks4j* v1.7.0, server functions were moved to a separate Maven module, *steamworks4j-server*.
+
+#### GameServer API
+
+Basic API use is similar to the client wrapper, just with *SteamGameServerAPI* as the main entry point.
+
+{% highlight java %}
+// initialization
+try {
+    if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
+        SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1"))) {
+        // initialization error
+    }
+} catch (SteamException e) {
+    // Error extracting or loading native libraries
+}
+
+// update ticks
+while (serverIsAlive) {
+  SteamGameServerAPI.runCallbacks();
+}
+
+// shutdown
+SteamGameServerAPI.shutdown();
+{% endhighlight java %}
+
+#### Encrypted app tickets
+
+The ```SteamEncryptedAppTicket``` wrapper is embedded inside the server module, but works as a stand-alone since it only depends on the *sdkencryptedappticket* shared library. Its use is simple - you just need to ensure that the native library is loaded first.
+
+{% highlight java %}
+try {
+    SteamEncryptedAppTicket.loadLibraries();
+} catch (SteamException e) {
+    // Error extracting or loading native libraries
+}
+
+SteamEncryptedAppTicket encryptedAppTicket = new SteamEncryptedAppTicket();
+{% endhighlight java %}
+
 ### Sample applications
 
-The `com.codedisaster.steamworks.test.*` package contains some console applications which show basic usage of the Java API and some of its interfaces.
+The `steamworks-tests` module contains some console applications which demonstrate use of the Java API and some of its interfaces.
