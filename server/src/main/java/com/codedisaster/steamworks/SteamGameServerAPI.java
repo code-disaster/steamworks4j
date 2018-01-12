@@ -22,16 +22,19 @@ public class SteamGameServerAPI {
 							   ServerMode serverMode, String versionString) throws SteamException {
 
 		if (!SteamAPI.isIsNativeAPILoaded()) {
+
 			// skip loading if SteamAPI.init() has been called already
+
 			if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
 				String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
 				SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
 			} else {
 				SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
 			}
+
+			SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
 		}
 
-		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
 
 		isRunning = SteamGameServerAPINative.nativeInit(

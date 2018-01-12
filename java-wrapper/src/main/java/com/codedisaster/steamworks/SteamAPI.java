@@ -20,9 +20,9 @@ public class SteamAPI {
 			SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
 		}
 
-		isNativeAPILoaded = true;
-
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
+
+		isNativeAPILoaded = true;
 
 		isRunning = nativeInit();
 
