@@ -5,6 +5,7 @@ import java.io.PrintStream;
 public class SteamAPI {
 
 	private static boolean isRunning = false;
+	private static boolean isNativeAPILoaded = false;
 
 	public static boolean init() throws SteamException {
 		return init(null);
@@ -18,6 +19,8 @@ public class SteamAPI {
 		} else {
 			SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
 		}
+
+		isNativeAPILoaded = true;
 
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
 
@@ -50,6 +53,10 @@ public class SteamAPI {
 	public static void printDebugInfo(PrintStream stream) {
 		stream.println("  Steam API initialized: " + isRunning);
 		stream.println("  Steam client active: " + isSteamRunning());
+	}
+
+	static boolean isIsNativeAPILoaded() {
+		return isNativeAPILoaded;
 	}
 
 	// @off

@@ -21,11 +21,14 @@ public class SteamGameServerAPI {
 							   int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) throws SteamException {
 
-		if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
-			String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
-			SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
-		} else {
-			SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
+		if (!SteamAPI.isIsNativeAPILoaded()) {
+			// skip loading if SteamAPI.init() has been called already
+			if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
+				String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
+				SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
+			} else {
+				SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
+			}
 		}
 
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);

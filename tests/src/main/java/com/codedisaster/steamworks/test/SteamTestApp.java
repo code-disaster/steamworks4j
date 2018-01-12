@@ -148,12 +148,31 @@ public abstract class SteamTestApp {
 		}
 	}
 
-	private boolean runAsGameServer(@SuppressWarnings("unused") String[] arguments) throws SteamException {
+	private boolean runAsGameServer(String[] arguments) throws SteamException {
+
+		boolean dedicated = false;
+
+		for (String arg : arguments) {
+			if (arg.equals("--dedicated")) {
+				dedicated = true;
+			}
+		}
+
+		if (!dedicated) {
+
+			System.out.println("Initialise Steam client API ...");
+
+			if (!SteamAPI.init()) {
+				SteamAPI.printDebugInfo(System.err);
+				return false;
+			}
+		}
 
 		System.out.println("Initialise Steam GameServer API ...");
 
 		if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
 				SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1")) {
+			System.err.println("SteamGameServerAPI.init() failed");
 			return false;
 		}
 
@@ -165,6 +184,10 @@ public abstract class SteamTestApp {
 		inputThread.start();
 
 		while (inputHandler.alive()) {
+
+			if (!dedicated) {
+				SteamAPI.runCallbacks();
+			}
 
 			SteamGameServerAPI.runCallbacks();
 
@@ -189,6 +212,11 @@ public abstract class SteamTestApp {
 		unregisterInterfaces();
 
 		SteamGameServerAPI.shutdown();
+
+		if (!dedicated) {
+			System.out.println("Shutting down Steam client API ...");
+			SteamAPI.shutdown();
+		}
 
 		return true;
 	}
