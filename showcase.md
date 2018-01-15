@@ -92,6 +92,7 @@ A list in alphabetical order, of other games I known to utilize *steamworks4j*. 
 | [Bard to the Future](http://store.steampowered.com/app/337110/) | [Battlebard Games][battlebardgames] |
 | [Battlestation: Harbinger](http://store.steampowered.com/app/396480/) | [Bugbyte Ltd][bugbyte] |
 | [Biodrone_Battle](http://store.steampowered.com/app/377290/) | voodoosoft |
+| [Borstal](http://store.steampowered.com/app/453730/) | The Secret Pie |
 | [BossConstructor](http://store.steampowered.com/app/330100/) | [Mirko Seithe][mseithe] |
 | [The Count Lucanor](http://store.steampowered.com/app/440880/) | [Baroque Decay][baroquedecay] |
 | [Crown and Council](http://store.steampowered.com/app/444250/) | Mojang |
@@ -101,6 +102,7 @@ A list in alphabetical order, of other games I known to utilize *steamworks4j*. 
 | [Fantasy Tales Online](http://store.steampowered.com/app/442710/) | Cold Tea Studio |
 | [Flat Path](http://store.steampowered.com/app/512740/) | GooDCrafter |
 | [Hidden Dimensions 3](http://store.steampowered.com/app/531540/) | Stijn Van Cauter |
+| [Howard Phillips Lovecar](http://store.steampowered.com/app/644370/) | The Secret Pie |
 | [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/) | [Shadebob Games][shadebobgames] |
 | [Iron Armada](http://store.steampowered.com/app/581910/) | Drakeling Labs |
 | [Lone Vessel](http://store.steampowered.com/app/687420/) | Cobalt Flow Studios |
