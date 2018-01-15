@@ -15,6 +15,11 @@ The [Robotality][robotality] game I originally wrote *steamworks4j* for.
 
 One man army [OrangePixel][orangepixel] earned his special section because he churns out *steamworks4j*-powered quality games like no other.
 
+![Ashworld](images/showcase_ashworld.png)
+<br>[Ashworld](http://store.steampowered.com/app/580320/)
+
+---
+
 ![Gunslugs](images/showcase_gunslugs.png)
 <br>[Gunslugs](http://store.steampowered.com/app/371890/)
 
@@ -27,6 +32,11 @@ One man army [OrangePixel][orangepixel] earned his special section because he ch
 
 ![Heroes of Loot](images/showcase_heroesofloot.png)
 <br>[Heroes of Loot](http://store.steampowered.com/app/359280/)
+
+---
+
+![Heroes of Loot 2](images/showcase_heroesofloot2.png)
+<br>[Heroes of Loot 2](http://store.steampowered.com/app/439880/)
 
 ---
 
