@@ -48,7 +48,7 @@ One man army [OrangePixel][orangepixel] earned his special section because he ch
 My - undoubtedly dictatorial - list of "favorite" games which look cool, and/or which I tried and enjoyed playing myself.
 
 ![Alchemists Awakening](images/showcase_alchemist.png)
-<br>[Alchemists Awakening](http://store.steampowered.com/app/431450/) by [Osaris Games](osarisgames)
+<br>[Alchemists Awakening](http://store.steampowered.com/app/431450/) by [Osaris Games][osarisgames]
 
 ![Crazy Belts](images/showcase_crazybelts.png)
 <br>[Crazy Belts](http://store.steampowered.com/app/355510/) by [jemchicomac][jemchicomac]
