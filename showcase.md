@@ -4,178 +4,79 @@ layout: default
 
 ## Games using steamworks4j
 
-A list of games released on Steam, in alphabetical order, which are known to utilize *steamworks4j*. Feel free to contact me if you like your game to be added (or removed).
+### Robotality
 
----
-
-### [Bard to the Future](http://store.steampowered.com/app/337110/)
-
-Developer: [Battlebard Games][battlebardgames]<br>
-Uses: achievements, user stats, leaderboards<br>
-
----
-
-### [Battlestation: Harbinger](http://store.steampowered.com/app/396480/)
-
-Developer: [Bugbyte Ltd][bugbyte]<br>
-Uses: achievements, remote storage<br>
-
----
-
-### [BossConstructor](http://store.steampowered.com/app/330100/)
-
-Developer: [Mirko Seithe][mseithe]<br>
-Uses: achievements, remote storage, user-generated content<br>
-
----
-
-### [Crazy Belts](http://store.steampowered.com/app/355510/)
-
-Developer: [jemchicomac][jemchicomac]<br>
-Uses: achievements<br>
-
-![Crazy Belts](images/showcase_crazybelts.png)
-
----
-
-### [The Count Lucanor](http://store.steampowered.com/app/440880/)
-
-Developer: [Baroque Decay][baroquedecay]<br>
-Uses: achievements, remote storage<br>
-
----
-
-### [Gunslugs](http://store.steampowered.com/app/371890/)
-
-Developer: [OrangePixel][orangepixel]<br>
-Uses: achievements, leaderboards<br>
-
-![Gunslugs](images/showcase_gunslugs.png)
-
----
-
-### [Gunslugs 2](http://store.steampowered.com/app/340750/)
-
-Developer: [OrangePixel][orangepixel]<br>
-Uses: achievements, leaderboards<br>
-
-![Gunslugs 2](images/showcase_gunslugs2.png)
-
----
-
-### [Halfway](http://store.steampowered.com/app/253150/)
-
-Developer: [Robotality][robotality]<br>
-Uses: achievements, user stats, remote storage, user-generated content<br>
+The [Robotality][robotality] game I originally wrote *steamworks4j* for.
 
 ![Halfway](images/showcase_halfway.png)
-*The game which I eventually started writing steamworks4j for.*
+<br>[Halfway](http://store.steampowered.com/app/253150/)
+
+### Most diligent user
+
+One man army [OrangePixel][orangepixel] earned his special section because he churns out *steamworks4j*-powered quality games like no other.
+
+![Gunslugs](images/showcase_gunslugs.png)
+<br>[Gunslugs](http://store.steampowered.com/app/371890/)
 
 ---
 
-### [Heroes of Loot](http://store.steampowered.com/app/359280/)
+![Gunslugs 2](images/showcase_gunslugs2.png)
+<br>[Gunslugs 2](http://store.steampowered.com/app/340750/)
 
-Developer: [OrangePixel][orangepixel]<br>
-Uses: achievements<br>
+---
 
 ![Heroes of Loot](images/showcase_heroesofloot.png)
+<br>[Heroes of Loot](http://store.steampowered.com/app/359280/)
 
 ---
-
-### [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/)
-
-Developer: [Shadebob Games][shadebobgames]<br>
-Uses: achievements, leaderboards, user-generated content<br>
-
----
-
-### [Lux Delux](http://store.steampowered.com/app/341950/)
-
-Developer: [Sillysoft Games][sillysoft]<br>
-Uses: achievements, user stats, leaderboards<br>
-
----
-
-### [The Madness of Little Emma](http://store.steampowered.com/app/418150/)
-
-Developer: [Bartosz Bojarowski][madnessoflittleemma]<br>
-Uses: achievements, leaderboards<br>
-
-![The Madness of Little Emma](images/showcase_madnessoflittleemma.png)
-
----
-
-### [Mute Crimson+](http://store.steampowered.com/app/384280/)
-
-Developer: [Iced Lizard Games][icedlizardgames]<br>
-Uses: achievements, remote storage<br>
-
-![Mute Crimson+](images/showcase_mutecrimsonplus.png)
-
----
-
-### [Prompt](http://store.steampowered.com/app/366590/)
-
-Developer: Peter Gutenko<br>
-Uses: achievements, remote storage<br>
-
----
-
-### [Quarries of Scred](http://store.steampowered.com/app/346770/)
-
-Developer: [Hammerspace Games][hammerspacegames]<br>
-Uses: achievements<br>
-
----
-
-### [RFLEX](http://store.steampowered.com/app/392020/)
-
-Developer: [Wesley LaFerriere][rflex]<br>
-Uses: achievements, remote storage, leaderboards<br>
-
----
-
-### [Run or Die](http://store.steampowered.com/app/325150/)
-
-Developer: [Team Flow][teamflow]<br>
-Uses: achievements, user-generated content<br>
-
-![Run or Die](images/showcase_runordie.png)
-*I love the (unwitting?) Halfway reference. :-D*
-
----
-
-### [Solar War](http://store.steampowered.com/app/340880/)
-
-Developer: [Snipefish Entertainment][snipefish]<br>
-Uses: achievements, remote storage<br>
-
----
-
-### [Space Grunts](http://store.steampowered.com/app/371430/)
-
-Developer: [OrangePixel][orangepixel]<br>
-Uses: achievements, leaderboards<br>
 
 ![Space Grunts](images/showcase_spacegrunts.png)
+<br>[Space Grunts](http://store.steampowered.com/app/371430/)
+
+### Editor's choice
+
+My - undoubtedly dictatorial - list of "best of" games I tried and enjoyed playing myself.
+
+![Crazy Belts](images/showcase_crazybelts.png)
+<br>[Crazy Belts](http://store.steampowered.com/app/355510/) by [jemchicomac][jemchicomac]
 
 ---
 
-### [Spermination](http://store.steampowered.com/app/363460/)
-
-Developer: [Phr00t][phr00t]<br>
-Uses: achievements<br>
-
-*I don't even ...*
+![The Madness of Little Emma](images/showcase_madnessoflittleemma.png)
+<br>[The Madness of Little Emma](http://store.steampowered.com/app/418150/) by [Bartosz Bojarowski][madnessoflittleemma]
 
 ---
 
-### [Spy Bugs](http://store.steampowered.com/app/366860/)
+![Mute Crimson+](images/showcase_mutecrimsonplus.png)
+<br>[Mute Crimson+](http://store.steampowered.com/app/384280/) by [Iced Lizard Games][icedlizardgames]
 
-Developer: [Digital Soul Games][digitalsoulgames]<br>
-Uses: achievements, user stats, leaderboards, gameserver, web api<br>
+---
 
-*The gameserver back-end for Spy Bugs is written in Java, and uses steamworks4j to interface with Steam services. Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*
+![Run or Die](images/showcase_runordie.png)
+<br>[Run or Die](http://store.steampowered.com/app/325150/) by [Team Flow][teamflow] (*I love the (unwitting?) Halfway reference. :-D*)
+
+---
+
+![Spy Bugs](images/showcase_spybugs.png)
+<br>[Spy Bugs](http://store.steampowered.com/app/366860/) by [Digital Soul Games][digitalsoulgames] (*Digital Soul Games' Francisco Bischoff contributed large parts of the game server and web API wrappers.*)
+
+### Mentions
+
+A list in alphabetical order, of other games I known to utilize *steamworks4j*. Feel free to contact me if you like your game to be added (or removed).
+
+| Title | Developer |
+|---|---|
+| [Bard to the Future](http://store.steampowered.com/app/337110/) | [Battlebard Games][battlebardgames] |
+| [Battlestation: Harbinger](http://store.steampowered.com/app/396480/) | [Bugbyte Ltd][bugbyte] |
+| [BossConstructor](http://store.steampowered.com/app/330100/) | [Mirko Seithe][mseithe] |
+| [The Count Lucanor](http://store.steampowered.com/app/440880/) | [Baroque Decay][baroquedecay] |
+| [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/) | [Shadebob Games][shadebobgames] |
+| [Lux Delux](http://store.steampowered.com/app/341950/) | [Sillysoft Games][sillysoft] |
+| [Prompt](http://store.steampowered.com/app/366590/) | Peter Gutenko |
+| [Quarries of Scred](http://store.steampowered.com/app/346770/) | [Hammerspace Games][hammerspacegames] |
+| [RFLEX](http://store.steampowered.com/app/392020/) | [Wesley LaFerriere][rflex] |
+| [Solar War](http://store.steampowered.com/app/340880/) | [Snipefish Entertainment][snipefish] |
+| [Spermination](http://store.steampowered.com/app/363460/) | [Phr00t][phr00t] |
 
 [baroquedecay]: http://www.thecountlucanor.com
 [battlebardgames]: http://battlebardgames.com
