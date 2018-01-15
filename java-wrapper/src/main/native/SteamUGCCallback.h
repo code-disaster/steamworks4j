@@ -26,6 +26,9 @@ public:
 
 	void onSubmitItemUpdate(SubmitItemUpdateResult_t* callback, bool error);
 	CCallResult<SteamUGCCallback, SubmitItemUpdateResult_t> onSubmitItemUpdateCall;
+	
+	void onDeleteItem(DeleteItemResult_t* callback, bool error);
+	CCallResult<SteamUGCCallback, DeleteItemResult_t> onDeleteItemCall;
 
 	STEAM_CALLBACK(SteamUGCCallback, onDownloadItemResult, DownloadItemResult_t, m_CallbackDownloadItemResult);
 

@@ -82,5 +82,8 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 	void onStopPlaytimeTrackingForAllItems(int result) {
 		callback.onStopPlaytimeTrackingForAllItems(SteamResult.byValue(result));
 	}
-
+	
+	void onDeleteItem(long publishedFileID, int result) {
+		callback.onDeleteItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
+	}
 }

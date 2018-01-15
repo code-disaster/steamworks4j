@@ -24,6 +24,12 @@ void SteamUGCCallback::onSubscribeItem(RemoteStorageSubscribePublishedFileResult
 	});
 }
 
+void SteamUGCCallback::onDeleteItem(DeleteItemResult_t* callback, bool error) {
+	invokeCallback({
+		callVoidMethod(env, "onDeleteItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);
+	});
+}
+
 void SteamUGCCallback::onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileResult_t* callback, bool error) {
 	invokeCallback({
 		callVoidMethod(env, "onUnsubscribeItem", "(JI)V", (jlong) callback->m_nPublishedFileId, (jint) callback->m_eResult);

@@ -32,4 +32,5 @@ public interface SteamUGCCallback {
 
 	void onStopPlaytimeTrackingForAllItems(SteamResult result);
 
+	void onDeleteItem(SteamPublishedFileID publishedFileID, SteamResult result);
 }

@@ -332,6 +332,11 @@ public class SteamClientAPITest extends SteamTestApp {
 		public void onStopPlaytimeTrackingForAllItems(SteamResult result) {
 
 		}
+
+		@Override
+		public void onDeleteItem(SteamPublishedFileID publishedFileID, SteamResult result) {
+			
+		}
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {

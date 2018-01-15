@@ -1,5 +1,6 @@
 []
 - SteamGameServerAPI.init() skips repeated loading of shared libraries if SteamAPI.init() has been called already. (#56)
+- Added SteamUGC.deleteItem()
 
 [1.7.0]
 - Updated to Steamworks SDK v1.42.

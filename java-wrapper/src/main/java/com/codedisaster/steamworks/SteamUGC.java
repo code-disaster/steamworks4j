@@ -489,6 +489,10 @@ public class SteamUGC extends SteamInterface {
 		return false;
 	}
 
+	public SteamAPICall deleteItem(SteamPublishedFileID publishedFileID) {
+		return new SteamAPICall(deleteItem(pointer, callback, publishedFileID.handle));
+	}
+	
 	public boolean downloadItem(SteamPublishedFileID publishedFileID, boolean highPriority) {
 		return downloadItem(pointer, publishedFileID.handle, highPriority);
 	}
@@ -1008,6 +1012,14 @@ public class SteamUGC extends SteamInterface {
 		ISteamUGC* ugc = (ISteamUGC*) pointer;
 		uint64* values = (uint64*) bytesDownloadedAndTotal;
 		return ugc->GetItemDownloadInfo(publishedFileID, &values[0], &values[1]);
+	*/
+
+	private static native long deleteItem(long pointer, long callback, long publishedFileID); /*
+		ISteamUGC* ugc = (ISteamUGC*) pointer;
+		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		SteamAPICall_t handle = ugc->DeleteItem(publishedFileID);
+		cb->onDeleteItemCall.Set(handle, cb, &SteamUGCCallback::onDeleteItem);
+		return handle;
 	*/
 
 	private static native boolean downloadItem(long pointer, long publishedFileID, boolean highPriority); /*
