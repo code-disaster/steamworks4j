@@ -105,6 +105,7 @@ A list in alphabetical order, of other games I known to utilize *steamworks4j*. 
 | [Howard Phillips Lovecar](http://store.steampowered.com/app/644370/) | The Secret Pie |
 | [InfiniTrap: Ohio Jack and The Cup Of Eternity](http://store.steampowered.com/app/412230/) | [Shadebob Games][shadebobgames] |
 | [Iron Armada](http://store.steampowered.com/app/581910/) | Drakeling Labs |
+| [Lightspeed Frontier](http://store.steampowered.com/app/548650/) | Crowdwork Studios |
 | [Lone Vessel](http://store.steampowered.com/app/687420/) | Cobalt Flow Studios |
 | [Lux Delux](http://store.steampowered.com/app/341950/) | [Sillysoft Games][sillysoft] |
 | [The Metronomicon: Slay The Dance Floor](http://store.steampowered.com/app/416790/) | Puuba |
