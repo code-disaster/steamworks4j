@@ -10,32 +10,31 @@ public class SteamGameServerAPI {
 	}
 
 	private static boolean isRunning = false;
+	private static boolean isNativeAPILoaded = false;
+
+	public static void loadLibraries() throws SteamException {
+		loadLibraries(null);
+	}
+	
+	public static void loadLibraries(String libraryPath) throws SteamException {
+
+		if (isNativeAPILoaded) {
+			return;
+		}
+
+		SteamAPI.loadLibraries(libraryPath);
+
+		SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
+
+		isNativeAPILoaded = true;
+	}
 
 	public static boolean init(int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) throws SteamException {
 
-		return init(null, ip, steamPort, gamePort, queryPort, serverMode, versionString);
-	}
-
-	public static boolean init(String libraryPath,
-							   int ip, short steamPort, short gamePort, short queryPort,
-							   ServerMode serverMode, String versionString) throws SteamException {
-
-		if (!SteamAPI.isIsNativeAPILoaded()) {
-
-			// skip loading if SteamAPI.init() has been called already
-
-			if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
-				String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
-				SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
-			} else {
-				SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
-			}
-
-			SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
+		if (!isNativeAPILoaded) {
+			throw new SteamException("Native server libraries not loaded.\nEnsure to call SteamGameServerAPI.loadLibraries() first!");
 		}
-
-		SteamSharedLibraryLoader.loadLibrary("steamworks4j-server", libraryPath);
 
 		isRunning = SteamGameServerAPINative.nativeInit(
 				ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);

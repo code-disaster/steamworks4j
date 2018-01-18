@@ -7,11 +7,15 @@ public class SteamAPI {
 	private static boolean isRunning = false;
 	private static boolean isNativeAPILoaded = false;
 
-	public static boolean init() throws SteamException {
-		return init(null);
+	public static void loadLibraries() throws SteamException {
+		loadLibraries(null);
 	}
 
-	public static boolean init(String libraryPath) throws SteamException {
+	public static void loadLibraries(String libraryPath) throws SteamException {
+
+		if (isNativeAPILoaded) {
+			return;
+		}
 
 		if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
 			String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
@@ -23,6 +27,22 @@ public class SteamAPI {
 		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
 
 		isNativeAPILoaded = true;
+	}
+
+	public static boolean restartAppIfNecessary(int appId) throws SteamException {
+
+		if (!isNativeAPILoaded) {
+			throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
+		}
+
+		return nativeRestartAppIfNecessary(appId);
+	}
+
+	public static boolean init() throws SteamException {
+
+		if (!isNativeAPILoaded) {
+			throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
+		}
 
 		isRunning = nativeInit();
 
@@ -67,7 +87,7 @@ public class SteamAPI {
 		static JavaVM* staticVM = 0;
 	*/
 
-	public static native boolean restartAppIfNecessary(int appId); /*
+	private static native boolean nativeRestartAppIfNecessary(int appId); /*
 		return SteamAPI_RestartAppIfNecessary(appId);
 	*/
 
