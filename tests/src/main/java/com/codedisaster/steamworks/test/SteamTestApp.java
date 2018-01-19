@@ -75,6 +75,10 @@ public abstract class SteamTestApp {
 
 	private boolean runAsClient(@SuppressWarnings("unused") String[] arguments) throws SteamException {
 
+		System.out.println("Load native libraries ...");
+
+		SteamAPI.loadLibraries();
+
 		System.out.println("Initialise Steam client API ...");
 
 		if (!SteamAPI.init()) {
@@ -89,6 +93,8 @@ public abstract class SteamTestApp {
 		clientUtils = new SteamUtils(clUtilsCallback);
 		clientUtils.setWarningMessageHook(clMessageHook);
 
+		// doesn't make much sense here, as normally you would call this before
+		// SteamAPI.init() with your (kn)own app ID
 		if (SteamAPI.restartAppIfNecessary(clientUtils.getAppID())) {
 			System.out.println("SteamAPI_RestartAppIfNecessary returned 'false'");
 		}
@@ -157,6 +163,10 @@ public abstract class SteamTestApp {
 				dedicated = true;
 			}
 		}
+
+		System.out.println("Load native libraries ...");
+
+		SteamGameServerAPI.loadLibraries();
 
 		if (!dedicated) {
 
