@@ -295,7 +295,7 @@ public class SteamMatchmaking extends SteamInterface {
 		return setLobbyMemberLimit(pointer, steamIDLobby.handle, maxMembers);
 	}
 
-	public boolean getLobbyMemberLimit(SteamID steamIDLobby) {
+	public int getLobbyMemberLimit(SteamID steamIDLobby) {
 		return getLobbyMemberLimit(pointer, steamIDLobby.handle);
 	}
 
@@ -544,7 +544,7 @@ public class SteamMatchmaking extends SteamInterface {
 		return matchmaking->SetLobbyMemberLimit((uint64) steamIDLobby, maxMembers);
 	*/
 
-	private static native boolean getLobbyMemberLimit(long pointer, long steamIDLobby); /*
+	private static native int getLobbyMemberLimit(long pointer, long steamIDLobby); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->GetLobbyMemberLimit((uint64) steamIDLobby);
 	*/
