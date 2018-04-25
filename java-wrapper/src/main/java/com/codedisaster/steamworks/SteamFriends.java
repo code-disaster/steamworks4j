@@ -186,6 +186,10 @@ public class SteamFriends extends SteamInterface {
 		return getFriendPersonaName(pointer, steamID.handle);
 	}
 
+	public void setInGameVoiceSpeaking(SteamID steamID, boolean speaking) {
+		setInGameVoiceSpeaking(pointer, steamID.handle, speaking);
+	}
+
 	public int getSmallFriendAvatar(SteamID steamID) {
 		return getSmallFriendAvatar(pointer, steamID.handle);
 	}
@@ -304,6 +308,11 @@ public class SteamFriends extends SteamInterface {
 		ISteamFriends* friends = (ISteamFriends*) pointer;
 		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamID));
 		return name;
+	*/
+
+	private static native void setInGameVoiceSpeaking(long pointer, long steamID, boolean speaking); /*
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		return friends->SetInGameVoiceSpeaking((uint64) steamID, speaking);
 	*/
 
 	private static native int getSmallFriendAvatar(long pointer, long steamID); /*
