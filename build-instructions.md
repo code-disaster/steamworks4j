@@ -15,9 +15,25 @@ Starting with *steamworks4j* v1.7.0, the SDK is required to build/package from s
 
 ### Java
 
+#### Build development versions
+
 Just use Maven with ```mvn package``` in the root directory to compile a jar ready to be used in your application, or ```mvn install``` to deploy it to your local Maven cache.
 
 During the compile phase, the Maven build pulls shared libraries out of the *sdk/redistributable_bin/* folder and adds them as resources to the *steamworks4j* module. For copyright reasons, this is **not** done for *steamworks4j-server* and the *sdkencryptedappticket* library. If you want to create such a package, this can be enforced manually with ```mvn package -Plibs```.
+
+#### Build snapshot or release versions
+
+You can use these profiles to simulate the commands I use to deploy new versions:
+
+```
+# snapshot
+mvn install -Psnapshot,libs -pl java-wrapper
+mvn install -Psnapshot -pl server
+
+# release
+mvn install -Prelease,libs -pl java-wrapper
+mvn install -Prelease -pl server
+```
 
 ### Native libraries
 
