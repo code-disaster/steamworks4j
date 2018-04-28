@@ -99,6 +99,35 @@ public class SteamFriends extends SteamInterface {
 		}
 	}
 
+	public static class FriendGameInfo {
+
+		private long gameID;
+		private int gameIP;
+		private short gamePort;
+		private short queryPort;
+		private long steamIDLobby;
+
+		public long getGameID() {
+			return gameID;
+		}
+
+		public int getGameIP() {
+			return gameIP;
+		}
+
+		public short getGamePort() {
+			return gamePort;
+		}
+
+		public short getQueryPort() {
+			return queryPort;
+		}
+
+		public SteamID getSteamIDLobby() {
+			return new SteamID(steamIDLobby);
+		}
+	}
+
 	public enum OverlayDialog {
 
 		Friends("Friends"),
@@ -182,8 +211,12 @@ public class SteamFriends extends SteamInterface {
 		return PersonaState.byOrdinal(getFriendPersonaState(pointer, steamIDFriend.handle));
 	}
 
-	public String getFriendPersonaName(SteamID steamID) {
-		return getFriendPersonaName(pointer, steamID.handle);
+	public String getFriendPersonaName(SteamID steamIDFriend) {
+		return getFriendPersonaName(pointer, steamIDFriend.handle);
+	}
+
+	public boolean getFriendGamePlayed(SteamID steamIDFriend, FriendGameInfo friendGameInfo) {
+		return getFriendGamePlayed(pointer, steamIDFriend.handle, friendGameInfo);
 	}
 
 	public void setInGameVoiceSpeaking(SteamID steamID, boolean speaking) {
@@ -304,10 +337,37 @@ public class SteamFriends extends SteamInterface {
 		return friends->GetFriendPersonaState((uint64) steamIDFriend);
 	*/
 
-	private static native String getFriendPersonaName(long pointer, long steamID); /*
+	private static native String getFriendPersonaName(long pointer, long steamIDFriend); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
-		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamID));
+		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamIDFriend));
 		return name;
+	*/
+
+	private static native boolean getFriendGamePlayed(long pointer, long steamIDFriend,
+													  FriendGameInfo friendGameInfo); /*
+
+		ISteamFriends* friends = (ISteamFriends*) pointer;
+		FriendGameInfo_t result;
+		bool success = friends->GetFriendGamePlayed((uint64) steamIDFriend, &result);
+		if (success) {
+			jclass clazz = env->GetObjectClass(friendGameInfo);
+
+			jfieldID field = env->GetFieldID(clazz, "gameID", "J");
+			env->SetLongField(friendGameInfo, field, (jlong) result.m_gameID.ToUint64());
+
+			field = env->GetFieldID(clazz, "gameIP", "I");
+			env->SetIntField(friendGameInfo, field, (jint) result.m_unGameIP);
+
+			field = env->GetFieldID(clazz, "gamePort", "S");
+			env->SetShortField(friendGameInfo, field, (jshort) result.m_usGamePort);
+
+			field = env->GetFieldID(clazz, "queryPort", "S");
+			env->SetShortField(friendGameInfo, field, (jshort) result.m_usQueryPort);
+
+			field = env->GetFieldID(clazz, "steamIDLobby", "J");
+			env->SetLongField(friendGameInfo, field, (jlong) result.m_steamIDLobby.ConvertToUint64());
+		}
+		return success;
 	*/
 
 	private static native void setInGameVoiceSpeaking(long pointer, long steamID, boolean speaking); /*
