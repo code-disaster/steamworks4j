@@ -4,6 +4,25 @@ import java.nio.ByteBuffer;
 
 public class SteamUser extends SteamInterface {
 
+	public enum VoiceResult {
+		OK,
+		NotInitialized,
+		NotRecording,
+		NoData,
+		BufferTooSmall,
+		DataCorrupted,
+		Restricted,
+		UnsupportedCodec,
+		ReceiverOutOfDate,
+		ReceiverDidNotAnswer;
+
+		private static final VoiceResult[] values = values();
+
+		static VoiceResult byOrdinal(int voiceResult) {
+			return values[voiceResult];
+		}
+	}
+
 	public SteamUser(SteamUserCallback callback) {
 		super(SteamAPI.getSteamUserPointer(),
 				createCallback(new SteamUserCallbackAdapter(callback)));
@@ -32,6 +51,53 @@ public class SteamUser extends SteamInterface {
 
 	public void terminateGameConnection(int serverIP, short serverPort) {
 		terminateGameConnection(pointer, serverIP, serverPort);
+	}
+
+	public void startVoiceRecording() {
+		startVoiceRecording(pointer);
+	}
+
+	public void stopVoiceRecording() {
+		stopVoiceRecording(pointer);
+	}
+
+	public VoiceResult getAvailableVoice(int[] bytesAvailable) {
+		int result = getAvailableVoice(pointer, bytesAvailable);
+
+		return VoiceResult.byOrdinal(result);
+	}
+
+	public VoiceResult getVoice(ByteBuffer voiceData, int[] bytesWritten) throws SteamException {
+
+		if (!voiceData.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		int result = getVoice(pointer, voiceData, voiceData.position(), voiceData.remaining(), bytesWritten);
+
+		return VoiceResult.byOrdinal(result);
+	}
+
+	public VoiceResult decompressVoice(ByteBuffer voiceData, ByteBuffer audioData, int[] bytesWritten, int desiredSampleRate) throws SteamException {
+
+		if (!voiceData.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		if (!audioData.isDirect()) {
+			throw new SteamException("Direct buffer required!");
+		}
+
+		int result = decompressVoice(pointer,
+				voiceData, voiceData.position(), voiceData.remaining(),
+				audioData, audioData.position(), audioData.remaining(),
+				bytesWritten, desiredSampleRate);
+
+		return VoiceResult.byOrdinal(result);
+	}
+
+	public int getVoiceOptimalSampleRate() {
+		return getVoiceOptimalSampleRate(pointer);
 	}
 
 	public SteamAuthTicket getAuthSessionTicket(ByteBuffer authTicket, int[] sizeInBytes) throws SteamException {
@@ -129,6 +195,40 @@ public class SteamUser extends SteamInterface {
 	private static native void terminateGameConnection(long pointer, int serverIP, short serverPort); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		user->TerminateGameConnection(serverIP, serverPort);
+	*/
+
+	private static native void startVoiceRecording(long pointer); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		user->StartVoiceRecording();
+	*/
+
+	private static native void stopVoiceRecording(long pointer); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		user->StopVoiceRecording();
+	*/
+
+	private static native int getAvailableVoice(long pointer, int[] bytesAvailable); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		return user->GetAvailableVoice((uint32*) bytesAvailable);
+	*/
+
+	private static native int getVoice(long pointer, ByteBuffer voiceData,
+									   int bufferOffset, int bufferCapacity, int[] bytesWritten); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		return user->GetVoice(true, &voiceData[bufferOffset], bufferCapacity, (uint32*) bytesWritten);
+	*/
+
+	private static native int decompressVoice(long pointer, ByteBuffer voiceData, int voiceBufferOffset,
+											  int voiceBufferSize, ByteBuffer audioData, int audioBufferOffset,
+											  int audioBufferCapacity, int[] bytesWritten, int desiredSampleRate); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		return user->DecompressVoice(&voiceData[voiceBufferOffset], voiceBufferSize,
+			&audioData[audioBufferOffset], audioBufferCapacity, (uint32*) bytesWritten, desiredSampleRate);
+	*/
+
+	private static native int getVoiceOptimalSampleRate(long pointer); /*
+		ISteamUser* user = (ISteamUser*) pointer;
+		return (int) user->GetVoiceOptimalSampleRate();
 	*/
 
 	private static native int getAuthSessionTicket(long pointer, ByteBuffer authTicket,
