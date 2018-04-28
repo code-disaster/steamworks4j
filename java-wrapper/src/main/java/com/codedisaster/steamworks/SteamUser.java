@@ -213,14 +213,14 @@ public class SteamUser extends SteamInterface {
 	*/
 
 	private static native int getVoice(long pointer, ByteBuffer voiceData,
-										int bufferOffset, int bufferCapacity, int[] bytesWritten); /*
+									   int bufferOffset, int bufferCapacity, int[] bytesWritten); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		return user->GetVoice(true, &voiceData[bufferOffset], bufferCapacity, (uint32*) bytesWritten);
 	*/
 
 	private static native int decompressVoice(long pointer, ByteBuffer voiceData, int voiceBufferOffset,
-											   int voiceBufferSize, ByteBuffer audioData, int audioBufferOffset,
-											   int audioBufferCapacity, int[] bytesWritten, int desiredSampleRate); /*
+											  int voiceBufferSize, ByteBuffer audioData, int audioBufferOffset,
+											  int audioBufferCapacity, int[] bytesWritten, int desiredSampleRate); /*
 		ISteamUser* user = (ISteamUser*) pointer;
 		return user->DecompressVoice(&voiceData[voiceBufferOffset], voiceBufferSize,
 			&audioData[audioBufferOffset], audioBufferCapacity, (uint32*) bytesWritten, desiredSampleRate);

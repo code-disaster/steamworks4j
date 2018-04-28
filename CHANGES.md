@@ -6,6 +6,7 @@
 - API change: applied same change as above to `SteamGameServerAPI.loadLibraries()` and `SteamGameServerAPI.init()`.
 - SteamGameServerAPI skips loading of shared libraries if already loaded by SteamAPI. (#56)
 - Added `SteamUGC.deleteItem()`. (#64)
+- Added Voice API. [contributed by sf17k]
 
 ### [1.7.0]
 - Updated to Steamworks SDK v1.42.
