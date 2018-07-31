@@ -226,6 +226,18 @@ public class SteamMatchmaking extends SteamInterface {
 		return setLobbyData(pointer, steamIDLobby.handle, keyValuePair.getKey(), keyValuePair.getValue());
 	}
 
+	public String getLobbyMemberData(SteamID steamIDLobby, SteamID steamIDUser, String key) {
+		return getLobbyMemberData(pointer, steamIDLobby.handle, steamIDUser.handle, key);
+	}
+
+	public void setLobbyMemberData(SteamID steamIDLobby, String key, String value) {
+		setLobbyMemberData(pointer, steamIDLobby.handle, key, value);
+	}
+
+	public void setLobbyMemberData(SteamID steamIDLobby, SteamMatchmakingKeyValuePair keyValuePair) {
+		setLobbyMemberData(pointer, steamIDLobby.handle, keyValuePair.getKey(), keyValuePair.getValue());
+	}
+
 	public int getLobbyDataCount(SteamID steamIDLobby) {
 		return getLobbyDataCount(pointer, steamIDLobby.handle);
 	}
@@ -451,6 +463,17 @@ public class SteamMatchmaking extends SteamInterface {
 	private static native boolean setLobbyData(long pointer, long steamIDLobby, String key, String value); /*
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		return matchmaking->SetLobbyData((uint64) steamIDLobby, key, value);
+	*/
+
+	private static native String getLobbyMemberData(long pointer, long steamIDLobby, long steamIDUser, String key); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		jstring value = env->NewStringUTF(matchmaking->GetLobbyMemberData((uint64) steamIDLobby, (uint64) steamIDUser, key));
+		return value;
+	*/
+
+	private static native void setLobbyMemberData(long pointer, long steamIDLobby, String key, String value); /*
+		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
+		matchmaking->SetLobbyMemberData((uint64) steamIDLobby, key, value);
 	*/
 
 	private static native int getLobbyDataCount(long pointer, long steamIDLobby); /*

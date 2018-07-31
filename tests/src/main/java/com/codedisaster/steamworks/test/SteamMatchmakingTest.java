@@ -248,6 +248,28 @@ public class SteamMatchmakingTest extends SteamTestApp {
 			} else {
 				System.err.println("Expecting: 'lobby chat <lobbyID> <message>'");
 			}
+		} else if (input.startsWith("get lobby member data ")) {
+			String[] content = input.substring("get lobby member data ".length()).split(" ");
+			if (content.length == 3) {
+				SteamID lobbyId = SteamID.createFromNativeHandle(Long.parseLong(content[0], 16));
+				SteamID userId = SteamID.createFromNativeHandle(Long.parseLong(content[1]));
+				String key = content[2];
+				String value = matchmaking.getLobbyMemberData(lobbyId, userId, key);
+				System.out.println(String.format("Member data for userId:%s in lobbyId:%s for key:%s has value:%s",
+					userId.toString(), lobbyId.toString(), key, value));
+			} else {
+				System.out.println("Expecting: 'get lobby member data <lobbyId> <userId> <key>'");
+			}
+		} else if (input.startsWith("set lobby member data ")) {
+			String[] content = input.substring("set lobby member data ".length()).split(" ");
+			if (content.length == 3) {
+				SteamID lobbyId = SteamID.createFromNativeHandle(Long.parseLong(content[0], 16));
+				String key = content[1];
+				String value = content[2];
+				matchmaking.setLobbyMemberData(lobbyId, key, value);
+			} else {
+				System.out.println("Expecting: 'set lobby member data <lobbyId> <key> <value>'");
+			}
 		}
 
 		friends.processInput(input);
