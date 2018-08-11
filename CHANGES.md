@@ -7,8 +7,9 @@
 - SteamGameServerAPI skips loading of shared libraries if already loaded by SteamAPI. (#56)
 - Added `SteamUGC.deleteItem()`. (#64)
 - Added Voice API. [contributed by sf17k]
-- Fixed signature of SteamMatchmaking.getLobbyMemberLimit(). (#67)
-- Added SteamFriends.getFriendGamePlayed(). (#68)
+- Fixed signature of `SteamMatchmaking.getLobbyMemberLimit()`. (#67)
+- Added `SteamFriends.getFriendGamePlayed()`. (#68)
+- Added `SteamMatchmaking.[set|get]LobbyMemberData()`. (#72) [contributed by XaeroDegreaz]
 
 ### [1.7.0]
 - Updated to Steamworks SDK v1.42.
