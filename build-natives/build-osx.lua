@@ -4,7 +4,7 @@ solution "steamworks4j"
 	buildoptions {
 		"-std=c++0x",
 		"-Wall",
-		"-mmacosx-version-min=10.6"
+		"-mmacosx-version-min=10.9"
 	}
 
 	includedirs {
@@ -25,11 +25,11 @@ solution "steamworks4j"
 
 	linkoptions {
 		"-framework CoreFoundation",
-		"-mmacosx-version-min=10.6"
+		"-mmacosx-version-min=10.9"
 	}
 
 	platforms {
-		"universal"
+		"x64"
 	}
 
 	project "steamworks4j"

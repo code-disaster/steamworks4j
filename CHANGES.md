@@ -2,6 +2,8 @@
 
 ### HEAD
 
+- MacOS: removed 32-bit support.
+- MacOS: raised minimum version support to OS X 10.9.
 - API change: split up initialization into `SteamAPI.loadLibraries()` and `SteamAPI.init()`. Allows to call some native functions, like restartAppIfNecessary(), before SteamAPI.init().
 - API change: applied same change as above to `SteamGameServerAPI.loadLibraries()` and `SteamGameServerAPI.init()`.
 - SteamGameServerAPI skips loading of shared libraries if already loaded by SteamAPI. (#56)
