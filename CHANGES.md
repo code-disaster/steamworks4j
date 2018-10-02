@@ -2,6 +2,7 @@
 
 ### HEAD
 
+### [1.8.0]
 - MacOS: removed 32-bit support.
 - MacOS: raised minimum version support to OS X 10.9.
 - API change: split up initialization into `SteamAPI.loadLibraries()` and `SteamAPI.init()`. Allows to call some native functions, like restartAppIfNecessary(), before SteamAPI.init().
