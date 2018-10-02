@@ -100,7 +100,7 @@ public class SteamClientAPITest extends SteamTestApp {
 					int numDetails = entry.getNumDetails();
 
 					System.out.println("Leaderboard entry #" + i +
-							": steamIDUser=" + entry.getSteamIDUser().getAccountID() +
+							": accountID=" + entry.getSteamIDUser().getAccountID() +
 							", globalRank=" + entry.getGlobalRank() +
 							", score=" + entry.getScore() +
 							", numDetails=" + numDetails);
@@ -427,6 +427,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		friends = new SteamFriends(friendsCallback);
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
+		System.out.println("Local user steam ID: " + SteamID.getNativeHandle(user.getSteamID()));
 		System.out.println("Local user friends name: " + friends.getPersonaName());
 		System.out.println("App ID: " + utils.getAppID());
 
@@ -632,6 +633,15 @@ public class SteamClientAPITest extends SteamTestApp {
 				userStats.downloadLeaderboardEntries(currentLeaderboard,
 						SteamUserStats.LeaderboardDataRequest.Global,
 						Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+			}
+		} else if (input.startsWith("leaderboard users ")) {
+			String[] params = input.substring("leaderboard users ".length()).split(" ");
+			if (currentLeaderboard != null && params.length > 0) {
+				SteamID[] users = new SteamID[params.length];
+				for (int i = 0; i < params.length; i++) {
+					users[i] = SteamID.createFromNativeHandle(Long.parseLong(params[i]));
+				}
+				userStats.downloadLeaderboardEntriesForUsers(currentLeaderboard, users);
 			}
 		} else if (input.startsWith("leaderboard score ")) {
 			String score = input.substring("leaderboard score ".length());

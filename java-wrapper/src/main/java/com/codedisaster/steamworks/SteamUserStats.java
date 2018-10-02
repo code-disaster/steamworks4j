@@ -133,6 +133,20 @@ public class SteamUserStats extends SteamInterface {
 				leaderboardDataRequest.ordinal(), rangeStart, rangeEnd));
 	}
 
+	public SteamAPICall downloadLeaderboardEntriesForUsers(SteamLeaderboardHandle leaderboard,
+														   SteamID[] users) {
+
+		int count = users.length;
+		long[] handles = new long[count];
+
+		for (int i = 0; i < count; i++) {
+			handles[i] = users[i].handle;
+		}
+
+		return new SteamAPICall(downloadLeaderboardEntriesForUsers(pointer,
+				callback, leaderboard.handle, handles, count));
+	}
+
 	/**
 	 * @param details The array size denotes the maximum number of details returned.
 	 *                Check {@link SteamLeaderboardEntry#getNumDetails()} for the actual count. Can be null.
@@ -310,6 +324,19 @@ public class SteamUserStats extends SteamInterface {
 
 		SteamAPICall_t handle = stats->DownloadLeaderboardEntries(leaderboard,
 			(ELeaderboardDataRequest) leaderboardDataRequest, rangeStart, rangeEnd);
+
+		cb->onLeaderboardScoresDownloadedCall.Set(handle, cb,
+			&SteamUserStatsCallback::onLeaderboardScoresDownloaded);
+
+		return handle;
+	*/
+
+	private static native long downloadLeaderboardEntriesForUsers(long pointer, long callback, long leaderboard,
+																  long[] users, int count); /*
+		ISteamUserStats* stats = (ISteamUserStats*) pointer;
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
+
+		SteamAPICall_t handle = stats->DownloadLeaderboardEntriesForUsers(leaderboard, (CSteamID*)users, count);
 
 		cb->onLeaderboardScoresDownloadedCall.Set(handle, cb,
 			&SteamUserStatsCallback::onLeaderboardScoresDownloaded);

@@ -10,6 +10,7 @@
 - Fixed signature of `SteamMatchmaking.getLobbyMemberLimit()`. (#67)
 - Added `SteamFriends.getFriendGamePlayed()`. (#68)
 - Added `SteamMatchmaking.[set|get]LobbyMemberData()`. (#72) [contributed by XaeroDegreaz]
+- Added `SteamUserStats.downloadLeaderboardEntriesForUsers()` (#74)
 
 ### [1.7.0]
 - Updated to Steamworks SDK v1.42.
