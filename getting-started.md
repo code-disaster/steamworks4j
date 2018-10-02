@@ -106,10 +106,15 @@ Please refer to the official documentation to learn about the steps needed to pr
 
 #### Initialization
 
-To load the native libraries and initialize the Steamworks client API, you just need to call ```SteamAPI.init()```.
+As a first step, to load the native libraries, you need to call ```SteamAPI.loadLibraries()```.
+
+Second, to initialize the Steamworks client API, you call ```SteamAPI.init()```.
+
+> Before *steamworks4j* v1.8.0, both these steps were condensed in ```SteamAPI.init()```. This has been changed to allow applications to call certain functions, like ```SteamAPI.restartAppIfNecessary()```, before the Steam API is initialized.
 
 {% highlight java %}
 try {
+    SteamAPI.loadLibraries();
     if (!SteamAPI.init()) {
         // Steamworks initialization error, e.g. Steam client not running
     }
@@ -118,12 +123,10 @@ try {
 }
 {% endhighlight java %}
 
-By default, ```SteamAPI.init()``` detects the operating system it runs on, then extracts the appropriate native libraries from your application's resource path to a temporary folder. There's a second function which allows to specify the path to a directory containing the native libraries.
+By default, ```SteamAPI.loadLibraries()``` detects the operating system it runs on, then extracts the appropriate native libraries from your application's resource path to a temporary folder. There's a second function which allows to specify the path to a directory containing the native libraries.
 
 {% highlight java %}
-if (!SteamAPI.init("./libs")) {
-    // Steamworks initialization error, e.g. Steam client not running
-}
+SteamAPI.loadLibraries("./libs");
 {% endhighlight java %}
 
 #### Update ticks
@@ -186,6 +189,7 @@ Basic API use is similar to the client wrapper, just with *SteamGameServerAPI* a
 {% highlight java %}
 // initialization
 try {
+    SteamGameServerAPI.loadLibraries();
     if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
         SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1"))) {
         // initialization error

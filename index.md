@@ -16,7 +16,7 @@ Callbacks are dealt with in a similar manner. Native callbacks are received by *
 
 ### Technical limitations
 
-> Note: with v1.7.0 of *steamworks4j*, the following requirements have been updated.
+> Note: the requirements listed here apply to the most recent version only. Please check the change log for more information.
 
 #### SDK version
 
@@ -28,7 +28,7 @@ The Java code compiles with Java language level 7.
 
 #### Mac OS
 
-OS X 10.6 and later are supported.
+MacOS 64-bit is supported on OS X 10.9 and later. Support for 32-bit via universal binaries has been dropped in *steamworks4j* v1.8.0.
 
 #### Linux
 

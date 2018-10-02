@@ -91,6 +91,7 @@ A list in alphabetical order, of other games I known to utilize *steamworks4j*. 
 | [Balrum](http://store.steampowered.com/app/424250/) | Balcony Team |
 | [Bard to the Future](http://store.steampowered.com/app/337110/) | [Battlebard Games][battlebardgames] |
 | [Battlestation: Harbinger](http://store.steampowered.com/app/396480/) | [Bugbyte Ltd][bugbyte] |
+| [Bee Aware!](https://store.steampowered.com/app/689880/Bee_Aware/) | Danny E.K. van der Kolk |
 | [Biodrone_Battle](http://store.steampowered.com/app/377290/) | voodoosoft |
 | [Borstal](http://store.steampowered.com/app/453730/) | The Secret Pie |
 | [BossConstructor](http://store.steampowered.com/app/330100/) | [Mirko Seithe][mseithe] |
