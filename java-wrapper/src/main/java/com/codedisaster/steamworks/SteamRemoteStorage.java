@@ -11,6 +11,7 @@ public class SteamRemoteStorage extends SteamInterface {
 		PS3(1 << 2),
 		Linux(1 << 3),
 		Reserved2(1 << 4),
+		Android(1 << 5),
 
 		All(0xffffffff);
 

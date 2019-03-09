@@ -16,12 +16,15 @@ public class SteamController extends SteamInterface {
 		Switch,
 		LeftTrigger,
 		RightTrigger,
+		LeftBumper,
+		RightBumper,
 		Gyro,
 		CenterTrackpad,
 		RightJoystick,
 		DPad,
 		Key,
-		Mouse
+		Mouse,
+		LeftGyro
 	}
 
 	public enum SourceMode {
@@ -209,9 +212,9 @@ public class SteamController extends SteamInterface {
 		SteamV2_Y,
 		SteamV2_LeftBumper,
 		SteamV2_RightBumper,
-		SteamV2_LeftGrip,
-		SteamV2_RightGrip,
+		SteamV2_LeftGrip_Lower,
 		SteamV2_LeftGrip_Upper,
+		SteamV2_RightGrip_Lower,
 		SteamV2_RightGrip_Upper,
 		SteamV2_LeftBumper_Pressure,
 		SteamV2_RightBumper_Pressure,
@@ -250,7 +253,53 @@ public class SteamController extends SteamInterface {
 		SteamV2_Gyro_Move,
 		SteamV2_Gyro_Pitch,
 		SteamV2_Gyro_Yaw,
-		SteamV2_Gyro_Roll;
+		SteamV2_Gyro_Roll,
+
+		Switch_A,
+		Switch_B,
+		Switch_X,
+		Switch_Y,
+		Switch_LeftBumper,
+		Switch_RightBumper,
+		Switch_Plus,
+		Switch_Minus,
+		Switch_Capture,
+		Switch_LeftTrigger_Pull,
+		Switch_LeftTrigger_Click,
+		Switch_RightTrigger_Pull,
+		Switch_RightTrigger_Click,
+		Switch_LeftStick_Move,
+		Switch_LeftStick_Click,
+		Switch_LeftStick_DPadNorth,
+		Switch_LeftStick_DPadSouth,
+		Switch_LeftStick_DPadWest,
+		Switch_LeftStick_DPadEast,
+		Switch_RightStick_Move,
+		Switch_RightStick_Click,
+		Switch_RightStick_DPadNorth,
+		Switch_RightStick_DPadSouth,
+		Switch_RightStick_DPadWest,
+		Switch_RightStick_DPadEast,
+		Switch_DPad_North,
+		Switch_DPad_South,
+		Switch_DPad_West,
+		Switch_DPad_East,
+		Switch_ProGyro_Move,
+		Switch_ProGyro_Pitch,
+		Switch_ProGyro_Yaw,
+		Switch_ProGyro_Roll,
+		Switch_RightGyro_Move,
+		Switch_RightGyro_Pitch,
+		Switch_RightGyro_Yaw,
+		Switch_RightGyro_Roll,
+		Switch_LeftGyro_Move,
+		Switch_LeftGyro_Pitch,
+		Switch_LeftGyro_Yaw,
+		Switch_LeftGyro_Roll,
+		Switch_LeftGrip_Lower,
+		Switch_LeftGrip_Upper,
+		Switch_RightGrip_Lower,
+		Switch_RightGrip_Upper;
 
 		private static final ActionOrigin[] values = values();
 
@@ -259,9 +308,35 @@ public class SteamController extends SteamInterface {
 		}
 	}
 
-	public enum LEDFlag {
-		SetColor,
-		RestoreUserDefault
+	public enum XboxOrigin {
+		A,
+		B,
+		X,
+		Y,
+		LeftBumper,
+		RightBumper,
+		Menu,
+		View,
+		LeftTrigger_Pull,
+		LeftTrigger_Click,
+		RightTrigger_Pull,
+		RightTrigger_Click,
+		LeftStick_Move,
+		LeftStick_Click,
+		LeftStick_DPadNorth,
+		LeftStick_DPadSouth,
+		LeftStick_DPadWest,
+		LeftStick_DPadEast,
+		RightStick_Move,
+		RightStick_Click,
+		RightStick_DPadNorth,
+		RightStick_DPadSouth,
+		RightStick_DPadWest,
+		RightStick_DPadEast,
+		DPad_North,
+		DPad_South,
+		DPad_West,
+		DPad_East
 	}
 
 	public enum InputType {
@@ -269,14 +344,26 @@ public class SteamController extends SteamInterface {
 		SteamController,
 		XBox360Controller,
 		XBoxOneController,
-		GenericXInput,
-		PS4Controller;
+		GenericGamepad,
+		PS4Controller,
+		AppleMFiController,
+		AndroidController,
+		SwitchJoyConPair,
+		SwitchJoyConSingle,
+		SwitchProController,
+		MobileTouch,
+		PS3Controller;
 
 		private static final InputType[] values = values();
 
 		static InputType byOrdinal(int ordinal) {
 			return values[ordinal];
 		}
+	}
+
+	public enum LEDFlag {
+		SetColor,
+		RestoreUserDefault
 	}
 
 	public static final int STEAM_CONTROLLER_MAX_COUNT = 16;
@@ -434,22 +521,6 @@ public class SteamController extends SteamInterface {
 
 	public void getMotionData(SteamControllerHandle controller, SteamControllerMotionData motionData) {
 		getMotionData(pointer, controller.handle, motionData.data);
-	}
-
-	public boolean showDigitalActionOrigins(SteamControllerHandle controller,
-											SteamControllerDigitalActionHandle digitalActionHandle,
-											float scale, float xPosition, float yPosition) {
-
-		return showDigitalActionOrigins(pointer, controller.handle,
-				digitalActionHandle.handle, scale, xPosition, yPosition);
-	}
-
-	public boolean showAnalogActionOrigins(SteamControllerHandle controller,
-										   SteamControllerAnalogActionHandle analogActionHandle,
-										   float scale, float xPosition, float yPosition) {
-
-		return showAnalogActionOrigins(pointer, controller.handle,
-				analogActionHandle.handle, scale, xPosition, yPosition);
 	}
 
 	public String getStringForActionOrigin(ActionOrigin origin) {
@@ -667,24 +738,6 @@ public class SteamController extends SteamInterface {
 		motionData[7] = data.rotVelX;
 		motionData[8] = data.rotVelY;
 		motionData[9] = data.rotVelZ;
-	*/
-
-	private static native boolean showDigitalActionOrigins(long pointer, long controllerHandle,
-														   long digitalActionHandle, float scale,
-														   float xPosition, float yPosition); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->ShowDigitalActionOrigins((ControllerHandle_t) controllerHandle,
-			(ControllerDigitalActionHandle_t) digitalActionHandle, scale, xPosition, yPosition);
-	*/
-
-	private static native boolean showAnalogActionOrigins(long pointer, long controllerHandle,
-														  long analogActionHandle, float scale,
-														  float xPosition, float yPosition); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->ShowAnalogActionOrigins((ControllerHandle_t) controllerHandle,
-			(ControllerAnalogActionHandle_t) analogActionHandle, scale, xPosition, yPosition);
 	*/
 
 	private static native String getStringForActionOrigin(long pointer, int origin); /*

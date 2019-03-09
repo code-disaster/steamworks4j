@@ -1,6 +1,7 @@
 ## change log
 
 ### HEAD
+- Updated to Steamworks SDK v1.43.
 
 ### [1.8.0]
 - MacOS: removed 32-bit support.
