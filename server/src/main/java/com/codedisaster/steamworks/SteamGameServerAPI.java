@@ -29,6 +29,10 @@ public class SteamGameServerAPI {
 		isNativeAPILoaded = true;
 	}
 
+	public static void skipLoadLibraries() {
+		isNativeAPILoaded = true;
+	}
+
 	public static boolean init(int ip, short steamPort, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) throws SteamException {
 

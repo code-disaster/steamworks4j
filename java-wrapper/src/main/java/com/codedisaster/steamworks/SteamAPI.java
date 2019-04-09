@@ -29,6 +29,10 @@ public class SteamAPI {
 		isNativeAPILoaded = true;
 	}
 
+	public static void skipLoadLibraries() {
+		isNativeAPILoaded = true;
+	}
+
 	public static boolean restartAppIfNecessary(int appId) throws SteamException {
 
 		if (!isNativeAPILoaded) {
