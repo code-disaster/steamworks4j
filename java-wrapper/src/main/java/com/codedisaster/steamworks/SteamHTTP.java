@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class SteamHTTP extends SteamInterface {
 
@@ -66,19 +67,44 @@ public class SteamHTTP extends SteamInterface {
         Unknown5xx(599);
 
         private final int code;
-        private static final HTTPStatusCode[] values = values();
+        private static final HTTPStatusCode[] values = generateValues();
+
+        private static final int maxValue() {
+            HTTPStatusCode[] rawValues = values();
+            int maxValue = rawValues[0].code;
+            for (HTTPStatusCode au : rawValues) {
+                if (maxValue < au.code) {
+                    maxValue = au.code;
+                }
+            }
+            return maxValue;
+        }
+
+        private static final HTTPStatusCode[] generateValues() {
+            HTTPStatusCode[] res = new HTTPStatusCode[maxValue() + 1];
+            Arrays.fill(res, Invalid);
+
+            for (HTTPStatusCode au : values()) {
+                res[au.code] = au;
+            }
+            return res;
+        }
+
+        /**
+         * get a HTTPStatusCode enum from code int
+         *
+         * @param code Input code int.
+         * @return If the input code int have a matching enum, then return that enum. Otherwise return "Invalid"
+         */
+        static HTTPStatusCode byValue(int code) {
+            if (code >= 0 && code < values.length) {
+                return values[code];
+            }
+            return Invalid;
+        }
 
         HTTPStatusCode(int code) {
             this.code = code;
-        }
-
-        static HTTPStatusCode byValue(int statusCode) {
-            for (HTTPStatusCode value : values) {
-                if (value.code == statusCode) {
-                    return value;
-                }
-            }
-            return Invalid;
         }
     }
 
@@ -240,7 +266,8 @@ public class SteamHTTP extends SteamInterface {
                                                              ByteBuffer value, int offset, int size); /*
 
         ISteamHTTP* http = (ISteamHTTP*) pointer;
-        return http->GetHTTPResponseHeaderValue((HTTPRequestHandle) request, headerName, (uint8*) &value[offset], size);
+        return http->GetHTTPResponseHeaderValue((HTTPRequestHandle) request, headerName, (uint8*) &value[offset],
+        size);
     */
 
     private static native int getHTTPResponseBodySize(long pointer, long request); /*

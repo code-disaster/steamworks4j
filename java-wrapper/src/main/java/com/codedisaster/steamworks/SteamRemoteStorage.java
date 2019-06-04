@@ -480,7 +480,8 @@ public class SteamRemoteStorage extends SteamInterface {
 
     private static native boolean updatePublishedFileVisibility(long pointer, long updateHandle, int visibility); /*
         ISteamRemoteStorage* storage = (ISteamRemoteStorage*) pointer;
-        return storage->UpdatePublishedFileVisibility(updateHandle, (ERemoteStoragePublishedFileVisibility) visibility);
+        return storage->UpdatePublishedFileVisibility(updateHandle, (ERemoteStoragePublishedFileVisibility)
+        visibility);
     */
 
     private static native boolean updatePublishedFileTags(long pointer, long updateHandle, String[] tags,

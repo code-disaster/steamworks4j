@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -156,19 +157,47 @@ public class SteamUGC extends SteamInterface {
         UnknownPreviewType_NotImplementedByAPI(-1);
 
         private final int value;
-        private static final ItemPreviewType[] values = values();
+        private static final ItemPreviewType[] values = generateValues();
+
+        private static final int maxValue() {
+            ItemPreviewType[] rawValues = values();
+            int maxValue = rawValues[0].value;
+            for (ItemPreviewType au : rawValues) {
+                if (maxValue < au.value) {
+                    maxValue = au.value;
+                }
+            }
+            return maxValue;
+        }
+
+        private static final ItemPreviewType[] generateValues() {
+            ItemPreviewType[] res = new ItemPreviewType[maxValue() + 1];
+            Arrays.fill(res, UnknownPreviewType_NotImplementedByAPI);
+
+            for (ItemPreviewType au : values()) {
+                if (au != UnknownPreviewType_NotImplementedByAPI) {
+                    res[au.value] = au;
+                }
+            }
+            return res;
+        }
+
+        /**
+         * get a ItemPreviewType enum from value int
+         *
+         * @param value Input value int.
+         * @return If the input value int have a matching enum, then return that enum. Otherwise return
+         * "UnknownPreviewType_NotImplementedByAPI"
+         */
+        static ItemPreviewType byValue(int value) {
+            if (value >= 0 && value < values.length) {
+                return values[value];
+            }
+            return UnknownPreviewType_NotImplementedByAPI;
+        }
 
         ItemPreviewType(int value) {
             this.value = value;
-        }
-
-        static ItemPreviewType byValue(int value) {
-            for (ItemPreviewType type : values) {
-                if (type.value == value) {
-                    return type;
-                }
-            }
-            return UnknownPreviewType_NotImplementedByAPI;
         }
     }
 
@@ -1064,7 +1093,8 @@ public class SteamUGC extends SteamInterface {
         ISteamUGC* ugc = (ISteamUGC*) pointer;
         SteamUGCCallback* cb = (SteamUGCCallback*) callback;
         SteamAPICall_t handle = ugc->StopPlaytimeTrackingForAllItems();
-        cb->onStopPlaytimeTrackingForAllItemsCall.Set(handle, cb, &SteamUGCCallback::onStopPlaytimeTrackingForAllItems);
+        cb->onStopPlaytimeTrackingForAllItemsCall.Set(handle, cb,
+        &SteamUGCCallback::onStopPlaytimeTrackingForAllItems);
         return handle;
     */
 

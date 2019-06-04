@@ -1,5 +1,7 @@
 package com.codedisaster.steamworks;
 
+import java.util.Arrays;
+
 public enum SteamResult {
 
     /**
@@ -124,32 +126,44 @@ public enum SteamResult {
     UnknownErrorCode_NotImplementedByAPI(0);
 
     private final int code;
-    private static final SteamResult[] valuesLookupTable;
+    private static final SteamResult[] values = generateValues();
+
+    private static final int maxValue() {
+        SteamResult[] rawValues = values();
+        int maxValue = rawValues[0].code;
+        for (SteamResult au : rawValues) {
+            if (maxValue < au.code) {
+                maxValue = au.code;
+            }
+        }
+        return maxValue;
+    }
+
+    private static final SteamResult[] generateValues() {
+        SteamResult[] res = new SteamResult[maxValue() + 1];
+        Arrays.fill(res, UnknownErrorCode_NotImplementedByAPI);
+
+        for (SteamResult au : values()) {
+            res[au.code] = au;
+        }
+        return res;
+    }
+
+    /**
+     * get a SteamResult enum from value int
+     *
+     * @param code Input code int.
+     * @return If the input code int have a matching enum, then return that enum. Otherwise return
+     * "UnknownErrorCode_NotImplementedByAPI"
+     */
+    static SteamResult byValue(int code) {
+        if (code > 0 && code < values.length) {
+            return values[code];
+        }
+        return UnknownErrorCode_NotImplementedByAPI;
+    }
 
     SteamResult(int code) {
         this.code = code;
-    }
-
-    public static SteamResult byValue(int resultCode) {
-        if (resultCode < valuesLookupTable.length) {
-            return valuesLookupTable[resultCode];
-        } else {
-            return UnknownErrorCode_NotImplementedByAPI;
-        }
-    }
-
-    static {
-        SteamResult[] values = values();
-        int maxResultCode = 0;
-
-        for (SteamResult value : values) {
-            maxResultCode = Math.max(maxResultCode, value.code);
-        }
-
-        valuesLookupTable = new SteamResult[maxResultCode + 1];
-
-        for (SteamResult value : values) {
-            valuesLookupTable[value.code] = value;
-        }
     }
 }

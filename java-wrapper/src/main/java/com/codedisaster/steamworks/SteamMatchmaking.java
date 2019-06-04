@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class SteamMatchmaking extends SteamInterface {
 
@@ -48,19 +49,44 @@ public class SteamMatchmaking extends SteamInterface {
         RatelimitExceeded(15);
 
         private final int code;
-        private static final ChatRoomEnterResponse[] values = values();
+        private static final ChatRoomEnterResponse[] values = generateValues();
+
+        private static final int maxValue() {
+            ChatRoomEnterResponse[] rawValues = values();
+            int maxValue = rawValues[0].code;
+            for (ChatRoomEnterResponse au : rawValues) {
+                if (maxValue < au.code) {
+                    maxValue = au.code;
+                }
+            }
+            return maxValue;
+        }
+
+        private static final ChatRoomEnterResponse[] generateValues() {
+            ChatRoomEnterResponse[] res = new ChatRoomEnterResponse[maxValue() + 1];
+            Arrays.fill(res, Error);
+
+            for (ChatRoomEnterResponse au : values()) {
+                res[au.code] = au;
+            }
+            return res;
+        }
+
+        /**
+         * get a ChatRoomEnterResponse enum from code int
+         *
+         * @param code Input code int.
+         * @return If the input code int have a matching enum, then return that enum. Otherwise return "Error"
+         */
+        static ChatRoomEnterResponse byCode(int code) {
+            if (code >= 0 && code < values.length) {
+                return values[code];
+            }
+            return Error;
+        }
 
         ChatRoomEnterResponse(int code) {
             this.code = code;
-        }
-
-        static ChatRoomEnterResponse byCode(int code) {
-            for (ChatRoomEnterResponse value : values) {
-                if (value.code == code) {
-                    return value;
-                }
-            }
-            return Error; // unknown enum, default to "Error"
         }
     }
 
@@ -99,19 +125,44 @@ public class SteamMatchmaking extends SteamInterface {
         LinkBlocked(14);
 
         private final int code;
-        private static final ChatEntryType[] values = values();
+        private static final ChatEntryType[] values = generateValues();
+
+        private static final int maxValue() {
+            ChatEntryType[] rawValues = values();
+            int maxValue = rawValues[0].code;
+            for (ChatEntryType au : rawValues) {
+                if (maxValue < au.code) {
+                    maxValue = au.code;
+                }
+            }
+            return maxValue;
+        }
+
+        private static final ChatEntryType[] generateValues() {
+            ChatEntryType[] res = new ChatEntryType[maxValue() + 1];
+            Arrays.fill(res, Invalid);
+
+            for (ChatEntryType au : values()) {
+                res[au.code] = au;
+            }
+            return res;
+        }
+
+        /**
+         * get a ChatEntryType enum from code int
+         *
+         * @param code Input code int.
+         * @return If the input code int have a matching enum, then return that enum. Otherwise return "Invalid"
+         */
+        static ChatEntryType byCode(int code) {
+            if (code >= 0 && code < values.length) {
+                return values[code];
+            }
+            return Invalid;
+        }
 
         ChatEntryType(int code) {
             this.code = code;
-        }
-
-        static ChatEntryType byCode(int code) {
-            for (ChatEntryType value : values) {
-                if (value.code == code) {
-                    return value;
-                }
-            }
-            return Invalid;
         }
     }
 
@@ -467,8 +518,8 @@ public class SteamMatchmaking extends SteamInterface {
 
     private static native String getLobbyMemberData(long pointer, long steamIDLobby, long steamIDUser, String key); /*
         ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
-        jstring value = env->NewStringUTF(matchmaking->GetLobbyMemberData((uint64) steamIDLobby, (uint64)
-        steamIDUser, key));
+        jstring value = env->NewStringUTF(matchmaking->GetLobbyMemberData((uint64) steamIDLobby, (uint64) steamIDUser,
+         key));
         return value;
     */
 

@@ -1,6 +1,7 @@
 package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class SteamUtils extends SteamInterface {
 
@@ -12,19 +13,45 @@ public class SteamUtils extends SteamInterface {
         MismatchedCallback(3);
 
         private final int code;
-        private static final SteamAPICallFailure[] values = values();
+        private static final SteamAPICallFailure[] values = generateValues();
+
+
+        private static final int maxValue() {
+            SteamAPICallFailure[] rawValues = values();
+            int maxValue = rawValues[0].code;
+            for (SteamAPICallFailure au : rawValues) {
+                if (maxValue < au.code) {
+                    maxValue = au.code;
+                }
+            }
+            return maxValue;
+        }
+
+        private static final SteamAPICallFailure[] generateValues() {
+            SteamAPICallFailure[] res = new SteamAPICallFailure[maxValue() + 1];
+            Arrays.fill(res, None);
+
+            for (SteamAPICallFailure au : values()) {
+                res[au.code] = au;
+            }
+            return res;
+        }
+
+        /**
+         * get a SteamAPICallFailure enum from value int
+         *
+         * @param value Input value int.
+         * @return If the input value int have a matching enum, then return that enum. Otherwise return "None"
+         */
+        static SteamAPICallFailure byValue(int value) {
+            if (value >= 0 && value < values.length) {
+                return values[value];
+            }
+            return None;
+        }
 
         SteamAPICallFailure(int code) {
             this.code = code;
-        }
-
-        static SteamAPICallFailure byValue(int code) {
-            for (SteamAPICallFailure value : values) {
-                if (value.code == code) {
-                    return value;
-                }
-            }
-            return None;
         }
     }
 
