@@ -2,9 +2,9 @@ package com.codedisaster.steamworks;
 
 abstract class SteamCallbackAdapter<T> {
 
-	protected final T callback;
+    protected final T callback;
 
-	SteamCallbackAdapter(T callback) {
-		this.callback = callback;
-	}
+    SteamCallbackAdapter(T callback) {
+        this.callback = callback;
+    }
 }
