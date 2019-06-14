@@ -124,4 +124,25 @@ public class SteamHTTPTest extends SteamTestApp {
 		new SteamHTTPTest().clientMain(arguments);
 	}
 
+	/*static {
+		// "unit test" for lookup HTTP status code by value
+		SteamHTTP.HTTPStatusCode[] values = SteamHTTP.HTTPStatusCode.values();
+		for (SteamHTTP.HTTPStatusCode value : values) {
+			int request = value.getValue();
+			SteamHTTP.HTTPStatusCode result = SteamHTTP.HTTPStatusCode.byValue(request);
+			if (result != value) {
+				throw new IllegalStateException();
+			}
+		}
+
+		// test some out of range values
+		final int[] codes = { -1, 0, 199, 9001 };
+		for (int code : codes) {
+			SteamHTTP.HTTPStatusCode result = SteamHTTP.HTTPStatusCode.byValue(code);
+			if (result != SteamHTTP.HTTPStatusCode.Invalid) {
+				throw new IllegalStateException();
+			}
+		}
+	}*/
+
 }

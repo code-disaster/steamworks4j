@@ -54,7 +54,7 @@ public class SteamMatchmaking extends SteamInterface {
 			this.code = code;
 		}
 
-		static ChatRoomEnterResponse byCode(int code) {
+		static ChatRoomEnterResponse byValue(int code) {
 			for (ChatRoomEnterResponse value : values) {
 				if (value.code == code) {
 					return value;
@@ -105,7 +105,7 @@ public class SteamMatchmaking extends SteamInterface {
 			this.code = code;
 		}
 
-		static ChatEntryType byCode(int code) {
+		static ChatEntryType byValue(int code) {
 			for (ChatEntryType value : values) {
 				if (value.code == code) {
 					return value;
@@ -125,7 +125,7 @@ public class SteamMatchmaking extends SteamInterface {
 		}
 
 		public ChatEntryType getChatEntryType() {
-			return ChatEntryType.byCode(chatEntryType);
+			return ChatEntryType.byValue(chatEntryType);
 		}
 	}
 

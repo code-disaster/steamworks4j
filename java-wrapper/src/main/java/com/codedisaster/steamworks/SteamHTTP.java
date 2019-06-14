@@ -72,12 +72,31 @@ public class SteamHTTP extends SteamInterface {
 			this.code = code;
 		}
 
+		/*public int getValue() {
+			return code;
+		}
+
+		public */
 		static HTTPStatusCode byValue(int statusCode) {
-			for (HTTPStatusCode value : values) {
-				if (value.code == statusCode) {
+			int from = 0;
+			int to = values.length - 1;
+
+			// Performs a simple binary search. This only works as long as the enum values
+			// are sorted by status code. With the current size of 44 values, this needs
+			// up to six (log2(n+1)) iterations until the result is found.
+
+			while (from <= to) {
+				int idx = (from + to) / 2;
+				HTTPStatusCode value = values[idx];
+				if (statusCode < value.code) {
+					to = idx - 1;
+				} else if (statusCode > value.code) {
+					from = idx + 1;
+				} else {
 					return value;
 				}
 			}
+
 			return Invalid;
 		}
 	}
@@ -194,7 +213,7 @@ public class SteamHTTP extends SteamInterface {
 	*/
 
 	private static native boolean setHTTPRequestHeaderValue(long pointer, long request,
-											 				String headerName, String headerValue); /*
+															String headerName, String headerValue); /*
 
 		ISteamHTTP* http = (ISteamHTTP*) pointer;
 		return http->SetHTTPRequestHeaderValue((HTTPRequestHandle) request, headerName, headerValue);
