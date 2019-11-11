@@ -299,7 +299,12 @@ public class SteamController extends SteamInterface {
 		Switch_LeftGrip_Lower,
 		Switch_LeftGrip_Upper,
 		Switch_RightGrip_Lower,
-		Switch_RightGrip_Upper;
+		Switch_RightGrip_Upper,
+
+		PS4_DPad_Move,
+		XBoxOne_DPad_Move,
+		XBox360_DPad_Move,
+		Switch_DPad_Move;
 
 		private static final ActionOrigin[] values = values();
 

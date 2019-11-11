@@ -12,6 +12,7 @@ public class SteamRemoteStorage extends SteamInterface {
 		Linux(1 << 3),
 		Reserved2(1 << 4),
 		Android(1 << 5),
+		IOS(1 << 6),
 
 		All(0xffffffff);
 
@@ -205,9 +206,9 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamAPICall publishWorkshopFile(String file, String previewFile,
-										   int consumerAppID, String title, String description,
-										   PublishedFileVisibility visibility, String[] tags,
-										   WorkshopFileType workshopFileType) {
+											int consumerAppID, String title, String description,
+											PublishedFileVisibility visibility, String[] tags,
+											WorkshopFileType workshopFileType) {
 
 		return new SteamAPICall(publishWorkshopFile(pointer, callback, file, previewFile, consumerAppID, title,
 				description, visibility.ordinal(), tags, tags != null ? tags.length : 0, workshopFileType.ordinal()));

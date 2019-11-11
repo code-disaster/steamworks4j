@@ -8,7 +8,8 @@ public class SteamMatchmaking extends SteamInterface {
 		Private,
 		FriendsOnly,
 		Public,
-		Invisible
+		Invisible,
+		PrivateUnique
 	}
 
 	public enum LobbyComparison {
