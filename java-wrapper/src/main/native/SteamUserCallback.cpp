@@ -2,6 +2,7 @@
 
 SteamUserCallback::SteamUserCallback(JNIEnv* env, jobject callback)
 	: SteamCallbackAdapter(env, callback)
+	, m_CallbackAuthSessionTicket(this, &SteamUserCallback::onAuthSessionTicket)
 	, m_CallbackValidateAuthTicket(this, &SteamUserCallback::onValidateAuthTicket)
 	, m_CallbackMicroTxnAuthorization(this, &SteamUserCallback::onMicroTxnAuthorization) {
 
@@ -9,6 +10,13 @@ SteamUserCallback::SteamUserCallback(JNIEnv* env, jobject callback)
 
 SteamUserCallback::~SteamUserCallback() {
 
+}
+
+void SteamUserCallback::onAuthSessionTicket(GetAuthSessionTicketResponse_t* callback) {
+	invokeCallback({
+		callVoidMethod(env, "onAuthSessionTicket", "(JI)V",
+			(jlong) callback->m_hAuthTicket, (jint) callback->m_eResult);
+	});
 }
 
 void SteamUserCallback::onValidateAuthTicket(ValidateAuthTicketResponse_t* callback) {

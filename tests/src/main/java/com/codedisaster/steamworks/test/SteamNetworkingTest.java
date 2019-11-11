@@ -35,6 +35,11 @@ public class SteamNetworkingTest extends SteamTestApp {
 
 	private SteamUserCallback userCallback = new SteamUserCallback() {
 		@Override
+		public void onAuthSessionTicket(SteamAuthTicket authTicket, SteamResult result) {
+
+		}
+
+		@Override
 		public void onValidateAuthTicket(SteamID steamID,
 										 SteamAuth.AuthSessionResponse authSessionResponse,
 										 SteamID ownerSteamID) {
