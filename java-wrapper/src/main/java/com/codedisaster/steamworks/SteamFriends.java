@@ -29,7 +29,8 @@ public class SteamFriends extends SteamInterface {
 		Away,
 		Snooze,
 		LookingToTrade,
-		LookingToPlay;
+		LookingToPlay,
+		Invisible;
 
 		private static final PersonaState[] values = values();
 
@@ -84,9 +85,10 @@ public class SteamFriends extends SteamInterface {
 		LeftSource(0x0100),
 		RelationshipChanged(0x0200),
 		NameFirstSet(0x0400),
-		FacebookInfo(0x0800),
+		Broadcast(0x0800),
 		Nickname(0x1000),
-		SteamLevel(0x2000);
+		SteamLevel(0x2000),
+		RichPresence(0x4000);
 
 		private final int bits;
 
@@ -171,6 +173,11 @@ public class SteamFriends extends SteamInterface {
 		AddToCartAndShow
 	}
 
+	public enum OverlayToWebPageMode {
+		Default,
+		Modal
+	}
+
 	public SteamFriends(SteamFriendsCallback callback) {
 		super(SteamAPI.getSteamFriendsPointer(), createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
@@ -247,8 +254,8 @@ public class SteamFriends extends SteamInterface {
 		activateGameOverlayToUser(pointer, dialog.id, steamID.handle);
 	}
 
-	public void activateGameOverlayToWebPage(String url) {
-		activateGameOverlayToWebPage(pointer, url);
+	public void activateGameOverlayToWebPage(String url, OverlayToWebPageMode mode) {
+		activateGameOverlayToWebPage(pointer, url, mode.ordinal());
 	}
 
 	public void activateGameOverlayToStore(int appID, OverlayToStoreFlag flag) {
@@ -405,9 +412,9 @@ public class SteamFriends extends SteamInterface {
 		return friends->ActivateGameOverlayToUser(dialog, (uint64) steamID);
 	*/
 
-	private static native void activateGameOverlayToWebPage(long pointer, String url); /*
+	private static native void activateGameOverlayToWebPage(long pointer, String url, int mode); /*
 		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlayToWebPage(url);
+		return friends->ActivateGameOverlayToWebPage(url, (EActivateGameOverlayToWebPageMode) mode);
 	*/
 
 	private static native void activateGameOverlayToStore(long pointer, int appID, int flag); /*
