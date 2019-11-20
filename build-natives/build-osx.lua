@@ -4,10 +4,10 @@ solution "steamworks4j"
 	buildoptions {
 		"-std=c++0x",
 		"-Wall",
-		"-mmacosx-version-min=10.9"
+		"--target=x86_64-apple-macos10.9"
 	}
 
-	includedirs {
+	sysincludedirs {
 		"../java-wrapper/src/main/native/include/jni",
 		"../java-wrapper/src/main/native/include/jni/mac",
 		"../sdk/public/steam",
@@ -19,13 +19,11 @@ solution "steamworks4j"
 		"MACOSX"
 	}
 
-	flags {
-		"Optimize"
-	}
+	optimize "On"
 
 	linkoptions {
 		"-framework CoreFoundation",
-		"-mmacosx-version-min=10.9"
+		"--target=x86_64-apple-macos10.9"
 	}
 
 	platforms {
@@ -41,12 +39,12 @@ solution "steamworks4j"
 			"../java-wrapper/src/main/native/**.cpp"
 		}
 
-		includedirs {
+		sysincludedirs {
 			"../java-wrapper/src/main/native"
 		}
 
 		libdirs {
-			"../sdk/redistributable_bin/osx32"
+			"../sdk/redistributable_bin/osx"
 		}
 
 		links {
@@ -66,12 +64,12 @@ solution "steamworks4j"
 			"../server/src/main/native/**EncryptedAppTicket*.cpp"
 		}
 
-		includedirs {
+		sysincludedirs {
 			"../server/src/main/native"
 		}
 
 		libdirs {
-			"../sdk/redistributable_bin/osx32"
+			"../sdk/redistributable_bin/osx"
 		}
 
 		links {
@@ -87,12 +85,12 @@ solution "steamworks4j"
 			"../server/src/main/native/**EncryptedAppTicket*.cpp"
 		}
 
-		includedirs {
+		sysincludedirs {
 			"../server/src/main/native"
 		}
 
 		libdirs {
-			"../sdk/public/steam/lib/osx32"
+			"../sdk/public/steam/lib/osx"
 		}
 
 		links {
