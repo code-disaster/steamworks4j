@@ -242,6 +242,21 @@ public class SteamFriends extends SteamInterface {
 		return getLargeFriendAvatar(pointer, steamID.handle);
 	}
 
+	public SteamImage getSmallFriendAvatarSteamImage(SteamID steamID) {
+		int imageHandle = getSmallFriendAvatar(pointer, steamID.handle);
+		return new SteamImage(imageHandle);
+	}
+
+	public SteamImage getMediumFriendAvatarSteamImage(SteamID steamID) {
+		int imageHandle = getMediumFriendAvatar(pointer, steamID.handle);
+		return new SteamImage(imageHandle);
+	}
+
+	public SteamImage getLargeFriendAvatarSteamImage(SteamID steamID) {
+		int imageHandle = getLargeFriendAvatar(pointer, steamID.handle);
+		return new SteamImage(imageHandle);
+	}
+
 	public boolean requestUserInformation(SteamID steamID, boolean requireNameOnly) {
 		return requestUserInformation(pointer, steamID.handle, requireNameOnly);
 	}

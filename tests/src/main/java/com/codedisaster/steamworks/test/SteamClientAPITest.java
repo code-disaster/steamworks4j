@@ -121,12 +121,18 @@ public class SteamClientAPITest extends SteamTestApp {
 								friends.getFriendPersonaName(entry.getSteamIDUser()) + "'");
 
 						int smallAvatar = friends.getSmallFriendAvatar(entry.getSteamIDUser());
+						SteamImage smallAvatarImage = friends.getSmallFriendAvatarSteamImage(entry.getSteamIDUser());
 						if (smallAvatar != 0) {
 							int w = utils.getImageWidth(smallAvatar);
 							int h = utils.getImageHeight(smallAvatar);
 							System.out.println("  ... small avatar size: " + w + "x" + h + " pixels");
 
 							ByteBuffer image = ByteBuffer.allocateDirect(w * h * 4);
+							try {
+								ByteBuffer image2 = smallAvatarImage.getImageBuffer(utils);
+							} catch (SteamException e) {
+								e.printStackTrace();
+							}
 
 							try {
 								if (utils.getImageRGBA(smallAvatar, image)) {

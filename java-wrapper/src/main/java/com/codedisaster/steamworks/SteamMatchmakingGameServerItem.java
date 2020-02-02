@@ -16,7 +16,7 @@ public class SteamMatchmakingGameServerItem {
 	boolean password;
 	boolean secure;
 	int timeLastPlayed;
-	int	serverVersion;
+	int serverVersion;
 
 	String serverName;
 
