@@ -143,24 +143,12 @@ public class SteamAPI {
 		return (intp) SteamNetworking();
 	*/
 
-	static native long getSteamScreenshotsPointer(); /*
-		return (intp) SteamScreenshots();
-	*/
-
 	static native long getSteamUGCPointer(); /*
 		return (intp) SteamUGC();
 	*/
 
 	static native long getSteamUserPointer(); /*
 		return (intp) SteamUser();
-	*/
-
-	static native long getSteamUserStatsPointer(); /*
-		return (intp) SteamUserStats();
-	*/
-
-	static native long getSteamUtilsPointer(); /*
-		return (intp) SteamUtils();
 	*/
 
 }
