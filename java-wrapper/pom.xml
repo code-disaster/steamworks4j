@@ -101,7 +101,7 @@
 											<destinationFile>${project.build.outputDirectory}/libsteam_api.so</destinationFile>
 										</fileSet>
 										<fileSet>
-											<sourceFile>../sdk/redistributable_bin/osx32/libsteam_api.dylib</sourceFile>
+											<sourceFile>../sdk/redistributable_bin/osx/libsteam_api.dylib</sourceFile>
 											<destinationFile>${project.build.outputDirectory}/libsteam_api.dylib</destinationFile>
 										</fileSet>
 										<fileSet>

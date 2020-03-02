@@ -98,7 +98,7 @@
 											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.so</destinationFile>
 										</fileSet>
 										<fileSet>
-											<sourceFile>../sdk/public/steam/lib/osx32/libsdkencryptedappticket.dylib</sourceFile>
+											<sourceFile>../sdk/public/steam/lib/osx/libsdkencryptedappticket.dylib</sourceFile>
 											<destinationFile>${project.build.outputDirectory}/libsdkencryptedappticket.dylib</destinationFile>
 										</fileSet>
 										<fileSet>
