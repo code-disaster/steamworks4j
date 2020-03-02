@@ -119,10 +119,6 @@ public class SteamAPI {
 		return SteamAPI_IsSteamRunning();
 	*/
 
-	static native long getSteamAppsPointer(); /*
-		return (intp) SteamApps();
-	*/
-
 	static native long getSteamControllerPointer(); /*
 		return (intp) SteamController();
 	*/
@@ -145,10 +141,6 @@ public class SteamAPI {
 
 	static native long getSteamNetworkingPointer(); /*
 		return (intp) SteamNetworking();
-	*/
-
-	static native long getSteamRemoteStoragePointer(); /*
-		return (intp) SteamRemoteStorage();
 	*/
 
 	static native long getSteamScreenshotsPointer(); /*

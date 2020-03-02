@@ -4,9 +4,15 @@ import java.nio.Buffer;
 
 abstract class SteamInterface {
 
+	@Deprecated
 	protected final long pointer;
 	protected long callback;
 
+	SteamInterface() {
+		this(-1L, 0L);
+	}
+
+	@Deprecated
 	SteamInterface(long pointer) {
 		this(pointer, 0L);
 	}
