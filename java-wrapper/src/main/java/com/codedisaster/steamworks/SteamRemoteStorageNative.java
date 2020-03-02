@@ -19,9 +19,9 @@ final class SteamRemoteStorageNative {
 		return SteamRemoteStorage()->FileWrite(file, &data[bufferOffset], bufferSize);
 	*/
 
-	static native boolean fileRead(String file, ByteBuffer buffer,
-								   int bufferOffset, int bufferSize); /*
-		return SteamRemoteStorage()->FileRead(file, &buffer[bufferOffset], bufferSize);
+	static native int fileRead(String file, ByteBuffer buffer,
+							   int bufferOffset, int bufferSize); /*
+		return (jint) SteamRemoteStorage()->FileRead(file, &buffer[bufferOffset], bufferSize);
 	*/
 
 	static native long fileWriteAsync(long callback, String file, ByteBuffer data,

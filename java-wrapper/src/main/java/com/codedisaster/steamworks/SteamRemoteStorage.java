@@ -81,23 +81,17 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public boolean fileWrite(String file, ByteBuffer data) throws SteamException {
-		if (!data.isDirect()) {
-			throw new SteamException("Direct buffer required!");
-		}
+		checkBuffer(data);
 		return SteamRemoteStorageNative.fileWrite(file, data, data.position(), data.remaining());
 	}
 
-	public boolean fileRead(String file, ByteBuffer buffer) throws SteamException {
-		if (!buffer.isDirect()) {
-			throw new SteamException("Direct buffer required!");
-		}
+	public int fileRead(String file, ByteBuffer buffer) throws SteamException {
+		checkBuffer(buffer);
 		return SteamRemoteStorageNative.fileRead(file, buffer, buffer.position(), buffer.remaining());
 	}
 
 	public SteamAPICall fileWriteAsync(String file, ByteBuffer data) throws SteamException {
-		if (!data.isDirect()) {
-			throw new SteamException("Direct buffer required!");
-		}
+		checkBuffer(data);
 		return new SteamAPICall(SteamRemoteStorageNative.fileWriteAsync(
 				callback, file, data, data.position(), data.remaining()));
 	}
