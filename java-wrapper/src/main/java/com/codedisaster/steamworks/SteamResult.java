@@ -117,6 +117,7 @@ public enum SteamResult {
 	WGNetworkSendExceeded(110),
 	AccountNotFriends(111),
 	LimitedUserAccount(112),
+	CantRemoveItem(113),
 
 	/**
 	 * If this is returned(), we missed to "port" an Steam error code above.

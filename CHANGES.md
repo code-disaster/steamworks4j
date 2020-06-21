@@ -1,6 +1,8 @@
 ## change log
 
 ### HEAD
+- Updated to Steamworks SDK v1.46.
+- Added `SteamUserCallback.onAuthSessionTicket()`. (#83)
 
 ### [1.8.0]
 - MacOS: removed 32-bit support.

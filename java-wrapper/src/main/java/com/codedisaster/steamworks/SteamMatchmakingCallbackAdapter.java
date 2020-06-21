@@ -20,7 +20,7 @@ class SteamMatchmakingCallbackAdapter extends SteamCallbackAdapter<SteamMatchmak
 
 	void onLobbyEnter(long steamIDLobby, int chatPermissions, boolean blocked, int response) {
 		callback.onLobbyEnter(new SteamID(steamIDLobby), chatPermissions, blocked,
-				SteamMatchmaking.ChatRoomEnterResponse.byCode(response));
+				SteamMatchmaking.ChatRoomEnterResponse.byValue(response));
 	}
 
 	void onLobbyDataUpdate(long steamIDLobby, long steamIDMember, boolean success) {
@@ -40,7 +40,7 @@ class SteamMatchmakingCallbackAdapter extends SteamCallbackAdapter<SteamMatchmak
 
 	void onLobbyChatMessage(long steamIDLobby, long steamIDUser, int entryType, int chatID) {
 		callback.onLobbyChatMessage(new SteamID(steamIDLobby), new SteamID(steamIDUser),
-				SteamMatchmaking.ChatEntryType.byCode(entryType), chatID);
+				SteamMatchmaking.ChatEntryType.byValue(entryType), chatID);
 	}
 
 	void onLobbyGameCreated(long steamIDLobby, long steamIDGameServer, int ip, short port) {

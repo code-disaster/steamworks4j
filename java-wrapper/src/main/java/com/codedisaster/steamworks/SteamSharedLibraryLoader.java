@@ -69,7 +69,7 @@ class SteamSharedLibraryLoader {
 				path = new File(SDK_REDISTRIBUTABLE_BIN_PATH, "linux64");
 				break;
 			case MacOS:
-				path = new File(SDK_REDISTRIBUTABLE_BIN_PATH, "osx32");
+				path = new File(SDK_REDISTRIBUTABLE_BIN_PATH, "osx");
 				break;
 			default:
 				return null;

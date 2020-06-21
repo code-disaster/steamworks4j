@@ -17,6 +17,7 @@ Makefile
 *.vcxproj
 *.vcxproj.*
 *.xcodeproj/
+*.xcworkspace
 
 # IDE files
 .idea/
@@ -24,7 +25,7 @@ Makefile
 
 # build tools
 build-natives/bin/
-premake5.exe
+premake5*
 
 # test resources
 steam_appid.txt
