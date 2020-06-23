@@ -6,7 +6,7 @@
 
 	<groupId>com.code-disaster.steamworks4j</groupId>
 	<artifactId>steamworks4j-parent</artifactId>
-	<version>1.8.1-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -18,5 +18,4 @@
 		<module>server</module>
 		<module>tests</module>
 	</modules>
-
 </project>

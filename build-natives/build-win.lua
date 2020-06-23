@@ -3,7 +3,7 @@ solution "steamworks4j"
 	platforms { "x32", "x64" }
 
     -- Premake 5.0.0 alpha 11 : SDK version needs to be specified for VS2017
-	systemversion("10.0.14393.0")
+	systemversion("10.0.18362.0")
 
 	includedirs {
 		"../java-wrapper/src/main/native/include/jni",

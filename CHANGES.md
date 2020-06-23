@@ -1,7 +1,8 @@
 ## change log
 
 ### HEAD
-- Updated to Steamworks SDK v1.46.
+- Updated to Steamworks SDK v1.49.
+- Added SteamInventory interface.
 - Added `SteamUserCallback.onAuthSessionTicket()`. (#83)
 
 ### [1.8.0]
