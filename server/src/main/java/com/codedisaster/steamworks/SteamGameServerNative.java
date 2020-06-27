@@ -188,11 +188,6 @@ class SteamGameServerNative {
 		return server->RequestUserGroupStatus((uint64) steamIDUser, (uint64) steamIDGroup);
 	*/
 
-	static native int getPublicIP(long pointer); /*
-		ISteamGameServer* server = (ISteamGameServer*) pointer;
-		return server->GetPublicIP();
-	*/
-
 	static native boolean handleIncomingPacket(long pointer, ByteBuffer data,
 													   int offset, int size, int srcIP, short srcPort); /*
 		ISteamGameServer* server = (ISteamGameServer*) pointer;

@@ -4,7 +4,9 @@ import com.codedisaster.steamworks.*;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class SteamClientAPITest extends SteamTestApp {
 
@@ -15,6 +17,7 @@ public class SteamClientAPITest extends SteamTestApp {
 	private SteamUtils utils;
 	private SteamApps apps;
 	private SteamFriends friends;
+	private SteamInventory inventory;
 
 	private SteamLeaderboardHandle currentLeaderboard = null;
 
@@ -407,6 +410,39 @@ public class SteamClientAPITest extends SteamTestApp {
 		}
 	};
 
+	private SteamInventoryCallback inventoryCallback = new SteamInventoryCallback() {
+		@Override
+		public void onSteamInventoryResultReady(SteamInventoryHandle inventoryHandle, SteamResult result) {
+			System.out.println("Inventory Result ready: " + result + ", " + SteamNativeIntHandle.getNativeHandle(inventoryHandle));
+		}
+
+		@Override
+		public void onSteamInventoryFullUpdate(SteamInventoryHandle inventoryHandle) {
+			System.out.println("Inventory full update");
+		}
+
+		@Override
+		public void onSteamInventoryDefinitionUpdate() {
+			System.out.println("Inventory definition update");
+		}
+
+		@Override
+		public void onSteamInventoryEligiblePromoItemDefIDs(SteamResult result, SteamID steamID,
+															int eligiblePromoItemDefs, boolean cachedData) {
+			System.out.println("Inventory Eligible Promo Items");
+		}
+
+		@Override
+		public void onSteamInventoryStartPurchaseResult(SteamResult result, long orderID, long transactionID) {
+			System.out.println("Inventory Start Purchase");
+		}
+
+		@Override
+		public void onSteamInventoryRequestPricesResult(SteamResult result, String currency) {
+			System.out.println("Inventory Request Prices");
+		}
+	};
+
 	@Override
 	protected void registerInterfaces() {
 
@@ -431,8 +467,11 @@ public class SteamClientAPITest extends SteamTestApp {
 		System.out.println("Register Friends ...");
 		friends = new SteamFriends(friendsCallback);
 
+		System.out.println("Register Inventory ...");
+		inventory = new SteamInventory(inventoryCallback);
+
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
-		System.out.println("Local user steam ID: " + SteamID.getNativeHandle(user.getSteamID()));
+		System.out.println("Local user steam ID: " + SteamNativeHandle.getNativeHandle(user.getSteamID()));
 		System.out.println("Local user friends name: " + friends.getPersonaName());
 		System.out.println("App ID: " + utils.getAppID());
 
@@ -441,6 +480,9 @@ public class SteamClientAPITest extends SteamTestApp {
 
 		System.out.println("Current game language: " + apps.getCurrentGameLanguage());
 		System.out.println("Available game languages: " + apps.getAvailableGameLanguages());
+
+		final List<SteamInventoryHandle> inventories = new ArrayList<>();
+		System.out.println(inventory.getAllItems(inventories) + ": result of getAllItems, Handle: " + SteamNativeIntHandle.getNativeHandle(inventories.get(0)));
 	}
 
 	@Override
@@ -452,6 +494,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		utils.dispose();
 		apps.dispose();
 		friends.dispose();
+		inventory.dispose();
 	}
 
 	@Override

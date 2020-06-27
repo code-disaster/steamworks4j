@@ -199,10 +199,6 @@ public class SteamGameServer extends SteamInterface {
 		return SteamGameServerNative.requestUserGroupStatus(pointer, steamIDUser.handle, steamIDGroup.handle);
 	}
 
-	public int getPublicIP() {
-		return SteamGameServerNative.getPublicIP(pointer);
-	}
-
 	public boolean handleIncomingPacket(ByteBuffer data, int srcIP, short srcPort) {
 		return SteamGameServerNative.handleIncomingPacket(
 				pointer, data, data.position(), data.remaining(), srcIP, srcPort);

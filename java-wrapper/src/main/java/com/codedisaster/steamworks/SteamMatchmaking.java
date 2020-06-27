@@ -487,7 +487,7 @@ public class SteamMatchmaking extends SteamInterface {
 		ISteamMatchmaking* matchmaking = (ISteamMatchmaking*) pointer;
 		MatchMakingKeyValuePair_t result;
 		bool success = matchmaking->GetLobbyDataByIndex((uint64) steamIDLobby, lobbyDataIndex,
-			result.m_szKey, 256, result.m_szValue, 256);
+			result.m_szKey, 256, result.m_szValue, 8192);
 		if (success) {
 			jclass clazz = env->GetObjectClass(keyValuePair);
 

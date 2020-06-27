@@ -1,6 +1,9 @@
 package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SteamInventory extends SteamInterface {
     public enum SteamItemFlags {
@@ -20,12 +23,12 @@ public class SteamInventory extends SteamInterface {
     }
 
     public static class SteamItemDetails {
-        private SteamItemInstanceId itemId;
+        private long itemId;
         private int itemDefinition;
         private short quantity;
         private short flags;
 
-        public SteamItemInstanceId getItemId() {
+        public long getItemId() {
             return itemId;
         }
 
@@ -42,6 +45,14 @@ public class SteamInventory extends SteamInterface {
         }
     }
 
+    public static class SteamInventoryValue {
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     public SteamInventory(SteamInventoryCallback callback) {
         super(SteamAPI.getSteamInventoryPointer(), createCallback(new SteamInventoryCallbackAdapter(callback)));
     }
@@ -50,17 +61,39 @@ public class SteamInventory extends SteamInterface {
         return SteamResult.byValue(getResultStatus(pointer, inventory.handle));
     }
 
-    public boolean getResultItems(SteamInventoryHandle inventory, SteamItemDetails[] itemDetails, int[] itemDetailsSize) {
-        if (itemDetails.length < itemDetailsSize.length) {
-            throw new IllegalArgumentException("Array size must be at least the same size as the supplied itemDetails");
-        }
-
-        return getResultItems(pointer, inventory.handle, itemDetails, itemDetailsSize);
+    public int getResultItemsLength(SteamInventoryHandle inventory) {
+        return getResultItemsLength(pointer, inventory.handle);
     }
 
-    // STEAM_OUT_STRING_COUNT( punValueBufferSizeOut ) String pchValueBuffer
-    public boolean getResultItemProperty(SteamInventoryHandle inventory, int itemIndex, String propertyName, String valueBuffer, int[] valueBufferSizeOut) {
-        return getResultItemProperty(pointer, inventory.handle, itemIndex, propertyName, valueBuffer, valueBufferSizeOut);
+    public boolean getResultItems(SteamInventoryHandle inventory, List<SteamItemDetails> itemDetails) {
+        final int itemCount = getResultItemsLength(pointer, inventory.handle);
+        SteamItemDetails[][] steamItemDetailsArray = new SteamItemDetails[1][itemCount];
+
+        for(int i = 0; i < itemCount; i++) {
+            steamItemDetailsArray[0][i] = new SteamItemDetails();
+        }
+
+        final boolean result = getResultItems(pointer, inventory.handle, steamItemDetailsArray[0]);
+
+        if(result) {
+            itemDetails.addAll(Arrays.stream(steamItemDetailsArray[0]).collect(Collectors.toList()));
+        }
+
+        return result;
+    }
+
+    public String getResultItemPropertyKeys(SteamInventoryHandle inventory, int itemIndex) {
+        return getResultItemPropertyKeys(pointer, inventory.handle, itemIndex);
+    }
+
+    public boolean getResultItemProperty(SteamInventoryHandle inventory, int itemIndex, String propertyName, List<String> values) {
+        SteamInventoryValue steamValue = new SteamInventoryValue();
+
+        final boolean result = getResultItemProperty(pointer, inventory.handle, itemIndex, propertyName, steamValue);
+
+        values.add(steamValue.getValue());
+
+        return result;
     }
 
     public int getResultTimestamp(SteamInventoryHandle inventory) {
@@ -75,13 +108,28 @@ public class SteamInventory extends SteamInterface {
         destroyResult(pointer, inventory.handle);
     }
 
-    public boolean getAllItems(SteamInventoryHandle[] inventories) {
-        return getAllItems(pointer, SteamInventoryHandle.mapToHandles(inventories));
+    public boolean getAllItems(List<SteamInventoryHandle> inventories) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = getAllItems(pointer, tempIntArray);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    // STEAM_ARRAY_COUNT( unCountInstanceIDs ) SteamItemInstanceId[] pInstanceIDs
-    public boolean getItemsByID(SteamInventoryHandle[] inventories, SteamItemInstanceId[] instanceIDs, int countInstanceIDs) {
-        return getItemsByID(pointer, SteamInventoryHandle.mapToHandles(inventories), instanceIDs, countInstanceIDs);
+    public boolean getItemsByID(List<SteamInventoryHandle> inventories, List<SteamItemInstanceId> instanceIDs) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = getItemsByID(pointer, tempIntArray, instanceIDs.toArray(new SteamItemInstanceId[0]), instanceIDs.size());
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // STEAM_OUT_BUFFER_COUNT(punOutBufferSize) void *pOutBuffer
@@ -90,56 +138,140 @@ public class SteamInventory extends SteamInterface {
     }
 
     // STEAM_BUFFER_COUNT(punOutBufferSize) void *pBuffer
-    public boolean deserializeResult(SteamInventoryHandle[] inventories, ByteBuffer buffer) {
-        return deserializeResult(pointer, SteamInventoryHandle.mapToHandles(inventories), buffer, buffer.position(), buffer.remaining(), false);
+    public boolean deserializeResult(List<SteamInventoryHandle> inventories, ByteBuffer buffer) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = deserializeResult(pointer, tempIntArray, buffer, buffer.position(), buffer.remaining(), false);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // STEAM_ARRAY_COUNT(unArrayLength) int[] pArrayItemDefs, STEAM_ARRAY_COUNT(unArrayLength)
-    public boolean generateItems(SteamInventoryHandle[] inventories, int[] arrayItemDefs, int[] arrayQuantity, int arrayLength) {
-        return generateItems(pointer, SteamInventoryHandle.mapToHandles(inventories), arrayItemDefs, arrayQuantity, arrayLength);
+    public boolean generateItems(List<SteamInventoryHandle> inventories, int[] arrayItemDefs, int[] arrayQuantity) {
+        if(arrayItemDefs.length != arrayQuantity.length) {
+            throw new IllegalArgumentException("The length of arrayItemDefs and arrayQuantity must match!");
+        }
+
+        int[] tempIntArray = new int[1];
+
+        final boolean result = generateItems(pointer, tempIntArray, arrayItemDefs, arrayQuantity, arrayItemDefs.length);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    public boolean grantPromoItems(SteamInventoryHandle[] inventories) {
-        return grantPromoItems(pointer, SteamInventoryHandle.mapToHandles(inventories));
+    public boolean grantPromoItems(List<SteamInventoryHandle> inventories) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = grantPromoItems(pointer, tempIntArray);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    public boolean addPromoItem(SteamInventoryHandle[] inventories, int itemDef) {
-        return addPromoItem(pointer, SteamInventoryHandle.mapToHandles(inventories), itemDef);
+    public boolean addPromoItem(List<SteamInventoryHandle> inventories, int itemDef) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = addPromoItem(pointer, tempIntArray, itemDef);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // STEAM_ARRAY_COUNT(unArrayLength) int[] pArrayItemDefs
-    public boolean addPromoItems(SteamInventoryHandle[] inventories, int[] arrayItemDefs, int arrayLength) {
-        return addPromoItems(pointer, SteamInventoryHandle.mapToHandles(inventories), arrayItemDefs, arrayLength);
+    public boolean addPromoItems(List<SteamInventoryHandle> inventories, int[] arrayItemDefs, int arrayLength) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = addPromoItems(pointer, tempIntArray, arrayItemDefs, arrayLength);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    public boolean consumeItem(SteamInventoryHandle[] inventories, SteamItemInstanceId itemConsume, int quantity) {
-        return consumeItem(pointer, SteamInventoryHandle.mapToHandles(inventories), itemConsume, quantity);
+    public boolean consumeItem(List<SteamInventoryHandle> inventories, SteamItemInstanceId itemConsume, int quantity) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = consumeItem(pointer, tempIntArray, itemConsume, quantity);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // STEAM_ARRAY_COUNT(unArrayGenerateLength) int[] pArrayGenerate, STEAM_ARRAY_COUNT(unArrayGenerateLength) int[] punArrayGenerateQuantity
     // STEAM_ARRAY_COUNT(unArrayDestroyLength) SteamItemInstanceId[] pArrayDestroy, STEAM_ARRAY_COUNT(unArrayDestroyLength) int[] punArrayDestroyQuantity
-    public boolean exchangeItems(SteamInventoryHandle[] inventories, int[] arrayGenerate, int[] arrayGenerateQuantity, int arrayGenerateLength,
+    public boolean exchangeItems(List<SteamInventoryHandle> inventories, int[] arrayGenerate, int[] arrayGenerateQuantity, int arrayGenerateLength,
                                  SteamItemInstanceId[] arrayDestroy, int[] arrayDestroyQuantity, int arrayDestroyLength) {
-        return exchangeItems(pointer, SteamInventoryHandle.mapToHandles(inventories), arrayGenerate, arrayGenerateQuantity, arrayGenerateLength, arrayDestroy, arrayDestroyQuantity, arrayDestroyLength);
+        int[] tempIntArray = new int[1];
+
+        final boolean result = exchangeItems(pointer, tempIntArray, arrayGenerate, arrayGenerateQuantity, arrayGenerateLength, arrayDestroy, arrayDestroyQuantity, arrayDestroyLength);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    public boolean transferItemQuantity(SteamInventoryHandle[] inventories, SteamItemInstanceId itemIdSource, int quantity, SteamItemInstanceId itemIdDest) {
-        return transferItemQuantity(pointer, SteamInventoryHandle.mapToHandles(inventories), itemIdSource, quantity, itemIdDest);
+    public boolean transferItemQuantity(List<SteamInventoryHandle> inventories, SteamItemInstanceId itemIdSource, int quantity, SteamItemInstanceId itemIdDest) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = transferItemQuantity(pointer, tempIntArray, itemIdSource, quantity, itemIdDest);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     public void sendItemDropHeartbeat() {
         sendItemDropHeartbeat(pointer);
     }
 
-    public boolean triggerItemDrop(SteamInventoryHandle[] inventories, int dropListDefinition) {
-        return triggerItemDrop(pointer, SteamInventoryHandle.mapToHandles(inventories), dropListDefinition);
+    public boolean triggerItemDrop(List<SteamInventoryHandle> inventories, int dropListDefinition) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = triggerItemDrop(pointer, tempIntArray, dropListDefinition);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // STEAM_ARRAY_COUNT(nArrayGiveLength) SteamItemInstanceId[] pArrayGive, STEAM_ARRAY_COUNT(nArrayGiveLength) int[] pArrayGiveQuantity
     // STEAM_ARRAY_COUNT(nArrayGetLength) SteamItemInstanceId[] pArrayGet, STEAM_ARRAY_COUNT(nArrayGetLength) int[] pArrayGetQuantity
-    public boolean tradeItems(SteamInventoryHandle[] inventories, SteamID steamIDTradePartner, SteamItemInstanceId[] arrayGive, int[] arrayGiveQuantity,
+    public boolean tradeItems(List<SteamInventoryHandle> inventories, SteamID steamIDTradePartner, SteamItemInstanceId[] arrayGive, int[] arrayGiveQuantity,
                               int arrayGiveLength, SteamItemInstanceId[] arrayGet, int[] arrayGetQuantity, int arrayGetLength) {
-        return tradeItems(pointer, SteamInventoryHandle.mapToHandles(inventories), steamIDTradePartner.handle, arrayGive, arrayGiveQuantity, arrayGiveLength, arrayGet, arrayGetQuantity, arrayGetLength);
+        int[] tempIntArray = new int[1];
+
+        final boolean result = tradeItems(pointer, tempIntArray, steamIDTradePartner.handle, arrayGive, arrayGiveQuantity, arrayGiveLength, arrayGet, arrayGetQuantity, arrayGetLength);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     public boolean loadItemDefinitions() {
@@ -215,18 +347,35 @@ public class SteamInventory extends SteamInterface {
         return setProperty(pointer, updateHandle.handle, itemID, propertyName, value);
     }
 
-    public boolean submitUpdateProperties(SteamInventoryUpdateHandle updateHandle, SteamInventoryHandle[] inventories) {
-        return submitUpdateProperties(pointer, updateHandle.handle, SteamInventoryHandle.mapToHandles(inventories));
+    public boolean submitUpdateProperties(SteamInventoryUpdateHandle updateHandle, List<SteamInventoryHandle> inventories) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = submitUpdateProperties(pointer, updateHandle.handle, tempIntArray);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
-    public boolean inspectItem(SteamInventoryHandle[] inventories, String itemToken) {
-        return inspectItem(pointer, SteamInventoryHandle.mapToHandles(inventories), itemToken);
+    public boolean inspectItem(List<SteamInventoryHandle> inventories, String itemToken) {
+        int[] tempIntArray = new int[1];
+
+        final boolean result = inspectItem(pointer, tempIntArray, itemToken);
+
+        if(result) {
+            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
+        }
+
+        return result;
     }
 
     // @off
 
 	/*JNI
 		#include "SteamInventoryCallback.h"
+		#include <vector>
 	*/
 
     private static native long createCallback(SteamInventoryCallbackAdapter javaCallback); /*
@@ -238,14 +387,79 @@ public class SteamInventory extends SteamInterface {
 		return inventory->GetResultStatus((SteamInventoryResult_t) resultHandle);
 	*/
 
-    private static native boolean getResultItems(long pointer, int resultHandle, SteamItemDetails[] itemDetails, int[] itemDetailsSize); /*
+    private static native int getResultItemsLength(long pointer, int resultHandle); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->GetResultItems((SteamInventoryResult_t) resultHandle, (SteamItemDetails_t*) itemDetails, (uint32*) itemDetailsSize);
+
+        uint32 count = 0;
+        bool success = inventory->GetResultItems((SteamInventoryResult_t) resultHandle, NULL, &count);
+
+        if(success) {
+            return count;
+        }
+
+		return -1;
 	*/
 
-    private static native boolean getResultItemProperty(long pointer, int resultHandle, int itemIndex, String propertyName, String valueBuffer, int[] valueBufferSizeOut); /*
+    private static native boolean getResultItems(long pointer, int resultHandle, SteamItemDetails[] itemDetails); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->GetResultItemProperty((SteamInventoryResult_t) resultHandle, itemIndex, propertyName, valueBuffer, (uint32*) valueBufferSizeOut);
+
+        uint32 count = 0;
+        bool success = false;
+        if(inventory->GetResultItems((SteamInventoryResult_t) resultHandle, NULL, &count)) {
+            std::vector<SteamItemDetails_t> results;
+	        results.resize(count);
+
+            success = inventory->GetResultItems((SteamInventoryResult_t) resultHandle, results.data(), &count);
+
+            if (success) {
+                for(unsigned int a = 0; a < count; a = a + 1) {
+                    jclass clazz = env->GetObjectClass(env->GetObjectArrayElement(itemDetails, a));
+
+                    jfieldID field = env->GetFieldID(clazz, "itemId", "J");
+                    env->SetLongField(env->GetObjectArrayElement(itemDetails, a), field, (jlong) results[a].m_itemId);
+
+                    field = env->GetFieldID(clazz, "itemDefinition", "I");
+                    env->SetIntField(env->GetObjectArrayElement(itemDetails, a), field, (jint) results[a].m_iDefinition);
+
+                    field = env->GetFieldID(clazz, "quantity", "S");
+                    env->SetShortField(env->GetObjectArrayElement(itemDetails, a), field, (jshort) results[a].m_unQuantity);
+
+                    field = env->GetFieldID(clazz, "flags", "S");
+                    env->SetShortField(env->GetObjectArrayElement(itemDetails, a), field, (jshort) results[a].m_unFlags);
+                }
+            }
+        }
+
+		return success;
+	*/
+
+    private static native String getResultItemPropertyKeys(long pointer, int resultHandle, int itemIndex); /*
+		ISteamInventory* inventory = (ISteamInventory*) pointer;
+		char *valueBuffer = (char*) malloc(1);
+		uint32 valueBufferSizeOut = 0;
+
+		inventory->GetResultItemProperty((SteamInventoryResult_t) resultHandle, itemIndex, NULL, valueBuffer, &valueBufferSizeOut);
+		valueBuffer = (char*) malloc(valueBufferSizeOut);
+        inventory->GetResultItemProperty((SteamInventoryResult_t) resultHandle, itemIndex, NULL, valueBuffer, &valueBufferSizeOut);
+
+		return env->NewStringUTF(valueBuffer);
+	*/
+
+    private static native boolean getResultItemProperty(long pointer, int resultHandle, int itemIndex, String propertyName, SteamInventoryValue value); /*
+		ISteamInventory* inventory = (ISteamInventory*) pointer;
+		char *valueBuffer = (char*) malloc(1);
+		uint32 valueBufferSizeOut = 0;
+
+		inventory->GetResultItemProperty((SteamInventoryResult_t) resultHandle, itemIndex, propertyName, valueBuffer, &valueBufferSizeOut);
+		valueBuffer = (char*) malloc(valueBufferSizeOut);
+        bool success = inventory->GetResultItemProperty((SteamInventoryResult_t) resultHandle, itemIndex, propertyName, valueBuffer, &valueBufferSizeOut);
+
+        jclass valueClazz = env->GetObjectClass(value);
+
+        jfieldID field = env->GetFieldID(valueClazz, "value", "Ljava/lang/String;");
+	    env->SetObjectField(value, field, env->NewStringUTF(valueBuffer));
+
+		return success;
 	*/
 
     private static native int getResultTimestamp(long pointer, int resultHandle); /*
