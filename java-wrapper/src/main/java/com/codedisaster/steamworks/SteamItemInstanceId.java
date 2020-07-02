@@ -4,7 +4,7 @@ public class SteamItemInstanceId extends SteamNativeHandle {
 
     public static final SteamItemInstanceId INVALID = new SteamItemInstanceId(~0);
 
-    SteamItemInstanceId(long handle) {
+    public SteamItemInstanceId(long handle) {
         super(handle);
     }
 

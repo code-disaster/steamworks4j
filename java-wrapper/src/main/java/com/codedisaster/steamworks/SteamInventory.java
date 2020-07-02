@@ -132,9 +132,16 @@ public class SteamInventory extends SteamInterface {
         return result;
     }
 
-    // STEAM_OUT_BUFFER_COUNT(punOutBufferSize) void *pOutBuffer
-    public boolean serializeResult(SteamInventoryHandle inventory, ByteBuffer outBuffer) {
-        return serializeResult(pointer, inventory.handle, outBuffer, outBuffer.position(), new int[]{outBuffer.remaining()});
+    public int getSizeNeededForResultSerialization(SteamInventoryHandle inventory) {
+        return serializeResultSize(pointer, inventory.handle);
+    }
+
+    public boolean serializeResult(SteamInventoryHandle inventory, ByteBuffer outBuffer) throws SteamException {
+        if (!outBuffer.isDirect()) {
+            throw new SteamException("Direct buffer required!");
+        }
+
+        return serializeResult(pointer, inventory.handle, outBuffer, outBuffer.position(), outBuffer.remaining());
     }
 
     // STEAM_BUFFER_COUNT(punOutBufferSize) void *pBuffer
@@ -192,10 +199,10 @@ public class SteamInventory extends SteamInterface {
     }
 
     // STEAM_ARRAY_COUNT(unArrayLength) int[] pArrayItemDefs
-    public boolean addPromoItems(List<SteamInventoryHandle> inventories, int[] arrayItemDefs, int arrayLength) {
+    public boolean addPromoItems(List<SteamInventoryHandle> inventories, int[] arrayItemDefs) {
         int[] tempIntArray = new int[1];
 
-        final boolean result = addPromoItems(pointer, tempIntArray, arrayItemDefs, arrayLength);
+        final boolean result = addPromoItems(pointer, tempIntArray, arrayItemDefs, arrayItemDefs.length);
 
         if(result) {
             inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
@@ -243,6 +250,7 @@ public class SteamInventory extends SteamInterface {
         return result;
     }
 
+    @Deprecated
     public void sendItemDropHeartbeat() {
         sendItemDropHeartbeat(pointer);
     }
@@ -278,15 +286,25 @@ public class SteamInventory extends SteamInterface {
         return loadItemDefinitions(pointer);
     }
 
-    // STEAM_OUT_ARRAY_COUNT(punItemDefIDsArraySize,List of item definition IDs) int[] pItemDefIDs,
-    // STEAM_DESC(Size of array is passed in and actual size used is returned in this param) int[] punItemDefIDsArraySize
-    public boolean getItemDefinitionIDs(int[] itemDefIDs, int[] itemDefIDsArraySize) {
-        return getItemDefinitionIDs(pointer, itemDefIDs, itemDefIDsArraySize);
+    // FIXME
+    public boolean getItemDefinitionIDs(List<Integer> itemDefIDs) {
+        final int[] tempIntArray = new int[1];
+
+        return getItemDefinitionIDs(pointer, tempIntArray, itemDefIDs.size());
     }
 
-    // STEAM_OUT_STRING_COUNT(punValueBufferSizeOut) String pchValueBuffer
-    public boolean getItemDefinitionProperty(int itemDefinition, String propertyName, String valueBuffer, int[] valueBufferSizeOut) {
-        return getItemDefinitionProperty(pointer, itemDefinition, propertyName, valueBuffer, valueBufferSizeOut);
+    public String getItemDefinitionPropertyKeys(int itemDefinition) {
+        return getItemDefinitionPropertyKeys(pointer, itemDefinition);
+    }
+
+    public boolean getItemDefinitionProperty(int itemDefinition, String propertyName, List<String> values) {
+        SteamInventoryValue steamValue = new SteamInventoryValue();
+
+        final boolean result = getItemDefinitionProperty(pointer, itemDefinition, propertyName, steamValue);
+
+        values.add(steamValue.getValue());
+
+        return result;
     }
 
     public SteamAPICall requestEligiblePromoItemDefinitionsIDs(SteamID steamID) {
@@ -295,8 +313,8 @@ public class SteamInventory extends SteamInterface {
 
     // STEAM_OUT_ARRAY_COUNT(punItemDefIDsArraySize,List of item definition IDs) int[] pItemDefIDs,
     // STEAM_DESC(Size of array is passed in and actual size used is returned in this param) int[] punItemDefIDsArraySiz
-    public boolean getEligiblePromoItemDefinitionIDs(SteamID steamID, int[] itemDefIDs, int[] itemDefIDsArraySize) {
-        return getEligiblePromoItemDefinitionIDs(pointer, steamID.handle, itemDefIDs, itemDefIDsArraySize);
+    public boolean getEligiblePromoItemDefinitionIDs(SteamID steamID, int[] itemDefIDs) {
+        return getEligiblePromoItemDefinitionIDs(pointer, steamID.handle, itemDefIDs, itemDefIDs.length);
     }
 
     // STEAM_ARRAY_COUNT(unArrayLength) int[] pArrayItemDefs, STEAM_ARRAY_COUNT(unArrayLength) int[] punArrayQuantity
@@ -487,9 +505,22 @@ public class SteamInventory extends SteamInterface {
 		return inventory->GetItemsByID((SteamInventoryResult_t*) resultHandles, (SteamItemInstanceID_t*) instanceIDs, countInstanceIDs);
 	*/
 
-    private static native boolean serializeResult(long pointer, int resultHandle, ByteBuffer outBuffer, int offset, int[] outBufferSize); /*
+    private static native int serializeResultSize(long pointer, int resultHandle); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->SerializeResult((SteamInventoryResult_t) resultHandle, &outBuffer[offset], (uint32*) outBufferSize);
+		uint32 outBufferSize = 0;
+
+		bool success = inventory->SerializeResult((SteamInventoryResult_t) resultHandle, NULL, &outBufferSize);
+
+		if(success) {
+		    return outBufferSize;
+		} else {
+		    return -1;
+		}
+	*/
+
+    private static native boolean serializeResult(long pointer, int resultHandle, ByteBuffer outBuffer, int offset, int outBufferSize); /*
+		ISteamInventory* inventory = (ISteamInventory*) pointer;
+		return inventory->SerializeResult((SteamInventoryResult_t) resultHandle, &outBuffer[offset], (uint32*) &outBufferSize);
 	*/
 
     private static native boolean deserializeResult(long pointer, int[] resultHandles, ByteBuffer buffer, int offset, int bufferSize, boolean reserved); /*
@@ -554,14 +585,38 @@ public class SteamInventory extends SteamInterface {
 		return inventory->LoadItemDefinitions();
 	*/
 
-    private static native boolean getItemDefinitionIDs(long pointer, int[] itemDefIDs, int[] itemDefIDsArraySize); /*
+    private static native boolean getItemDefinitionIDs(long pointer, int[] itemDefIDs, int itemDefIDsArraySize); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->GetItemDefinitionIDs((SteamItemDef_t*) itemDefIDs, (uint32*) itemDefIDsArraySize);
+		return inventory->GetItemDefinitionIDs((SteamItemDef_t*) itemDefIDs, (uint32*) &itemDefIDsArraySize);
 	*/
 
-    private static native boolean getItemDefinitionProperty(long pointer, int itemDefinition, String propertyName, String valueBuffer, int[] valueBufferSizeOut); /*
+    private static native String getItemDefinitionPropertyKeys(long pointer, int itemDefinition); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->GetItemDefinitionProperty((SteamItemDef_t) itemDefinition, propertyName, valueBuffer, (uint32*) valueBufferSizeOut);
+		char *valueBuffer = (char*) malloc(1);
+		uint32 valueBufferSizeOut = 0;
+
+		inventory->GetItemDefinitionProperty((SteamItemDef_t) itemDefinition, NULL, valueBuffer, &valueBufferSizeOut);
+		valueBuffer = (char*) malloc(valueBufferSizeOut);
+        inventory->GetItemDefinitionProperty((SteamItemDef_t) itemDefinition, NULL, valueBuffer, &valueBufferSizeOut);
+
+		return env->NewStringUTF(valueBuffer);
+	*/
+
+    private static native boolean getItemDefinitionProperty(long pointer, int itemDefinition, String propertyName, SteamInventoryValue value); /*
+		ISteamInventory* inventory = (ISteamInventory*) pointer;
+		char *valueBuffer = (char*) malloc(1);
+		uint32 valueBufferSizeOut = 0;
+
+		inventory->GetItemDefinitionProperty((SteamItemDef_t) itemDefinition, propertyName, valueBuffer, &valueBufferSizeOut);
+		valueBuffer = (char*) malloc(valueBufferSizeOut);
+        bool success = inventory->GetItemDefinitionProperty((SteamItemDef_t) itemDefinition, propertyName, valueBuffer, &valueBufferSizeOut);
+
+        jclass valueClazz = env->GetObjectClass(value);
+
+        jfieldID field = env->GetFieldID(valueClazz, "value", "Ljava/lang/String;");
+	    env->SetObjectField(value, field, env->NewStringUTF(valueBuffer));
+
+		return success;
 	*/
 
     private static native long requestEligiblePromoItemDefinitionsIDs(long pointer, long callback, long steamID); /*
@@ -572,9 +627,9 @@ public class SteamInventory extends SteamInterface {
 		return handle;
 	*/
 
-    private static native boolean getEligiblePromoItemDefinitionIDs(long pointer, long steamID, int[] itemDefIDs, int[] itemDefIDsArraySize); /*
+    private static native boolean getEligiblePromoItemDefinitionIDs(long pointer, long steamID, int[] itemDefIDs, int itemDefIDsArraySize); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->GetEligiblePromoItemDefinitionIDs((uint64) steamID, (SteamItemDef_t*) itemDefIDs, (uint32*)itemDefIDsArraySize);
+		return inventory->GetEligiblePromoItemDefinitionIDs((uint64) steamID, (SteamItemDef_t*) itemDefIDs, (uint32*) &itemDefIDsArraySize);
 	*/
 
     private static native long startPurchase(long pointer, long callback, int[] arrayItemDefs, int[] arrayQuantity, int arrayLength); /*
