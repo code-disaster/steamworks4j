@@ -5,7 +5,6 @@ SteamInventoryCallback::SteamInventoryCallback(JNIEnv* env, jobject callback)
 	, m_CallbackSteamInventoryResultReady(this, &SteamInventoryCallback::onSteamInventoryResultReady)
 	, m_CallbackSteamInventoryFullUpdate(this, &SteamInventoryCallback::onSteamInventoryFullUpdate)
 	, m_CallbackSteamInventoryDefinitionUpdate(this, &SteamInventoryCallback::onSteamInventoryDefinitionUpdate) {
-
 }
 
 SteamInventoryCallback::~SteamInventoryCallback() {
@@ -35,7 +34,7 @@ void SteamInventoryCallback::onSteamInventoryDefinitionUpdate(SteamInventoryDefi
 void SteamInventoryCallback::onSteamInventoryEligiblePromoItemDefIDs(SteamInventoryEligiblePromoItemDefIDs_t* callback, bool error) {
 	invokeCallback({
 		callVoidMethod(env, "onSteamInventoryEligiblePromoItemDefIDs", "(IJIZ)V",
-		    (jint) callback->m_result, (jlong) callback->m_steamID.ConvertToUint64(), callback->m_numEligiblePromoItemDefs, callback->m_bCachedData);
+		    (jint) callback->m_result, (jlong) callback->m_steamID.ConvertToUint64(), (jint) callback->m_numEligiblePromoItemDefs, (jboolean) callback->m_bCachedData);
 	});
 }
 
