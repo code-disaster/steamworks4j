@@ -28,8 +28,8 @@ public class SteamInventory extends SteamInterface {
         private short quantity;
         private short flags;
 
-        public long getItemId() {
-            return itemId;
+        public SteamItemInstanceId getItemId() {
+            return new SteamItemInstanceId(itemId);
         }
 
         public int getItemDefinition() {
@@ -67,19 +67,23 @@ public class SteamInventory extends SteamInterface {
 
     public boolean getResultItems(SteamInventoryHandle inventory, List<SteamItemDetails> itemDetails) {
         final int itemCount = getResultItemsLength(pointer, inventory.handle);
-        SteamItemDetails[] steamItemDetailsArray = new SteamItemDetails[itemCount];
+        if(itemCount > 0) {
+            SteamItemDetails[] steamItemDetailsArray = new SteamItemDetails[itemCount];
 
-        for(int i = 0; i < itemCount; i++) {
-            steamItemDetailsArray[i] = new SteamItemDetails();
+            for(int i = 0; i < itemCount; i++) {
+                steamItemDetailsArray[i] = new SteamItemDetails();
+            }
+
+            final boolean result = getResultItems(pointer, inventory.handle, steamItemDetailsArray);
+
+            if(result) {
+                itemDetails.addAll(Arrays.stream(steamItemDetailsArray).collect(Collectors.toList()));
+            }
+
+            return result;
         }
 
-        final boolean result = getResultItems(pointer, inventory.handle, steamItemDetailsArray);
-
-        if(result) {
-            itemDetails.addAll(Arrays.stream(steamItemDetailsArray).collect(Collectors.toList()));
-        }
-
-        return result;
+        return false;
     }
 
     public String getResultItemPropertyKeys(SteamInventoryHandle inventory, int itemIndex) {
@@ -123,7 +127,7 @@ public class SteamInventory extends SteamInterface {
     public boolean getItemsByID(List<SteamInventoryHandle> inventories, List<SteamItemInstanceId> instanceIDs) {
         int[] tempIntArray = new int[1];
 
-        final boolean result = getItemsByID(pointer, tempIntArray, instanceIDs.toArray(new SteamItemInstanceId[0]), instanceIDs.size());
+        final boolean result = getItemsByID(pointer, tempIntArray, instanceIDs.stream().mapToLong(steamItemInstanceId -> steamItemInstanceId.handle).toArray(), instanceIDs.size());
 
         if(result) {
             inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
@@ -214,7 +218,7 @@ public class SteamInventory extends SteamInterface {
     public boolean consumeItem(List<SteamInventoryHandle> inventories, SteamItemInstanceId itemConsume, int quantity) {
         int[] tempIntArray = new int[1];
 
-        final boolean result = consumeItem(pointer, tempIntArray, itemConsume, quantity);
+        final boolean result = consumeItem(pointer, tempIntArray, itemConsume.handle, quantity);
 
         if(result) {
             inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
@@ -229,7 +233,8 @@ public class SteamInventory extends SteamInterface {
                                  SteamItemInstanceId[] arrayDestroy, int[] arrayDestroyQuantity, int arrayDestroyLength) {
         int[] tempIntArray = new int[1];
 
-        final boolean result = exchangeItems(pointer, tempIntArray, arrayGenerate, arrayGenerateQuantity, arrayGenerateLength, arrayDestroy, arrayDestroyQuantity, arrayDestroyLength);
+        final boolean result = exchangeItems(pointer, tempIntArray, arrayGenerate, arrayGenerateQuantity, arrayGenerateLength,
+                                             Arrays.stream(arrayDestroy).mapToLong(steamItemInstanceId -> steamItemInstanceId.handle).toArray(), arrayDestroyQuantity, arrayDestroyLength);
 
         if(result) {
             inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
@@ -241,7 +246,7 @@ public class SteamInventory extends SteamInterface {
     public boolean transferItemQuantity(List<SteamInventoryHandle> inventories, SteamItemInstanceId itemIdSource, int quantity, SteamItemInstanceId itemIdDest) {
         int[] tempIntArray = new int[1];
 
-        final boolean result = transferItemQuantity(pointer, tempIntArray, itemIdSource, quantity, itemIdDest);
+        final boolean result = transferItemQuantity(pointer, tempIntArray, itemIdSource.handle, quantity, itemIdDest.handle);
 
         if(result) {
             inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
@@ -267,26 +272,10 @@ public class SteamInventory extends SteamInterface {
         return result;
     }
 
-    // STEAM_ARRAY_COUNT(nArrayGiveLength) SteamItemInstanceId[] pArrayGive, STEAM_ARRAY_COUNT(nArrayGiveLength) int[] pArrayGiveQuantity
-    // STEAM_ARRAY_COUNT(nArrayGetLength) SteamItemInstanceId[] pArrayGet, STEAM_ARRAY_COUNT(nArrayGetLength) int[] pArrayGetQuantity
-    public boolean tradeItems(List<SteamInventoryHandle> inventories, SteamID steamIDTradePartner, SteamItemInstanceId[] arrayGive, int[] arrayGiveQuantity,
-                              int arrayGiveLength, SteamItemInstanceId[] arrayGet, int[] arrayGetQuantity, int arrayGetLength) {
-        int[] tempIntArray = new int[1];
-
-        final boolean result = tradeItems(pointer, tempIntArray, steamIDTradePartner.handle, arrayGive, arrayGiveQuantity, arrayGiveLength, arrayGet, arrayGetQuantity, arrayGetLength);
-
-        if(result) {
-            inventories.addAll(SteamInventoryHandle.mapToHandles(tempIntArray));
-        }
-
-        return result;
-    }
-
     public boolean loadItemDefinitions() {
         return loadItemDefinitions(pointer);
     }
 
-    // FIXME
     public boolean getItemDefinitionIDs(List<Integer> itemDefIDs) {
         int size = getItemDefinitionIDSize(pointer);
         final int[] tempIntArray = new int[size];
@@ -331,7 +320,6 @@ public class SteamInventory extends SteamInterface {
         return result;
     }
 
-    // STEAM_ARRAY_COUNT(unArrayLength) int[] pArrayItemDefs, STEAM_ARRAY_COUNT(unArrayLength) int[] punArrayQuantity
     public SteamAPICall startPurchase(int[] arrayItemDefs, int[] arrayQuantity) {
         return new SteamAPICall(startPurchase(pointer, callback, arrayItemDefs, arrayQuantity, arrayItemDefs.length));
     }
@@ -344,11 +332,8 @@ public class SteamInventory extends SteamInterface {
         return getNumItemsWithPrices(pointer);
     }
 
-    // STEAM_ARRAY_COUNT(unArrayLength) STEAM_OUT_ARRAY_COUNT(pArrayItemDefs, Items with prices) int[] pArrayItemDefs,
-    // STEAM_ARRAY_COUNT(unArrayLength) STEAM_OUT_ARRAY_COUNT(pPrices, List of prices for the given item defs) long[] pCurrentPrices,
-    // STEAM_ARRAY_COUNT(unArrayLength) STEAM_OUT_ARRAY_COUNT(pPrices, List of prices for the given item defs) long[] pBasePrices
-    public boolean getItemsWithPrices(int[] arrayItemDefs, long[] currentPrices, long[] basePrices, int arrayLength) {
-        return getItemsWithPrices(pointer, arrayItemDefs, currentPrices, basePrices, arrayLength);
+    public boolean getItemsWithPrices(int[] arrayItemDefs, long[] currentPrices, long[] basePrices) {
+        return getItemsWithPrices(pointer, arrayItemDefs, currentPrices, basePrices, arrayItemDefs.length);
     }
 
     public boolean getItemPrice(int itemDefinition, long[] currentPrice, long[] basePrice) {
@@ -360,23 +345,23 @@ public class SteamInventory extends SteamInterface {
     }
 
     public boolean removeProperty(SteamInventoryUpdateHandle updateHandle, SteamItemInstanceId itemID, String propertyName) {
-        return removeProperty(pointer, updateHandle.handle, itemID, propertyName);
+        return removeProperty(pointer, updateHandle.handle, itemID.handle, propertyName);
     }
 
     public boolean setProperty(SteamInventoryUpdateHandle updateHandle, SteamItemInstanceId itemID, String propertyName, String value) {
-        return setProperty(pointer, updateHandle.handle, itemID, propertyName, value);
+        return setProperty(pointer, updateHandle.handle, itemID.handle, propertyName, value);
     }
 
     public boolean setProperty(SteamInventoryUpdateHandle updateHandle, SteamItemInstanceId itemID, String propertyName, boolean value) {
-        return setProperty(pointer, updateHandle.handle, itemID, propertyName, value);
+        return setProperty(pointer, updateHandle.handle, itemID.handle, propertyName, value);
     }
 
     public boolean setProperty(SteamInventoryUpdateHandle updateHandle, SteamItemInstanceId itemID, String propertyName, long value) {
-        return setProperty(pointer, updateHandle.handle, itemID, propertyName, value);
+        return setProperty(pointer, updateHandle.handle, itemID.handle, propertyName, value);
     }
 
     public boolean setProperty(SteamInventoryUpdateHandle updateHandle, SteamItemInstanceId itemID, String propertyName, float value) {
-        return setProperty(pointer, updateHandle.handle, itemID, propertyName, value);
+        return setProperty(pointer, updateHandle.handle, itemID.handle, propertyName, value);
     }
 
     public boolean submitUpdateProperties(SteamInventoryUpdateHandle updateHandle, List<SteamInventoryHandle> inventories) {
@@ -514,7 +499,7 @@ public class SteamInventory extends SteamInterface {
 		return inventory->GetAllItems((SteamInventoryResult_t*) resultHandles);
 	*/
 
-    private static native boolean getItemsByID(long pointer, int[] resultHandles, SteamItemInstanceId[] instanceIDs, int countInstanceIDs); /*
+    private static native boolean getItemsByID(long pointer, int[] resultHandles, long[] instanceIDs, int countInstanceIDs); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->GetItemsByID((SteamInventoryResult_t*) resultHandles, (SteamItemInstanceID_t*) instanceIDs, countInstanceIDs);
 	*/
@@ -562,18 +547,18 @@ public class SteamInventory extends SteamInterface {
 		return inventory->AddPromoItems((SteamInventoryResult_t*) resultHandles, (SteamItemDef_t*) arrayItemDefs, arrayLength);
 	*/
 
-    private static native boolean consumeItem(long pointer, int[] resultHandles, SteamItemInstanceId itemConsume, int quantity); /*
+    private static native boolean consumeItem(long pointer, int[] resultHandles, long itemConsume, int quantity); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->ConsumeItem((SteamInventoryResult_t*) resultHandles, (SteamItemInstanceID_t) itemConsume, quantity);
 	*/
 
     private static native boolean exchangeItems(long pointer, int[] resultHandles, int[] arrayGenerate, int[] arrayGenerateQuantity, int arrayGenerateLength,
-                                 SteamItemInstanceId[] arrayDestroy, int[] arrayDestroyQuantity, int arrayDestroyLength); /*
+                                                long[] arrayDestroy, int[] arrayDestroyQuantity, int arrayDestroyLength); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->ExchangeItems((SteamInventoryResult_t*) resultHandles, (SteamItemDef_t*) arrayGenerate, (uint32*) arrayGenerateQuantity, arrayGenerateLength, (SteamItemInstanceID_t*) arrayDestroy, (uint32*) arrayDestroyQuantity, arrayDestroyLength);
 	*/
 
-    private static native boolean transferItemQuantity(long pointer, int[] resultHandles, SteamItemInstanceId itemIdSource, int quantity, SteamItemInstanceId itemIdDest); /*
+    private static native boolean transferItemQuantity(long pointer, int[] resultHandles, long itemIdSource, int quantity, long itemIdDest); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->TransferItemQuantity((SteamInventoryResult_t*) resultHandles, (SteamItemInstanceID_t) itemIdSource, quantity, (SteamItemInstanceID_t) itemIdDest);
 	*/
@@ -586,12 +571,6 @@ public class SteamInventory extends SteamInterface {
     private static native boolean triggerItemDrop(long pointer, int[] resultHandles, int dropListDefinition); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->TriggerItemDrop((SteamInventoryResult_t*) resultHandles, dropListDefinition);
-	*/
-
-    private static native boolean tradeItems(long pointer, int[] resultHandles, long steamIDTradePartner, SteamItemInstanceId[] arrayGive, int[] arrayGiveQuantity,
-                              int arrayGiveLength, SteamItemInstanceId[] arrayGet, int[] arrayGetQuantity, int arrayGetLength); /*
-		ISteamInventory* inventory = (ISteamInventory*) pointer;
-		return inventory->TradeItems((SteamInventoryResult_t*) resultHandles, (uint64) steamIDTradePartner, (SteamItemInstanceID_t*) arrayGive, (uint32*) arrayGiveQuantity, arrayGiveLength, (SteamItemInstanceID_t*) arrayGet, (uint32*) arrayGetQuantity, arrayGetLength);
 	*/
 
     private static native boolean loadItemDefinitions(long pointer); /*
@@ -695,27 +674,27 @@ public class SteamInventory extends SteamInterface {
 		return inventory->StartUpdateProperties();
 	*/
 
-    private static native boolean removeProperty(long pointer, long updateHandle, SteamItemInstanceId itemID, String propertyName); /*
+    private static native boolean removeProperty(long pointer, long updateHandle, long itemID, String propertyName); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->RemoveProperty((SteamInventoryUpdateHandle_t) updateHandle, (SteamItemInstanceID_t) itemID, propertyName);
 	*/
 
-    private static native boolean setProperty(long pointer, long updateHandle, SteamItemInstanceId itemID, String propertyName, String value); /*
+    private static native boolean setProperty(long pointer, long updateHandle, long itemID, String propertyName, String value); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->SetProperty((SteamInventoryUpdateHandle_t) updateHandle, (SteamItemInstanceID_t) itemID, propertyName, (char*) value);
 	*/
 
-    private static native boolean setProperty(long pointer, long updateHandle, SteamItemInstanceId itemID, String propertyName, boolean value); /*
+    private static native boolean setProperty(long pointer, long updateHandle, long itemID, String propertyName, boolean value); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->SetProperty((SteamInventoryUpdateHandle_t) updateHandle, (SteamItemInstanceID_t) itemID, propertyName, (bool) value);
 	*/
 
-    private static native boolean setProperty(long pointer, long updateHandle, SteamItemInstanceId itemID, String propertyName, long value); /*
+    private static native boolean setProperty(long pointer, long updateHandle, long itemID, String propertyName, long value); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->SetProperty((SteamInventoryUpdateHandle_t) updateHandle, (SteamItemInstanceID_t) itemID, propertyName, (int64) value);
 	*/
 
-    private static native boolean setProperty(long pointer, long updateHandle, SteamItemInstanceId itemID, String propertyName, float value); /*
+    private static native boolean setProperty(long pointer, long updateHandle, long itemID, String propertyName, float value); /*
 		ISteamInventory* inventory = (ISteamInventory*) pointer;
 		return inventory->SetProperty((SteamInventoryUpdateHandle_t) updateHandle, (SteamItemInstanceID_t) itemID, propertyName, (float) value);
 	*/
