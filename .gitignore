@@ -18,6 +18,7 @@ Makefile
 *.vcxproj.*
 *.xcodeproj/
 *.xcworkspace
+*.log
 
 # IDE files
 .idea/

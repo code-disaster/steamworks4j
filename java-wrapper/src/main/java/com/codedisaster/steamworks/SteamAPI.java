@@ -135,6 +135,10 @@ public class SteamAPI {
 		return (intp) SteamHTTP();
 	*/
 
+	static native long getSteamInventoryPointer(); /*
+		return (intp) SteamInventory();
+	*/
+
 	static native long getSteamMatchmakingPointer(); /*
 		return (intp) SteamMatchmaking();
 	*/

@@ -18,5 +18,4 @@
 		<module>server</module>
 		<module>tests</module>
 	</modules>
-
 </project>

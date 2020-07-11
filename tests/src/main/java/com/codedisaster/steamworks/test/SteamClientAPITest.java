@@ -4,7 +4,7 @@ import com.codedisaster.steamworks.*;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.Collection;
+import java.util.*;
 
 public class SteamClientAPITest extends SteamTestApp {
 
@@ -281,12 +281,20 @@ public class SteamClientAPITest extends SteamTestApp {
 
 		@Override
 		public void onCreateItem(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
+			System.out.println("Create item result: result=" + result + ", needsToAcceptWLA: " + needsToAcceptWLA);
+			System.out.println("publishedFileID: " + publishedFileID);
 
+			SteamUGCUpdateHandle updateHandle = ugc.startItemUpdate(utils.getAppID(), publishedFileID);
+			ugc.setItemTitle(updateHandle, "Test UGC!");
+			ugc.setItemDescription(updateHandle, "Dummy UGC file published by test application.");
+			ugc.setItemVisibility(updateHandle, SteamRemoteStorage.PublishedFileVisibility.Private);
+			ugc.submitItemUpdate(updateHandle, "Dummy UGC file published by test application.");
 		}
 
 		@Override
 		public void onSubmitItemUpdate(SteamPublishedFileID publishedFileID, boolean needsToAcceptWLA, SteamResult result) {
-
+			System.out.println("Submit itemupdate result: result=" + result + ", needsToAcceptWLA: " + needsToAcceptWLA);
+			System.out.println("publishedFileID: " + publishedFileID);
 		}
 
 		@Override
@@ -356,15 +364,11 @@ public class SteamClientAPITest extends SteamTestApp {
 			switch (change) {
 
 				case Name:
-					System.out.println("Persona name received: " +
-							"accountID=" + steamID.getAccountID() +
-							", name='" + friends.getFriendPersonaName(steamID) + "'");
+					System.out.println("Persona name received: " + "accountID=" + steamID.getAccountID() + ", name='" + friends.getFriendPersonaName(steamID) + "'");
 					break;
 
 				default:
-					System.out.println("Persona state changed (unhandled): " +
-							"accountID=" + steamID.getAccountID() +
-							", change=" + change.name());
+					System.out.println("Persona state changed (unhandled): " + "accountID=" + steamID.getAccountID() + ", change=" + change.name());
 					break;
 			}
 		}
@@ -409,7 +413,6 @@ public class SteamClientAPITest extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() {
-
 		System.out.println("Register user ...");
 		user = new SteamUser(userCallback);
 
@@ -432,7 +435,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		friends = new SteamFriends(friendsCallback);
 
 		System.out.println("Local user account ID: " + user.getSteamID().getAccountID());
-		System.out.println("Local user steam ID: " + SteamID.getNativeHandle(user.getSteamID()));
+		System.out.println("Local user steam ID: " + SteamNativeHandle.getNativeHandle(user.getSteamID()));
 		System.out.println("Local user friends name: " + friends.getPersonaName());
 		System.out.println("App ID: " + utils.getAppID());
 
@@ -461,7 +464,6 @@ public class SteamClientAPITest extends SteamTestApp {
 
 	@Override
 	protected void processInput(String input) throws SteamException {
-
 		if (input.startsWith("stats global ")) {
 			String[] cmd = input.substring("stats global ".length()).split(" ");
 			if (cmd.length > 0) {
@@ -548,6 +550,8 @@ public class SteamClientAPITest extends SteamTestApp {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else if (input.startsWith("file create")) {
+			ugc.createItem(utils.getAppID(), SteamRemoteStorage.WorkshopFileType.Community);
 		} else if (input.startsWith("file delete ")) {
 			String path = input.substring("file delete ".length());
 			if (remoteStorage.fileDelete(path)) {
@@ -660,7 +664,6 @@ public class SteamClientAPITest extends SteamTestApp {
 			boolean subscribed = apps.isSubscribedApp(Integer.parseInt(appId));
 			System.out.println("user described to app #" + appId + ": " + (subscribed ? "yes" : "no"));
 		}
-
 	}
 
 	public static void main(String[] arguments) {

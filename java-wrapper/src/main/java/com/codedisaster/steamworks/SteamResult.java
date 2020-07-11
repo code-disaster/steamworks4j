@@ -118,6 +118,9 @@ public enum SteamResult {
 	AccountNotFriends(111),
 	LimitedUserAccount(112),
 	CantRemoveItem(113),
+	AccountDeleted(114),
+	ExistingUserCancelledLicense(115),
+	CommunityCooldown(116),
 
 	/**
 	 * If this is returned(), we missed to "port" an Steam error code above.
