@@ -2,6 +2,20 @@
   "appid": 688610,
   "items": [
     {
+      "itemdefid": 10,
+      "type":  "playtimegenerator",
+      "bundle": "1000x100;1100x50;1300x25;1400x15;1500x10;",
+      "name": "Drop Generator",
+      "name_color":  "7D6D00",
+      "background_color":  "3C352E",
+      "item_slot": "generator",
+      "item_quality": 0,
+      "icon_url": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
+      "icon_url_large": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
+      "tradable": false,
+      "marketable": false
+    },
+    {
       "itemdefid": 1000,
       "type":  "item",
       "price_category": "1;VLV100",
@@ -45,7 +59,7 @@
       "name_english": "Property TestItem",
       "description_english": "The Item which will be used for testing the dynamic properties",
       "store_tags": "hat;weapon",
-      "tags": "weapon",
+      "tags": "weapon:hat",
       "icon_url": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
       "icon_url_large": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
       "tradable": true,
@@ -53,6 +67,21 @@
     },
     {
       "itemdefid": 1400,
+      "type":  "item",
+      "price_category": "1;VLV2500",
+      "name_english": "Promo TestItem",
+      "description_english": "The Item which will be used for testing the Promo methods",
+      "store_tags": "hat",
+      "tags": "promo",
+      "icon_url": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
+      "icon_url_large": "https://wiki.teamfortress.com/w/images/1/1b/Backpack_Anger.png",
+      "promo": "manual",
+      "granted_manually": true,
+      "tradable": true,
+      "marketable": true
+    },
+    {
+      "itemdefid": 1500,
       "type":  "item",
       "price_category": "1;VLV2500",
       "name_english": "Promo TestItem",
