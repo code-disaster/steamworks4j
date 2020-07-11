@@ -17,7 +17,7 @@ public class SteamInventory extends SteamInterface {
             this.bits = bits;
         }
 
-        static boolean isSet(SteamInventory.SteamItemFlags value, int bitMask) {
+        public static boolean isSet(SteamInventory.SteamItemFlags value, int bitMask) {
             return (value.bits & bitMask) == value.bits;
         }
     }
