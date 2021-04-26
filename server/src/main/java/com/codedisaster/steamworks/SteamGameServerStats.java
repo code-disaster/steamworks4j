@@ -4,7 +4,7 @@ package com.codedisaster.steamworks;
 public class SteamGameServerStats extends SteamInterface {
 
 	public SteamGameServerStats(SteamGameServerStatsCallback callback) {
-		super(-1, SteamGameServerStatsNative.createCallback(new SteamGameServerStatsCallbackAdapter(callback)));
+		super(SteamGameServerStatsNative.createCallback(new SteamGameServerStatsCallbackAdapter(callback)));
 	}
 
 	public SteamAPICall requestUserStats(SteamID steamIDUser) {

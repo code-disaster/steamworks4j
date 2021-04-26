@@ -25,7 +25,7 @@ public class SteamUser extends SteamInterface {
 	}
 
 	public SteamUser(SteamUserCallback callback) {
-		super(-1, SteamUserNative.createCallback(new SteamUserCallbackAdapter(callback)));
+		super(SteamUserNative.createCallback(new SteamUserCallbackAdapter(callback)));
 	}
 
 	public SteamID getSteamID() {

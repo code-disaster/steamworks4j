@@ -31,7 +31,7 @@ public class SteamGameServer extends SteamInterface {
 	}
 
 	public SteamGameServer(SteamGameServerCallback callback) {
-		super(-1, SteamGameServerNative.createCallback(new SteamGameServerCallbackAdapter(callback)));
+		super(SteamGameServerNative.createCallback(new SteamGameServerCallbackAdapter(callback)));
 	}
 
 	public void setProduct(String product) {

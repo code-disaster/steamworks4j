@@ -4,25 +4,13 @@ import java.nio.Buffer;
 
 abstract class SteamInterface {
 
-	@Deprecated
-	protected final long pointer;
 	protected long callback;
 
 	SteamInterface() {
-		this(-1L, 0L);
+		this(0L);
 	}
 
-	@Deprecated
-	SteamInterface(long pointer) {
-		this(pointer, 0L);
-	}
-
-	SteamInterface(long pointer, long callback) {
-		if (pointer == 0L) {
-			throw new RuntimeException("Steam interface created with null pointer." +
-							" Always check result of SteamAPI.init(), or with SteamAPI.isSteamRunning()!");
-		}
-		this.pointer = pointer;
+	SteamInterface(long callback) {
 		this.callback = callback;
 	}
 

@@ -79,7 +79,7 @@ public class SteamNetworking extends SteamInterface {
 	}
 
 	SteamNetworking(boolean isServer, long callback) {
-		super(-1, callback);
+		super(callback);
 		this.isServer = isServer;
 	}
 

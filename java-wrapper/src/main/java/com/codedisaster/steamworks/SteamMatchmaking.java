@@ -132,7 +132,7 @@ public class SteamMatchmaking extends SteamInterface {
 	}
 
 	public SteamMatchmaking(SteamMatchmakingCallback callback) {
-		super(-1, SteamMatchmakingNative.createCallback(new SteamMatchmakingCallbackAdapter(callback)));
+		super(SteamMatchmakingNative.createCallback(new SteamMatchmakingCallbackAdapter(callback)));
 	}
 
 	public int getFavoriteGameCount() {

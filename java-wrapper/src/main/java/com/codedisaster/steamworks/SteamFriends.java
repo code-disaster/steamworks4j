@@ -180,7 +180,7 @@ public class SteamFriends extends SteamInterface {
 	}
 
 	public SteamFriends(SteamFriendsCallback callback) {
-		super(-1, SteamFriendsNative.createCallback(new SteamFriendsCallbackAdapter(callback)));
+		super(SteamFriendsNative.createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
 
 	public String getPersonaName() {

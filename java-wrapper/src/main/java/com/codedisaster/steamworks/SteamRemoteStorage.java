@@ -77,7 +77,7 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public SteamRemoteStorage(SteamRemoteStorageCallback callback) {
-		super(-1L, SteamRemoteStorageNative.createCallback(new SteamRemoteStorageCallbackAdapter(callback)));
+		super(SteamRemoteStorageNative.createCallback(new SteamRemoteStorageCallbackAdapter(callback)));
 	}
 
 	public boolean fileWrite(String file, ByteBuffer data) throws SteamException {

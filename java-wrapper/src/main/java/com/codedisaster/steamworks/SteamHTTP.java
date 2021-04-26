@@ -109,7 +109,7 @@ public class SteamHTTP extends SteamInterface {
 	}
 
 	SteamHTTP(boolean isServer, long callback) {
-		super(-1, callback);
+		super(callback);
 		this.isServer = isServer;
 	}
 

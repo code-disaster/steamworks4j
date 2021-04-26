@@ -224,7 +224,7 @@ public class SteamUGC extends SteamInterface {
 	}
 
 	public SteamUGC(SteamUGCCallback callback) {
-		super(-1, SteamUGCNative.createCallback(new SteamUGCCallbackAdapter(callback)));
+		super(SteamUGCNative.createCallback(new SteamUGCCallbackAdapter(callback)));
 	}
 
 	public SteamUGCQuery createQueryUserUGCRequest(int accountID, UserUGCList listType,

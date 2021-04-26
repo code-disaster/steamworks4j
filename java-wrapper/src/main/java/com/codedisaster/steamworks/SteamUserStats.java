@@ -30,7 +30,7 @@ public class SteamUserStats extends SteamInterface {
 	}
 
 	public SteamUserStats(SteamUserStatsCallback callback) {
-		super(-1L, SteamUserStatsNative.createCallback(new SteamUserStatsCallbackAdapter(callback)));
+		super(SteamUserStatsNative.createCallback(new SteamUserStatsCallbackAdapter(callback)));
 	}
 
 	public boolean requestCurrentStats() {

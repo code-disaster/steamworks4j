@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 public class SteamScreenshots extends SteamInterface {
 
 	public SteamScreenshots(SteamScreenshotsCallback callback) {
-		super(-1L, SteamScreenshotsNative.createCallback(new SteamScreenshotsCallbackAdapter(callback)));
+		super(SteamScreenshotsNative.createCallback(new SteamScreenshotsCallbackAdapter(callback)));
 	}
 
 	public SteamScreenshotHandle writeScreenshot(ByteBuffer rgb, int width, int height) {
