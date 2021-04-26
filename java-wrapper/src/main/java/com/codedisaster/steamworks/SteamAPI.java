@@ -119,24 +119,4 @@ public class SteamAPI {
 		return SteamAPI_IsSteamRunning();
 	*/
 
-	static native long getSteamControllerPointer(); /*
-		return (intp) SteamController();
-	*/
-
-	static native long getSteamFriendsPointer(); /*
-		return (intp) SteamFriends();
-	*/
-
-	static native long getSteamHTTPPointer(); /*
-		return (intp) SteamHTTP();
-	*/
-
-	static native long getSteamMatchmakingPointer(); /*
-		return (intp) SteamMatchmaking();
-	*/
-
-	static native long getSteamMatchmakingServersPointer(); /*
-		return (intp) SteamMatchmakingServers();
-	*/
-
 }

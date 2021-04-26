@@ -10,7 +10,7 @@ class SteamGameServerAPINative {
 	*/
 
 	static native boolean nativeInit(int ip, short steamPort, short gamePort, short queryPort,
-											 int serverMode, String versionString); /*
+									 int serverMode, String versionString); /*
 
 		 if (env->GetJavaVM(&staticVM) != 0) {
 			 return false;
@@ -34,18 +34,6 @@ class SteamGameServerAPINative {
 
 	static native long nativeGetSteamID(); /*
 		return SteamGameServer_GetSteamID();
-	*/
-
-	static native long getSteamGameServerPointer(); /*
-		return (intp) SteamGameServer();
-	*/
-
-	static native long getSteamGameServerStatsPointer(); /*
-		return (intp) SteamGameServerStats();
-	*/
-
-	static native long getSteamGameServerHTTPPointer(); /*
-		return (intp) SteamGameServerHTTP();
 	*/
 
 }

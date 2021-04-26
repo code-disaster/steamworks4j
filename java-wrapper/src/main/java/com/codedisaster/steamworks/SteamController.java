@@ -1,5 +1,6 @@
 package com.codedisaster.steamworks;
 
+@SuppressWarnings({ "unused", "UnusedReturnValue" })
 public class SteamController extends SteamInterface {
 
 	public enum Pad {
@@ -381,23 +382,23 @@ public class SteamController extends SteamInterface {
 	public static final float STEAM_CONTROLLER_MIN_ANALOG_ACTION_DATA = -1.0f;
 	public static final float STEAM_CONTROLLER_MAX_ANALOG_ACTION_DATA = 1.0f;
 
-	private long[] controllerHandles = new long[STEAM_CONTROLLER_MAX_COUNT];
-	private int[] actionOrigins = new int[STEAM_CONTROLLER_MAX_ORIGINS];
+	private final long[] controllerHandles = new long[STEAM_CONTROLLER_MAX_COUNT];
+	private final int[] actionOrigins = new int[STEAM_CONTROLLER_MAX_ORIGINS];
 
 	public SteamController() {
-		super(SteamAPI.getSteamControllerPointer());
+		super(-1);
 	}
 
 	public boolean init() {
-		return init(pointer);
+		return SteamControllerNative.init();
 	}
 
 	public boolean shutdown() {
-		return shutdown(pointer);
+		return SteamControllerNative.shutdown();
 	}
 
 	public void runFrame() {
-		runFrame(pointer);
+		SteamControllerNative.runFrame();
 	}
 
 	public int getConnectedControllers(SteamControllerHandle[] handlesOut) {
@@ -405,7 +406,7 @@ public class SteamController extends SteamInterface {
 			throw new IllegalArgumentException("Array size must be at least STEAM_CONTROLLER_MAX_COUNT");
 		}
 
-		int count = getConnectedControllers(pointer, controllerHandles);
+		int count = SteamControllerNative.getConnectedControllers(controllerHandles);
 
 		for (int i = 0; i < count; i++) {
 			handlesOut[i] = new SteamControllerHandle(controllerHandles[i]);
@@ -415,30 +416,30 @@ public class SteamController extends SteamInterface {
 	}
 
 	public boolean showBindingPanel(SteamControllerHandle controller) {
-		return showBindingPanel(pointer, controller.handle);
+		return SteamControllerNative.showBindingPanel(controller.handle);
 	}
 
 	public SteamControllerActionSetHandle getActionSetHandle(String actionSetName) {
-		return new SteamControllerActionSetHandle(getActionSetHandle(pointer, actionSetName));
+		return new SteamControllerActionSetHandle(SteamControllerNative.getActionSetHandle(actionSetName));
 	}
 
 	public void activateActionSet(SteamControllerHandle controller, SteamControllerActionSetHandle actionSet) {
-		activateActionSet(pointer, controller.handle, actionSet.handle);
+		SteamControllerNative.activateActionSet(controller.handle, actionSet.handle);
 	}
 
 	public SteamControllerActionSetHandle getCurrentActionSet(SteamControllerHandle controller) {
-		return new SteamControllerActionSetHandle(getCurrentActionSet(pointer, controller.handle));
+		return new SteamControllerActionSetHandle(SteamControllerNative.getCurrentActionSet(controller.handle));
 	}
 
 	public SteamControllerDigitalActionHandle getDigitalActionHandle(String actionName) {
-		return new SteamControllerDigitalActionHandle(getDigitalActionHandle(pointer, actionName));
+		return new SteamControllerDigitalActionHandle(SteamControllerNative.getDigitalActionHandle(actionName));
 	}
 
 	public void getDigitalActionData(SteamControllerHandle controller,
 									 SteamControllerDigitalActionHandle digitalAction,
 									 SteamControllerDigitalActionData digitalActionData) {
 
-		getDigitalActionData(pointer, controller.handle, digitalAction.handle, digitalActionData);
+		SteamControllerNative.getDigitalActionData(controller.handle, digitalAction.handle, digitalActionData);
 	}
 
 	public int getDigitalActionOrigins(SteamControllerHandle controller,
@@ -450,7 +451,7 @@ public class SteamController extends SteamInterface {
 			throw new IllegalArgumentException("Array size must be at least STEAM_CONTROLLER_MAX_ORIGINS");
 		}
 
-		int count = getDigitalActionOrigins(pointer, controller.handle,
+		int count = SteamControllerNative.getDigitalActionOrigins(controller.handle,
 				actionSet.handle, digitalAction.handle, actionOrigins);
 
 		for (int i = 0; i < count; i++) {
@@ -461,14 +462,14 @@ public class SteamController extends SteamInterface {
 	}
 
 	public SteamControllerAnalogActionHandle getAnalogActionHandle(String actionName) {
-		return new SteamControllerAnalogActionHandle(getAnalogActionHandle(pointer, actionName));
+		return new SteamControllerAnalogActionHandle(SteamControllerNative.getAnalogActionHandle(actionName));
 	}
 
 	public void getAnalogActionData(SteamControllerHandle controller,
 									SteamControllerAnalogActionHandle analogAction,
 									SteamControllerAnalogActionData analoglActionData) {
 
-		getAnalogActionData(pointer, controller.handle, analogAction.handle, analoglActionData);
+		SteamControllerNative.getAnalogActionData(controller.handle, analogAction.handle, analoglActionData);
 	}
 
 	public int getAnalogActionOrigins(SteamControllerHandle controller,
@@ -480,7 +481,7 @@ public class SteamController extends SteamInterface {
 			throw new IllegalArgumentException("Array size must be at least STEAM_CONTROLLER_MAX_ORIGINS");
 		}
 
-		int count = getAnalogActionOrigins(pointer, controller.handle,
+		int count = SteamControllerNative.getAnalogActionOrigins(controller.handle,
 				actionSet.handle, analogAction.handle, actionOrigins);
 
 		for (int i = 0; i < count; i++) {
@@ -493,271 +494,51 @@ public class SteamController extends SteamInterface {
 	public void stopAnalogActionMomentum(SteamControllerHandle controller,
 										 SteamControllerAnalogActionHandle analogAction) {
 
-		stopAnalogActionMomentum(pointer, controller.handle, analogAction.handle);
+		SteamControllerNative.stopAnalogActionMomentum(controller.handle, analogAction.handle);
 	}
 
 	public void triggerHapticPulse(SteamControllerHandle controller, Pad targetPad, int durationMicroSec) {
-		triggerHapticPulse(pointer, controller.handle, targetPad.ordinal(), durationMicroSec);
+		SteamControllerNative.triggerHapticPulse(controller.handle, targetPad.ordinal(), durationMicroSec);
 	}
 
 	public void triggerRepeatedHapticPulse(SteamControllerHandle controller, Pad targetPad,
 										   int durationMicroSec, int offMicroSec, int repeat, int flags) {
 
-		triggerRepeatedHapticPulse(pointer, controller.handle, targetPad.ordinal(),
+		SteamControllerNative.triggerRepeatedHapticPulse(controller.handle, targetPad.ordinal(),
 				durationMicroSec, offMicroSec, repeat, flags);
 	}
 
 	public void triggerVibration(SteamControllerHandle controller, short leftSpeed, short rightSpeed) {
-		triggerVibration(pointer, controller.handle, leftSpeed, rightSpeed);
+		SteamControllerNative.triggerVibration(controller.handle, leftSpeed, rightSpeed);
 	}
 
 	public void setLEDColor(SteamControllerHandle controller, int colorR, int colorG, int colorB, LEDFlag flags) {
-		setLEDColor(pointer, controller.handle, (byte) (colorR & 0xff),
+		SteamControllerNative.setLEDColor(controller.handle, (byte) (colorR & 0xff),
 				(byte) (colorG & 0xff), (byte) (colorB & 0xff), flags.ordinal());
 	}
 
 	public int getGamepadIndexForController(SteamControllerHandle controller) {
-		return getGamepadIndexForController(pointer, controller.handle);
+		return SteamControllerNative.getGamepadIndexForController(controller.handle);
 	}
 
 	public SteamControllerHandle getControllerForGamepadIndex(int index) {
-		return new SteamControllerHandle(getControllerForGamepadIndex(pointer, index));
+		return new SteamControllerHandle(SteamControllerNative.getControllerForGamepadIndex(index));
 	}
 
 	public void getMotionData(SteamControllerHandle controller, SteamControllerMotionData motionData) {
-		getMotionData(pointer, controller.handle, motionData.data);
+		SteamControllerNative.getMotionData(controller.handle, motionData.data);
 	}
 
 	public String getStringForActionOrigin(ActionOrigin origin) {
-		return getStringForActionOrigin(pointer, origin.ordinal());
+		return SteamControllerNative.getStringForActionOrigin(origin.ordinal());
 	}
 
 	public String getGlyphForActionOrigin(ActionOrigin origin) {
-		return getGlyphForActionOrigin(pointer, origin.ordinal());
+		return SteamControllerNative.getGlyphForActionOrigin(origin.ordinal());
 	}
 
 	public InputType getInputTypeForHandle(SteamControllerHandle controller) {
-		return InputType.byOrdinal(getInputTypeForHandle(pointer, controller.handle));
+		return InputType.byOrdinal(SteamControllerNative.getInputTypeForHandle(controller.handle));
 	}
-
-	// @off
-
-	/*JNI
-		#include "isteamcontroller.h"
-	*/
-
-	private static native boolean init(long pointer); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->Init();
-	*/
-
-	private static native boolean shutdown(long pointer); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->Shutdown();
-	*/
-
-	private static native void runFrame(long pointer); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->RunFrame();
-	*/
-
-	private static native int getConnectedControllers(long pointer, long[] handlesOut); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetConnectedControllers((ControllerHandle_t*) handlesOut);
-	*/
-
-	private static native boolean showBindingPanel(long pointer, long controllerHandle); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->ShowBindingPanel((ControllerHandle_t) controllerHandle);
-	*/
-
-	private static native long getActionSetHandle(long pointer, String actionSetName); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetActionSetHandle(actionSetName);
-	*/
-
-	private static native void activateActionSet(long pointer, long controllerHandle, long actionSetHandle); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->ActivateActionSet((ControllerHandle_t) controllerHandle, (ControllerActionSetHandle_t) actionSetHandle);
-	*/
-
-	private static native long getCurrentActionSet(long pointer, long controllerHandle); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetCurrentActionSet((ControllerHandle_t) controllerHandle);
-	*/
-
-	private static native long getDigitalActionHandle(long pointer, String actionName); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetDigitalActionHandle(actionName);
-	*/
-
-	private static native void getDigitalActionData(long pointer,
-													long controllerHandle,
-													long digitalActionHandle,
-													SteamControllerDigitalActionData digitalActionData); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		ControllerDigitalActionData_t result = controller->GetDigitalActionData(
-			(ControllerHandle_t) controllerHandle, (ControllerDigitalActionHandle_t) digitalActionHandle);
-
-		{
-			jclass clazz = env->GetObjectClass(digitalActionData);
-
-			jfieldID field = env->GetFieldID(clazz, "state", "Z");
-			env->SetBooleanField(digitalActionData, field, (jboolean) result.bState);
-
-			field = env->GetFieldID(clazz, "active", "Z");
-			env->SetBooleanField(digitalActionData, field, (jboolean) result.bActive);
-		}
-	*/
-
-	private static native int getDigitalActionOrigins(long pointer,
-													  long controllerHandle,
-													  long actionSetHandle,
-													  long digitalActionHandle,
-													  int[] originsOut); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetDigitalActionOrigins((ControllerHandle_t) controllerHandle,
-			(ControllerActionSetHandle_t) actionSetHandle, (ControllerDigitalActionHandle_t) digitalActionHandle,
-			(EControllerActionOrigin*) originsOut);
-	*/
-
-	private static native long getAnalogActionHandle(long pointer, String actionName); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetAnalogActionHandle(actionName);
-	*/
-
-	private static native void getAnalogActionData(long pointer,
-												   long controllerHandle,
-												   long analogActionHandle,
-												   SteamControllerAnalogActionData analogActionData); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		ControllerAnalogActionData_t result = controller->GetAnalogActionData(
-			(ControllerHandle_t) controllerHandle, (ControllerAnalogActionHandle_t) analogActionHandle);
-
-		{
-			jclass clazz = env->GetObjectClass(analogActionData);
-
-			jfieldID field = env->GetFieldID(clazz, "mode", "I");
-			env->SetIntField(analogActionData, field, (jint) result.eMode);
-
-			field = env->GetFieldID(clazz, "x", "F");
-			env->SetFloatField(analogActionData, field, (jfloat) result.x);
-
-			field = env->GetFieldID(clazz, "y", "F");
-			env->SetFloatField(analogActionData, field, (jfloat) result.y);
-
-			field = env->GetFieldID(clazz, "active", "Z");
-			env->SetBooleanField(analogActionData, field, (jboolean) result.bActive);
-		}
-	*/
-
-	private static native int getAnalogActionOrigins(long pointer,
-													 long controllerHandle,
-													 long actionSetHandle,
-													 long analogActionHandle,
-													 int[] originsOut); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetAnalogActionOrigins((ControllerHandle_t) controllerHandle,
-			(ControllerActionSetHandle_t) actionSetHandle, (ControllerAnalogActionHandle_t) analogActionHandle,
-			(EControllerActionOrigin*) originsOut);
-	*/
-
-	private static native void stopAnalogActionMomentum(long pointer,
-														long controllerHandle,
-														long analogActionHandle); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->StopAnalogActionMomentum((ControllerHandle_t) controllerHandle,
-			(ControllerAnalogActionHandle_t) analogActionHandle);
-	*/
-
-	private static native void triggerHapticPulse(long pointer,
-												  long controllerHandle,
-												  int targetPad,
-												  int durationMicroSec); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->TriggerHapticPulse((ControllerHandle_t) controllerHandle,
-			(ESteamControllerPad) targetPad, (unsigned short) durationMicroSec);
-	*/
-
-	private static native void triggerRepeatedHapticPulse(long pointer,
-														  long controllerHandle,
-														  int targetPad,
-														  int durationMicroSec,
-														  int offMicroSec,
-														  int repeat,
-														  int flags); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->TriggerRepeatedHapticPulse((ControllerHandle_t) controllerHandle,
-				(ESteamControllerPad) targetPad, (unsigned short) durationMicroSec,
-				(unsigned short) offMicroSec, (unsigned short) repeat, (unsigned int) flags);
-	*/
-
-	private static native void triggerVibration(long pointer,
-												long controllerHandle,
-												short leftSpeed,
-												short rightSpeed); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->TriggerVibration((ControllerHandle_t) controllerHandle,
-			(unsigned short) leftSpeed, (unsigned short) rightSpeed);
-	*/
-
-	private static native void setLEDColor(long pointer, long controllerHandle,
-										   byte colorR, byte colorG, byte colorB, int flags); /*
-
-		ISteamController* controller = (ISteamController*) pointer;
-		controller->SetLEDColor((ControllerHandle_t) controllerHandle,
-			colorR, colorG, colorB, (unsigned int) flags);
-	*/
-
-	private static native int getGamepadIndexForController(long pointer, long controllerHandle); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetGamepadIndexForController((ControllerHandle_t) controllerHandle);
-	*/
-
-	private static native long getControllerForGamepadIndex(long pointer, int index); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetControllerForGamepadIndex(index);
-	*/
-
-	private static native void getMotionData(long pointer, long controllerHandle, float[] motionData); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		ControllerMotionData_t data = controller->GetMotionData((ControllerHandle_t) controllerHandle);
-
-		motionData[0] = data.rotQuatX;
-		motionData[1] = data.rotQuatY;
-		motionData[2] = data.rotQuatZ;
-		motionData[3] = data.rotQuatW;
-
-		motionData[4] = data.posAccelX;
-		motionData[5] = data.posAccelY;
-		motionData[6] = data.posAccelZ;
-
-		motionData[7] = data.rotVelX;
-		motionData[8] = data.rotVelY;
-		motionData[9] = data.rotVelZ;
-	*/
-
-	private static native String getStringForActionOrigin(long pointer, int origin); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return env->NewStringUTF(controller->GetStringForActionOrigin((EControllerActionOrigin) origin));
-	*/
-
-	private static native String getGlyphForActionOrigin(long pointer, int origin); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return env->NewStringUTF(controller->GetGlyphForActionOrigin((EControllerActionOrigin) origin));
-	*/
-
-	private static native int getInputTypeForHandle(long pointer, long controllerHandle); /*
-		ISteamController* controller = (ISteamController*) pointer;
-		return controller->GetInputTypeForHandle((ControllerHandle_t) controllerHandle);
-	*/
 
 }

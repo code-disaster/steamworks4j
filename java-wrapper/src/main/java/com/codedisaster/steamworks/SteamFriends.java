@@ -2,6 +2,7 @@ package com.codedisaster.steamworks;
 
 import java.util.Collection;
 
+@SuppressWarnings({ "unused", "UnusedReturnValue" })
 public class SteamFriends extends SteamInterface {
 
 	public enum FriendRelationship {
@@ -179,287 +180,119 @@ public class SteamFriends extends SteamInterface {
 	}
 
 	public SteamFriends(SteamFriendsCallback callback) {
-		super(SteamAPI.getSteamFriendsPointer(), createCallback(new SteamFriendsCallbackAdapter(callback)));
+		super(-1, SteamFriendsNative.createCallback(new SteamFriendsCallbackAdapter(callback)));
 	}
 
 	public String getPersonaName() {
-		return getPersonaName(pointer);
+		return SteamFriendsNative.getPersonaName();
 	}
 
 	public SteamAPICall setPersonaName(String personaName) {
-		return new SteamAPICall(setPersonaName(pointer, callback, personaName));
+		return new SteamAPICall(SteamFriendsNative.setPersonaName(callback, personaName));
 	}
 
 	public PersonaState getPersonaState() {
-		return PersonaState.byOrdinal(getPersonaState(pointer));
+		return PersonaState.byOrdinal(SteamFriendsNative.getPersonaState());
 	}
 
 	public int getFriendCount(FriendFlags friendFlag) {
-		return getFriendCount(pointer, friendFlag.bits);
+		return SteamFriendsNative.getFriendCount(friendFlag.bits);
 	}
 
 	public int getFriendCount(Collection<FriendFlags> friendFlags) {
-		return getFriendCount(pointer, FriendFlags.asBits(friendFlags));
+		return SteamFriendsNative.getFriendCount(FriendFlags.asBits(friendFlags));
 	}
 
 	public SteamID getFriendByIndex(int friend, FriendFlags friendFlag) {
-		return new SteamID(getFriendByIndex(pointer, friend, friendFlag.bits));
+		return new SteamID(SteamFriendsNative.getFriendByIndex(friend, friendFlag.bits));
 	}
 
 	public SteamID getFriendByIndex(int friend, Collection<FriendFlags> friendFlags) {
-		return new SteamID(getFriendByIndex(pointer, friend, FriendFlags.asBits(friendFlags)));
+		return new SteamID(SteamFriendsNative.getFriendByIndex(friend, FriendFlags.asBits(friendFlags)));
 	}
 
 	public FriendRelationship getFriendRelationship(SteamID steamIDFriend) {
-		return FriendRelationship.byOrdinal(getFriendRelationship(pointer, steamIDFriend.handle));
+		return FriendRelationship.byOrdinal(SteamFriendsNative.getFriendRelationship(steamIDFriend.handle));
 	}
 
 	public PersonaState getFriendPersonaState(SteamID steamIDFriend) {
-		return PersonaState.byOrdinal(getFriendPersonaState(pointer, steamIDFriend.handle));
+		return PersonaState.byOrdinal(SteamFriendsNative.getFriendPersonaState(steamIDFriend.handle));
 	}
 
 	public String getFriendPersonaName(SteamID steamIDFriend) {
-		return getFriendPersonaName(pointer, steamIDFriend.handle);
+		return SteamFriendsNative.getFriendPersonaName(steamIDFriend.handle);
 	}
 
 	public boolean getFriendGamePlayed(SteamID steamIDFriend, FriendGameInfo friendGameInfo) {
-		return getFriendGamePlayed(pointer, steamIDFriend.handle, friendGameInfo);
+		return SteamFriendsNative.getFriendGamePlayed(steamIDFriend.handle, friendGameInfo);
 	}
 
 	public void setInGameVoiceSpeaking(SteamID steamID, boolean speaking) {
-		setInGameVoiceSpeaking(pointer, steamID.handle, speaking);
+		SteamFriendsNative.setInGameVoiceSpeaking(steamID.handle, speaking);
 	}
 
 	public int getSmallFriendAvatar(SteamID steamID) {
-		return getSmallFriendAvatar(pointer, steamID.handle);
+		return SteamFriendsNative.getSmallFriendAvatar(steamID.handle);
 	}
 
 	public int getMediumFriendAvatar(SteamID steamID) {
-		return getMediumFriendAvatar(pointer, steamID.handle);
+		return SteamFriendsNative.getMediumFriendAvatar(steamID.handle);
 	}
 
 	public int getLargeFriendAvatar(SteamID steamID) {
-		return getLargeFriendAvatar(pointer, steamID.handle);
+		return SteamFriendsNative.getLargeFriendAvatar(steamID.handle);
 	}
 
 	public boolean requestUserInformation(SteamID steamID, boolean requireNameOnly) {
-		return requestUserInformation(pointer, steamID.handle, requireNameOnly);
+		return SteamFriendsNative.requestUserInformation(steamID.handle, requireNameOnly);
 	}
 
 	public void activateGameOverlay(OverlayDialog dialog) {
-		activateGameOverlay(pointer, dialog.id);
+		SteamFriendsNative.activateGameOverlay(dialog.id);
 	}
 
 	public void activateGameOverlayToUser(OverlayToUserDialog dialog, SteamID steamID) {
-		activateGameOverlayToUser(pointer, dialog.id, steamID.handle);
+		SteamFriendsNative.activateGameOverlayToUser(dialog.id, steamID.handle);
 	}
 
 	public void activateGameOverlayToWebPage(String url, OverlayToWebPageMode mode) {
-		activateGameOverlayToWebPage(pointer, url, mode.ordinal());
+		SteamFriendsNative.activateGameOverlayToWebPage(url, mode.ordinal());
 	}
 
 	public void activateGameOverlayToStore(int appID, OverlayToStoreFlag flag) {
-		activateGameOverlayToStore(pointer, appID, flag.ordinal());
+		SteamFriendsNative.activateGameOverlayToStore(appID, flag.ordinal());
 	}
 
 	public void activateGameOverlayInviteDialog(SteamID steamIDLobby) {
-		activateGameOverlayInviteDialog(pointer, steamIDLobby.handle);
+		SteamFriendsNative.activateGameOverlayInviteDialog(steamIDLobby.handle);
 	}
 
 	public boolean setRichPresence(String key, String value) {
-		return setRichPresence(pointer, key, value != null ? value : "");
+		return SteamFriendsNative.setRichPresence(key, value != null ? value : "");
 	}
 
 	public void clearRichPresence() {
-		clearRichPresence(pointer);
+		SteamFriendsNative.clearRichPresence();
 	}
 
 	public String getFriendRichPresence(SteamID steamIDFriend, String key) {
-		return getFriendRichPresence(pointer, steamIDFriend.handle, key);
+		return SteamFriendsNative.getFriendRichPresence(steamIDFriend.handle, key);
 	}
 
 	public int getFriendRichPresenceKeyCount(SteamID steamIDFriend) {
-		return getFriendRichPresenceKeyCount(pointer, steamIDFriend.handle);
+		return SteamFriendsNative.getFriendRichPresenceKeyCount(steamIDFriend.handle);
 	}
 
 	public String getFriendRichPresenceKeyByIndex(SteamID steamIDFriend, int index) {
-		return getFriendRichPresenceKeyByIndex(pointer, steamIDFriend.handle, index);
+		return SteamFriendsNative.getFriendRichPresenceKeyByIndex(steamIDFriend.handle, index);
 	}
 
 	public void requestFriendRichPresence(SteamID steamIDFriend) {
-		requestFriendRichPresence(pointer, steamIDFriend.handle);
+		SteamFriendsNative.requestFriendRichPresence(steamIDFriend.handle);
 	}
 
 	public boolean inviteUserToGame(SteamID steamIDFriend, String connectString) {
-		return inviteUserToGame(pointer, steamIDFriend.handle, connectString);
+		return SteamFriendsNative.inviteUserToGame(steamIDFriend.handle, connectString);
 	}
-
-	// @off
-
-	/*JNI
-		#include "SteamFriendsCallback.h"
-	*/
-
-	private static native long createCallback(SteamFriendsCallbackAdapter javaCallback); /*
-		return (intp) new SteamFriendsCallback(env, javaCallback);
-	*/
-
-	private static native String getPersonaName(long pointer); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		jstring name = env->NewStringUTF(friends->GetPersonaName());
-		return name;
-	*/
-
-	private static native long setPersonaName(long pointer, long callback, String personaName); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		SteamFriendsCallback* cb = (SteamFriendsCallback*) callback;
-		SteamAPICall_t handle = friends->SetPersonaName(personaName);
-		cb->onSetPersonaNameResponseCall.Set(handle, cb, &SteamFriendsCallback::onSetPersonaNameResponse);
-		return handle;
-	*/
-
-	private static native int getPersonaState(long pointer); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetPersonaState();
-	*/
-
-	private static native int getFriendCount(long pointer, int friendFlags); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetFriendCount(friendFlags);
-	*/
-
-	private static native long getFriendByIndex(long pointer, int friendIndex, int friendFlags); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		CSteamID id = friends->GetFriendByIndex(friendIndex, friendFlags);
-		return id.ConvertToUint64();
-	*/
-
-	private static native int getFriendRelationship(long pointer, long steamIDFriend); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetFriendRelationship((uint64) steamIDFriend);
-	*/
-
-	private static native int getFriendPersonaState(long pointer, long steamIDFriend); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetFriendPersonaState((uint64) steamIDFriend);
-	*/
-
-	private static native String getFriendPersonaName(long pointer, long steamIDFriend); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		jstring name = env->NewStringUTF(friends->GetFriendPersonaName((uint64) steamIDFriend));
-		return name;
-	*/
-
-	private static native boolean getFriendGamePlayed(long pointer, long steamIDFriend,
-													  FriendGameInfo friendGameInfo); /*
-
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		FriendGameInfo_t result;
-		bool success = friends->GetFriendGamePlayed((uint64) steamIDFriend, &result);
-		if (success) {
-			jclass clazz = env->GetObjectClass(friendGameInfo);
-
-			jfieldID field = env->GetFieldID(clazz, "gameID", "J");
-			env->SetLongField(friendGameInfo, field, (jlong) result.m_gameID.ToUint64());
-
-			field = env->GetFieldID(clazz, "gameIP", "I");
-			env->SetIntField(friendGameInfo, field, (jint) result.m_unGameIP);
-
-			field = env->GetFieldID(clazz, "gamePort", "S");
-			env->SetShortField(friendGameInfo, field, (jshort) result.m_usGamePort);
-
-			field = env->GetFieldID(clazz, "queryPort", "S");
-			env->SetShortField(friendGameInfo, field, (jshort) result.m_usQueryPort);
-
-			field = env->GetFieldID(clazz, "steamIDLobby", "J");
-			env->SetLongField(friendGameInfo, field, (jlong) result.m_steamIDLobby.ConvertToUint64());
-		}
-		return success;
-	*/
-
-	private static native void setInGameVoiceSpeaking(long pointer, long steamID, boolean speaking); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->SetInGameVoiceSpeaking((uint64) steamID, speaking);
-	*/
-
-	private static native int getSmallFriendAvatar(long pointer, long steamID); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetSmallFriendAvatar((uint64) steamID);
-	*/
-
-	private static native int getMediumFriendAvatar(long pointer, long steamID); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetMediumFriendAvatar((uint64) steamID);
-	*/
-
-	private static native int getLargeFriendAvatar(long pointer, long steamID); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetLargeFriendAvatar((uint64) steamID);
-	*/
-
-	private static native boolean requestUserInformation(long pointer, long steamID, boolean requireNameOnly); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->RequestUserInformation((uint64) steamID, requireNameOnly);
-	*/
-
-	private static native void activateGameOverlay(long pointer, String dialog); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlay(dialog);
-	*/
-
-	private static native void activateGameOverlayToUser(long pointer, String dialog, long steamID); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlayToUser(dialog, (uint64) steamID);
-	*/
-
-	private static native void activateGameOverlayToWebPage(long pointer, String url, int mode); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlayToWebPage(url, (EActivateGameOverlayToWebPageMode) mode);
-	*/
-
-	private static native void activateGameOverlayToStore(long pointer, int appID, int flag); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlayToStore((AppId_t) appID, (EOverlayToStoreFlag) flag);
-	*/
-
-	private static native void activateGameOverlayInviteDialog(long pointer, long steamIDLobby); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->ActivateGameOverlayInviteDialog((uint64) steamIDLobby);
-	*/
-
-	private static native boolean setRichPresence(long pointer, String key, String value); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->SetRichPresence(key, value);
-	*/
-
-	private static native void clearRichPresence(long pointer); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		friends->ClearRichPresence();
-	*/
-
-	private static native String getFriendRichPresence(long pointer, long steamIDFriend, String key); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return env->NewStringUTF(friends->GetFriendRichPresence((uint64) steamIDFriend, key));
-	*/
-
-	private static native int getFriendRichPresenceKeyCount(long pointer, long steamIDFriend); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->GetFriendRichPresenceKeyCount((uint64) steamIDFriend);
-	*/
-
-	private static native String getFriendRichPresenceKeyByIndex(long pointer, long steamIDFriend, int index); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return env->NewStringUTF(friends->GetFriendRichPresenceKeyByIndex((uint64) steamIDFriend, index));
-	*/
-
-	private static native void requestFriendRichPresence(long pointer, long steamIDFriend); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		friends->RequestFriendRichPresence((uint64) steamIDFriend);
-	*/
-
-	private static native boolean inviteUserToGame(long pointer, long steamIDFriend, String connectString); /*
-		ISteamFriends* friends = (ISteamFriends*) pointer;
-		return friends->InviteUserToGame((uint64) steamIDFriend, connectString);
-	*/
 
 }
