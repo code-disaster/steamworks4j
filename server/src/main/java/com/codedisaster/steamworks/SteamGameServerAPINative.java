@@ -40,10 +40,6 @@ class SteamGameServerAPINative {
 		return (intp) SteamGameServer();
 	*/
 
-	static native long getSteamGameServerNetworkingPointer(); /*
-		return (intp) SteamGameServerNetworking();
-	*/
-
 	static native long getSteamGameServerStatsPointer(); /*
 		return (intp) SteamGameServerStats();
 	*/

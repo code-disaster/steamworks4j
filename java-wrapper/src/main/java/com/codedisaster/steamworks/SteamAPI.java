@@ -139,16 +139,4 @@ public class SteamAPI {
 		return (intp) SteamMatchmakingServers();
 	*/
 
-	static native long getSteamNetworkingPointer(); /*
-		return (intp) SteamNetworking();
-	*/
-
-	static native long getSteamUGCPointer(); /*
-		return (intp) SteamUGC();
-	*/
-
-	static native long getSteamUserPointer(); /*
-		return (intp) SteamUser();
-	*/
-
 }
