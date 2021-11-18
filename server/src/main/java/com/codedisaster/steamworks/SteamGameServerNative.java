@@ -156,7 +156,7 @@ class SteamGameServerNative {
 	*/
 
 	static native int getPublicIP(); /*
-		return SteamGameServer()->GetPublicIP();
+		return (jint) SteamGameServer()->GetPublicIP().m_unIPv4;
 	*/
 
 	static native boolean handleIncomingPacket(ByteBuffer data,
