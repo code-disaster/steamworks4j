@@ -109,7 +109,7 @@ class SteamGameServerNative {
 	static native boolean sendUserConnectAndAuthenticate(int clientIP, ByteBuffer authBlob,
 														 int offset, int size, long[] steamIDUser); /*
 		CSteamID user;
-		if (SteamGameServer()->SendUserConnectAndAuthenticate(clientIP, &authBlob[offset], size, &user)) {
+		if (SteamGameServer()->SendUserConnectAndAuthenticate_DEPRECATED(clientIP, &authBlob[offset], size, &user)) {
 			steamIDUser[0] = user.ConvertToUint64();
 			return true;
 		}
@@ -121,7 +121,7 @@ class SteamGameServerNative {
 	*/
 
 	static native void sendUserDisconnect(long steamIDUser); /*
-		SteamGameServer()->SendUserDisconnect((uint64) steamIDUser);
+		SteamGameServer()->SendUserDisconnect_DEPRECATED((uint64) steamIDUser);
 	*/
 
 	static native boolean updateUserData(long steamIDUser, String playerName, int score); /*
@@ -167,18 +167,6 @@ class SteamGameServerNative {
 	static native int getNextOutgoingPacket(ByteBuffer out,
 											int offset, int size, int[] netAdr, short[] port); /*
 		return SteamGameServer()->GetNextOutgoingPacket(&out[offset], size, (uint32*) netAdr, (uint16*) port);
-	*/
-
-	static native void enableHeartbeats(boolean active); /*
-		SteamGameServer()->EnableHeartbeats(active);
-	*/
-
-	static native void setHeartbeatInterval(int heartbeatInterval); /*
-		SteamGameServer()->SetHeartbeatInterval(heartbeatInterval);
-	*/
-
-	static native void forceHeartbeat(); /*
-		SteamGameServer()->ForceHeartbeat();
 	*/
 
 	static native long associateWithClan(long steamIDClan); /*

@@ -180,7 +180,7 @@ public abstract class SteamTestApp {
 
 		System.out.println("Initialise Steam GameServer API ...");
 
-		if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
+		if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27016, (short) 27017,
 				SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1")) {
 			System.err.println("SteamGameServerAPI.init() failed");
 			return false;

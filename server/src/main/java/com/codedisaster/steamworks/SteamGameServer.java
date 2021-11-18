@@ -126,6 +126,7 @@ public class SteamGameServer extends SteamInterface {
 		SteamGameServerNative.setRegion(region);
 	}
 
+	@Deprecated
 	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,
 												  SteamID steamIDUser) {
@@ -145,6 +146,7 @@ public class SteamGameServer extends SteamInterface {
 		return new SteamID(SteamGameServerNative.createUnauthenticatedUserConnection());
 	}
 
+	@Deprecated
 	public void sendUserDisconnect(SteamID steamIDUser) {
 		SteamGameServerNative.sendUserDisconnect(steamIDUser.handle);
 	}
@@ -212,18 +214,6 @@ public class SteamGameServer extends SteamInterface {
 		// todo: improve return values (buffers? dedicated data type?)
 		return SteamGameServerNative.getNextOutgoingPacket(
 				out, out.position(), out.remaining(), netAdr, port);
-	}
-
-	public void enableHeartbeats(boolean active) {
-		SteamGameServerNative.enableHeartbeats(active);
-	}
-
-	public void setHeartbeatInterval(int heartbeatInterval) {
-		SteamGameServerNative.setHeartbeatInterval(heartbeatInterval);
-	}
-
-	public void forceHeartbeat() {
-		SteamGameServerNative.forceHeartbeat();
 	}
 
 	public SteamAPICall associateWithClan(SteamID steamIDClan) {

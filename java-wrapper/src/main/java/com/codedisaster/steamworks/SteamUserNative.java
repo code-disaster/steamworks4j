@@ -23,13 +23,13 @@ final class SteamUserNative {
 	static native int initiateGameConnection(ByteBuffer authBlob,
 											 int bufferOffset, int bufferSize, long steamIDGameServer,
 											 int serverIP, short serverPort, boolean secure); /*
-		int bytesWritten = SteamUser()->InitiateGameConnection(&authBlob[bufferOffset], bufferSize,
+		int bytesWritten = SteamUser()->InitiateGameConnection_DEPRECATED(&authBlob[bufferOffset], bufferSize,
 			(uint64) steamIDGameServer, serverIP, serverPort, secure);
 		return bytesWritten;
 	*/
 
 	static native void terminateGameConnection(int serverIP, short serverPort); /*
-		SteamUser()->TerminateGameConnection(serverIP, serverPort);
+		SteamUser()->TerminateGameConnection_DEPRECATED(serverIP, serverPort);
 	*/
 
 	static native void startVoiceRecording(); /*

@@ -32,6 +32,7 @@ public class SteamUser extends SteamInterface {
 		return new SteamID(SteamUserNative.getSteamID());
 	}
 
+	@Deprecated
 	public int initiateGameConnection(ByteBuffer authBlob, SteamID steamIDGameServer,
 									  int serverIP, short serverPort, boolean secure) throws SteamException {
 
@@ -49,6 +50,7 @@ public class SteamUser extends SteamInterface {
 		return bytesWritten;
 	}
 
+	@Deprecated
 	public void terminateGameConnection(int serverIP, short serverPort) {
 		SteamUserNative.terminateGameConnection(serverIP, serverPort);
 	}

@@ -33,7 +33,7 @@ public class SteamGameServerAPI {
 		isNativeAPILoaded = true;
 	}
 
-	public static boolean init(int ip, short steamPort, short gamePort, short queryPort,
+	public static boolean init(int ip, short gamePort, short queryPort,
 							   ServerMode serverMode, String versionString) throws SteamException {
 
 		if (!isNativeAPILoaded) {
@@ -41,7 +41,7 @@ public class SteamGameServerAPI {
 		}
 
 		isRunning = SteamGameServerAPINative.nativeInit(
-				ip, steamPort, gamePort, queryPort, serverMode.ordinal(), versionString);
+				ip, gamePort, queryPort, serverMode.ordinal(), versionString);
 
 		return isRunning;
 	}
