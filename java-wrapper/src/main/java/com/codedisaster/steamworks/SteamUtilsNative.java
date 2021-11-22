@@ -81,4 +81,15 @@ final class SteamUtilsNative {
 		return SteamUtils()->IsOverlayEnabled();
 	*/
 
+	static native boolean isSteamRunningOnSteamDeck(); /*
+		return SteamUtils()->IsSteamRunningOnSteamDeck();
+	*/
+
+	static native boolean showFloatingGamepadTextInput(int keyboardMode,
+													   int textFieldXPosition, int textFieldYPosition,
+													   int textFieldWidth, int textFieldHeight); /*
+		return SteamUtils()->ShowFloatingGamepadTextInput((EFloatingGamepadTextInputMode) keyboardMode,
+			textFieldXPosition, textFieldYPosition, textFieldWidth, textFieldHeight);
+	*/
+
 }

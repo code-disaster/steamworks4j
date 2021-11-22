@@ -36,7 +36,14 @@ public class SteamUtils extends SteamInterface {
 		BottomRight
 	}
 
-	private SteamUtilsCallbackAdapter callbackAdapter;
+	public enum FloatingGamepadTextInputMode {
+		ModeSingleLine,
+		ModeMultipleLines,
+		ModeEmail,
+		ModeNumeric,
+	}
+
+	private final SteamUtilsCallbackAdapter callbackAdapter;
 
 	public SteamUtils(SteamUtilsCallback callback) {
 		callbackAdapter = new SteamUtilsCallbackAdapter(callback);
@@ -101,5 +108,15 @@ public class SteamUtils extends SteamInterface {
 		return SteamUtilsNative.isOverlayEnabled();
 	}
 
+	public boolean isSteamRunningOnSteamDeck() {
+		return SteamUtilsNative.isSteamRunningOnSteamDeck();
+	}
+
+	public boolean showFloatingGamepadTextInput(FloatingGamepadTextInputMode keyboardMode,
+												int textFieldXPosition, int textFieldYPosition,
+												int textFieldWidth, int textFieldHeight) {
+		return SteamUtilsNative.showFloatingGamepadTextInput(keyboardMode.ordinal(),
+				textFieldXPosition, textFieldYPosition, textFieldWidth, textFieldHeight);
+	}
 
 }
