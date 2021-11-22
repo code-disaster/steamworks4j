@@ -180,6 +180,11 @@ public class SteamClientAPITest extends SteamTestApp {
 		}
 
 		@Override
+		public void onNumberOfCurrentPlayersReceived(boolean success, int players) {
+			System.out.println("Number of current players received: " + players);
+		}
+
+		@Override
 		public void onGlobalStatsReceived(long gameId, SteamResult result) {
 			System.out.println("Global stats received: gameId=" + gameId + ", result=" + result.toString());
 		}
@@ -471,6 +476,8 @@ public class SteamClientAPITest extends SteamTestApp {
 						days = Integer.parseInt(cmd[1]);
 					}
 					userStats.requestGlobalStats(days);
+				} else if (cmd[0].equals("players")) {
+					userStats.getNumberOfCurrentPlayers();
 				} else if (cmd[0].equals("lget") && cmd.length > 1) {
 					int days = 0;
 					if (cmd.length > 2) {

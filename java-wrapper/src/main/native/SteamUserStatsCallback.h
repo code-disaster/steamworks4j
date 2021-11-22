@@ -23,6 +23,9 @@ public:
     void onLeaderboardScoreUploaded(LeaderboardScoreUploaded_t* callback, bool error);
     CCallResult<SteamUserStatsCallback, LeaderboardScoreUploaded_t> onLeaderboardScoreUploadedCall;
 
+    void onNumberOfCurrentPlayersReceived(NumberOfCurrentPlayers_t* callback, bool error);
+    CCallResult<SteamUserStatsCallback, NumberOfCurrentPlayers_t> onNumberOfCurrentPlayersReceivedCall;
+
     void onGlobalStatsReceived(GlobalStatsReceived_t* callback, bool error);
     CCallResult<SteamUserStatsCallback, GlobalStatsReceived_t> onGlobalStatsReceivedCall;
 };

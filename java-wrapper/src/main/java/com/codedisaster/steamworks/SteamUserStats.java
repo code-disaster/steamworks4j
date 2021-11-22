@@ -172,6 +172,10 @@ public class SteamUserStats extends SteamInterface {
 				: SteamUserStatsNative.uploadLeaderboardScore(callback, leaderboard.handle, method.ordinal(), score, scoreDetails, scoreDetails.length));
 	}
 
+	public SteamAPICall getNumberOfCurrentPlayers() {
+		return new SteamAPICall(SteamUserStatsNative.getNumberOfCurrentPlayers(callback));
+	}
+
 	public SteamAPICall requestGlobalStats(int historyDays) {
 		return new SteamAPICall(SteamUserStatsNative.requestGlobalStats(callback, historyDays));
 	}

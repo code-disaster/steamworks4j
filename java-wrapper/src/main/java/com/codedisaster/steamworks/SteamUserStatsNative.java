@@ -208,6 +208,16 @@ final class SteamUserStatsNative {
 		return handle;
 	*/
 
+	static native long getNumberOfCurrentPlayers(long callback); /*
+		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
+
+		SteamAPICall_t handle = SteamUserStats()->GetNumberOfCurrentPlayers();
+
+		cb->onNumberOfCurrentPlayersReceivedCall.Set(handle, cb, &SteamUserStatsCallback::onNumberOfCurrentPlayersReceived);
+
+		return handle;
+	*/
+
 	static native long requestGlobalStats(long callback, int historyDays); /*
 		SteamUserStatsCallback* cb = (SteamUserStatsCallback*) callback;
 

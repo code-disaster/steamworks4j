@@ -63,6 +63,13 @@ void SteamUserStatsCallback::onLeaderboardScoreUploaded(LeaderboardScoreUploaded
     });
 }
 
+void SteamUserStatsCallback::onNumberOfCurrentPlayersReceived(NumberOfCurrentPlayers_t* callback, bool error) {
+    invokeCallback({
+        callVoidMethod(env, "onNumberOfCurrentPlayersReceived", "(ZI)V", (jboolean) (callback->m_bSuccess != 0),
+            (jint) callback->m_cPlayers);
+    });
+}
+
 void SteamUserStatsCallback::onGlobalStatsReceived(GlobalStatsReceived_t* callback, bool error) {
     invokeCallback({
         callVoidMethod(env, "onGlobalStatsReceived", "(JI)V", (jlong) callback->m_nGameID,
