@@ -1,8 +1,17 @@
 ## change log
 
 ### HEAD
-- Updated to Steamworks SDK v1.46.
+- Updated to Steamworks SDK v1.52. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
+- Refactored interface to the native API.
+  - Each interface class (any class extending `SteamInterface`) is now split into a Java class and an accompanying `*Native` class which implement its native calls.
+  - Interfaces do not cache their native class pointer anymore, as it is recommended in the SDK documentation.
+- OS X: updated build script to compile with premake5.
+- Windows: updated build script to compile with premake5.0.0-beta1.
+- Added `SteamAPI.skipLoadLibraries()` and `SteamGameServerAPI.skipLoadLibraries()`. They can be used to skip the library's own SharedLibraryLoader entirely, so you can, for example, use your own, or the one shipped with LWJGL3.
+- Use a simple binary search for more efficient HTTPStatusCode lookups. (#81)
 - Added `SteamUserCallback.onAuthSessionTicket()`. (#83)
+- Added `SteamUserCallback.getNumberOfCurrentPlayers()`.
+- Fixed `SteamRemoteStorage.fileRead()` to return `int` instead of `boolean`.
 
 ### [1.8.0]
 - MacOS: removed 32-bit support.
