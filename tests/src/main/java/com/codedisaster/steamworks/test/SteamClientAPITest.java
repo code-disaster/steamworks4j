@@ -666,8 +666,18 @@ public class SteamClientAPITest extends SteamTestApp {
 			String appId = input.substring("apps subscribed ".length());
 			boolean subscribed = apps.isSubscribedApp(Integer.parseInt(appId));
 			System.out.println("user described to app #" + appId + ": " + (subscribed ? "yes" : "no"));
+		} else if (input.startsWith("deck ")) {
+			String cmd = input.substring("deck ".length());
+			if (cmd.equals("status")) {
+				boolean isDeck = utils.isSteamRunningOnSteamDeck();
+				System.out.println("Steam is running on SteamDeck: " + (isDeck ? "yes" : "no"));
+			} else if (cmd.equals("input")) {
+				// supposed to fail, since we run w/o UI here
+				boolean success = utils.showFloatingGamepadTextInput(
+						SteamUtils.FloatingGamepadTextInputMode.ModeSingleLine, 0, 0, 1280,200);
+				System.out.println("Show floating gamepad text input: " + (success ? "success" : "failed"));
+			}
 		}
-
 	}
 
 	public static void main(String[] arguments) {
