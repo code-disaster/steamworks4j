@@ -26,9 +26,7 @@ solution "steamworks4j"
 		"--target=x86_64-apple-macos10.9"
 	}
 
-	platforms {
-		"x64"
-	}
+	architecture "x86_64"
 
 	project "steamworks4j"
 
