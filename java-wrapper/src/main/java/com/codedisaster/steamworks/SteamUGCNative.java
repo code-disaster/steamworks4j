@@ -335,6 +335,9 @@ final class SteamUGCNative {
 
 	static native long submitItemUpdate(long callback, long update, String changeNote); /*
 		SteamUGCCallback* cb = (SteamUGCCallback*) callback;
+		if (changeNote[0] == '\0') {
+			changeNote = nullptr;
+		}
 		SteamAPICall_t handle = SteamUGC()->SubmitItemUpdate(update, changeNote);
 		cb->onSubmitItemUpdateCall.Set(handle, cb, &SteamUGCCallback::onSubmitItemUpdate);
 		return handle;
