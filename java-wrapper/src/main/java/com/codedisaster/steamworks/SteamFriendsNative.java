@@ -113,6 +113,10 @@ final class SteamFriendsNative {
 		return SteamFriends()->ActivateGameOverlayToStore((AppId_t) appID, (EOverlayToStoreFlag) flag);
 	*/
 
+	static native void setPlayedWith(long steamIDUserPlayedWith); /*
+		SteamFriends()->SetPlayedWith((uint64) steamIDUserPlayedWith);
+	*/
+
 	static native void activateGameOverlayInviteDialog(long steamIDLobby); /*
 		return SteamFriends()->ActivateGameOverlayInviteDialog((uint64) steamIDLobby);
 	*/
@@ -143,6 +147,22 @@ final class SteamFriendsNative {
 
 	static native boolean inviteUserToGame(long steamIDFriend, String connectString); /*
 		return SteamFriends()->InviteUserToGame((uint64) steamIDFriend, connectString);
+	*/
+
+	static native int getCoplayFriendCount(); /*
+		return SteamFriends()->GetCoplayFriendCount();
+	*/
+
+	static native long getCoplayFriend(int index); /*
+		return SteamFriends()->GetCoplayFriend(index).ConvertToUint64();
+	*/
+
+	static native int getFriendCoplayTime(long steamIDFriend); /*
+		return SteamFriends()->GetFriendCoplayTime((uint64) steamIDFriend);
+	*/
+
+	static native int getFriendCoplayGame(long steamIDFriend); /*
+		return (jint) SteamFriends()->GetFriendCoplayGame((uint64) steamIDFriend);
 	*/
 
 }

@@ -263,6 +263,10 @@ public class SteamFriends extends SteamInterface {
 		SteamFriendsNative.activateGameOverlayToStore(appID, flag.ordinal());
 	}
 
+	public void setPlayedWith(SteamID steamIDUserPlayedWith) {
+		SteamFriendsNative.setPlayedWith(steamIDUserPlayedWith.handle);
+	}
+
 	public void activateGameOverlayInviteDialog(SteamID steamIDLobby) {
 		SteamFriendsNative.activateGameOverlayInviteDialog(steamIDLobby.handle);
 	}
@@ -293,6 +297,22 @@ public class SteamFriends extends SteamInterface {
 
 	public boolean inviteUserToGame(SteamID steamIDFriend, String connectString) {
 		return SteamFriendsNative.inviteUserToGame(steamIDFriend.handle, connectString);
+	}
+
+	public int getCoplayFriendCount() {
+		return SteamFriendsNative.getCoplayFriendCount();
+	}
+
+	public SteamID getCoplayFriend(int index) {
+		return new SteamID(SteamFriendsNative.getCoplayFriend(index));
+	}
+
+	public int getFriendCoplayTime(SteamID steamIDFriend) {
+		return SteamFriendsNative.getFriendCoplayTime(steamIDFriend.handle);
+	}
+
+	public int getFriendCoplayGame(SteamID steamIDFriend) {
+		return SteamFriendsNative.getFriendCoplayGame(steamIDFriend.handle);
 	}
 
 }
