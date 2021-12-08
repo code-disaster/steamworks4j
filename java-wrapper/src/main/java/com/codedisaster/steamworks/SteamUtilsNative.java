@@ -92,4 +92,8 @@ final class SteamUtilsNative {
 			textFieldXPosition, textFieldYPosition, textFieldWidth, textFieldHeight);
 	*/
 
+	static native boolean dismissFloatingGamepadTextInput(); /*
+		return SteamUtils()->DismissFloatingGamepadTextInput();
+	*/
+
 }

@@ -118,6 +118,16 @@ public enum SteamResult {
 	AccountNotFriends(111),
 	LimitedUserAccount(112),
 	CantRemoveItem(113),
+	AccountDeleted(114),
+	ExistingUserCancelledLicense(115),
+	CommunityCooldown(116),
+	NoLauncherSpecified(117),
+	MustAgreeToSSA(118),
+	LauncherMigrated(119),
+	SteamRealmMismatch(120),
+	InvalidSignature(121),
+	ParseFailure(122),
+	NoVerifiedPhone(123),
 
 	/**
 	 * If this is returned(), we missed to "port" an Steam error code above.

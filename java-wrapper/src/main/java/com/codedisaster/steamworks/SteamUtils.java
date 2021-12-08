@@ -119,4 +119,8 @@ public class SteamUtils extends SteamInterface {
 				textFieldXPosition, textFieldYPosition, textFieldWidth, textFieldHeight);
 	}
 
+	public boolean dismissFloatingGamepadTextInput() {
+		return SteamUtilsNative.dismissFloatingGamepadTextInput();
+	}
+
 }
