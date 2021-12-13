@@ -1,7 +1,7 @@
 ## change log
 
 ### HEAD
-- Updated to Steamworks SDK v1.52. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
+- Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
 - Refactored interface to the native API.
   - Each interface class (any class extending `SteamInterface`) is now split into a Java class and an accompanying `*Native` class which implement its native calls.
   - Interfaces do not cache their native class pointer anymore, as it is recommended in the SDK documentation.
@@ -12,7 +12,9 @@
 - Added `SteamUserCallback.onAuthSessionTicket()`. (#83)
 - Added `SteamUserCallback.getNumberOfCurrentPlayers()`.
 - Fixed `SteamRemoteStorage.fileRead()` to return `int` instead of `boolean`.
-- Added `SteamUtils.isSteamRunningOnSteamDeck()` and `SteamUtils.showFloatingGamepadTextInput()`.
+- Added `isSteamRunningOnSteamDeck()`, `showFloatingGamepadTextInput()` and `dismissFloatingGamepadTextInput()` functions to SteamUtils interface.
+- Fixed `SteamUGC.submitItemUpdate()` to allow for the changeNote parameter set to null.
+- Added Coplay functions to SteamFriends interface. (#85)
 
 ### [1.8.0]
 - MacOS: removed 32-bit support.
