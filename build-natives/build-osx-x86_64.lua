@@ -1,4 +1,4 @@
-solution "steamworks4j"
+solution "steamworks4j-x86_64"
 	configurations { "ReleaseDLL" }
 
 	buildoptions {
@@ -28,7 +28,7 @@ solution "steamworks4j"
 
 	architecture "x86_64"
 
-	project "steamworks4j"
+	project "steamworks4j-x86_64"
 
 		kind "SharedLib"
 		language "C++"
@@ -49,7 +49,7 @@ solution "steamworks4j"
 			"steam_api"
 		}
 
-	project "steamworks4j-server"
+	project "steamworks4j-x86_64-server"
 
 		kind "SharedLib"
 		language "C++"
@@ -74,7 +74,7 @@ solution "steamworks4j"
 		    "steam_api"
 		}
 
-	project "steamworks4j-encryptedappticket"
+	project "steamworks4j-x86_64-encryptedappticket"
 
 		kind "SharedLib"
 		language "C++"
