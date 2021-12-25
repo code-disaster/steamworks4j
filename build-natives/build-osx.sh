@@ -24,7 +24,7 @@ lipo -create ../java-wrapper/src/main/resources/libsteamworks4j-arm64.dylib ../j
 lipo -create ../server/src/main/resources/libsteamworks4j-encryptedappticket-arm64.dylib ../server/src/main/resources/libsteamworks4j-encryptedappticket-x86_64.dylib -output ../server/src/main/resources/libsteamworks4j-encryptedappticket.dylib
 lipo -create ../server/src/main/resources/libsteamworks4j-server-arm64.dylib ../server/src/main/resources/libsteamworks4j-server-x86_64.dylib -output ../server/src/main/resources/libsteamworks4j-server.dylib
 
+# Delete all intermediate libs
+find .. | grep x86_64.dylib | xargs rm
+find .. | grep arm64.dylib | xargs rm
 
-rm ../java-wrapper/src/main/resources/libsteamworks4j-arm64.dylib ../java-wrapper/src/main/resources/libsteamworks4j-x86_64.dylib
-rm ../server/src/main/resources/libsteamworks4j-encryptedappticket-arm64.dylib ../server/src/main/resources/libsteamworks4j-encryptedappticket-x86_64.dylib 
-rm ../server/src/main/resources/libsteamworks4j-server-arm64.dylib ../server/src/main/resources/libsteamworks4j-server-x86_64.dylib 
