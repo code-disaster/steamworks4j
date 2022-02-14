@@ -102,15 +102,31 @@ public class SteamNetworkingTest extends SteamTestApp {
 	@Override
 	protected void processUpdate() throws SteamException {
 
-		int packetSize = networking.isP2PPacketAvailable(defaultChannel);
-
-		if (packetSize > 0) {
+		int[] packetSize = new int[1];
+		if (networking.isP2PPacketAvailable(defaultChannel, packetSize)) {
 
 			SteamID steamIDSender = new SteamID();
 
-			packetReadBuffer.clear();
+			if (packetSize[0] > packetReadBuffer.capacity()) {
+				throw new SteamException("incoming packet larger than read buffer can handle");
+			}
 
-			if (networking.readP2PPacket(steamIDSender, packetReadBuffer, defaultChannel) > 0) {
+			packetReadBuffer.clear();
+			// this isn't needed actually, buffer passed in can be larger than message to read
+			packetReadBuffer.limit(packetSize[0]);
+
+			int packetReadSize = networking.readP2PPacket(steamIDSender, packetReadBuffer, defaultChannel);
+
+			if (packetReadSize == 0) {
+				System.err.println("Rcv packet: expected " + packetSize[0] + " bytes, but got none");
+			} else if (packetReadSize < packetSize[0]) {
+				System.err.println("Rcv packet: expected " + packetSize[0] + " bytes, but only got " + packetReadSize);
+			}
+
+			// limit to actual data received
+			packetReadBuffer.limit(packetReadSize);
+
+			if (packetReadSize > 0) {
 
 				// register, if unknown
 				registerRemoteSteamID(steamIDSender);
@@ -138,9 +154,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 					System.out.println("Rcv message: \"" + message + "\"");
 				}
 			}
-
 		}
-
 	}
 
 	@Override

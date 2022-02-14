@@ -15,6 +15,7 @@
 - Added `isSteamRunningOnSteamDeck()`, `showFloatingGamepadTextInput()` and `dismissFloatingGamepadTextInput()` functions to SteamUtils interface.
 - Fixed `SteamUGC.submitItemUpdate()` to allow for the changeNote parameter set to null.
 - Added Coplay functions to SteamFriends interface. (#85)
+- API change: `SteamNetworking.isP2PPacketAvailable()` now returns a boolean in addition to the packet size.
 
 ### [1.8.0]
 - MacOS: removed 32-bit support.

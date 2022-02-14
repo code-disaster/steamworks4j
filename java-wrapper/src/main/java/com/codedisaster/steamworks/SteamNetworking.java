@@ -94,11 +94,8 @@ public class SteamNetworking extends SteamInterface {
 				data.position(), data.remaining(), sendType.ordinal(), channel);
 	}
 
-	public int isP2PPacketAvailable(int channel) {
-		if (SteamNetworkingNative.isP2PPacketAvailable(isServer, tmpIntResult, channel)) {
-			return tmpIntResult[0];
-		}
-		return 0;
+	public boolean isP2PPacketAvailable(int channel, int[] msgSize) {
+		return SteamNetworkingNative.isP2PPacketAvailable(isServer, msgSize, channel);
 	}
 
 	/**
