@@ -1,6 +1,6 @@
 ## change log
 
-### HEAD
+### [1.9.0]
 - Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
 - Refactored interface to the native API.
   - Each interface class (any class extending `SteamInterface`) is now split into a Java class and an accompanying `*Native` class which implement its native calls.
