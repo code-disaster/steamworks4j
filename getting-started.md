@@ -35,10 +35,9 @@ Maven:
 Gradle:
 
 {% highlight groovy %}
-dependencies {
-  compile "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.version }}"
-  compile "com.code-disaster.steamworks4j:steamworks4j-server:{{ site.steamworks4j.version }}"
-}
+apply plugin: 'java-library'
+implementation "com.code-disaster.steamworks4j:steamworks4j:{{ site.steamworks4j.version }}"
+implementation "com.code-disaster.steamworks4j:steamworks4j-server:{{ site.steamworks4j.version }}"
 {% endhighlight groovy %}
 
 If you don't use any build tools, [direct downloads of .jar files](http://mvnrepository.com/artifact/com.code-disaster.steamworks4j/) are also available.
@@ -166,7 +165,7 @@ SteamUserStats stats = new SteamUserStats(callback);
 
 #### Shutdown
 
-Each interface instance (each instance of a class derived from ```SteamInterface```) allocates and owns at least a few bytes of native heap memory. You should call ```SteamInterface.dispose()``` on shutdown to prevent memory leaks.
+Every interface instance (each instance of a class derived from ```SteamInterface```) may allocate a few bytes of native heap memory. You should call ```SteamInterface.dispose()``` on shutdown to prevent memory leaks.
 
 {% highlight java %}
 stats.dispose();
@@ -190,7 +189,7 @@ Basic API use is similar to the client wrapper, just with *SteamGameServerAPI* a
 // initialization
 try {
     SteamGameServerAPI.loadLibraries();
-    if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27015, (short) 27016, (short) 27017,
+    if (!SteamGameServerAPI.init((127 << 24) + 1, (short) 27016, (short) 27017,
         SteamGameServerAPI.ServerMode.NoAuthentication, "0.0.1"))) {
         // initialization error
     }

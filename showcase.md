@@ -6,10 +6,15 @@ layout: default
 
 ### Robotality
 
-The [Robotality][robotality] game I originally wrote *steamworks4j* for.
+The [Robotality][robotality] games I originally wrote *steamworks4j* to use with.
 
 ![Halfway](images/showcase_halfway.png)
 <br>[Halfway](http://store.steampowered.com/app/253150/)
+
+---
+
+![Pathway](images/showcase_pathway.png)
+<br>[Pathway](https://store.steampowered.com/app/546430/)
 
 ### Most diligent user
 
