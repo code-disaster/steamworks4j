@@ -3,11 +3,13 @@ package com.codedisaster.steamworks;
 @SuppressWarnings("unused")
 class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallback> {
 
+
 	private static final SteamFriends.PersonaChange[] personaChangeValues = SteamFriends.PersonaChange.values();
 
 	SteamFriendsCallbackAdapter(SteamFriendsCallback callback) {
 		super(callback);
 	}
+
 
 	void onSetPersonaNameResponse(boolean success, boolean localSuccess, int result) {
 		callback.onSetPersonaNameResponse(success, localSuccess, SteamResult.byValue(result));

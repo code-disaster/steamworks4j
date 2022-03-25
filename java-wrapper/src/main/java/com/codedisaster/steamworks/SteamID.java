@@ -12,6 +12,11 @@ public class SteamID extends SteamNativeHandle {
 		super(steamID.handle);
 	}
 
+	// TODO: MOVED METHOD
+	public int getNumLobbyMembers() {
+		return SteamMatchmakingNative.getNumLobbyMembers(this.handle);
+	}
+
 	/**
 	 * This constructor is package-private to not invite user applications to persist and recover ID values
 	 * manually. Instead, Steamworks API functions should always be used to obtain valid steam IDs.

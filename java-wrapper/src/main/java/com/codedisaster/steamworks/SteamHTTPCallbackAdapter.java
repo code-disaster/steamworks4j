@@ -3,9 +3,13 @@ package com.codedisaster.steamworks;
 @SuppressWarnings("unused")
 class SteamHTTPCallbackAdapter extends SteamCallbackAdapter<SteamHTTPCallback> {
 
+
+	private static SteamHTTP.HTTPStatusCode[] values;
+
 	SteamHTTPCallbackAdapter(SteamHTTPCallback callback) {
 		super(callback);
 	}
+
 
 	void onHTTPRequestCompleted(long request, long contextValue, boolean requestSuccessful,
 								int statusCode, int bodySize) {

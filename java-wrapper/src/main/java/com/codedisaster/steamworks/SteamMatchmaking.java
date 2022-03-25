@@ -208,9 +208,10 @@ public class SteamMatchmaking extends SteamInterface {
 		return SteamMatchmakingNative.inviteUserToLobby(steamIDLobby.handle, steamIDInvitee.handle);
 	}
 
-	public int getNumLobbyMembers(SteamID steamIDLobby) {
-		return SteamMatchmakingNative.getNumLobbyMembers(steamIDLobby.handle);
-	}
+	// TODO: MOVED METHOD
+//	public int getNumLobbyMembers(SteamID steamIDLobby) {
+//		return SteamMatchmakingNative.getNumLobbyMembers(steamIDLobby.handle);
+//	}
 
 	public SteamID getLobbyMemberByIndex(SteamID steamIDLobby, int memberIndex) {
 		return new SteamID(SteamMatchmakingNative.getLobbyMemberByIndex(steamIDLobby.handle, memberIndex));
