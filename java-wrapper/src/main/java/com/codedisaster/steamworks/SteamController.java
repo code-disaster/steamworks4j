@@ -587,14 +587,23 @@ public class SteamController extends SteamInterface {
 		if (originsOut.length < STEAM_CONTROLLER_MAX_ORIGINS) {
 			throw new IllegalArgumentException("Array size must be at least STEAM_CONTROLLER_MAX_ORIGINS");
 		}
+		int count = getSteamControllerCount(controller,actionSet,digitalAction, originsOut);
+		return count;
+	}
 
+	// I have created a different method which only focuses on getting the count.
+	// For that, I have extracted the code for that from the method above to this new method.
+	public int getSteamControllerCount(SteamControllerHandle controller,
+						SteamControllerActionSetHandle actionSet,
+						SteamControllerDigitalActionHandle digitalAction,
+						ActionOrigin[] originsOut)
+	{
 		int count = SteamControllerNative.getDigitalActionOrigins(controller.handle,
 				actionSet.handle, digitalAction.handle, actionOrigins);
 
 		for (int i = 0; i < count; i++) {
 			originsOut[i] = ActionOrigin.byOrdinal(actionOrigins[i]);
 		}
-
 		return count;
 	}
 

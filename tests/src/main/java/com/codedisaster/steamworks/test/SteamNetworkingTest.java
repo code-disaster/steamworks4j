@@ -212,7 +212,7 @@ public class SteamNetworkingTest extends SteamTestApp {
 			for (SteamID steamIDUser : remoteUserIDs.values()) {
 				System.out.println("  " + steamIDUser.getAccountID());
 			}
-		} else if (input.startsWith("auth ticket ")) {
+		} else if (input.startsWith("auth ticket")) {
 			String authCmd = input.substring("auth ticket ".length());
 			if (authCmd.equals("get")) {
 				getAuthTicket();
@@ -224,7 +224,6 @@ public class SteamNetworkingTest extends SteamTestApp {
 				endAuthSession();
 			}
 		}
-
 		friends.processInput(input);
 	}
 
@@ -305,8 +304,10 @@ public class SteamNetworkingTest extends SteamTestApp {
 	}
 
 	private int checkMagicBytes(ByteBuffer buffer, byte[] magicBytes) {
-		for (int b = 0; b < magicBytes.length; b++) {
-			if (buffer.get(b) != magicBytes[b]) {
+
+		// Here, I have renamed the value of the iterator to 'magicByte'
+		for (int magicByte = 0; magicByte < magicBytes.length; magicByte++) {
+			if (buffer.get(magicByte) != magicBytes[magicByte]) {
 				return 0;
 			}
 		}
