@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public class SteamRemoteStorage extends SteamInterface {
 
-
 	public enum RemoteStoragePlatform {
 		None(0),
 		Windows(1),
@@ -220,7 +219,6 @@ public class SteamRemoteStorage extends SteamInterface {
 	}
 
 	public boolean updatePublishedFileFile(SteamPublishedFileUpdateHandle updateHandle, String file) {
-
 		return SteamRemoteStorageNative.updatePublishedFileFile(updateHandle.handle, file);
 	}
 

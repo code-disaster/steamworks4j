@@ -165,7 +165,7 @@ public class SteamGameServer extends SteamInterface {
 				authTicket.position(), authTicket.remaining(), sizeInBytes);
 
 		if (ticket != SteamAuthTicket.AuthTicketInvalid) {
-			//  TODO: this doesn't match the rest of the API
+			// TODO: this doesn't match the rest of the API
 			authTicket.limit(authTicket.position() + sizeInBytes[0]);
 		}
 

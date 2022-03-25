@@ -91,8 +91,6 @@ public class SteamControllerTest extends SteamTestApp {
 		}
 	}
 
-
-
 	@Override
 	protected void processInput(String input) throws SteamException {
 		if (input.equals("c list")) {

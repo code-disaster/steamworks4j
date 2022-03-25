@@ -108,7 +108,7 @@ public class SteamFriends extends SteamInterface {
 		private int gameIP;
 		private short gamePort;
 		private short queryPort;
- 		private long steamIDLobby;
+		private long steamIDLobby;
 
 		public long getGameID() {
 			return gameID;

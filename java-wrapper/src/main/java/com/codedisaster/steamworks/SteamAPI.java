@@ -118,4 +118,5 @@ public class SteamAPI {
 	private static native boolean isSteamRunningNative(); /*
 		return SteamAPI_IsSteamRunning();
 	*/
+
 }

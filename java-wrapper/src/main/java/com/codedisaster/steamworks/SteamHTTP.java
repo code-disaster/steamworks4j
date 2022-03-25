@@ -101,6 +101,7 @@ public class SteamHTTP extends SteamInterface {
 			return Invalid;
 		}
 	}
+
 	private final boolean isServer;
 
 	public SteamHTTP(SteamHTTPCallback callback) {

@@ -47,7 +47,7 @@ public class SteamMatchmakingTest extends SteamTestApp {
 			System.out.println("Lobby entered: " + steamIDLobby);
 			System.out.println("  - response: " + response);
 
-			int numMembers = steamIDLobby.getNumLobbyMembers();
+			int numMembers = matchmaking.getNumLobbyMembers(steamIDLobby);
 			System.out.println("  - " + numMembers + " members in lobby");
 			for (int i = 0; i < numMembers; i++) {
 				SteamID member = matchmaking.getLobbyMemberByIndex(steamIDLobby, i);
@@ -141,7 +141,7 @@ public class SteamMatchmakingTest extends SteamTestApp {
 		for (Map.Entry<Long, SteamID> lobby : lobbies.entrySet()) {
 			System.out.print("  " + Long.toHexString(lobby.getKey()) + ": ");
 			if (lobby.getValue().isValid()) {
-				int members = lobby.getValue().getNumLobbyMembers();
+				int members = matchmaking.getNumLobbyMembers(lobby.getValue());
 				System.out.println(members + " members");
 			} else {
 				System.err.println("invalid SteamID!");

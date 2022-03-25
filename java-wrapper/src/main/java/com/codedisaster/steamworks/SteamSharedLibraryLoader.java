@@ -11,8 +11,8 @@ class SteamSharedLibraryLoader {
 		MacOS
 	}
 
-	private static PLATFORM OS;
-	private static boolean IS_64_BIT;
+	private static final PLATFORM OS;
+	private static final boolean IS_64_BIT;
 
 	private static final String SHARED_LIBRARY_EXTRACT_DIRECTORY = System.getProperty(
 			"com.codedisaster.steamworks.SharedLibraryExtractDirectory", "steamworks4j");
@@ -29,7 +29,7 @@ class SteamSharedLibraryLoader {
 	static final boolean DEBUG = Boolean.parseBoolean(System.getProperty(
 			"com.codedisaster.steamworks.Debug", "false"));
 
-	{
+	static {
 		String osName = System.getProperty("os.name");
 		String osArch = System.getProperty("os.arch");
 
@@ -44,25 +44,6 @@ class SteamSharedLibraryLoader {
 		}
 
 		IS_64_BIT = osArch.equals("amd64") || osArch.equals("x86_64");
-	}
-
-	public String getSdkLibraryPathMaster() {
-
-		switch (OS) {
-			case Windows:
-				new Windows().getSdkLibraryPath();
-				break;
-			case Linux:
-				new Linux().getSdkLibraryPath();
-				break;
-			case MacOS:
-				new Macos().getSdkLibraryPath();
-				break;
-			default:
-				return null;
-		}
-		return null;
-
 	}
 
 	private static String getPlatformLibName(String libName) {
@@ -96,59 +77,27 @@ class SteamSharedLibraryLoader {
 
 		return path.exists() ? path.getPath() : null;
 	}
-	abstract class LibraryPath
-	{
-		abstract String getSdkLibraryPath();
-	}
-	class Windows extends LibraryPath
-	{
-		File path;
-		String getSdkLibraryPath()
-		{
-			path = new File(SDK_LIBRARY_PATH, IS_64_BIT ? "win64" : "win32");
-			return  path.toString();
-		}
-	}
-	class Linux extends LibraryPath
-	{
-		File path;
-		String getSdkLibraryPath()
-		{
-			path = new File(SDK_LIBRARY_PATH, "linux64");
-			return  path.toString();
-		}
-	}
-	class Macos extends LibraryPath
-	{
-		File path;
-		String getSdkLibraryPath()
-		{
-			path = new File(SDK_LIBRARY_PATH, "osx");
-			return  path.toString();
-		}
-	}
 
-//	static String getSdkLibraryPath() {
-//		File path;
-//		switch (OS) {
-//			case Windows:
-//				path = new File(SDK_LIBRARY_PATH, IS_64_BIT ? "win64" : "win32");
-//				break;
-//			case Linux:
-//				path = new File(SDK_LIBRARY_PATH, "linux64");
-//				break;
-//			case MacOS:
-//				path = new File(SDK_LIBRARY_PATH, "osx");
-//				break;
-//			default:
-//				return null;
-//		}
-//
-//		return path.exists() ? path.getPath() : null;
-//	}
+	static String getSdkLibraryPath() {
+		File path;
+		switch (OS) {
+			case Windows:
+				path = new File(SDK_LIBRARY_PATH, IS_64_BIT ? "win64" : "win32");
+				break;
+			case Linux:
+				path = new File(SDK_LIBRARY_PATH, "linux64");
+				break;
+			case MacOS:
+				path = new File(SDK_LIBRARY_PATH, "osx");
+				break;
+			default:
+				return null;
+		}
+
+		return path.exists() ? path.getPath() : null;
+	}
 
 	static void loadLibrary(String libraryName, String libraryPath) throws SteamException {
-		extractionProcess obj = new extractionProcess();
 		try {
 			String librarySystemName = getPlatformLibName(libraryName);
 
@@ -157,14 +106,14 @@ class SteamSharedLibraryLoader {
 
 			if (libraryPath == null) {
 				// extract library from resource
-				obj.extractLibrary(librarySystemPath, librarySystemName);
+				extractLibrary(librarySystemPath, librarySystemName);
 			} else {
 				// read library from given path
 				File librarySourcePath = new File(libraryPath, librarySystemName);
 
 				if (OS != PLATFORM.Windows) {
 					// on MacOS & Linux, "extract" (copy) from source location
-					obj.extractLibrary(librarySystemPath, librarySourcePath);
+					extractLibrary(librarySystemPath, librarySourcePath);
 				} else {
 					// on Windows, load the library from the source location
 					librarySystemPath = librarySourcePath;
@@ -175,6 +124,41 @@ class SteamSharedLibraryLoader {
 			System.load(absolutePath);
 		} catch (IOException e) {
 			throw new SteamException(e);
+		}
+	}
+
+	private static void extractLibrary(File librarySystemPath, String librarySystemName) throws IOException {
+		extractLibrary(librarySystemPath,
+				SteamSharedLibraryLoader.class.getResourceAsStream("/" + librarySystemName));
+	}
+
+	private static void extractLibrary(File librarySystemPath, File librarySourcePath) throws IOException {
+		extractLibrary(librarySystemPath, new FileInputStream(librarySourcePath));
+	}
+
+	private static void extractLibrary(File librarySystemPath, InputStream input) throws IOException {
+		if (input != null) {
+			try (FileOutputStream output = new FileOutputStream(librarySystemPath)) {
+				byte[] buffer = new byte[4096];
+				while (true) {
+					int length = input.read(buffer);
+					if (length == -1) break;
+					output.write(buffer, 0, length);
+				}
+				output.close();
+			} catch (IOException e) {
+				/*
+					Extracting the library may fail, for example because 'nativeFile' already exists and is in
+					use by another process. In this case, we fail silently and just try to load the existing file.
+				 */
+				if (!librarySystemPath.exists()) {
+					throw e;
+				}
+			} finally {
+				input.close();
+			}
+		} else {
+			throw new IOException("Failed to read input stream for " + librarySystemPath.getCanonicalPath());
 		}
 	}
 
@@ -262,6 +246,7 @@ class SteamSharedLibraryLoader {
 	}
 
 	private static boolean canExecute(File file) {
+
 		try {
 			if (file.canExecute()) {
 				return true;
@@ -275,45 +260,6 @@ class SteamSharedLibraryLoader {
 		}
 
 		return false;
-	}
-	//This is the new class created which consists of te methods focused on extracting libraries.
-	//By implementing this, we are using the extract class refcatoring technique
-	public static class extractionProcess
-	{
-		private void extractLibrary(File librarySystemPath, String librarySystemName) throws IOException {
-			extractLibrary(librarySystemPath,
-					SteamSharedLibraryLoader.class.getResourceAsStream("/" + librarySystemName));
-		}
-
-		private void extractLibrary(File librarySystemPath, File librarySourcePath) throws IOException {
-			extractLibrary(librarySystemPath, new FileInputStream(librarySourcePath));
-		}
-
-		private void extractLibrary(File librarySystemPath, InputStream input) throws IOException {
-			if (input != null) {
-				try (FileOutputStream output = new FileOutputStream(librarySystemPath)) {
-					byte[] buffer = new byte[4096];
-					while (true) {
-						int length = input.read(buffer);
-						if (length == -1) break;
-						output.write(buffer, 0, length);
-					}
-					output.close();
-				} catch (IOException e) {
-				/*
-					Extracting the library may fail, for example because 'nativeFile' already exists and is in
-					use by another process. In this case, we fail silently and just try to load the existing file.
-				 */
-					if (!librarySystemPath.exists()) {
-						throw e;
-					}
-				} finally {
-					input.close();
-				}
-			} else {
-				throw new IOException("Failed to read input stream for " + librarySystemPath.getCanonicalPath());
-			}
-		}
 	}
 
 }
