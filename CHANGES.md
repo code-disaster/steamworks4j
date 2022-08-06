@@ -4,6 +4,7 @@
 - Updated Maven modules to compile with Java 8.
 - All callback interfaces are now implemented using empty `default` methods. (#110)
 - Added `SteamUtilsCallback.onFloatingGamepadTextInputDismissed()`. (#118)
+- MacOS: build fat dylib to support both x86_64 and arm64 architectures. (#107, #116)
 
 ### [1.9.0]
 - Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
