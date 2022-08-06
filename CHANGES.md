@@ -1,5 +1,8 @@
 ## change log
 
+### [1.10.0-SNAPSHOT]
+- Added `SteamUtilsCallback.onFloatingGamepadTextInputDismissed()`. (#118)
+
 ### [1.9.0]
 - Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
 - Refactored interface to the native API.

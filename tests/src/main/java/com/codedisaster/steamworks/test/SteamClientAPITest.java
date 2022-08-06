@@ -410,6 +410,11 @@ public class SteamClientAPITest extends SteamTestApp {
 		public void onSteamShutdown() {
 			System.out.println("Steam client wants to shut down!");
 		}
+
+		@Override
+		public void onFloatingGamepadTextInputDismissed() {
+
+		}
 	};
 
 	@Override

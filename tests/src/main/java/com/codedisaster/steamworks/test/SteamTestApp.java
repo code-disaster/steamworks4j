@@ -22,6 +22,11 @@ public abstract class SteamTestApp {
 		public void onSteamShutdown() {
 			System.err.println("Steam client requested to shut down!");
 		}
+
+		@Override
+		public void onFloatingGamepadTextInputDismissed() {
+
+		}
 	};
 
 	private class InputHandler implements Runnable {
