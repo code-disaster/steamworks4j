@@ -1,6 +1,8 @@
 ## change log
 
 ### [1.10.0-SNAPSHOT]
+- Updated Maven modules to compile with Java 8.
+- All callback interfaces are now implemented using empty `default` methods. (#110)
 - Added `SteamUtilsCallback.onFloatingGamepadTextInputDismissed()`. (#118)
 
 ### [1.9.0]
