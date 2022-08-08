@@ -128,6 +128,10 @@ public enum SteamResult {
 	InvalidSignature(121),
 	ParseFailure(122),
 	NoVerifiedPhone(123),
+	InsufficientBattery(124),
+	ChargerRequired(125),
+	CachedCredentialInvalid(126),
+	PhoneNumberIsVOIP(127),
 
 	/**
 	 * If this is returned(), we missed to "port" an Steam error code above.

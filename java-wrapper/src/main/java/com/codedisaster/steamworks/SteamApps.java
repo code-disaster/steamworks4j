@@ -67,4 +67,8 @@ public class SteamApps extends SteamInterface {
 		return SteamAppsNative.getAppBuildId();
 	}
 
+	public boolean setDlcContext(int appID) {
+		return SteamAppsNative.setDlcContext(appID);
+	}
+
 }

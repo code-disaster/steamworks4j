@@ -69,4 +69,8 @@ final class SteamAppsNative {
         return SteamApps()->GetAppBuildId();
 	*/
 
+	static native boolean setDlcContext(int appID); /*
+		return SteamApps()->SetDlcContext((AppId_t) appID);
+	*/
+
 }
