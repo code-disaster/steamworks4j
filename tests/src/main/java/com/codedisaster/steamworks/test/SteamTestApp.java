@@ -1,7 +1,6 @@
 package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
-import org.lwjgl.system.Platform;
 
 import java.util.Scanner;
 
@@ -75,7 +74,7 @@ public abstract class SteamTestApp {
 
 	protected abstract void processInput(String input) throws SteamException;
 
-	private boolean runAsClient(@SuppressWarnings("unused") String[] arguments) throws SteamException {
+	private boolean runAsClient() throws SteamException {
 
 		if (!SteamAPI.loadLibraries(libraryLoader)) {
 			System.err.println("Failed to load native libraries");
@@ -139,14 +138,11 @@ public abstract class SteamTestApp {
 
 	protected void clientMain(String[] arguments) {
 
-		libraryLoader = new SteamLibraryLoaderLwjgl3();
-
-		// development mode, read Steamworks libraries from ./sdk folder
-		SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
+		libraryLoader = createLibraryLoader(arguments);
 
 		try {
 
-			if (!runAsClient(arguments)) {
+			if (!runAsClient()) {
 				System.exit(-1);
 			}
 
@@ -158,15 +154,7 @@ public abstract class SteamTestApp {
 		}
 	}
 
-	private boolean runAsGameServer(String[] arguments) throws SteamException {
-
-		boolean dedicated = false;
-
-		for (String arg : arguments) {
-			if (arg.equals("--dedicated")) {
-				dedicated = true;
-			}
-		}
+	private boolean runAsGameServer(boolean dedicated) throws SteamException {
 
 		if (!SteamGameServerAPI.loadLibraries(libraryLoader)) {
 			System.err.println("Failed to load native libraries");
@@ -238,14 +226,23 @@ public abstract class SteamTestApp {
 
 	protected void serverMain(String[] arguments) {
 
-		libraryLoader = new SteamLibraryLoaderLwjgl3();
+		boolean dedicated = false;
+
+		for (String arg : arguments) {
+			if (arg.equals("--dedicated")) {
+				dedicated = true;
+				break;
+			}
+		}
+
+		libraryLoader = createLibraryLoader(arguments);
 
 		// development mode, read Steamworks libraries from ./sdk folder
 		SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
 
 		try {
 
-			if (!runAsGameServer(arguments)) {
+			if (!runAsGameServer(dedicated)) {
 				System.exit(-1);
 			}
 
@@ -255,6 +252,26 @@ public abstract class SteamTestApp {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+	}
+
+	private static SteamLibraryLoader createLibraryLoader(String[] arguments) {
+
+		SteamLibraryLoader loader = null;
+
+		for (String arg : arguments) {
+			if (arg.equals("--gdx")) {
+				loader = new SteamLibraryLoaderGdx();
+				break;
+			}
+		}
+
+		if (loader == null) {
+			loader = new SteamLibraryLoaderLwjgl3();
+			// development mode, read Steamworks libraries from ./sdk folder
+			SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
+		}
+
+		return loader;
 	}
 
 	private static String getRedistributableFolder() {
