@@ -81,7 +81,9 @@ public class SteamEncryptedAppTicketTest extends SteamTestApp {
 
 	@Override
 	protected void registerInterfaces() throws SteamException {
-		SteamEncryptedAppTicket.loadLibraries();
+		if (!SteamEncryptedAppTicket.loadLibraries(libraryLoader)) {
+			throw new SteamException("Failed to load native libraries");
+		}
 		user = new SteamUser(userCallback);
 		encryptedAppTicket = new SteamEncryptedAppTicket();
 	}

@@ -15,6 +15,7 @@
 	<modules>
 		<module>java-wrapper</module>
 		<module>jnigen</module>
+		<module>loader/lwjgl3</module>
 		<module>server</module>
 		<module>tests</module>
 	</modules>

@@ -7,30 +7,14 @@ public class SteamAPI {
 	private static boolean isRunning = false;
 	private static boolean isNativeAPILoaded = false;
 
-	public static void loadLibraries() throws SteamException {
-		loadLibraries(null);
-	}
+	public static boolean loadLibraries(SteamLibraryLoader loader) {
 
-	public static void loadLibraries(String libraryPath) throws SteamException {
-
-		if (isNativeAPILoaded) {
-			return;
+		if (!isNativeAPILoaded) {
+			isNativeAPILoaded = loader.loadLibrary("steam_api");
+			isNativeAPILoaded = isNativeAPILoaded && loader.loadLibrary("steamworks4j");
 		}
 
-		if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
-			String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
-			SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
-		} else {
-			SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
-		}
-
-		SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
-
-		isNativeAPILoaded = true;
-	}
-
-	public static void skipLoadLibraries() {
-		isNativeAPILoaded = true;
+		return isNativeAPILoaded;
 	}
 
 	public static boolean restartAppIfNecessary(int appId) throws SteamException {

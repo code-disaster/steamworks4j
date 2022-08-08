@@ -1,39 +1,36 @@
 package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
+import org.lwjgl.system.Platform;
 
 import java.util.Scanner;
 
 public abstract class SteamTestApp {
 
+	protected SteamLibraryLoader libraryLoader;
 	protected SteamUtils clientUtils;
 
 	protected static final int MS_PER_TICK = 1000 / 15;
 
-	private SteamAPIWarningMessageHook clMessageHook = new SteamAPIWarningMessageHook() {
+	private final SteamAPIWarningMessageHook clMessageHook = new SteamAPIWarningMessageHook() {
 		@Override
 		public void onWarningMessage(int severity, String message) {
 			System.err.println("[client debug message] (" + severity + ") " + message);
 		}
 	};
 
-	private SteamUtilsCallback clUtilsCallback = new SteamUtilsCallback() {
+	private final SteamUtilsCallback clUtilsCallback = new SteamUtilsCallback() {
 		@Override
 		public void onSteamShutdown() {
 			System.err.println("Steam client requested to shut down!");
-		}
-
-		@Override
-		public void onFloatingGamepadTextInputDismissed() {
-
 		}
 	};
 
 	private class InputHandler implements Runnable {
 
 		private volatile boolean alive;
-		private Thread mainThread;
-		private Scanner scanner;
+		private final Thread mainThread;
+		private final Scanner scanner;
 
 		public InputHandler(Thread mainThread) {
 			this.alive = true;
@@ -80,9 +77,9 @@ public abstract class SteamTestApp {
 
 	private boolean runAsClient(@SuppressWarnings("unused") String[] arguments) throws SteamException {
 
-		System.out.println("Load native libraries ...");
-
-		SteamAPI.loadLibraries();
+		if (!SteamAPI.loadLibraries(libraryLoader)) {
+			System.err.println("Failed to load native libraries");
+		}
 
 		System.out.println("Initialise Steam client API ...");
 
@@ -142,8 +139,10 @@ public abstract class SteamTestApp {
 
 	protected void clientMain(String[] arguments) {
 
+		libraryLoader = new SteamLibraryLoaderLwjgl3();
+
 		// development mode, read Steamworks libraries from ./sdk folder
-		System.setProperty("com.codedisaster.steamworks.Debug", "true");
+		SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
 
 		try {
 
@@ -169,9 +168,10 @@ public abstract class SteamTestApp {
 			}
 		}
 
-		System.out.println("Load native libraries ...");
-
-		SteamGameServerAPI.loadLibraries();
+		if (!SteamGameServerAPI.loadLibraries(libraryLoader)) {
+			System.err.println("Failed to load native libraries");
+			return false;
+		}
 
 		if (!dedicated) {
 
@@ -238,8 +238,10 @@ public abstract class SteamTestApp {
 
 	protected void serverMain(String[] arguments) {
 
+		libraryLoader = new SteamLibraryLoaderLwjgl3();
+
 		// development mode, read Steamworks libraries from ./sdk folder
-		System.setProperty("com.codedisaster.steamworks.Debug", "true");
+		SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
 
 		try {
 
@@ -252,6 +254,26 @@ public abstract class SteamTestApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
+		}
+	}
+
+	private static String getRedistributableFolder() {
+
+		String osName = System.getProperty("os.name");
+		String osArch  = System.getProperty("os.arch");
+
+		if (osName.startsWith("Windows")) {
+			if (osArch.contains("64")) {
+				return "sdk/redistributable_bin/win64";
+			} else {
+				return "sdk/redistributable_bin";
+			}
+		} else if (osName.startsWith("Linux") || osName.startsWith("FreeBSD") || osName.startsWith("Unix")) {
+			return "sdk/redistributable_bin/linux64";
+		} else if (osName.startsWith("Mac OS X") || osName.startsWith("Darwin")) {
+			return "sdk/redistributable_bin/osx";
+		} else {
+			throw new LinkageError("Unknown platform: " + osName);
 		}
 	}
 
