@@ -238,7 +238,7 @@ public abstract class SteamTestApp {
 		libraryLoader = createLibraryLoader(arguments);
 
 		// development mode, read Steamworks libraries from ./sdk folder
-		SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
+		libraryLoader.configure(getRedistributableFolder());
 
 		try {
 
@@ -267,9 +267,10 @@ public abstract class SteamTestApp {
 
 		if (loader == null) {
 			loader = new SteamLibraryLoaderLwjgl3();
-			// development mode, read Steamworks libraries from ./sdk folder
-			SteamLibraryLoaderLwjgl3.configure(getRedistributableFolder());
 		}
+
+		// development mode, read Steamworks libraries from ./sdk folder
+		loader.configure(getRedistributableFolder());
 
 		return loader;
 	}
