@@ -40,7 +40,7 @@
 	</scm>
 
 	<properties>
-		<gdx.version>1.11.0</gdx.version>
+		<gdx-jnigen-loader.version>2.3.1</gdx-jnigen-loader.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -53,8 +53,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
-			<artifactId>gdx</artifactId>
-			<version>${gdx.version}</version>
+			<artifactId>gdx-jnigen-loader</artifactId>
+			<version>${gdx-jnigen-loader.version}</version>
 		</dependency>
 	</dependencies>
 
