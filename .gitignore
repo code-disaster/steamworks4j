@@ -2,8 +2,8 @@
 sdk/
 
 # generated sources
-java-wrapper/src/main/native/com.codedisaster.steamworks.*
-server/src/main/native/com.codedisaster.steamworks.*
+java-wrapper/src/main/native/com_codedisaster_steamworks_*
+server/src/main/native/com_codedisaster_steamworks_*
 
 # output
 build/
