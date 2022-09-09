@@ -238,7 +238,7 @@ public abstract class SteamTestApp {
 		libraryLoader = createLibraryLoader(arguments);
 
 		// development mode, read Steamworks libraries from ./sdk folder
-		libraryLoader.configure(getRedistributableFolder());
+		libraryLoader.setLibraryPath(getRedistributableFolder());
 
 		try {
 
@@ -270,7 +270,7 @@ public abstract class SteamTestApp {
 		}
 
 		// development mode, read Steamworks libraries from ./sdk folder
-		loader.configure(getRedistributableFolder());
+		loader.setLibraryPath(getRedistributableFolder());
 
 		return loader;
 	}

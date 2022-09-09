@@ -56,7 +56,7 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 	};
 
 	@Override
-	public void configure(String libraryPath) {
+	public void setLibraryPath(String libraryPath) {
 		this.libraryPath = Paths.get(libraryPath).toAbsolutePath();
 	}
 

@@ -6,7 +6,7 @@ import org.lwjgl.system.Platform;
 public class SteamLibraryLoaderLwjgl3 implements SteamLibraryLoader {
 
 	@Override
-	public void configure(String libraryPath) {
+	public void setLibraryPath(String libraryPath) {
 		System.setProperty("org.lwjgl.librarypath", libraryPath);
 	}
 
