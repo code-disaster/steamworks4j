@@ -5,6 +5,10 @@
 - All callback interfaces are now implemented using empty `default` methods. (#110)
 - Added `SteamUtilsCallback.onFloatingGamepadTextInputDismissed()`. (#118)
 - MacOS: build fat dylib to support both x86_64 and arm64 architectures. (#107, #116)
+- API change: removed `SteamSharedLibraryLoader`
+  - Replaced by `SteamLibraryLoader` interface. Applications must pass an implementation of this interface to `SteamAPI.loadLibraries()`.
+  - Added two new submodules: `steamworks4j-gdx` and `steamworks4j-lwjgl3`. They can be imported and used as-is, or serve as a reference for your own implementations.
+  - `SteamAPI.skipLoadLibraries()` has been removed. Calling `SteamAPI.loadLibraries(new SteamLibraryLoader())` has the same effect.
 
 ### [1.9.0]
 - Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
