@@ -25,7 +25,7 @@ public class SteamLibraryLoaderLwjgl3 implements SteamLibraryLoader {
 		// Let LWJGL3 do its magic
 
 		try {
-			Library.loadSystem("org.lwjgl", libraryName);
+			Library.loadSystem("com.codedisaster.steamworks", libraryName);
 		} catch (Throwable t) {
 			return false;
 		}
