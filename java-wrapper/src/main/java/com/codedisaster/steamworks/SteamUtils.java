@@ -108,6 +108,14 @@ public class SteamUtils extends SteamInterface {
 		return SteamUtilsNative.isOverlayEnabled();
 	}
 
+	public boolean isSteamInBigPictureMode() {
+		return SteamUtilsNative.isSteamInBigPictureMode();
+	}
+
+	public boolean isSteamChinaLauncher() {
+		return SteamUtilsNative.isSteamChinaLauncher();
+	}
+
 	public boolean isSteamRunningOnSteamDeck() {
 		return SteamUtilsNative.isSteamRunningOnSteamDeck();
 	}
@@ -117,6 +125,10 @@ public class SteamUtils extends SteamInterface {
 												int textFieldWidth, int textFieldHeight) {
 		return SteamUtilsNative.showFloatingGamepadTextInput(keyboardMode.ordinal(),
 				textFieldXPosition, textFieldYPosition, textFieldWidth, textFieldHeight);
+	}
+
+	public void setGameLauncherMode(boolean isLauncherMode) {
+		SteamUtilsNative.setGameLauncherMode(isLauncherMode);
 	}
 
 	public boolean dismissFloatingGamepadTextInput() {
