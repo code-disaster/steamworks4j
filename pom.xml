@@ -17,7 +17,6 @@
 		<module>jnigen</module>
 		<module>loader/gdx</module>
 		<module>loader/lwjgl3</module>
-		<module>server</module>
 		<module>tests</module>
 	</modules>
 

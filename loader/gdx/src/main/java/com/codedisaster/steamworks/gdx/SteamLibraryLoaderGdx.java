@@ -1,6 +1,7 @@
-package com.codedisaster.steamworks;
+package com.codedisaster.steamworks.gdx;
 
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import com.codedisaster.steamworks.SteamLibraryLoader;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

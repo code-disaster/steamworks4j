@@ -1,6 +1,8 @@
 package com.codedisaster.steamworks.test;
 
 import com.codedisaster.steamworks.*;
+import com.codedisaster.steamworks.gdx.SteamLibraryLoaderGdx;
+import com.codedisaster.steamworks.lwjgl3.SteamLibraryLoaderLwjgl3;
 
 import java.util.Scanner;
 

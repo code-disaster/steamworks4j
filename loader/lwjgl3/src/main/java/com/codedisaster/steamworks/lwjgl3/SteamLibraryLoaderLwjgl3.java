@@ -1,5 +1,6 @@
-package com.codedisaster.steamworks;
+package com.codedisaster.steamworks.lwjgl3;
 
+import com.codedisaster.steamworks.SteamLibraryLoader;
 import org.lwjgl.system.Library;
 import org.lwjgl.system.Platform;
 
