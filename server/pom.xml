@@ -117,6 +117,15 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>java-8-api</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.release>8</maven.compiler.release>
+			</properties>
+		</profile>
 	</profiles>
 
 	<properties>
@@ -145,7 +154,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.6.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
