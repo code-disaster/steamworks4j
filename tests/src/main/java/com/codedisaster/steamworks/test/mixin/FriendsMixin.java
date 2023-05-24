@@ -41,7 +41,7 @@ public class FriendsMixin {
 		}
 
 		@Override
-		public void onGameOverlayActivated(boolean active) {
+		public void onGameOverlayActivated(boolean active, boolean userInitiated, int appID) {
 
 		}
 

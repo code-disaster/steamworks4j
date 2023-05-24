@@ -32,7 +32,8 @@ void SteamFriendsCallback::onPersonaStateChange(PersonaStateChange_t* callback) 
 
 void SteamFriendsCallback::onGameOverlayActivated(GameOverlayActivated_t* callback) {
 	invokeCallback({
-		callVoidMethod(env, "onGameOverlayActivated", "(Z)V", callback->m_bActive);
+		callVoidMethod(env, "onGameOverlayActivated", "(ZZI)V",
+			callback->m_bActive, callback->m_bUserInitiated, callback->m_nAppID);
 	});
 }
 

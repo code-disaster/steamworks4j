@@ -24,4 +24,8 @@ class SteamUserCallbackAdapter extends SteamCallbackAdapter<SteamUserCallback> {
 		callback.onEncryptedAppTicket(SteamResult.byValue(result));
 	}
 
+	void onGetTicketForWebApi(long authTicket, int result, byte[] ticketData) {
+		callback.onGetTicketForWebApi(new SteamAuthTicket(authTicket), SteamResult.byValue(result), ticketData);
+	}
+
 }

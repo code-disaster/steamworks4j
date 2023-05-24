@@ -30,7 +30,8 @@ public class SteamAuth {
 		AuthTicketCanceled,
 		AuthTicketInvalidAlreadyUsed,
 		AuthTicketInvalid,
-		PublisherIssuedBan;
+		PublisherIssuedBan,
+		AuthTicketNetworkIdentityFailure;
 
 		private static final AuthSessionResponse[] values = values();
 

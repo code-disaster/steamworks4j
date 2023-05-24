@@ -4,7 +4,8 @@ SteamUserCallback::SteamUserCallback(JNIEnv* env, jobject callback)
 	: SteamCallbackAdapter(env, callback)
 	, m_CallbackAuthSessionTicket(this, &SteamUserCallback::onAuthSessionTicket)
 	, m_CallbackValidateAuthTicket(this, &SteamUserCallback::onValidateAuthTicket)
-	, m_CallbackMicroTxnAuthorization(this, &SteamUserCallback::onMicroTxnAuthorization) {
+	, m_CallbackMicroTxnAuthorization(this, &SteamUserCallback::onMicroTxnAuthorization)
+	, m_CallbackGetTicketForWebApi(this, &SteamUserCallback::onGetTicketForWebApi) {
 
 }
 
@@ -39,4 +40,21 @@ void SteamUserCallback::onRequestEncryptedAppTicket(EncryptedAppTicketResponse_t
     invokeCallback({
         callVoidMethod(env, "onEncryptedAppTicket", "(I)V", (jint) callback->m_eResult);
     });
+}
+
+void SteamUserCallback::onGetTicketForWebApi(GetTicketForWebApiResponse_t* callback) {
+	invokeCallback({
+        jbyteArray arr = nullptr;
+        if (callback->m_eResult == k_EResultOK) {
+            arr = env->NewByteArray(callback->m_cubTicket);
+            env->SetByteArrayRegion(arr, 0, callback->m_cubTicket, (const jbyte*) callback->m_rgubTicket);
+        }
+
+		callVoidMethod(env, "onGetTicketForWebApi", "(JI[B)V",
+			(jlong) callback->m_hAuthTicket, (jint) callback->m_eResult, arr);
+
+		if (arr != nullptr) {
+		    env->DeleteLocalRef(arr);
+		}
+	});
 }

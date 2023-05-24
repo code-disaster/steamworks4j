@@ -130,7 +130,7 @@ class SteamGameServerNative {
 
 	static native int getAuthSessionTicket(ByteBuffer authTicket,
 										   int offset, int size, int[] sizeInBytes); /*
-		int ticket = SteamGameServer()->GetAuthSessionTicket(&authTicket[offset], size, (uint32*) sizeInBytes);
+		int ticket = SteamGameServer()->GetAuthSessionTicket(&authTicket[offset], size, (uint32*) sizeInBytes, nullptr);
 		return ticket;
 	*/
 

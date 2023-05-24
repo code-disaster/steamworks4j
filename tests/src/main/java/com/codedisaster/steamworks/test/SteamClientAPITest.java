@@ -38,6 +38,12 @@ public class SteamClientAPITest extends SteamTestApp {
 		public void onEncryptedAppTicket(SteamResult result) {
 
 		}
+
+		@Override
+		public void onGetTicketForWebApi(SteamAuthTicket authTicket, SteamResult result, byte[] ticketData) {
+			System.out.println("auth ticket for web API: " + ticketData.length + " bytes" +
+					", result=" + result.toString());
+		}
 	};
 
 	private SteamUserStatsCallback userStatsCallback = new SteamUserStatsCallback() {
@@ -375,7 +381,7 @@ public class SteamClientAPITest extends SteamTestApp {
 		}
 
 		@Override
-		public void onGameOverlayActivated(boolean active) {
+		public void onGameOverlayActivated(boolean active, boolean userInitiated, int appID) {
 
 		}
 
@@ -682,6 +688,8 @@ public class SteamClientAPITest extends SteamTestApp {
 						SteamUtils.FloatingGamepadTextInputMode.ModeSingleLine, 0, 0, 1280,200);
 				System.out.println("Show floating gamepad text input: " + (success ? "success" : "failed"));
 			}
+		} else if (input.equals("auth web")) {
+			/*SteamAuthTicket ticket =*/ user.getAuthTicketForWebApi();
 		}
 	}
 

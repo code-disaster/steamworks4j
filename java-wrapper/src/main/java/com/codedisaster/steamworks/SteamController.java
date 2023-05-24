@@ -441,7 +441,17 @@ public class SteamController extends SteamInterface {
 		SteamDeck_Reserved17,
 		SteamDeck_Reserved18,
 		SteamDeck_Reserved19,
-		SteamDeck_Reserved20;
+		SteamDeck_Reserved20,
+
+		Switch_JoyConButton_N,
+		Switch_JoyConButton_E,
+		Switch_JoyConButton_S,
+		Switch_JoyConButton_W,
+
+		PS5_LeftGrip,
+		PS5_RightGrip,
+		PS5_LeftFn,
+		PS5_RightFn;
 
 		private static final ActionOrigin[] values = values();
 
@@ -510,8 +520,8 @@ public class SteamController extends SteamInterface {
 	}
 
 	public static final int STEAM_CONTROLLER_MAX_COUNT = 16;
-	public static final int STEAM_CONTROLLER_MAX_ANALOG_ACTIONS = 16;
-	public static final int STEAM_CONTROLLER_MAX_DIGITAL_ACTIONS = 128;
+	public static final int STEAM_CONTROLLER_MAX_ANALOG_ACTIONS = 24;
+	public static final int STEAM_CONTROLLER_MAX_DIGITAL_ACTIONS = 256;
 	public static final int STEAM_CONTROLLER_MAX_ORIGINS = 8;
 
 	public static final long STEAM_CONTROLLER_HANDLE_ALL_CONTROLLERS = 0xffffffffffffffffL;

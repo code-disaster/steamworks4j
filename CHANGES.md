@@ -1,9 +1,11 @@
 ## change log
 
 ### [1.10.0-SNAPSHOT]
+- Updated to Steamworks SDK v1.57.
 - Updated Maven modules to compile with Java 8.
 - All callback interfaces are now implemented using empty `default` methods. (#110)
 - Added `SteamUtilsCallback.onFloatingGamepadTextInputDismissed()`. (#118)
+- Added `SteamUser.getAuthTicketForWebApi()`. (#126)
 - MacOS: build fat dylib to support both x86_64 and arm64 architectures. (#107, #116)
 - API change: removed `SteamSharedLibraryLoader`
   - Replaced by `SteamLibraryLoader` interface. Applications must pass an implementation of this interface to `SteamAPI.loadLibraries()`.

@@ -22,8 +22,8 @@ class SteamFriendsCallbackAdapter extends SteamCallbackAdapter<SteamFriendsCallb
 		}
 	}
 
-	void onGameOverlayActivated(boolean active) {
-		callback.onGameOverlayActivated(active);
+	void onGameOverlayActivated(boolean active, boolean userInitiated, int appID) {
+		callback.onGameOverlayActivated(active, userInitiated, appID);
 	}
 
 	void onGameLobbyJoinRequested(long steamIDLobby, long steamIDFriend) {
