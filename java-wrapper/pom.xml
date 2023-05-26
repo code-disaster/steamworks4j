@@ -79,7 +79,9 @@
 		<profile>
             <id>libs</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>!noLibs</name>
+				</property>
 			</activation>
 			<build>
                 <plugins>
