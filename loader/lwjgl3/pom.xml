@@ -162,11 +162,13 @@
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
 			<classifier>${lwjgl.natives}</classifier>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

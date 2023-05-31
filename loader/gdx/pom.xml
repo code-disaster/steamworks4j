@@ -103,6 +103,7 @@
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-jnigen-loader</artifactId>
 			<version>${gdx-jnigen-loader.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
