@@ -263,6 +263,10 @@ public abstract class SteamTestApp {
 				loader = new SteamLibraryLoaderGdx();
 				break;
 			}
+			if (arg.equals("--legacy")) {
+				loader = new SteamLibraryLoaderLegacy();
+				break;
+			}
 		}
 
 		if (loader == null) {
