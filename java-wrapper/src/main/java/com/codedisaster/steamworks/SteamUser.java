@@ -123,6 +123,17 @@ public class SteamUser extends SteamInterface {
 		return new SteamAuthTicket(ticket);
 	}
 
+	public SteamAuthTicket getAuthTicketForWebApi(String pchIdentity) {
+		// gdx jnigen does not work with nullable strings
+		int ticket;
+		if (pchIdentity == null) {
+			ticket = SteamUserNative.getAuthTicketForWebApi();
+		} else {
+			ticket = SteamUserNative.getAuthTicketForWebApi(pchIdentity);
+		}
+		return new SteamAuthTicket(ticket);
+	}
+
 	public SteamAuth.BeginAuthSessionResult beginAuthSession(ByteBuffer authTicket, SteamID steamID) throws SteamException {
 
 		if (!authTicket.isDirect()) {

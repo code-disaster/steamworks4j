@@ -71,6 +71,11 @@ final class SteamUserNative {
 		return ticket;
 	*/
 
+	static native int getAuthTicketForWebApi(String pchIdentity); /*
+		int ticket = SteamUser()->GetAuthTicketForWebApi(pchIdentity);
+		return ticket;
+	*/
+
 	static native int beginAuthSession(ByteBuffer authTicket,
 									   int bufferOffset, int bufferSize, long steamID); /*
 		return SteamUser()->BeginAuthSession(&authTicket[bufferOffset], bufferSize, (uint64) steamID);
