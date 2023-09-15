@@ -3,6 +3,7 @@ package com.codedisaster.steamworks;
 import java.io.*;
 import java.util.UUID;
 
+@Deprecated
 public class SteamLibraryLoaderLegacy implements SteamLibraryLoader {
 
 	enum PLATFORM {
