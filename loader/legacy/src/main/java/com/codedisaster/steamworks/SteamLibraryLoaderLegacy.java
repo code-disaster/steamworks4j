@@ -155,7 +155,6 @@ public class SteamLibraryLoaderLegacy implements SteamLibraryLoader {
 					if (length == -1) break;
 					output.write(buffer, 0, length);
 				}
-				output.close();
 			} catch (IOException e) {
 				/*
 					Extracting the library may fail, for example because 'nativeFile' already exists and is in
