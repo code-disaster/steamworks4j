@@ -2,6 +2,7 @@ package com.codedisaster.steamworks;
 
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -52,6 +53,12 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 				}
 				super.load(libraryName);
 			}
+		}
+
+		@Override
+		public String crc(InputStream input) {
+			closeQuietly(input);
+			return "00000000";
 		}
 	};
 
