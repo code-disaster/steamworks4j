@@ -55,6 +55,14 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 			}
 		}
 
+		/**
+		 * Behind the scenes SharedLibraryLoader extracts libraries from resources
+		 * into separate directories based on the CRC checksum of the files.
+		 * When loading libsteamworks4j.dylib, libsteam_api.dylib needs to be in
+		 * the same directory due to the install-name of libsteam_api.dylib.
+		 * <p>
+		 * This override forces all extracted libraries into the same directory.
+		 */
 		@Override
 		public String crc(InputStream input) {
 			closeQuietly(input);
