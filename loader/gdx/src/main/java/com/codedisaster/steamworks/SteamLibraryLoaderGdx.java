@@ -65,8 +65,11 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 		 */
 		@Override
 		public String crc(InputStream input) {
-			closeQuietly(input);
-			return "00000000";
+			if (isMac) {
+				closeQuietly(input);
+				return "00000000";
+			}
+			return super.crc(input);
 		}
 	};
 
