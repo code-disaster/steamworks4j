@@ -1,0 +1,206 @@
+on:
+  push:
+    paths:
+      - .github/workflows/main.yml
+      - java-wrapper/src/main/java/**
+      - java-wrapper/src/main/native/**
+      - server/src/main/java/**
+      - server/src/main/native/**
+env:
+  SDK: 3ed0ffc6f533cb006e5f8d0cd16cf6327fc0b198
+jobs:
+  jnigen:
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Checkout Steamworks SDK 1.57
+      uses: actions/checkout@v4
+      with:
+        repository: rlabrecque/SteamworksSDK
+        ref: ${{ env.SDK }}
+        path: ${{ github.workspace }}/sdk
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '21'
+        cache: 'maven'
+    - name: Install java-wrapper
+      run: mvn -B install --file java-wrapper/pom.xml
+    - name: Install server
+      run: mvn -B install --file server/pom.xml
+    - name: Package jnigen
+      run: mvn -B package --file jnigen/pom.xml
+    - name: Run jnigen
+      run: java -cp ${{ github.workspace }}/jnigen/target/jnigen.jar com.codedisaster.steamworks.jnigen.JNICodeGenerator
+    - name: Upload the result of jnigen for java-wrapper
+      uses: actions/upload-artifact@v3
+      with:
+        name: java-wrapper-cpp
+        path: ${{ github.workspace }}/java-wrapper/src/main/native/
+    - name: Upload the result of jnigen for server
+      uses: actions/upload-artifact@v3
+      with:
+        name: server-cpp
+        path: ${{ github.workspace }}/server/src/main/native/
+  linux:
+    needs: jnigen
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Checkout Steamworks SDK 1.57
+      uses: actions/checkout@v4
+      with:
+        repository: rlabrecque/SteamworksSDK
+        ref: ${{ env.SDK }}
+        path: ${{ github.workspace }}/sdk
+    - name: Download the result of java-wrapper jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: java-wrapper-cpp
+        path: ${{ github.workspace }}/java-wrapper/src/main/native/
+    - name: Download the result of server jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: server-cpp
+        path: ${{ github.workspace }}/server/src/main/native/
+    - name: Set up premake for linux compile
+      run: sudo apt-get install premake4
+    - name: Compile linux project
+      run: ./build-linux.sh
+      working-directory: ${{ github.workspace }}/build-natives/
+    - name: Upload built java-wrapper libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-java-wrapper-libraries
+        path: ${{ github.workspace }}/java-wrapper/src/main/resources/*.so
+    - name: Upload built server libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-server-libraries
+        path: ${{ github.workspace }}/server/src/main/resources/*.so
+  windows:
+    needs: jnigen
+    runs-on: windows-2022
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Checkout Steamworks SDK 1.57
+      uses: actions/checkout@v4
+      with:
+        repository: rlabrecque/SteamworksSDK
+        ref: ${{ env.SDK }}
+        path: ${{ github.workspace }}\sdk
+    - name: Download the result of java-wrapper jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: java-wrapper-cpp
+        path: ${{ github.workspace }}\java-wrapper\src\main\native\
+    - name: Download the result of server jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: server-cpp
+        path: ${{ github.workspace }}\server\src\main\native\
+    - name: Set up premake for windows compile
+      uses: abel0b/setup-premake@v2.3
+      with:
+        version: "5.0.0-beta2"
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.3.1
+    - name: Compile windows project
+      run: .\build-win.bat vs2022
+      working-directory: ${{ github.workspace }}\build-natives\
+    - name: Upload built java-wrapper libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-java-wrapper-libraries
+        path: ${{ github.workspace }}\java-wrapper\src\main\resources\*.dll
+    - name: Upload built server libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-server-libraries
+        path: ${{ github.workspace }}\server\src\main\resources\*.dll
+  osx:
+    needs: jnigen
+    runs-on: macos-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Checkout Steamworks SDK 1.57
+      uses: actions/checkout@v4
+      with:
+        repository: rlabrecque/SteamworksSDK
+        ref: ${{ env.SDK }}
+        path: ${{ github.workspace }}/sdk
+    - name: Download the result of java-wrapper jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: java-wrapper-cpp
+        path: ${{ github.workspace }}/java-wrapper/src/main/native/
+    - name: Download the result of server jnigen
+      uses: actions/download-artifact@v3
+      with:
+        name: server-cpp
+        path: ${{ github.workspace }}/server/src/main/native/
+    - name: Set up premake for mac compile
+      uses: abel0b/setup-premake@v2.3
+      with:
+        version: "5.0.0-beta2"
+        path: build-natives
+    - name: Compile mac project
+      run: ./build-osx.sh
+      working-directory: ${{ github.workspace }}/build-natives/
+    - name: Upload built java-wrapper libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: osx-java-wrapper-libraries
+        path: ${{ github.workspace }}/java-wrapper/src/main/resources/*.dylib
+    - name: Upload built server libraries
+      uses: actions/upload-artifact@v3
+      with:
+        name: osx-server-libraries
+        path: ${{ github.workspace }}/server/src/main/resources/*.dylib
+  pull:
+    needs: [linux, windows, osx]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Download the linux java-wrapper libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: linux-java-wrapper-libraries
+        path: ${{ github.workspace }}/java-wrapper/src/main/resources/
+    - name: Download the linux server libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: linux-server-libraries
+        path: ${{ github.workspace }}/server/src/main/resources/
+    - name: Download the windows java-wrapper libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: windows-java-wrapper-libraries
+        path: ${{ github.workspace }}/java-wrapper/src/main/resources/
+    - name: Download the windows server libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: windows-server-libraries
+        path: ${{ github.workspace }}/server/src/main/resources/
+    - name: Download the mac java-wrapper libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: osx-java-wrapper-libraries
+        path: ${{ github.workspace }}/java-wrapper/src/main/resources/
+    - name: Download the mac server libraries
+      uses: actions/download-artifact@v3
+      with:
+        name: osx-server-libraries
+        path: ${{ github.workspace }}/server/src/main/resources/
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: Update prebuilt libraries
+        title: Updated Prebuilt Binaries
+        body: Fresh build of binaries as a result of a "${{ github.event_name }}" event.
