@@ -8,6 +8,20 @@ final class SteamNetworkingSocketsNative {
 
     /*JNI
 		#include <steam_api.h>
+		#include "SteamNetworkingSocketsCallback.h"
+		#include <iostream>
+	*/
+
+    static native void initRelayNetworkAccess(); /*
+        SteamNetworkingUtils()->InitRelayNetworkAccess();
+    */
+
+    static native int getRelayNetworkStatus();/*
+        return SteamNetworkingUtils()->GetRelayNetworkStatus(NULL);
+    */
+
+    static native long createCallback(SteamNetworkingSocketsCallback javaCallback); /*
+		return (intp) new SteamNetworkingSocketsCallback(env, javaCallback);
 	*/
 
     public static native int connectP2P(long steamID, int numVirtualPorts);/*
@@ -39,7 +53,7 @@ final class SteamNetworkingSocketsNative {
     */
 
     public static native int sendMessageToConnection(int netConnectionHandle, ByteBuffer data, int dataLength, int sendFlags);/*
-        return SteamNetworkingSockets()->SendMessageToConnection(netConnectionHandle, &data, dataLength, sendFlags, NULL);
+        return SteamNetworkingSockets()->SendMessageToConnection(netConnectionHandle, (const void*) data, dataLength, sendFlags, NULL);
     */
 
     public static native int receiveMessagesOnConnection(int netConnectionHandle, SteamNetworkingMessage[] messageBuffer, int maxMessages);/*
@@ -54,7 +68,7 @@ final class SteamNetworkingSocketsNative {
             return 0;
         }
 
-        SteamNetworkingMessage_t** ppOutMessages;
+        SteamNetworkingMessage_t** ppOutMessages = new SteamNetworkingMessage_t*[maxMessages];
 
         int num = SteamNetworkingSockets()->ReceiveMessagesOnConnection(netConnectionHandle, ppOutMessages, maxMessages);
 
@@ -67,17 +81,20 @@ final class SteamNetworkingSocketsNative {
             jfieldID payloadField = env->GetFieldID(clazz, "payload", "[B");
             jfieldID connectionField = env->GetFieldID(clazz, "connectionHandle", "I");
 
-            env->SetIntField(message, connectionField, netMessage->m_conn);
-
             jbyteArray javaByteArray = env->NewByteArray(netMessage->m_cbSize);
 
             env->SetByteArrayRegion(javaByteArray, 0, netMessage->m_cbSize, (const jbyte*) netMessage->m_pData);
+
+            env->SetIntField(message, connectionField, netMessage->m_conn);
+            env->SetObjectField(message, payloadField, javaByteArray);
 
             env->DeleteLocalRef(javaByteArray);
             env->DeleteLocalRef(message);
 
             netMessage->Release();
         }
+
+        delete[] ppOutMessages;
 
         return num;
     */
@@ -111,7 +128,7 @@ final class SteamNetworkingSocketsNative {
             return 0;
         }
 
-        SteamNetworkingMessage_t** ppOutMessages;
+        SteamNetworkingMessage_t** ppOutMessages = new SteamNetworkingMessage_t*[maxMessages];
 
         int num = SteamNetworkingSockets()->ReceiveMessagesOnPollGroup(pollGroupHandle, ppOutMessages, maxMessages);
 
@@ -124,17 +141,20 @@ final class SteamNetworkingSocketsNative {
             jfieldID payloadField = env->GetFieldID(clazz, "payload", "[B");
             jfieldID connectionField = env->GetFieldID(clazz, "connectionHandle", "I");
 
-            env->SetIntField(message, connectionField, netMessage->m_conn);
-
             jbyteArray javaByteArray = env->NewByteArray(netMessage->m_cbSize);
 
             env->SetByteArrayRegion(javaByteArray, 0, netMessage->m_cbSize, (const jbyte*) netMessage->m_pData);
+
+            env->SetIntField(message, connectionField, netMessage->m_conn);
+            env->SetObjectField(message, payloadField, javaByteArray);
 
             env->DeleteLocalRef(javaByteArray);
             env->DeleteLocalRef(message);
 
             netMessage->Release();
         }
+
+        delete[] ppOutMessages;
 
         return num;
     */

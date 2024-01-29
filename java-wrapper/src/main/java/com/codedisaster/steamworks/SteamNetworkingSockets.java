@@ -1,6 +1,8 @@
 package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SteamNetworkingSockets extends SteamInterface {
 
@@ -10,31 +12,35 @@ public class SteamNetworkingSockets extends SteamInterface {
     public static final int SEND_FLAG_RELIABLE = 8;
     public static final int SEND_FLAG_AUTO_RESTART = 32;
 
-
-    public SteamNetworkingSockets() {
+    public SteamNetworkingSockets(SteamNetworkingSocketsCallback callback) {
+        super(SteamNetworkingSocketsNative.createCallback(callback));
     }
 
     public int connectP2P(long steamID, int numVirtualPorts){
         return SteamNetworkingSocketsNative.connectP2P(steamID, numVirtualPorts);
     }
 
-    public long createListenSocketP2P(int numVirtualPorts){
+    public int createListenSocketP2P(int numVirtualPorts){
         return SteamNetworkingSocketsNative.createListenSocketP2P(numVirtualPorts);
     }
 
     /**
-     * If handle is invalid returns {@link SteamResult#InvalidParam}<br>
-     * If connection state is not appropriate returns {@link SteamResult#InvalidState}<br>
+     * Accepts an incoming connection request.
      *
-     * otherwise,
-     *
-     * {@link SteamResult#OK}
+     * @param connectionHandle The handle of the connection to be accepted.
+     * @return {@link SteamResult} indicating the result of the operation:
+     * <ul>
+     *   <li>{@link SteamResult#OK}: Connection successfully accepted.</li>
+     *   <li>{@link SteamResult#InvalidParam}: The provided handle is invalid.</li>
+     *   <li>{@link SteamResult#InvalidState}: The connection state is not appropriate for acceptance (e.g., not in a pending state).</li>
+     * </ul>
+     * This method communicates with the native SteamNetworkingSockets API to accept a connection.
      */
-    public SteamResult acceptConnection(int connectionHandle){
+    public SteamResult acceptConnection(int connectionHandle) {
         int result = SteamNetworkingSocketsNative.acceptConnection(connectionHandle);
-
         return SteamResult.byValue(result);
     }
+
 
     public boolean closeConnection(int connectionHandle, int reason, boolean linger){
         return SteamNetworkingSocketsNative.closeConnection(connectionHandle, reason, linger);
@@ -45,39 +51,52 @@ public class SteamNetworkingSockets extends SteamInterface {
     }
 
     /**
-     * k_EResultInvalidParam: invalid connection handle, or the individual message is too big. (See k_cbMaxSteamNetworkingSocketsMessageSizeSend)
-     * k_EResultInvalidState: connection is in an invalid state
-     * k_EResultNoConnection: connection has ended
-     * k_EResultIgnored: You used k_nSteamNetworkingSend_NoDelay, and the message was dropped because we were not ready to send it.
-     * k_EResultLimitExceeded: there was already too much data queued to be sent. (See k_ESteamNetworkingConfig_SendBufferSize)
+     * Sends a message to a specified connection.
+     *
+     * @param connectionHandle The handle of the connection to which the message is sent.
+     * @param data The byte array containing the message to be sent.
+     * @param sendFlags Flags controlling how the message is sent.
+     * @return {@link SteamResult} indicating the result of the operation. Possible values include:
+     * <ul>
+     *   <li>{@link SteamResult#InvalidParam}: Invalid connection handle, or the message size exceeds the maximum allowed limit (refer to {@code k_cbMaxSteamNetworkingSocketsMessageSizeSend}).</li>
+     *   <li>{@link SteamResult#InvalidState}: Connection is in an invalid state.</li>
+     *   <li>{@link SteamResult#NoConnection}: Connection has ended.</li>
+     *   <li>{@link SteamResult#Ignored}: Message dropped due to usage of {@code k_nSteamNetworkingSend_NoDelay} and unavailability of immediate sending capacity.</li>
+     *   <li>{@link SteamResult#LimitExceeded}: Queue limit for outgoing messages exceeded (refer to {@code k_ESteamNetworkingConfig_SendBufferSize}).</li>
+     * </ul>
+     * This method interfaces with the native SteamNetworkingSockets API for message transmission.
      */
-    public SteamResult sendMessageToConnection(int connectionHandle, byte[] data, int sendFlags){
-        int result = SteamNetworkingSocketsNative.sendMessageToConnection(connectionHandle, ByteBuffer.wrap(data), data.length, sendFlags);
+    public SteamResult sendMessageToConnection(int connectionHandle, byte[] data, int sendFlags) {
 
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.put(data);
+
+        int result = SteamNetworkingSocketsNative.sendMessageToConnection(connectionHandle, buffer, data.length, sendFlags);
         return SteamResult.byValue(result);
     }
 
+
     /**
-     * k_EResultInvalidParam: invalid connection handle
-     * k_EResultInvalidState: connection is in an invalid state
-     * k_EResultNoConnection: connection has ended
-     * k_EResultIgnored: We weren't (yet) connected, so this operation has no effect.
+     * Flushes messages for a specified connection.
+     *
+     * @param connectionHandle The handle of the connection to flush messages for.
+     * @return {@link SteamResult} indicating the result of the operation. Possible values include:
+     * <ul>
+     *   <li>{@link SteamResult#InvalidParam}: Invalid connection handle.</li>
+     *   <li>{@link SteamResult#InvalidState}: Connection is in an invalid state.</li>
+     *   <li>{@link SteamResult#NoConnection}: Connection has ended.</li>
+     *   <li>{@link SteamResult#Ignored}: No effective operation as the connection was not yet established.</li>
+     * </ul>
+     * This method communicates with the native SteamNetworkingSockets API to perform the operation.
      */
-    public SteamResult flushMessages(int connectionHandle){
+    public SteamResult flushMessages(int connectionHandle) {
         int result = SteamNetworkingSocketsNative.flushMessages(connectionHandle);
         return SteamResult.byValue(result);
     }
 
-    public SteamNetworkingMessage[] receiveMessagesOnConnection(int connectionHandle, int numMaxMessages){
-        SteamNetworkingMessage[] messages = new SteamNetworkingMessage[numMaxMessages];
 
-        for(int i = 0; i < messages.length;i++){
-            messages[i] = new SteamNetworkingMessage();
-        }
-
-        SteamNetworkingSocketsNative.receiveMessagesOnConnection(connectionHandle, messages, numMaxMessages);
-
-        return messages;
+    public int receiveMessagesOnConnection(int connectionHandle, SteamNetworkingMessage[] messages){
+        return SteamNetworkingSocketsNative.receiveMessagesOnConnection(connectionHandle, messages, messages.length);
     }
 
     public int createPollGroup(){
@@ -92,52 +111,66 @@ public class SteamNetworkingSockets extends SteamInterface {
         return SteamNetworkingSocketsNative.setConnectionPollGroup(connectionHandle, pollGroupHandle);
     }
 
-    public SteamNetworkingMessage[] receiveMessagesOnPollGroup(int pollGroupHandle, int numMaxMessages){
-        SteamNetworkingMessage[] messages = new SteamNetworkingMessage[numMaxMessages];
+    public int receiveMessagesOnPollGroup(int pollGroupHandle, SteamNetworkingMessage[] messages){
+        return SteamNetworkingSocketsNative.receiveMessagesOnConnection(pollGroupHandle, messages, messages.length);
+    }
 
-        for(int i = 0; i < messages.length;i++){
-            messages[i] = new SteamNetworkingMessage();
+    public SteamNetworkingAvailability initAuthentication(){
+        int state = SteamNetworkingSocketsNative.initAuthentication();
+        return SteamNetworkingAvailability.fromValue(state);
+    }
+
+    public SteamNetworkingAvailability getAuthenticationStatus(){
+        int state = SteamNetworkingSocketsNative.getAuthenticationStatus();
+        return SteamNetworkingAvailability.fromValue(state);
+    }
+
+    public void initRelayNetworkAccess(){
+        SteamNetworkingSocketsNative.initRelayNetworkAccess();
+    }
+
+    public SteamNetworkingAvailability getRelayNetworkStatus(){
+        int state = SteamNetworkingSocketsNative.getRelayNetworkStatus();
+        return SteamNetworkingAvailability.fromValue(state);
+    }
+
+    public enum SteamNetworkingAvailability {
+        // Enum values
+        CANNOT_TRY(-102),
+        FAILED(-101),
+        PREVIOUSLY(-100),
+        RETRYING(-10),
+        NEVER_TRIED(1),
+        WAITING(2),
+        ATTEMPTING(3),
+        CURRENT(100),
+        UNKNOWN(0);
+
+        private final int value;
+
+        // Static map to store the mapping from int values to enum constants
+        private static final Map<Integer, SteamNetworkingAvailability> valueToEnumMap = new HashMap<>();
+
+        // Static block to populate the map
+        static {
+            for (SteamNetworkingAvailability availability : values()) {
+                valueToEnumMap.put(availability.value, availability);
+            }
         }
 
-        SteamNetworkingSocketsNative.receiveMessagesOnConnection(pollGroupHandle, messages, numMaxMessages);
+        SteamNetworkingAvailability(int value) {
+            this.value = value;
+        }
 
-        return messages;
+        public int getValue() {
+            return value;
+        }
+
+        // Function to get enum by its value
+        public static SteamNetworkingAvailability fromValue(int value) {
+            return valueToEnumMap.getOrDefault(value, UNKNOWN);
+        }
     }
 
-    /**
-     * @return
-     * enum ESteamNetworkingAvailability
-     * {
-     * 	// Negative values indicate a problem.
-     * 	//
-     * 	// In general, we will not automatically retry unless you take some action that
-     * 	// depends on of requests this resource, such as querying the status, attempting
-     * 	// to initiate a connection, receive a connection, etc.  If you do not take any
-     * 	// action at all, we do not automatically retry in the background.
-     * 	k_ESteamNetworkingAvailability_CannotTry = -102,		// A dependent resource is missing, so this service is unavailable.  (E.g. we cannot talk to routers because Internet is down or we don't have the network config.)
-     * 	k_ESteamNetworkingAvailability_Failed = -101,			// We have tried for enough time that we would expect to have been successful by now.  We have never been successful
-     * 	k_ESteamNetworkingAvailability_Previously = -100,		// We tried and were successful at one time, but now it looks like we have a problem
-     *
-     * 	k_ESteamNetworkingAvailability_Retrying = -10,		// We previously failed and are currently retrying
-     *
-     * 	// Not a problem, but not ready either
-     * 	k_ESteamNetworkingAvailability_NeverTried = 1,		// We don't know because we haven't ever checked/tried
-     * 	k_ESteamNetworkingAvailability_Waiting = 2,			// We're waiting on a dependent resource to be acquired.  (E.g. we cannot obtain a cert until we are logged into Steam.  We cannot measure latency to relays until we have the network config.)
-     * 	k_ESteamNetworkingAvailability_Attempting = 3,		// We're actively trying now, but are not yet successful.
-     *
-     * 	k_ESteamNetworkingAvailability_Current = 100,			// Resource is online/available
-     *
-     *
-     * 	k_ESteamNetworkingAvailability_Unknown = 0,			// Internal dummy/sentinel, or value is not applicable in this context
-     * 	k_ESteamNetworkingAvailability__Force32bit = 0x7fffffff,
-     * };
-     */
-    public int initAuthentication(){
-        return SteamNetworkingSocketsNative.initAuthentication();
-    }
-
-    public int getAuthenticationStatus(){
-        return SteamNetworkingSocketsNative.getAuthenticationStatus();
-    }
 
 }
