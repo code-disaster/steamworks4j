@@ -1,7 +1,5 @@
 package com.codedisaster.steamworks;
 
-import java.nio.ByteBuffer;
-
 public class SteamNetworkingMessage {
 
     public byte[] payload;
