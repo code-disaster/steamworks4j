@@ -118,8 +118,8 @@ public class SteamUser extends SteamInterface {
 		return new SteamAuthTicket(ticket);
 	}
 
-	public SteamAuthTicket getAuthTicketForWebApi() {
-		int ticket = SteamUserNative.getAuthTicketForWebApi();
+	public SteamAuthTicket getAuthTicketForWebApi(String identity) {
+		int ticket = SteamUserNative.getAuthTicketForWebApi(maybeNull(identity));
 		return new SteamAuthTicket(ticket);
 	}
 
