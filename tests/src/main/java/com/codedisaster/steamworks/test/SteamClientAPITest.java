@@ -689,7 +689,7 @@ public class SteamClientAPITest extends SteamTestApp {
 				System.out.println("Show floating gamepad text input: " + (success ? "success" : "failed"));
 			}
 		} else if (input.equals("auth web")) {
-			/*SteamAuthTicket ticket =*/ user.getAuthTicketForWebApi();
+			/*SteamAuthTicket ticket =*/ user.getAuthTicketForWebApi(null);
 		}
 	}
 

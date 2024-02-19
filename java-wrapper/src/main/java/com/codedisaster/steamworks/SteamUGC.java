@@ -109,7 +109,8 @@ public class SteamUGC extends SteamInterface {
 		Installed(4),
 		NeedsUpdate(8),
 		Downloading(16),
-		DownloadPending(32);
+		DownloadPending(32),
+		DisabledLocally(64);
 
 		private final int bits;
 		private static final ItemState[] values = values();
@@ -153,6 +154,7 @@ public class SteamUGC extends SteamInterface {
 		Sketchfab(2),
 		EnvironmentMap_HorizontalCross(3),
 		EnvironmentMap_LatLong(4),
+		Clip(5),
 		ReservedMax(255),
 
 		UnknownPreviewType_NotImplementedByAPI(-1);
