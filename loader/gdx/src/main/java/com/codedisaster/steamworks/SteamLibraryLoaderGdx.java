@@ -58,19 +58,24 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 		/**
 		 * Behind the scenes SharedLibraryLoader extracts libraries from resources
 		 * into separate directories based on the CRC checksum of the files.
-		 * When loading libsteamworks4j.dylib, libsteam_api.dylib needs to be in
-		 * the same directory due to the install-name of libsteam_api.dylib.
 		 * <p>
-		 * This override forces all extracted libraries into the same directory.
+		 * On macOS, when loading libsteamworks4j.dylib, libsteam_api.dylib needs
+		 * to be in the same directory due to the install-name of libsteam_api.dylib.
+		 * <p>
+		 * This override forces all extracted libraries into the same directory,
+		 * by re-using the CRC of the first library that has been loaded.
 		 */
 		@Override
 		public String crc(InputStream input) {
-			if (isMac) {
+			if (isMac && !previousCrc.isEmpty()) {
 				closeQuietly(input);
-				return "00000000";
+				return previousCrc;
 			}
-			return super.crc(input);
+			previousCrc = super.crc(input);
+			return previousCrc;
 		}
+
+		private String previousCrc = "";
 	};
 
 	@Override
