@@ -126,6 +126,10 @@ public class SteamGameServer extends SteamInterface {
 		SteamGameServerNative.setRegion(region);
 	}
 
+	public void setAdvertiseServerActive(boolean active) {
+		SteamGameServerNative.setAdvertiseServerActive(active);
+	}
+
 	@Deprecated
 	public boolean sendUserConnectAndAuthenticate(int clientIP,
 												  ByteBuffer authBlob,

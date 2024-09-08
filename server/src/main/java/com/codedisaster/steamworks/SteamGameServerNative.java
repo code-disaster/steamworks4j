@@ -106,6 +106,10 @@ class SteamGameServerNative {
 		SteamGameServer()->SetRegion(region);
 	*/
 
+	static native void setAdvertiseServerActive(boolean active); /*
+		SteamGameServer()->SetAdvertiseServerActive(active);
+	*/
+
 	static native boolean sendUserConnectAndAuthenticate(int clientIP, ByteBuffer authBlob,
 														 int offset, int size, long[] steamIDUser); /*
 		CSteamID user;
