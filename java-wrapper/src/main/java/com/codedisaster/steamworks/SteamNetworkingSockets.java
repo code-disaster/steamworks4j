@@ -112,7 +112,7 @@ public class SteamNetworkingSockets extends SteamInterface {
     }
 
     public int receiveMessagesOnPollGroup(int pollGroupHandle, SteamNetworkingMessage[] messages){
-        return SteamNetworkingSocketsNative.receiveMessagesOnConnection(pollGroupHandle, messages, messages.length);
+        return SteamNetworkingSocketsNative.receiveMessagesOnPollGroup(pollGroupHandle, messages, messages.length);
     }
 
     public SteamNetworkingAvailability initAuthentication(){
