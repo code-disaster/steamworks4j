@@ -2,6 +2,7 @@ package com.codedisaster.steamworks;
 
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -53,6 +54,28 @@ public class SteamLibraryLoaderGdx implements SteamLibraryLoader {
 				super.load(libraryName);
 			}
 		}
+
+		/**
+		 * Behind the scenes SharedLibraryLoader extracts libraries from resources
+		 * into separate directories based on the CRC checksum of the files.
+		 * <p>
+		 * On macOS, when loading libsteamworks4j.dylib, libsteam_api.dylib needs
+		 * to be in the same directory due to the install-name of libsteam_api.dylib.
+		 * <p>
+		 * This override forces all extracted libraries into the same directory,
+		 * by re-using the CRC of the first library that has been loaded.
+		 */
+		@Override
+		public String crc(InputStream input) {
+			if (isMac && !previousCrc.isEmpty()) {
+				closeQuietly(input);
+				return previousCrc;
+			}
+			previousCrc = super.crc(input);
+			return previousCrc;
+		}
+
+		private String previousCrc = "";
 	};
 
 	@Override

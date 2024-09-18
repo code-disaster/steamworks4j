@@ -4,6 +4,19 @@ import java.io.PrintStream;
 
 public class SteamAPI {
 
+	public enum InitResult {
+		OK,
+		FailedGeneric,
+		NoSteamClient,
+		VersionMismatch;
+
+		private static final InitResult[] values = values();
+
+		static InitResult byOrdinal(int result) {
+			return values[result];
+		}
+	}
+
 	private static boolean isRunning = false;
 	private static boolean isNativeAPILoaded = false;
 
@@ -27,14 +40,19 @@ public class SteamAPI {
 	}
 
 	public static boolean init() throws SteamException {
+		return initEx() == InitResult.OK;
+	}
+
+	public static InitResult initEx() throws SteamException {
 
 		if (!isNativeAPILoaded) {
 			throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
 		}
 
-		isRunning = nativeInit();
+		InitResult result = InitResult.byOrdinal(nativeInit());
+		isRunning = result == InitResult.OK;
 
-		return isRunning;
+		return result;
 	}
 
 	public static void shutdown() {
@@ -83,12 +101,12 @@ public class SteamAPI {
 		SteamAPI_ReleaseCurrentThreadMemory();
 	*/
 
-	private static native boolean nativeInit(); /*
+	private static native int nativeInit(); /*
 		if (env->GetJavaVM(&staticVM) != 0) {
 			return false;
 		}
 
-		return SteamAPI_Init();
+		return SteamAPI_InitEx(nullptr);
 	*/
 
 	private static native void nativeShutdown(); /*

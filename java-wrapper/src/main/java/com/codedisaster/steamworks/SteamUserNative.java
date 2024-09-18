@@ -66,8 +66,11 @@ final class SteamUserNative {
 		return ticket;
 	*/
 
-	static native int getAuthTicketForWebApi(); /*
-		int ticket = SteamUser()->GetAuthTicketForWebApi(nullptr);
+	static native int getAuthTicketForWebApi(String identity); /*
+		if (identity[0] == '\0') {
+			identity = nullptr;
+		}
+		int ticket = SteamUser()->GetAuthTicketForWebApi(identity);
 		return ticket;
 	*/
 
