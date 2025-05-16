@@ -134,6 +134,7 @@ public enum SteamResult {
 	PhoneNumberIsVOIP(127),
 	NotSupported(128),
 	FamilySizeLimitExceeded(129),
+	OfflineAppCacheInvalid(130),
 
 	/**
 	 * If this is returned(), we missed to "port" a Steam error code above.

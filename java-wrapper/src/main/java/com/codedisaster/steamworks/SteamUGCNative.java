@@ -390,12 +390,12 @@ final class SteamUGCNative {
 		return handle;
 	 */
 
-	static native int getNumSubscribedItems(); /*
-		return SteamUGC()->GetNumSubscribedItems();
+	static native int getNumSubscribedItems(boolean includeLocallyDisabled); /*
+		return SteamUGC()->GetNumSubscribedItems(includeLocallyDisabled);
 	*/
 
-	static native int getSubscribedItems(long[] files, int maxEntries); /*
-		return SteamUGC()->GetSubscribedItems((PublishedFileId_t*) files, maxEntries);
+	static native int getSubscribedItems(long[] files, int maxEntries, boolean includeLocallyDisabled); /*
+		return SteamUGC()->GetSubscribedItems((PublishedFileId_t*) files, maxEntries, includeLocallyDisabled);
 	*/
 
 	static native int getItemState(long publishedFileID); /*

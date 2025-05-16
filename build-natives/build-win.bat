@@ -15,5 +15,5 @@ copy bin\x64\ReleaseDLL\steamworks4j-encryptedappticket.dll ..\server\src\main\r
 @goto :eof
 
 :usage
-@echo call with [action] profile, e.g. "build-win vs2013"
+@echo call with [action] profile, e.g. "build-win vs2022"
 @exit /B 1

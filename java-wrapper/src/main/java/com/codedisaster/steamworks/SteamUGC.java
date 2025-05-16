@@ -463,13 +463,13 @@ public class SteamUGC extends SteamInterface {
 		return new SteamAPICall(SteamUGCNative.unsubscribeItem(callback, publishedFileID.handle));
 	}
 
-	public int getNumSubscribedItems() {
-		return SteamUGCNative.getNumSubscribedItems();
+	public int getNumSubscribedItems(boolean includeLocallyDisabled) {
+		return SteamUGCNative.getNumSubscribedItems(includeLocallyDisabled);
 	}
 
-	public int getSubscribedItems(SteamPublishedFileID[] publishedFileIds) {
+	public int getSubscribedItems(SteamPublishedFileID[] publishedFileIds, boolean includeLocallyDisabled) {
 		long[] ids = new long[publishedFileIds.length];
-		int nb = SteamUGCNative.getSubscribedItems(ids, publishedFileIds.length);
+		int nb = SteamUGCNative.getSubscribedItems(ids, publishedFileIds.length, includeLocallyDisabled);
 
 		for (int i = 0; i < nb; i++) {
 			publishedFileIds[i] = new SteamPublishedFileID(ids[i]);

@@ -14,14 +14,6 @@ public class FriendsMixin {
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
 		@Override
-		public void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result) {
-			System.out.println("Set persona name response: " +
-					"success=" + success +
-					", localSuccess=" + localSuccess +
-					", result=" + result.name());
-		}
-
-		@Override
 		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
 
 			switch (change) {
@@ -86,9 +78,6 @@ public class FriendsMixin {
 
 		if (input.equals("persona get")) {
 			System.out.println("persona name: " + friends.getPersonaName());
-		} else if (input.startsWith("persona set ")) {
-			String personaName = input.substring("persona set ".length());
-			friends.setPersonaName(personaName);
 		} else if (input.equals("friends list")) {
 
 			int friendsCount = friends.getFriendCount(SteamFriends.FriendFlags.Immediate);

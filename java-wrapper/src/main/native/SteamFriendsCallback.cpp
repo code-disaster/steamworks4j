@@ -16,13 +16,6 @@ SteamFriendsCallback::~SteamFriendsCallback() {
 
 }
 
-void SteamFriendsCallback::onSetPersonaNameResponse(SetPersonaNameResponse_t* callback, bool error) {
-	invokeCallback({
-		callVoidMethod(env, "onSetPersonaNameResponse", "(ZZI)V",
-		    callback->m_bSuccess, callback->m_bLocalSuccess, (jint) callback->m_result);
-	});
-}
-
 void SteamFriendsCallback::onPersonaStateChange(PersonaStateChange_t* callback) {
 	invokeCallback({
 		callVoidMethod(env, "onPersonaStateChange", "(JI)V",

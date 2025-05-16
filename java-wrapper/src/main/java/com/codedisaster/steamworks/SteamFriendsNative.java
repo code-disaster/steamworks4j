@@ -18,13 +18,6 @@ final class SteamFriendsNative {
 		return name;
 	*/
 
-	static native long setPersonaName(long callback, String personaName); /*
-		SteamFriendsCallback* cb = (SteamFriendsCallback*) callback;
-		SteamAPICall_t handle = SteamFriends()->SetPersonaName(personaName);
-		cb->onSetPersonaNameResponseCall.Set(handle, cb, &SteamFriendsCallback::onSetPersonaNameResponse);
-		return handle;
-	*/
-
 	static native int getPersonaState(); /*
 		return SteamFriends()->GetPersonaState();
 	*/

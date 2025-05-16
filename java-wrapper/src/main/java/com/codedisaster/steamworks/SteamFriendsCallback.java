@@ -2,9 +2,6 @@ package com.codedisaster.steamworks;
 
 public interface SteamFriendsCallback {
 
-	default void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result) {
-	}
-
 	default void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
 	}
 

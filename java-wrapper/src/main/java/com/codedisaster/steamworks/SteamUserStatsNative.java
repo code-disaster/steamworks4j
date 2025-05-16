@@ -13,10 +13,6 @@ final class SteamUserStatsNative {
 		return (intp) new SteamUserStatsCallback(env, javaCallback);
 	*/
 
-	static native boolean requestCurrentStats(); /*
-		return SteamUserStats()->RequestCurrentStats();
-	*/
-
 	static native boolean getStat(String name, int[] value); /*
 		return SteamUserStats()->GetStat(name, &((int32*) value)[0]);
 	*/

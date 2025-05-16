@@ -331,7 +331,8 @@ public class SteamClientAPITest extends SteamTestApp {
 					", fileName=" + details.getFileName() +
 					", fileHandle=" + details.getFileHandle().toString() +
 					", previewFileHandle=" + details.getPreviewFileHandle().toString() +
-					", url=" + details.getURL());
+					", url=" + details.getURL() +
+					", totalFileSize=" + details.getTotalFileSize());
 		}
 
 		@Override
@@ -356,11 +357,6 @@ public class SteamClientAPITest extends SteamTestApp {
 	};
 
 	private SteamFriendsCallback friendsCallback = new SteamFriendsCallback() {
-		@Override
-		public void onSetPersonaNameResponse(boolean success, boolean localSuccess, SteamResult result) {
-
-		}
-
 		@Override
 		public void onPersonaStateChange(SteamID steamID, SteamFriends.PersonaChange change) {
 
@@ -525,8 +521,6 @@ public class SteamClientAPITest extends SteamTestApp {
 					}
 				}
 			}
-		} else if (input.equals("stats request")) {
-			userStats.requestCurrentStats();
 		} else if (input.equals("stats store")) {
 			userStats.storeStats();
 		} else if (input.startsWith("achievement set ")) {
