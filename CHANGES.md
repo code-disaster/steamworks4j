@@ -1,7 +1,7 @@
 ## change log
 
 ### [1.10.0-SNAPSHOT]
-- Updated to Steamworks SDK v1.60.
+- Updated to Steamworks SDK v1.62.
 - Updated Maven modules to compile with Java 8.
 - All callback interfaces are now implemented using empty `default` methods. (#110)
 - Added `SteamAPI.initEx()`. It doesn't return the optional error description string yet, only the error return value.
@@ -14,6 +14,8 @@
   - Replaced by `SteamLibraryLoader` interface. Applications must pass an implementation of this interface to `SteamAPI.loadLibraries()`.
   - Added two new submodules: `steamworks4j-gdx` and `steamworks4j-lwjgl3`. They can be imported and used as-is, or serve as a reference for your own implementations.
   - `SteamAPI.skipLoadLibraries()` has been removed. Calling `SteamAPI.loadLibraries(new SteamLibraryLoader())` has the same effect.
+- Added new (and some missing) fields to `SteamUGCDetails`.
+- Moved Sonatype deployments from OSSRH to Maven Central.
 
 ### [1.9.0]
 - Updated to Steamworks SDK v1.53. This also removes a few functions, or marks them deprecated, which are removed or flagged as deprecated by the SDK.
