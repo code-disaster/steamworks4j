@@ -12,16 +12,16 @@
 
 	<name>Steam API Java Wrapper - LWJGL3 library loader</name>
 	<description>Java wrapper to access the Steamworks API.</description>
-	<url>http://github.com/code-disaster/steamworks4j</url>
+	<url>https://github.com/code-disaster/steamworks4j</url>
 
 	<issueManagement>
-		<url>http://github.com/code-disaster/steamworks4j/issues</url>
+		<url>https://github.com/code-disaster/steamworks4j/issues</url>
 	</issueManagement>
 
 	<licenses>
 		<license>
 			<name>MIT License</name>
-			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<url>https://opensource.org/license/mit</url>
 		</license>
 	</licenses>
 
@@ -36,8 +36,21 @@
 	<scm>
 		<connection>scm:git:https://github.com/code-disaster/steamworks4j.git</connection>
 		<developerConnection>scm:git:https://github.com/code-disaster/steamworks4j.git</developerConnection>
-		<url>http://github.com/code-disaster/steamworks4j</url>
+		<url>https://github.com/code-disaster/steamworks4j/tree/master</url>
 	</scm>
+
+	<repositories>
+		<repository>
+			<id>central-portal-snapshots</id>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<properties>
 		<lwjgl.version>3.3.1</lwjgl.version>
@@ -46,42 +59,6 @@
 	</properties>
 
 	<profiles>
-		<profile>
-			<id>release</id>
-			<distributionManagement>
-				<repository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>snapshot</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
 		<profile>
 			<id>lwjgl-natives-linux-amd64</id>
 			<activation>
@@ -222,6 +199,30 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>3.2.7</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.7.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+					<autoPublish>false</autoPublish>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
