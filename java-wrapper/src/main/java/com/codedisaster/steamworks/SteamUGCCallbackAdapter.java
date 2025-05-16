@@ -22,24 +22,49 @@ class SteamUGCCallbackAdapter extends SteamCallbackAdapter<SteamUGCCallback> {
 		callback.onUnsubscribeItem(new SteamPublishedFileID(publishedFileID), SteamResult.byValue(result));
 	}
 	
-	void onRequestUGCDetails(long publishedFileID, int result, String title, String description,
-							 long fileHandle, long previewFileHandle, String fileName,
-							 boolean cachedData, int votesUp, int votesDown, long ownerID,
-							 int timeCreated, int timeUpdated) {
+	void onRequestUGCDetails(long publishedFileID,
+							 int result,
+							 int fileType,
+							 String title,
+							 String description,
+							 boolean tagsTruncated,
+							 String tags,
+							 long fileHandle,
+							 long previewFileHandle,
+							 String fileName,
+							 int fileSize,
+							 int previewFileSize,
+							 String url,
+							 int votesUp,
+							 int votesDown,
+							 long ownerID,
+							 int timeCreated,
+							 int timeUpdated,
+							 float score,
+							 int numChildren,
+							 long totalFileSize) {
 
 		SteamUGCDetails details = new SteamUGCDetails();
 		details.publishedFileID = publishedFileID;
 		details.result = result;
+		details.fileType = fileType;
 		details.title = title;
 		details.description = description;
+		details.tagsTruncated = tagsTruncated;
+		details.tags = tags;
 		details.fileHandle = fileHandle;
 		details.previewFileHandle = previewFileHandle;
 		details.fileName = fileName;
+		details.fileSize = fileSize;
+		details.previewFileSize = previewFileSize;
 		details.votesUp = votesUp;
 		details.votesDown = votesDown;
 		details.ownerID = ownerID;
 		details.timeCreated = timeCreated;
 		details.timeUpdated = timeUpdated;
+		details.score = score;
+		details.numChildren = numChildren;
+		details.totalFileSize = totalFileSize;
 		
 		callback.onRequestUGCDetails(details, SteamResult.byValue(result));
 	}

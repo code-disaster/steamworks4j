@@ -38,13 +38,28 @@ void SteamUGCCallback::onUnsubscribeItem(RemoteStorageUnsubscribePublishedFileRe
 
 void SteamUGCCallback::onRequestUGCDetails(SteamUGCRequestUGCDetailsResult_t* callback, bool error) {
 	invokeCallback({
-		callVoidMethod(env, "onRequestUGCDetails", "(JILjava/lang/String;Ljava/lang/String;JJLjava/lang/String;ZIIJII)V",
-			(jlong) callback->m_details.m_nPublishedFileId, (jint) callback->m_details.m_eResult,
-			env->NewStringUTF(callback->m_details.m_rgchTitle), env->NewStringUTF(callback->m_details.m_rgchDescription),
-			callback->m_details.m_hFile, callback->m_details.m_hPreviewFile, env->NewStringUTF(callback->m_details.m_pchFileName),
-			(jboolean) callback->m_bCachedData, (jint) callback->m_details.m_unVotesUp,
-			(jint) callback->m_details.m_unVotesDown, (jlong) callback->m_details.m_ulSteamIDOwner,
-			(jint) callback->m_details.m_rtimeCreated, (jint) callback->m_details.m_rtimeUpdated);
+		callVoidMethod(env, "onRequestUGCDetails", "(JIILjava/lang/String;Ljava/lang/String;ZLjava/lang/String;JJLjava/lang/String;IILjava/lang/String;IIJIIFIJ)V",
+			(jlong) callback->m_details.m_nPublishedFileId,
+			(jint) callback->m_details.m_eResult,
+			(jint) callback->m_details.m_eFileType,
+			env->NewStringUTF(callback->m_details.m_rgchTitle),
+			env->NewStringUTF(callback->m_details.m_rgchDescription),
+			callback->m_details.m_bTagsTruncated,
+			env->NewStringUTF(callback->m_details.m_rgchTags),
+			callback->m_details.m_hFile,
+			callback->m_details.m_hPreviewFile,
+			env->NewStringUTF(callback->m_details.m_pchFileName),
+			(jint) callback->m_details.m_nFileSize,
+			(jint) callback->m_details.m_nPreviewFileSize,
+			env->NewStringUTF(callback->m_details.m_rgchURL),
+			(jint) callback->m_details.m_unVotesUp,
+			(jint) callback->m_details.m_unVotesDown,
+			(jlong) callback->m_details.m_ulSteamIDOwner,
+			(jint) callback->m_details.m_rtimeCreated,
+			(jint) callback->m_details.m_rtimeUpdated,
+			(jfloat) callback->m_details.m_flScore,
+			(jint) callback->m_details.m_unNumChildren,
+			(jlong) callback->m_details.m_ulTotalFilesSize);
 	});
 }
 

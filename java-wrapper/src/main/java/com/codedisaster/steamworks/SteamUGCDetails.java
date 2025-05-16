@@ -29,8 +29,9 @@ public class SteamUGCDetails {
 	String url;
 	int votesUp;
 	int votesDown;
-	// score
-	// numChildren
+	float score;
+	int numChildren;
+	long totalFileSize;
 
 	public SteamPublishedFileID getPublishedFileID() {
 		return new SteamPublishedFileID(publishedFileID);
@@ -102,6 +103,18 @@ public class SteamUGCDetails {
 
 	public int getVotesDown() {
 		return votesDown;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public int getNumChildren() {
+		return numChildren;
+	}
+
+	public long getTotalFileSize() {
+		return totalFileSize;
 	}
 
 }
