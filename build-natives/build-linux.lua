@@ -1,6 +1,6 @@
 solution "steamworks4j"
 	configurations { "release" }
-	platforms { "x64" }
+	platforms { "x64", "arm64" }
 
 	buildoptions {
 		"-std=c++11",
@@ -18,9 +18,18 @@ solution "steamworks4j"
 		"LINUX"
 	}
 
-	flags {
-		"Optimize"
+	steam_arch = {
+		x86_64 = "linux64",
+		ARM64  = "linuxarm64"
 	}
+
+	filter "platforms:x64"
+		architecture "x86_64"
+	filter "platforms:arm64"
+		architecture "ARM64"
+	filter {}
+
+	libdirs { "../sdk/redistributable_bin/%{steam_arch[cfg.architecture]}" }
 
 	project "steamworks4j"
 
@@ -35,12 +44,9 @@ solution "steamworks4j"
 			"../java-wrapper/src/main/native",
 		}
 
-        libdirs {
-            "../sdk/redistributable_bin/linux64"
-        }
-        links {
-            "steam_api"
-        }
+        	links {
+        	    "steam_api"
+        	}
 
 	project "steamworks4j-server"
 
@@ -59,12 +65,9 @@ solution "steamworks4j"
 			"../server/src/main/native",
 		}
 
-        libdirs {
-            "../sdk/redistributable_bin/linux64"
-        }
-        links {
-            "steam_api"
-        }
+        	links {
+        	    "steam_api"
+        	}
 
 	project "steamworks4j-encryptedappticket"
 
@@ -79,9 +82,8 @@ solution "steamworks4j"
 			"../server/src/main/native",
 		}
 
-        libdirs {
-            "../sdk/public/steam/lib/linux64"
-        }
-        links {
-            "sdkencryptedappticket"
-        }
+	        libdirs { "../sdk/public/steam/lib/%{steam_arch[cfg.architecture]}" }
+
+        	links {
+        	    "sdkencryptedappticket"
+        	}
