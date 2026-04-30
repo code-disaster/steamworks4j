@@ -451,12 +451,105 @@ public class SteamController extends SteamInterface {
 		PS5_LeftGrip,
 		PS5_RightGrip,
 		PS5_LeftFn,
-		PS5_RightFn;
+		PS5_RightFn,
+
+
+		Horipad_M1,
+		Horipad_M2,
+		Horipad_L4,
+		Horipad_R4,
+
+		LenovoLegionGo_A,
+		LenovoLegionGo_B,
+		LenovoLegionGo_X,
+		LenovoLegionGo_Y,
+		LenovoLegionGo_LB,
+		LenovoLegionGo_RB,
+		LenovoLegionGo_Menu,
+		LenovoLegionGo_View,
+		LenovoLegionGo_LeftPad_Touch,  // Left pad is only present on the original Legion Go
+		LenovoLegionGo_LeftPad_Swipe,
+		LenovoLegionGo_LeftPad_Click,
+		LenovoLegionGo_LeftPad_DPadNorth,
+		LenovoLegionGo_LeftPad_DPadSouth,
+		LenovoLegionGo_LeftPad_DPadWest,
+		LenovoLegionGo_LeftPad_DPadEast,
+		LenovoLegionGo_RightPad_Touch,
+		LenovoLegionGo_RightPad_Swipe,
+		LenovoLegionGo_RightPad_Click,
+		LenovoLegionGo_RightPad_DPadNorth,
+		LenovoLegionGo_RightPad_DPadSouth,
+		LenovoLegionGo_RightPad_DPadWest,
+		LenovoLegionGo_RightPad_DPadEast,
+		LenovoLegionGo_LT_SoftPull,
+		LenovoLegionGo_LT,
+		LenovoLegionGo_RT_SoftPull,
+		LenovoLegionGo_RT,
+		LenovoLegionGo_LeftStick_Move,
+		LenovoLegionGo_LS,
+		LenovoLegionGo_LeftStick_DPadNorth,
+		LenovoLegionGo_LeftStick_DPadSouth,
+		LenovoLegionGo_LeftStick_DPadWest,
+		LenovoLegionGo_LeftStick_DPadEast,
+		LenovoLegionGo_RightStick_Move,
+		LenovoLegionGo_RS,
+		LenovoLegionGo_RightStick_DPadNorth,
+		LenovoLegionGo_RightStick_DPadSouth,
+		LenovoLegionGo_RightStick_DPadWest,
+		LenovoLegionGo_RightStick_DPadEast,
+		LenovoLegionGo_Y1,
+		LenovoLegionGo_Y2,
+		LenovoLegionGo_DPad_Move,
+		LenovoLegionGo_DPad_North,
+		LenovoLegionGo_DPad_South,
+		LenovoLegionGo_DPad_West,
+		LenovoLegionGo_DPad_East,
+		LenovoLegionGo_Gyro_Move,
+		LenovoLegionGo_Gyro_Pitch,
+		LenovoLegionGo_Gyro_Yaw,
+		LenovoLegionGo_Gyro_Roll,
+		LenovoLegionGo_Reserved1,
+		LenovoLegionGo_Reserved2,
+		LenovoLegionGo_Reserved3,
+		LenovoLegionGo_Reserved4,
+		LenovoLegionGo_Reserved5,
+		LenovoLegionGo_Reserved6,
+		LenovoLegionGo_Reserved7,
+		LenovoLegionGo_Reserved8,
+		LenovoLegionGo_Reserved9,
+		LenovoLegionGo_Reserved10,
+		LenovoLegionGo_Reserved11,
+		LenovoLegionGo_Reserved12,
+		LenovoLegionGo_Reserved13,
+		LenovoLegionGo_Reserved14,
+		LenovoLegionGo_Reserved15,
+		LenovoLegionGo_Reserved16,
+		LenovoLegionGo_Reserved17,
+		LenovoLegionGo_Reserved18,
+		LenovoLegionGo_Reserved19,
+		LenovoLegionGo_Reserved20,
+
+		Generic_L4,
+		Generic_R4,
+		Generic_L5,
+		Generic_R5,
+		Generic_PL,
+		Generic_PR,
+		Generic_C,
+		Generic_Z,
+		Generic_MISC1,
+		Generic_MISC2,
+		Generic_MISC3,
+		Generic_MISC4,
+		Generic_MISC5,
+		Generic_MISC6,
+		Generic_MISC7,
+		Generic_MISC8;
 
 		private static final ActionOrigin[] values = values();
 
 		static ActionOrigin byOrdinal(int ordinal) {
-			return values[ordinal];
+			return ordinal < values.length ? values[ordinal] : ActionOrigin.None;
 		}
 	}
 
@@ -510,7 +603,7 @@ public class SteamController extends SteamInterface {
 		private static final InputType[] values = values();
 
 		static InputType byOrdinal(int ordinal) {
-			return values[ordinal];
+			return ordinal < values.length ? values[ordinal] : InputType.Unknown;
 		}
 	}
 
