@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamUserStats extends SteamInterface {
+public class SteamUserStats extends SteamInterfaceImpl {
 
 	public enum LeaderboardDataRequest {
 		Global,

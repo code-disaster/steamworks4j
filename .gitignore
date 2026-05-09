@@ -9,6 +9,7 @@ server/src/main/native/com_codedisaster_steamworks_*
 build/
 obj/
 target/
+bin/
 Makefile
 *.exp
 *.lib
@@ -22,6 +23,9 @@ Makefile
 # IDE files
 .idea/
 *.iml
+.project
+.classpath
+.settings/
 
 # build tools
 build-natives/.vs/

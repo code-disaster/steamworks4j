@@ -1,6 +1,6 @@
 package com.codedisaster.steamworks;
 
-public abstract class SteamMatchmakingPingResponse extends SteamInterface {
+public abstract class SteamMatchmakingPingResponse extends SteamInterfaceImpl {
 
 	protected SteamMatchmakingPingResponse() {
 		super(~0L);

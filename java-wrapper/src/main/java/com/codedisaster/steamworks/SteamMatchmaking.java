@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamMatchmaking extends SteamInterface {
+public class SteamMatchmaking extends SteamInterfaceImpl {
 
 	public enum LobbyType {
 		Private,

@@ -1,6 +1,6 @@
 package com.codedisaster.steamworks;
 
-public abstract class SteamMatchmakingRulesResponse extends SteamInterface {
+public abstract class SteamMatchmakingRulesResponse extends SteamInterfaceImpl {
 
 	protected SteamMatchmakingRulesResponse() {
 		super(~0L);

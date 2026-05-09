@@ -1,7 +1,6 @@
 package com.codedisaster.steamworks;
 
-@SuppressWarnings("unused")
-public class SteamApps extends SteamInterface {
+public class SteamApps extends SteamInterfaceImpl {
 
 	public SteamApps() {
 

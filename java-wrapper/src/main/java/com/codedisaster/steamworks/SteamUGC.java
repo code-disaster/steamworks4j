@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamUGC extends SteamInterface {
+public class SteamUGC extends SteamInterfaceImpl {
 
 	public enum UserUGCList {
 		Published,

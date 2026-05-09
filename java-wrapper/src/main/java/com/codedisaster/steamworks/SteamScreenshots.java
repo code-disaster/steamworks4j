@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings("unused")
-public class SteamScreenshots extends SteamInterface {
+public class SteamScreenshots extends SteamInterfaceImpl {
 
 	public SteamScreenshots(SteamScreenshotsCallback callback) {
 		super(SteamScreenshotsNative.createCallback(new SteamScreenshotsCallbackAdapter(callback)));

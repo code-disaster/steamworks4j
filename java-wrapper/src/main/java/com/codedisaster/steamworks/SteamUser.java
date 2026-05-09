@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamUser extends SteamInterface {
+public class SteamUser extends SteamInterfaceImpl {
 
 	public enum VoiceResult {
 		OK,

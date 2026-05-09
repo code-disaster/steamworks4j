@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
 @SuppressWarnings("unused")
-public class SteamGameServerStats extends SteamInterface {
+public class SteamGameServerStats extends SteamInterfaceImpl {
 
 	public SteamGameServerStats(SteamGameServerStatsCallback callback) {
 		super(SteamGameServerStatsNative.createCallback(new SteamGameServerStatsCallbackAdapter(callback)));

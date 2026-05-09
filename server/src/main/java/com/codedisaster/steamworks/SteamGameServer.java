@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings("unused")
-public class SteamGameServer extends SteamInterface {
+public class SteamGameServer extends SteamInterfaceImpl {
 
 	public enum DenyReason {
 		Invalid,

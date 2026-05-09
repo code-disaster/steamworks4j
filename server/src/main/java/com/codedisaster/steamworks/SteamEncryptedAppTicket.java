@@ -2,7 +2,7 @@ package com.codedisaster.steamworks;
 
 import java.nio.ByteBuffer;
 
-public class SteamEncryptedAppTicket extends SteamInterface {
+public class SteamEncryptedAppTicket extends SteamInterfaceImpl {
 
 	public static final int SymmetricKeyLen = 32;
 

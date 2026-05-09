@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamNetworking extends SteamInterface {
+public class SteamNetworking extends SteamInterfaceImpl {
 
 	public enum P2PSend {
 		Unreliable,

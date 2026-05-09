@@ -1,7 +1,7 @@
 package com.codedisaster.steamworks;
 
 @SuppressWarnings("unused")
-public class SteamMatchmakingServers extends SteamInterface {
+public class SteamMatchmakingServers extends SteamInterfaceImpl {
 
 	public SteamMatchmakingServers() {
 		super(-1);

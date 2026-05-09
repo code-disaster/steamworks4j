@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.util.Collection;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamFriends extends SteamInterface {
+public class SteamFriends extends SteamInterfaceImpl {
 
 	public enum FriendRelationship {
 		None,

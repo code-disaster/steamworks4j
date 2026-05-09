@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamHTTP extends SteamInterface {
+public class SteamHTTP extends SteamInterfaceImpl {
 
 	public enum HTTPMethod {
 		Invalid,

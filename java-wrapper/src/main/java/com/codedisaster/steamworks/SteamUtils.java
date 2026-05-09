@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings("unused")
-public class SteamUtils extends SteamInterface {
+public class SteamUtils extends SteamInterfaceImpl {
 
 	public enum SteamAPICallFailure {
 		None(-1),

@@ -1,6 +1,6 @@
 package com.codedisaster.steamworks;
 
-public abstract class SteamMatchmakingServerListResponse extends SteamInterface {
+public abstract class SteamMatchmakingServerListResponse extends SteamInterfaceImpl {
 
 	public enum Response {
 		ServerResponded,

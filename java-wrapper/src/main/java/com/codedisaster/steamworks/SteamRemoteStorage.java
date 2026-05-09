@@ -3,7 +3,7 @@ package com.codedisaster.steamworks;
 import java.nio.ByteBuffer;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class SteamRemoteStorage extends SteamInterface {
+public class SteamRemoteStorage extends SteamInterfaceImpl {
 
 	public enum RemoteStoragePlatform {
 		None(0),
