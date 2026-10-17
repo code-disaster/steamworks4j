@@ -1,5 +1,12 @@
 package com.codedisaster.steamworks;
 
+/**
+ *
+ * The ISteamController interface is now deprecated.
+ *
+ * @deprecated Use {@link SteamInput} instead.
+ */
+@Deprecated
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public class SteamController extends SteamInterface {
 

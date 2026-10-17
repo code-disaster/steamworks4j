@@ -1,5 +1,15 @@
 ## change log
 
+### [1.11.0]
+- Updated to Steamworks SDK v1.65.
+- Deprecated `SteamController` like the ISteamController interface.
+- Added `SteamUtils.isRunningOnSteamHardware()`.
+- Deprecated `SteamUtils.isSteamRunningOnSteamDeck()`, which now calls `isRunningOnSteamHardware()`, since `IsSteamRunningOnSteamDeck()` was removed.
+- Added `SteamInput`, the wrapper for the ISteamInput interface.
+  - Adds Action set layers, device callbacks, glyphs, input action manifest path, extended vibration, and a lot more.
+  - Adds action event callbacks with `SteamInput.enableActionEventCallbacks()`, reported with `SteamInputCallback.onDigitalActionEvent()` and `onAnalogActionEvent()`.
+  - Adds DualSense adaptive trigger effects using `SteamInput.setDualSenseTriggerEffect()` and `SteamInputDualSenseTriggerEffect`.
+
 ### [1.10.0]
 - Updated to Steamworks SDK v1.62.
 - Updated Maven modules to compile with Java 8.

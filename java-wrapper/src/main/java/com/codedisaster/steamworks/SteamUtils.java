@@ -43,6 +43,23 @@ public class SteamUtils extends SteamInterface {
 		ModeNumeric,
 	}
 
+	public enum SteamHardwareType {
+		None,
+		SteamDeck,
+		SteamMachine,
+		SteamFrame,
+		/**
+		 * Steam hardware added after the SDK version steamworks4j was built against.
+		 */
+		Unrecognized;
+
+		private static final SteamHardwareType[] values = values();
+
+		static SteamHardwareType byOrdinal(int ordinal) {
+			return ordinal >= 0 && ordinal < Unrecognized.ordinal() ? values[ordinal] : Unrecognized;
+		}
+	}
+
 	private final SteamUtilsCallbackAdapter callbackAdapter;
 
 	public SteamUtils(SteamUtilsCallback callback) {
@@ -116,8 +133,16 @@ public class SteamUtils extends SteamInterface {
 		return SteamUtilsNative.isSteamChinaLauncher();
 	}
 
+	/**
+	 * @deprecated v1.65 replaced this with {@link #isRunningOnSteamHardware()}.
+	 */
+	@Deprecated
 	public boolean isSteamRunningOnSteamDeck() {
-		return SteamUtilsNative.isSteamRunningOnSteamDeck();
+		return isRunningOnSteamHardware() == SteamHardwareType.SteamDeck;
+	}
+
+	public SteamHardwareType isRunningOnSteamHardware() {
+		return SteamHardwareType.byOrdinal(SteamUtilsNative.isRunningOnSteamHardware());
 	}
 
 	public boolean showFloatingGamepadTextInput(FloatingGamepadTextInputMode keyboardMode,
